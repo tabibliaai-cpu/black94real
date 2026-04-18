@@ -3,14 +3,14 @@ import { create } from 'zustand'
 export type AppView = 
   | 'landing' | 'login' | 'signup' | 'feed' | 'explore' | 'chat' 
   | 'chat-room' | 'e2ee-chat' | 'profile' | 'edit-profile' | 'article' | 'write-article'
-  | 'notifications' | 'search' | 'settings' | 'business-dashboard' 
+  | 'notifications' | 'search' | 'settings' | 'business-dashboard' | 'premium-dashboard'
   | 'ads-manager' | 'create-ad' | 'crm-leads' | 'crm-deals' | 'crm-orders'
   | 'crm-analytics' | 'affiliates' | 'subscriptions' | 'share-profile'
   | 'user-profile' | 'threads' | 'thread-detail'
   | 'anonymous-chat' | 'anonymous-room' | 'reels' | 'stories' | 'dual-pane-chat'
   | 'storefront' | 'product-detail' | 'cart' | 'checkout'
   | 'my-store' | 'add-product' | 'order-tracking' | 'business-orders'
-  | 'store-dashboard'
+  | 'store-dashboard' | 'audio-call'
 
 export type AccountType = 'personal' | 'creator' | 'professional' | 'business'
 
@@ -182,6 +182,7 @@ interface AppState {
   viewParams: Record<string, string>
   navigate: (view: AppView, params?: Record<string, string>) => void
   previousView: AppView
+  restoreViewFromHash: () => void
 
   // Chat
   selectedChat: Chat | null
@@ -227,6 +228,24 @@ export const useAppStore = create<AppState>((set, get) => ({
   navigate: (view, params = {}) => {
     const prev = get().currentView
     set({ currentView: view, viewParams: params, previousView: prev })
+    // Persist to URL hash for refresh persistence
+    if (typeof window !== 'undefined') {
+      const hash = params ? `${view}?${new URLSearchParams(params).toString()}` : view
+      window.history.replaceState(null, '', '#' + hash)
+    }
+  },
+  // Restore view from hash on init
+  restoreViewFromHash: () => {
+    if (typeof window === 'undefined') return
+    const hash = window.location.hash.replace('#', '')
+    if (!hash) return
+    const [view, query] = hash.split('?')
+    const validViews: string[] = ['feed','explore','chat','profile','notifications','search','settings','stories','anonymous-chat','dual-pane-chat','business-dashboard','premium-dashboard','edit-profile','subscriptions','ads-manager','crm-leads','store-dashboard','my-store']
+    if (validViews.includes(view)) {
+      const params: Record<string, string> = {}
+      if (query) new URLSearchParams(query).forEach((v, k) => { params[k] = v })
+      set({ currentView: view as AppView, viewParams: params })
+    }
   },
 
   // Chat

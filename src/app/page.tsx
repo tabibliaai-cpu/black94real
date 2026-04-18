@@ -1,51 +1,65 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react'
 import { useAppStore, type AppView, type User as StoreUser } from '@/stores/app'
 import { auth, authReady, signIn, signOutUser, onAuthStateChanged } from '@/lib/firebase'
 import { createUserFromGoogle } from '@/lib/db'
 import { type User as FirebaseUser } from 'firebase/auth'
-import { FeedView } from '@/views/FeedView'
-import { ExploreView } from '@/views/ExploreView'
-import { ChatListView, ChatRoomView } from '@/views/ChatListView'
-import { ProfileView } from '@/views/ProfileView'
-import { NotificationsView } from '@/views/NotificationsView'
-import { SearchView } from '@/views/SearchView'
-import { SettingsView } from '@/views/SettingsView'
-import { StoriesView } from '@/views/StoriesView'
-import { AnonymousChatView, AnonymousChatRoomView } from '@/views/AnonymousChatView'
-import { DualPaneChatView } from '@/views/DualPaneChatView'
-import { BusinessDashboardView } from '@/views/BusinessDashboardView'
-import { AdsManagerView } from '@/views/AdsManagerView'
-import { CreateAdView } from '@/views/CreateAdView'
-import { CrmLeadsView } from '@/views/CrmLeadsView'
-import { CrmDealsView } from '@/views/CrmDealsView'
-import { CrmOrdersView } from '@/views/CrmOrdersView'
-import { CrmAnalyticsView } from '@/views/CrmAnalyticsView'
-import { SubscriptionsView } from '@/views/SubscriptionsView'
-import { PrivacySettingsView } from '@/views/PrivacySettingsView'
-import { ShareProfileView } from '@/views/ShareProfileView'
-import { WriteArticleView } from '@/views/WriteArticleView'
-import { ArticleView } from '@/views/ArticleView'
-import { AffiliatesView } from '@/views/AffiliatesView'
-import { SalaryView } from '@/views/SalaryView'
-import { PerformanceView } from '@/views/PerformanceView'
-import { StorefrontView } from '@/views/StorefrontView'
-import { ProductDetailView } from '@/views/ProductDetailView'
-import { CartView } from '@/views/CartView'
-import { CheckoutView } from '@/views/CheckoutView'
-import { MyStoreView } from '@/views/MyStoreView'
-import { AddProductView } from '@/views/AddProductView'
-import { OrderTrackingView } from '@/views/OrderTrackingView'
-import { BusinessOrdersView } from '@/views/BusinessOrdersView'
-import { StoreDashboardView } from '@/views/StoreDashboardView'
-import { useDualPaneChat } from '@/stores/dualPaneChat'
 import { MobileNav } from '@/components/MobileNav'
 import { Sidebar } from '@/components/Sidebar'
 import { MobileHeader } from '@/components/MobileHeader'
 import { ComposeDialog } from '@/components/ComposeDialog'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+
+/* ─── Lazy-loaded views for performance (code splitting) ──────────────────── */
+const FeedView = lazy(() => import('@/views/FeedView').then(m => ({ default: m.FeedView })))
+const ExploreView = lazy(() => import('@/views/ExploreView').then(m => ({ default: m.ExploreView })))
+const ChatListView = lazy(() => import('@/views/ChatListView').then(m => ({ default: m.ChatListView })))
+const ChatRoomView = lazy(() => import('@/views/ChatListView').then(m => ({ default: m.ChatRoomView })))
+const ProfileView = lazy(() => import('@/views/ProfileView').then(m => ({ default: m.ProfileView })))
+const NotificationsView = lazy(() => import('@/views/NotificationsView').then(m => ({ default: m.NotificationsView })))
+const SearchView = lazy(() => import('@/views/SearchView').then(m => ({ default: m.SearchView })))
+const SettingsView = lazy(() => import('@/views/SettingsView').then(m => ({ default: m.SettingsView })))
+const StoriesView = lazy(() => import('@/views/StoriesView').then(m => ({ default: m.StoriesView })))
+const AnonymousChatView = lazy(() => import('@/views/AnonymousChatView').then(m => ({ default: m.AnonymousChatView })))
+const AnonymousChatRoomView = lazy(() => import('@/views/AnonymousChatView').then(m => ({ default: m.AnonymousChatRoomView })))
+const MessagesView = lazy(() => import('@/views/MessagesView').then(m => ({ default: m.MessagesView })))
+const AudioCallView = lazy(() => import('@/views/AudioCallView').then(m => ({ default: m.AudioCallView })))
+const BusinessDashboardView = lazy(() => import('@/views/BusinessDashboardView').then(m => ({ default: m.BusinessDashboardView })))
+const PremiumDashboardView = lazy(() => import('@/views/PremiumDashboardView').then(m => ({ default: m.PremiumDashboardView })))
+const AdsManagerView = lazy(() => import('@/views/AdsManagerView').then(m => ({ default: m.AdsManagerView })))
+const CreateAdView = lazy(() => import('@/views/CreateAdView').then(m => ({ default: m.CreateAdView })))
+const CrmLeadsView = lazy(() => import('@/views/CrmLeadsView').then(m => ({ default: m.CrmLeadsView })))
+const CrmDealsView = lazy(() => import('@/views/CrmDealsView').then(m => ({ default: m.CrmDealsView })))
+const CrmOrdersView = lazy(() => import('@/views/CrmOrdersView').then(m => ({ default: m.CrmOrdersView })))
+const CrmAnalyticsView = lazy(() => import('@/views/CrmAnalyticsView').then(m => ({ default: m.CrmAnalyticsView })))
+const SubscriptionsView = lazy(() => import('@/views/SubscriptionsView').then(m => ({ default: m.SubscriptionsView })))
+const PrivacySettingsView = lazy(() => import('@/views/PrivacySettingsView').then(m => ({ default: m.PrivacySettingsView })))
+const ShareProfileView = lazy(() => import('@/views/ShareProfileView').then(m => ({ default: m.ShareProfileView })))
+const WriteArticleView = lazy(() => import('@/views/WriteArticleView').then(m => ({ default: m.WriteArticleView })))
+const ArticleView = lazy(() => import('@/views/ArticleView').then(m => ({ default: m.ArticleView })))
+const AffiliatesView = lazy(() => import('@/views/AffiliatesView').then(m => ({ default: m.AffiliatesView })))
+const SalaryView = lazy(() => import('@/views/SalaryView').then(m => ({ default: m.SalaryView })))
+const PerformanceView = lazy(() => import('@/views/PerformanceView').then(m => ({ default: m.PerformanceView })))
+const StorefrontView = lazy(() => import('@/views/StorefrontView').then(m => ({ default: m.StorefrontView })))
+const ProductDetailView = lazy(() => import('@/views/ProductDetailView').then(m => ({ default: m.ProductDetailView })))
+const CartView = lazy(() => import('@/views/CartView').then(m => ({ default: m.CartView })))
+const CheckoutView = lazy(() => import('@/views/CheckoutView').then(m => ({ default: m.CheckoutView })))
+const MyStoreView = lazy(() => import('@/views/MyStoreView').then(m => ({ default: m.MyStoreView })))
+const AddProductView = lazy(() => import('@/views/AddProductView').then(m => ({ default: m.AddProductView })))
+const OrderTrackingView = lazy(() => import('@/views/OrderTrackingView').then(m => ({ default: m.OrderTrackingView })))
+const BusinessOrdersView = lazy(() => import('@/views/BusinessOrdersView').then(m => ({ default: m.BusinessOrdersView })))
+const StoreDashboardView = lazy(() => import('@/views/StoreDashboardView').then(m => ({ default: m.StoreDashboardView })))
+
+/* ─── View loading fallback ───────────────────────────────────────────────────── */
+function ViewLoader() {
+  return (
+    <div className="flex items-center justify-center h-[40vh]">
+      <div className="w-6 h-6 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+    </div>
+  )
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    AUTH LOGIC — DO NOT TOUCH (LOCKED)
@@ -122,103 +136,54 @@ function LoadingScreen() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CHAT TABS — Segmented control for Chat / Chat Ads
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-function ChatTabs() {
-  const { activeTab, setActiveTab, totalEarned } = useDualPaneChat()
-
-  return (
-    <div className="flex items-center gap-[3px] p-[3px] rounded-full bg-white/[0.06] border border-white/[0.08]">
-      <button
-        onClick={() => setActiveTab('chat')}
-        className={cn(
-          'relative flex items-center gap-1.5 px-3.5 py-[5px] rounded-full text-[13px] font-semibold transition-all duration-300',
-          activeTab === 'chat'
-            ? 'bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black shadow-md shadow-[#a3d977]/20'
-            : 'text-[#71767b] hover:text-[#c0c0c0]'
-        )}
-      >
-        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0110 0v4"/>
-        </svg>
-        Chat
-      </button>
-      <button
-        onClick={() => setActiveTab('ads')}
-        className={cn(
-          'relative flex items-center gap-1.5 px-3.5 py-[5px] rounded-full text-[13px] font-semibold transition-all duration-300',
-          activeTab === 'ads'
-            ? 'bg-gradient-to-r from-[#f59e0b] to-[#f97316] text-black shadow-md shadow-[#f59e0b]/20'
-            : 'text-[#71767b] hover:text-[#c0c0c0]'
-        )}
-      >
-        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-        </svg>
-        Ads
-        {totalEarned > 0 && (
-          <span className={cn(
-            'ml-0.5 text-[10px] font-bold px-1.5 py-[1px] rounded-full',
-            activeTab === 'ads' ? 'bg-black/20 text-black' : 'bg-[#f59e0b]/15 text-[#f59e0b]'
-          )}>
-            ₹{totalEarned}
-          </span>
-        )}
-      </button>
-    </div>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
    VIEW ROUTER
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function ViewRouter() {
   const currentView = useAppStore((s) => s.currentView)
   const views: Record<string, React.ReactNode> = {
-    feed: <FeedView />,
-    explore: <ExploreView />,
-    chat: <ChatListView />,
-    'chat-room': <ChatRoomView />,
-    profile: <ProfileView />,
-    'user-profile': <ProfileView />,
-    'edit-profile': <SettingsView />,
-    notifications: <NotificationsView />,
-    search: <SearchView />,
-    settings: <SettingsView />,
-    stories: <StoriesView />,
-    'anonymous-chat': <AnonymousChatView />,
-    'anonymous-room': <AnonymousChatRoomView />,
-    'dual-pane-chat': <DualPaneChatView />,
-    'chat': <DualPaneChatView />,
-    'subscriptions': <SubscriptionsView />,
-    'business-dashboard': <BusinessDashboardView />,
-    'ads-manager': <AdsManagerView />,
-    'create-ad': <CreateAdView />,
-    'crm-leads': <CrmLeadsView />,
-    'crm-deals': <CrmDealsView />,
-    'crm-orders': <CrmOrdersView />,
-    'crm-analytics': <CrmAnalyticsView />,
-    'privacy-settings': <PrivacySettingsView />,
-    'share-profile': <ShareProfileView />,
-    'write-article': <WriteArticleView />,
-    'article': <ArticleView />,
-    'affiliates': <AffiliatesView />,
-    'salary': <SalaryView />,
-    'performance': <PerformanceView />,
-    'storefront': <StorefrontView />,
-    'product-detail': <ProductDetailView />,
-    'cart': <CartView />,
-    'checkout': <CheckoutView />,
-    'my-store': <MyStoreView />,
-    'add-product': <AddProductView />,
-    'order-tracking': <OrderTrackingView />,
-    'business-orders': <BusinessOrdersView />,
-    'store-dashboard': <StoreDashboardView />,
+    feed: <Suspense fallback={<ViewLoader />}><FeedView /></Suspense>,
+    explore: <Suspense fallback={<ViewLoader />}><ExploreView /></Suspense>,
+    chat: <Suspense fallback={<ViewLoader />}><ChatListView /></Suspense>,
+    'chat-room': <Suspense fallback={<ViewLoader />}><ChatRoomView /></Suspense>,
+    profile: <Suspense fallback={<ViewLoader />}><ProfileView /></Suspense>,
+    'user-profile': <Suspense fallback={<ViewLoader />}><ProfileView /></Suspense>,
+    'edit-profile': <Suspense fallback={<ViewLoader />}><SettingsView /></Suspense>,
+    notifications: <Suspense fallback={<ViewLoader />}><NotificationsView /></Suspense>,
+    search: <Suspense fallback={<ViewLoader />}><SearchView /></Suspense>,
+    settings: <Suspense fallback={<ViewLoader />}><SettingsView /></Suspense>,
+    stories: <Suspense fallback={<ViewLoader />}><StoriesView /></Suspense>,
+    'anonymous-chat': <Suspense fallback={<ViewLoader />}><AnonymousChatView /></Suspense>,
+    'anonymous-room': <Suspense fallback={<ViewLoader />}><AnonymousChatRoomView /></Suspense>,
+    'dual-pane-chat': <Suspense fallback={<ViewLoader />}><MessagesView /></Suspense>,
+    'audio-call': <Suspense fallback={<ViewLoader />}><AudioCallView /></Suspense>,
+    'subscriptions': <Suspense fallback={<ViewLoader />}><SubscriptionsView /></Suspense>,
+    'business-dashboard': <Suspense fallback={<ViewLoader />}><BusinessDashboardView /></Suspense>,
+    'premium-dashboard': <Suspense fallback={<ViewLoader />}><PremiumDashboardView /></Suspense>,
+    'ads-manager': <Suspense fallback={<ViewLoader />}><AdsManagerView /></Suspense>,
+    'create-ad': <Suspense fallback={<ViewLoader />}><CreateAdView /></Suspense>,
+    'crm-leads': <Suspense fallback={<ViewLoader />}><CrmLeadsView /></Suspense>,
+    'crm-deals': <Suspense fallback={<ViewLoader />}><CrmDealsView /></Suspense>,
+    'crm-orders': <Suspense fallback={<ViewLoader />}><CrmOrdersView /></Suspense>,
+    'crm-analytics': <Suspense fallback={<ViewLoader />}><CrmAnalyticsView /></Suspense>,
+    'privacy-settings': <Suspense fallback={<ViewLoader />}><PrivacySettingsView /></Suspense>,
+    'share-profile': <Suspense fallback={<ViewLoader />}><ShareProfileView /></Suspense>,
+    'write-article': <Suspense fallback={<ViewLoader />}><WriteArticleView /></Suspense>,
+    'article': <Suspense fallback={<ViewLoader />}><ArticleView /></Suspense>,
+    'affiliates': <Suspense fallback={<ViewLoader />}><AffiliatesView /></Suspense>,
+    'salary': <Suspense fallback={<ViewLoader />}><SalaryView /></Suspense>,
+    'performance': <Suspense fallback={<ViewLoader />}><PerformanceView /></Suspense>,
+    'storefront': <Suspense fallback={<ViewLoader />}><StorefrontView /></Suspense>,
+    'product-detail': <Suspense fallback={<ViewLoader />}><ProductDetailView /></Suspense>,
+    'cart': <Suspense fallback={<ViewLoader />}><CartView /></Suspense>,
+    'checkout': <Suspense fallback={<ViewLoader />}><CheckoutView /></Suspense>,
+    'my-store': <Suspense fallback={<ViewLoader />}><MyStoreView /></Suspense>,
+    'add-product': <Suspense fallback={<ViewLoader />}><AddProductView /></Suspense>,
+    'order-tracking': <Suspense fallback={<ViewLoader />}><OrderTrackingView /></Suspense>,
+    'business-orders': <Suspense fallback={<ViewLoader />}><BusinessOrdersView /></Suspense>,
+    'store-dashboard': <Suspense fallback={<ViewLoader />}><StoreDashboardView /></Suspense>,
   }
-  return <>{views[currentView] || <FeedView />}</>
+  return <>{views[currentView] || <Suspense fallback={<ViewLoader />}><FeedView /></Suspense>}</>
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -228,7 +193,7 @@ function ViewRouter() {
 export default function Black94App() {
   const [screen, setScreen] = useState<Screen>('loading')
   const [busy, setBusy] = useState(false)
-  const { user, setUser, setToken, navigate, currentView, composeOpen, setComposeOpen, logout } = useAppStore()
+  const { user, setUser, setToken, navigate, currentView, composeOpen, setComposeOpen, logout, restoreViewFromHash } = useAppStore()
 
   /* ── Scroll-based header hide/show + FAB ──────────────────────────────── */
   const [headerState, setHeaderState] = useState<'visible' | 'hiding' | 'hidden'>('visible')
@@ -288,6 +253,8 @@ export default function Black94App() {
         setScreenRef.current('app')
         setBusyRef.current(false)
         console.log('[Auth] Logged in:', storeUser.username)
+        // Restore previous view from URL hash
+        useAppStore.getState().restoreViewFromHash()
       } catch (err) {
         console.error('[Auth] createUserFromGoogle failed:', err)
         setBusyRef.current(false)
@@ -322,6 +289,8 @@ export default function Black94App() {
         setToken(result.user.uid)
         setScreen('app')
         setBusy(false)
+        // Restore previous view from URL hash
+        restoreViewFromHash()
       }
     } catch (err: unknown) {
       setBusy(false)
@@ -330,7 +299,7 @@ export default function Black94App() {
       console.error('[Auth] signIn error:', err)
       toast.error('Sign in failed. Try again.')
     }
-  }, [setUser, setToken])
+  }, [setUser, setToken, restoreViewFromHash])
 
   /* ── Sign Out ─────────────────────────────────────────────────────────── */
   const handleSignOut = useCallback(async () => {
@@ -349,19 +318,21 @@ export default function Black94App() {
   if (screen === 'loading') return <LoadingScreen />
   if (screen === 'login') return <LoginScreen onSignIn={handleSignIn} busy={busy} />
 
-  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article', 'checkout', 'store-dashboard'].includes(currentView)
+  // Hide chrome for full-screen views
+  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article', 'checkout', 'store-dashboard', 'audio-call'].includes(currentView)
   const isHomeFeed = currentView === 'feed'
 
   // Title for header
   const viewTitles: Record<string, string> = {
     search: 'Search',
     notifications: 'Notifications',
-    settings: 'Settings',
+    settings: 'Edit Profile',
     explore: 'Explore',
     stories: 'Stories',
     'anonymous-chat': 'Anonymous Chat',
     'subscriptions': 'Subscriptions',
     'business-dashboard': 'Business',
+    'premium-dashboard': 'Dashboard',
     'ads-manager': 'Ad Manager',
     'create-ad': 'Create Ad',
     'crm-leads': 'Leads',
@@ -383,20 +354,20 @@ export default function Black94App() {
     'order-tracking': 'My Orders',
     'business-orders': 'Orders',
     'store-dashboard': 'Store Dashboard',
+    'dual-pane-chat': 'Messages',
   }
 
-  const isDualPaneChat = currentView === 'dual-pane-chat' || currentView === 'chat'
-  const headerTitle = isDualPaneChat ? undefined : viewTitles[currentView]
+  const headerTitle = viewTitles[currentView]
 
   return (
     <div className="min-h-screen bg-black">
       {/* ─── Sidebar ─── */}
       <Sidebar />
-      {/* ─── Header (scroll-hide/show on feed, always visible on other pages) ─── */}
+      {/* ─── Header ─── */}
       {showChrome && (
         <MobileHeader
           user={user ? { displayName: user.displayName || 'User', username: user.username, profileImage: user.profileImage } : null}
-          showBack={!!headerTitle || isDualPaneChat}
+          showBack={!!headerTitle}
           onBack={() => navigate('feed')}
           onProfileClick={() => navigate('profile')}
           onSettingsClick={() => useAppStore.getState().setSidebarOpen(true)}
@@ -404,7 +375,6 @@ export default function Black94App() {
           onLogoClick={() => navigate('feed')}
           headerState={isHomeFeed ? headerState : 'visible'}
           title={headerTitle}
-          centerContent={isDualPaneChat ? <ChatTabs /> : undefined}
         />
       )}
 

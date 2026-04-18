@@ -38,68 +38,12 @@ function IconUser({ className }: { className?: string }) {
   )
 }
 
-function IconHome({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className}>
-      <path
-        d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9 21V12h6v9"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 function IconCompass({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className}>
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={1.8} />
       <polygon
         points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function IconBell({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className}>
-      <path
-        d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M13.73 21a2 2 0 01-3.46 0"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function IconChat({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className}>
-      <path
-        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
         stroke="currentColor"
         strokeWidth={1.8}
         strokeLinecap="round"
@@ -188,7 +132,7 @@ const NAV_ITEMS: NavItem[] = [
     id: 'premium',
     label: 'Premium',
     icon: IconStar,
-    view: 'settings',
+    view: 'premium-dashboard',
   },
   {
     id: 'profile',
@@ -197,28 +141,10 @@ const NAV_ITEMS: NavItem[] = [
     view: 'profile',
   },
   {
-    id: 'feed',
-    label: 'Feed',
-    icon: IconHome,
-    view: 'feed',
-  },
-  {
     id: 'explore',
     label: 'Explore',
     icon: IconCompass,
     view: 'explore',
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    icon: IconBell,
-    view: 'notifications',
-  },
-  {
-    id: 'messages',
-    label: 'Messages',
-    icon: IconChat,
-    view: 'dual-pane-chat',
   },
   {
     id: 'bookmarks',
@@ -299,7 +225,7 @@ export function Sidebar() {
       role="navigation"
       aria-label="Main navigation"
       className={cn(
-        'flex h-full flex-col bg-[#07060b]/95 backdrop-blur-xl',
+        'flex h-full flex-col bg-black',
         // Smooth width transition
         'transition-[width] duration-[250ms] ease-in-out',
         // Desktop
@@ -376,7 +302,7 @@ export function Sidebar() {
             className={cn(
               'mb-2 flex items-center gap-3 rounded-xl px-3 py-2.5 text-gray-300 transition-all duration-200',
               'hover:bg-white/[0.04] hover:text-white',
-              'focus-visible:ring-2 focus-visible:ring-[#a3d977]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07060b]',
+              'focus-visible:ring-2 focus-visible:ring-[#a3d977]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
               'outline-none',
               !isExpanded && 'justify-center'
             )}
@@ -400,7 +326,7 @@ export function Sidebar() {
           className={cn(
             'group flex w-full items-center gap-3 rounded-xl p-2.5 transition-all duration-200',
             'hover:bg-white/[0.04]',
-            'focus-visible:ring-2 focus-visible:ring-[#a3d977]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07060b]',
+            'focus-visible:ring-2 focus-visible:ring-[#a3d977]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
             'outline-none',
             !isExpanded && 'justify-center'
           )}
