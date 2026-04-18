@@ -8,7 +8,7 @@ import { PAvatar } from '@/components/PAvatar'
 import type { Chat, Message } from '@/lib/db'
 import { useDualPaneChat, type SponsoredAd } from '@/stores/dualPaneChat'
 import { toast } from 'sonner'
-import { onSnapshot, collection, query, where, orderBy, doc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
@@ -525,8 +525,7 @@ export function ChatRoomView() {
   useEffect(() => {
     if (!chatId || !user) return
     setChatLoading(true)
-    const { getDoc, doc: docFn } = require('firebase/firestore') as any
-    getDoc(docFn(db, 'chats', chatId)).then(async (snap: any) => {
+    getDoc(doc(db, 'chats', chatId)).then(async (snap: any) => {
       if (snap.exists()) {
         const data = snap.data()!
         const resolvedOtherId = data.user1Id === user.id ? data.user2Id : data.user1Id
