@@ -3,11 +3,13 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { fetchChats, sendMessage, fetchMessages } from '@/lib/db'
+import { getUser, sendMessage, fetchChats } from '@/lib/db'
 import { PAvatar } from '@/components/PAvatar'
 import type { Chat, Message } from '@/lib/db'
 import { useDualPaneChat, type SponsoredAd } from '@/stores/dualPaneChat'
 import { toast } from 'sonner'
+import { onSnapshot, collection, query, where, orderBy, doc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -238,25 +240,135 @@ export function ChatListView() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'chat' | 'ads'>('chat')
 
-  const loadChats = useCallback(() => {
+  // Firestore Timestamp → ISO string helper
+  const tsToISO = (value: unknown): string => {
+    if (value && typeof value === 'object' && 'seconds' in value) {
+      const ts = value as { seconds: number; nanoseconds: number }
+      return new Date(ts.seconds * 1000 + ts.nanoseconds / 1_000_000).toISOString()
+    }
+    if (value instanceof Date) return value.toISOString()
+    if (typeof value === 'string') return value
+    return new Date().toISOString()
+  }
+
+  // Helper to enrich chats with other user info and sort
+  const enrichChatList = useCallback(async (chatList: Chat[], userId: string) => {
+    const enriched = await Promise.all(
+      chatList.map(async (chat) => {
+        const otherUserId = chat.user1Id === userId ? chat.user2Id : chat.user1Id
+        let otherUser
+        try {
+          otherUser = await getUser(otherUserId)
+        } catch {
+          otherUser = null
+        }
+        return { ...chat, otherUser: otherUser ?? undefined } as Chat
+      }),
+    )
+    enriched.sort((a, b) => {
+      const ta = a.updatedAt ? new Date(a.updatedAt).getTime() : 0
+      const tb = b.updatedAt ? new Date(b.updatedAt).getTime() : 0
+      return tb - ta
+    })
+    return enriched
+  }, [])
+
+  // Initial data load — fetchChats as reliable fallback
+  useEffect(() => {
     if (!user) return
-    setLoading(true)
+    let cancelled = false
+
     fetchChats(user.id)
-      .then(setChats)
-      .catch(console.error)
-      .finally(() => setLoading(false))
+      .then((enriched) => {
+        if (cancelled) return
+        if (enriched.length > 0) {
+          setChats(enriched)
+        }
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('[ChatListView] initial fetchChats failed:', err)
+        if (!cancelled) setLoading(false)
+      })
+
+    return () => { cancelled = true }
   }, [user])
 
+  // Real-time Firestore listener — keeps list in sync
   useEffect(() => {
-    loadChats()
-  }, [loadChats])
+    if (!user) return
 
-  // Re-fetch chats whenever user navigates back to the chat list
-  useEffect(() => {
-    if (currentView === 'chat') {
-      loadChats()
+    const chatsRef = collection(db, 'chats')
+    const q1 = query(chatsRef, where('user1Id', '==', user.id))
+    const q2 = query(chatsRef, where('user2Id', '==', user.id))
+
+    const mergedDocs = new Map<string, Chat>()
+    let debounceTimer: ReturnType<typeof setTimeout>
+    let initialDone = false
+
+    const enrichAndSet = async () => {
+      try {
+        const chatList = Array.from(mergedDocs.values())
+        const enriched = await enrichChatList(chatList, user.id)
+        if (!initialDone) {
+          // First real-time update — replace initial fetch data entirely
+          setChats(enriched)
+          initialDone = true
+        } else {
+          setChats(enriched)
+        }
+        setLoading(false)
+      } catch (err) {
+        console.error('[ChatListView] enrichAndSet failed:', err)
+        setLoading(false)
+      }
     }
-  }, [currentView, loadChats])
+
+    const handleSnapshot = (snap: any) => {
+      let changed = false
+      for (const change of snap.docChanges()) {
+        if (change.type === 'removed') {
+          if (mergedDocs.delete(change.doc.id)) changed = true
+        } else {
+          const d = change.doc.data()
+          mergedDocs.set(change.doc.id, {
+            id: change.doc.id,
+            user1Id: d.user1Id ?? '',
+            user2Id: d.user2Id ?? '',
+            isPaidChat: d.isPaidChat ?? false,
+            chatPrice: d.chatPrice ?? 0,
+            isPaidBy: d.isPaidBy ?? null,
+            isDeleted: d.isDeleted ?? false,
+            unreadCount: d.unreadCount ?? 0,
+            createdAt: tsToISO(d.createdAt),
+            updatedAt: tsToISO(d.updatedAt),
+            lastMessage: d.lastMessage
+              ? { id: '', chatId: change.doc.id, senderId: d.lastMessage.senderId ?? '', receiverId: d.lastMessage.receiverId ?? '', content: d.lastMessage.content ?? '', messageType: 'text', mediaUrl: null, status: 'sent', createdAt: tsToISO(d.lastMessage.createdAt) }
+              : undefined,
+          } as Chat)
+          changed = true
+        }
+      }
+      if (changed) {
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(enrichAndSet, 300)
+      }
+    }
+
+    const unsub1 = onSnapshot(q1, handleSnapshot)
+    const unsub2 = onSnapshot(q2, handleSnapshot)
+
+    return () => {
+      unsub1()
+      unsub2()
+      clearTimeout(debounceTimer)
+    }
+  }, [user, enrichChatList])
+
+  // Stop loading indicator once we have chats
+  useEffect(() => {
+    if (chats.length > 0) setLoading(false)
+  }, [chats])
 
   return (
     <div className="flex flex-col h-[calc(100vh-90px)]">
@@ -394,18 +506,16 @@ export function ChatRoomView() {
   const chatId = viewParams?.chatId
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!chatId) return
-    setLoading(true)
-    fetchMessages(chatId, 50)
-      .then(setMessages)
-      .catch(console.error)
-      .finally(() => setLoading(false))
-  }, [chatId])
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  // Firestore Timestamp → ISO string helper
+  const tsToISO = (value: unknown): string => {
+    if (value && typeof value === 'object' && 'seconds' in value) {
+      const ts = value as { seconds: number; nanoseconds: number }
+      return new Date(ts.seconds * 1000 + ts.nanoseconds / 1_000_000).toISOString()
+    }
+    if (value instanceof Date) return value.toISOString()
+    if (typeof value === 'string') return value
+    return new Date().toISOString()
+  }
 
   // Resolve other user's ID and profile from the chat document
   const [otherId, setOtherId] = useState<string | null>(null)
@@ -415,40 +525,87 @@ export function ChatRoomView() {
   useEffect(() => {
     if (!chatId || !user) return
     setChatLoading(true)
-    import('firebase/firestore').then(({ getDoc, doc: docFn }) => {
-      import('@/lib/firebase').then(({ db }) => {
-        getDoc(docFn(db, 'chats', chatId)).then(async snap => {
-          if (snap.exists()) {
-            const data = snap.data()!
-            const resolvedOtherId = data.user1Id === user.id ? data.user2Id : data.user1Id
-            setOtherId(resolvedOtherId)
-            // Fetch other user's profile
-            try {
-              const { getUser } = await import('@/lib/db')
-              const otherProfile = await getUser(resolvedOtherId)
-              if (otherProfile) {
-                setOtherUser({
-                  displayName: otherProfile.displayName,
-                  profileImage: otherProfile.profileImage,
-                  username: otherProfile.username,
-                })
-              }
-            } catch (e) {
-              console.error('Failed to fetch other user:', e)
-            }
+    const { getDoc, doc: docFn } = require('firebase/firestore') as any
+    getDoc(docFn(db, 'chats', chatId)).then(async (snap: any) => {
+      if (snap.exists()) {
+        const data = snap.data()!
+        const resolvedOtherId = data.user1Id === user.id ? data.user2Id : data.user1Id
+        setOtherId(resolvedOtherId)
+        try {
+          const otherProfile = await getUser(resolvedOtherId)
+          if (otherProfile) {
+            setOtherUser({
+              displayName: otherProfile.displayName,
+              profileImage: otherProfile.profileImage,
+              username: otherProfile.username,
+            })
           }
-          setChatLoading(false)
-        }).catch(() => setChatLoading(false))
-      })
-    })
+        } catch (e) {
+          console.error('Failed to fetch other user:', e)
+        }
+      }
+      setChatLoading(false)
+    }).catch(() => setChatLoading(false))
   }, [chatId, user])
+
+  // Real-time message listener
+  useEffect(() => {
+    if (!chatId) return
+    setLoading(true)
+    const messagesRef = collection(db, 'chats', chatId, 'messages')
+    const q = query(messagesRef)
+    const unsub = onSnapshot(q, (snap: any) => {
+      const msgs = snap.docs.map((doc: any) => {
+        const d = doc.data()
+        return {
+          id: doc.id,
+          chatId: d.chatId ?? '',
+          senderId: d.senderId ?? '',
+          receiverId: d.receiverId ?? '',
+          content: d.content ?? '',
+          messageType: d.messageType ?? 'text',
+          mediaUrl: d.mediaUrl ?? null,
+          status: d.status ?? 'sent',
+          createdAt: tsToISO(d.createdAt),
+        } as Message
+      })
+      // Sort chronologically (oldest first)
+      msgs.sort((a: Message, b: Message) => {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      })
+      setMessages(msgs)
+      setLoading(false)
+    }, (err: any) => {
+      console.error('[ChatRoom] onSnapshot error:', err)
+      setLoading(false)
+    })
+    return () => unsub()
+  }, [chatId])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   const handleSend = useCallback(async () => {
     if (!text.trim() || !user || !chatId || sending || !otherId) return
     setSending(true)
     try {
-      const msg = await sendMessage(chatId, user.id, otherId, text.trim())
-      setMessages((prev) => [...prev, msg])
+      await sendMessage(chatId, user.id, otherId, text.trim())
+      // Update chat doc with lastMessage so chat list shows preview
+      try {
+        const chatRef = doc(db, 'chats', chatId)
+        await updateDoc(chatRef, {
+          lastMessage: {
+            senderId: user.id,
+            receiverId: otherId,
+            content: text.trim().slice(0, 100),
+            createdAt: serverTimestamp(),
+          },
+          updatedAt: serverTimestamp(),
+        })
+      } catch (updateErr) {
+        console.warn('[ChatRoom] lastMessage update failed (non-critical):', updateErr)
+      }
       setText('')
     } catch (err) {
       console.error('Send failed:', err)
