@@ -172,7 +172,7 @@ export function ChatRoomView() {
   }, [text, user, chatId, sending, otherId])
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-screen">
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
         {loading ? (

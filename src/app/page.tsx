@@ -41,6 +41,7 @@ import { BusinessOrdersView } from '@/views/BusinessOrdersView'
 import { StoreDashboardView } from '@/views/StoreDashboardView'
 import { useDualPaneChat } from '@/stores/dualPaneChat'
 import { MobileNav } from '@/components/MobileNav'
+import { Sidebar } from '@/components/Sidebar'
 import { MobileHeader } from '@/components/MobileHeader'
 import { ComposeDialog } from '@/components/ComposeDialog'
 import { cn } from '@/lib/utils'
@@ -388,7 +389,9 @@ export default function Black94App() {
   const headerTitle = isDualPaneChat ? undefined : viewTitles[currentView]
 
   return (
-    <div className="h-dvh h-[100vh] flex flex-col bg-black overflow-hidden">
+    <div className="min-h-screen bg-black">
+      {/* ─── Sidebar ─── */}
+      <Sidebar />
       {/* ─── Header (scroll-hide/show on feed, always visible on other pages) ─── */}
       {showChrome && (
         <MobileHeader
@@ -396,7 +399,7 @@ export default function Black94App() {
           showBack={!!headerTitle || isDualPaneChat}
           onBack={() => navigate('feed')}
           onProfileClick={() => navigate('profile')}
-          onSettingsClick={() => navigate('settings')}
+          onSettingsClick={() => useAppStore.getState().setSidebarOpen(true)}
           onSignOut={handleSignOut}
           onLogoClick={() => navigate('feed')}
           headerState={isHomeFeed ? headerState : 'visible'}
@@ -406,7 +409,7 @@ export default function Black94App() {
       )}
 
       {/* ─── Views ─── */}
-      <main className="flex-1 min-h-0 overflow-y-auto"><ViewRouter /></main>
+      <main><ViewRouter /></main>
 
       {/* ─── FAB — compose button ─── */}
       {isHomeFeed && (

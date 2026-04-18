@@ -2,8 +2,6 @@
 
 import React from 'react'
 import { cn } from '@/lib/utils'
-import { PAvatar } from './PAvatar'
-import { useCartStore } from '@/stores/cart'
 import { useAppStore } from '@/stores/app'
 
 interface MobileHeaderProps {
@@ -41,12 +39,12 @@ export function MobileHeader({
   return (
     <header
       className={cn(
-        'sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-white/[0.08] safe-area-top shrink-0',
+        'sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-white/[0.08] safe-area-top',
         stateClass
       )}
     >
       <div className="flex items-center justify-between h-[53px] px-4">
-        {/* Left: Avatar or Back button */}
+        {/* Left: Hamburger menu */}
         <div className="w-10 flex items-center justify-start">
           {showBack ? (
             <button
@@ -59,8 +57,14 @@ export function MobileHeader({
               </svg>
             </button>
           ) : (
-            <button onClick={onProfileClick} className="focus:outline-none">
-              <PAvatar src={user?.profileImage} name={user?.displayName} size={34} />
+            <button
+              onClick={() => useAppStore.getState().setSidebarOpen(true)}
+              className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+              aria-label="Open menu"
+            >
+              <svg className="w-[22px] h-[22px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
             </button>
           )}
         </div>
@@ -78,21 +82,8 @@ export function MobileHeader({
           )}
         </div>
 
-        {/* Right: Action */}
-        <div className="w-20 flex items-center justify-end gap-1">
-          {/* Cart Icon */}
-          <button
-            onClick={() => useAppStore.getState().navigate('cart')}
-            className="relative w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
-            aria-label="Cart"
-          >
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="20" cy="21" r="1" />
-              <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
-            </svg>
-            <CartBadge />
-          </button>
+        {/* Right: Settings only */}
+        <div className="w-10 flex items-center justify-end">
           <button
             onClick={onSettingsClick}
             className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
@@ -106,16 +97,5 @@ export function MobileHeader({
         </div>
       </div>
     </header>
-  )
-}
-
-function CartBadge() {
-  const items = useCartStore((s) => s.items)
-  const count = items.reduce((sum, i) => sum + i.quantity, 0)
-  if (count === 0) return null
-  return (
-    <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#a3d977] text-black text-[10px] font-bold flex items-center justify-center">
-      {count > 99 ? '99+' : count}
-    </span>
   )
 }

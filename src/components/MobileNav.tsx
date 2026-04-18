@@ -80,8 +80,6 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
 ]
 
 export function MobileNav({ currentView, onNavigate }: MobileNavProps) {
-  const user = useAppStore((s) => s.user)
-
   return (
     <nav className="fixed bottom-0 inset-x-0 z-30 bg-black/90 backdrop-blur-xl border-t border-white/[0.08] safe-area-bottom shrink-0">
       <div className="flex items-center justify-around h-[50px]">
@@ -98,27 +96,6 @@ export function MobileNav({ currentView, onNavigate }: MobileNavProps) {
             </button>
           )
         })}
-        {/* Profile — always last, uses avatar */}
-        <button
-          onClick={() => onNavigate('profile')}
-          className="flex items-center justify-center w-16 h-full relative transition-colors duration-150"
-          aria-label="Profile"
-        >
-          <div
-            className={cn(
-              'w-[26px] h-[26px] rounded-full overflow-hidden',
-              currentView === 'profile' ? 'ring-2 ring-[#a3d977]' : 'ring-1 ring-[#536471]'
-            )}
-          >
-            {user?.profileImage ? (
-              <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center text-[10px] text-white font-bold">
-                {(user?.displayName || 'U')[0].toUpperCase()}
-              </div>
-            )}
-          </div>
-        </button>
       </div>
     </nav>
   )
