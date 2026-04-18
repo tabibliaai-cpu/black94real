@@ -8,8 +8,10 @@ import { PAvatar } from '@/components/PAvatar'
 import type { Chat, Message } from '@/lib/db'
 import { useDualPaneChat, type SponsoredAd } from '@/stores/dualPaneChat'
 import { toast } from 'sonner'
-import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import Picker from '@emoji-mart/react'
+import emojiData from '@emoji-mart/data'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -503,8 +505,11 @@ export function ChatRoomView() {
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [showEmoji, setShowEmoji] = useState(false)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const chatId = viewParams?.chatId
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
   // Firestore Timestamp → ISO string helper
   const tsToISO = (value: unknown): string => {
@@ -585,12 +590,11 @@ export function ChatRoomView() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = useCallback(async () => {
+  const handleSendText = useCallback(async () => {
     if (!text.trim() || !user || !chatId || sending || !otherId) return
     setSending(true)
     try {
       await sendMessage(chatId, user.id, otherId, text.trim())
-      // Update chat doc with lastMessage so chat list shows preview
       try {
         const chatRef = doc(db, 'chats', chatId)
         await updateDoc(chatRef, {
@@ -612,6 +616,71 @@ export function ChatRoomView() {
       setSending(false)
     }
   }, [text, user, chatId, sending, otherId])
+
+  const handleSendImage = useCallback(async () => {
+    if (!imagePreview || !user || !chatId || sending || !otherId) return
+    setSending(true)
+    try {
+      // Write image message directly since db.ts sendMessage is text-only
+      await addDoc(collection(db, 'chats', chatId, 'messages'), {
+        chatId,
+        senderId: user.id,
+        receiverId: otherId,
+        content: '📷 Photo',
+        messageType: 'image',
+        mediaUrl: imagePreview,
+        status: 'sent',
+        createdAt: serverTimestamp(),
+      })
+      try {
+        const chatRef = doc(db, 'chats', chatId)
+        await updateDoc(chatRef, {
+          lastMessage: {
+            senderId: user.id,
+            receiverId: otherId,
+            content: '📷 Photo',
+            messageType: 'image',
+            createdAt: serverTimestamp(),
+          },
+          updatedAt: serverTimestamp(),
+        })
+      } catch (updateErr) {
+        console.warn('[ChatRoom] lastMessage update failed (non-critical):', updateErr)
+      }
+      setImagePreview(null)
+      if (imageInputRef.current) imageInputRef.current.value = ''
+    } catch (err) {
+      console.error('Image send failed:', err)
+      toast.error('Failed to send image')
+    } finally {
+      setSending(false)
+    }
+  }, [imagePreview, user, chatId, sending, otherId])
+
+  const handleImageSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5MB')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => setImagePreview(reader.result as string)
+    reader.readAsDataURL(file)
+  }, [])
+
+  const handleEmojiSelect = (emoji: any) => {
+    setText((prev) => prev + emoji.native)
+    setShowEmoji(false)
+  }
+
+  const handleSend = useCallback(() => {
+    if (imagePreview) {
+      handleSendImage()
+    } else {
+      handleSendText()
+    }
+  }, [imagePreview, handleSendImage, handleSendText])
 
   return (
     <div className="flex flex-col h-[calc(100vh-90px)]">
@@ -681,11 +750,20 @@ export function ChatRoomView() {
               <div key={msg.id} className={cn('flex', isMine ? 'justify-end' : 'justify-start')}>
                 <div
                   className={cn(
-                    'max-w-[75%] px-4.5 py-3 rounded-2xl text-[15px] leading-relaxed',
+                    'max-w-[75%] px-4 py-3 rounded-2xl text-[15px] leading-relaxed',
                     isMine ? 'bg-[#8b5cf6] text-white rounded-br-md' : 'bg-white/[0.06] text-[#f0eef6] rounded-bl-md'
                   )}
                 >
-                  <p>{msg.content}</p>
+                  {msg.messageType === 'image' && msg.mediaUrl ? (
+                    <img
+                      src={msg.mediaUrl}
+                      alt="Shared image"
+                      className="max-w-[240px] rounded-xl mb-1.5 cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => window.open(msg.mediaUrl!, '_blank')}
+                    />
+                  ) : (
+                    <p>{msg.content}</p>
+                  )}
                   <p className={cn('text-[11px] mt-1', isMine ? 'text-white/60' : 'text-[#94a3b8]')}>
                     {formatTime(msg.createdAt)}
                   </p>
@@ -697,10 +775,78 @@ export function ChatRoomView() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Emoji Picker */}
+      {showEmoji && (
+        <div className="shrink-0 border-t border-white/[0.06] animate-fade-in">
+          <Picker
+            data={emojiData}
+            onEmojiSelect={handleEmojiSelect}
+            theme="dark"
+            set="native"
+            perLine={8}
+            previewPosition="none"
+            skinTonePosition="search"
+            style={{ maxWidth: '100%' }}
+          />
+        </div>
+      )}
+
+      {/* Image preview bar */}
+      {imagePreview && (
+        <div className="shrink-0 px-5 py-2.5 border-t border-white/[0.06] bg-[#09080f] flex items-center gap-3">
+          <img src={imagePreview} alt="Preview" className="w-14 h-14 rounded-xl object-cover border border-white/[0.08]" />
+          <div className="flex-1 min-w-0">
+            <p className="text-[13px] text-[#f0eef6] truncate">Photo ready to send</p>
+            <button onClick={() => { setImagePreview(null); if (imageInputRef.current) imageInputRef.current.value = '' }} className="text-[12px] text-red-400 hover:text-red-300 transition-colors mt-0.5">Remove</button>
+          </div>
+          <button
+            onClick={handleSendImage}
+            disabled={sending}
+            className="px-4 py-2 rounded-xl bg-[#8b5cf6] text-black text-[14px] font-bold hover:bg-[#7c3aed] transition-colors disabled:opacity-50"
+          >
+            {sending ? 'Sending...' : 'Send'}
+          </button>
+        </div>
+      )}
+
       {/* Input bar */}
-      <div className="sticky bottom-0 border-t border-white/[0.06] bg-[#09080f] px-5 py-3.5 safe-area-bottom">
-        <div className="flex items-end gap-3">
-          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-colors px-4.5 py-3">
+      <div className="shrink-0 border-t border-white/[0.06] bg-[#09080f] px-4 py-3 safe-area-bottom">
+        <div className="flex items-end gap-2">
+          {/* Emoji button */}
+          <button
+            onClick={() => setShowEmoji(!showEmoji)}
+            className={cn(
+              'w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-colors mb-0.5',
+              showEmoji ? 'bg-[#8b5cf6]/20' : 'hover:bg-white/[0.08]'
+            )}
+          >
+            <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+
+          {/* Image upload button */}
+          <button
+            onClick={() => imageInputRef.current?.click()}
+            className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 hover:bg-white/[0.08] transition-colors mb-0.5"
+          >
+            <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+              <rect x="3" y="3" width="18" height="18" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageSelect}
+          />
+
+          {/* Text input */}
+          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-colors px-4 py-2.5">
             <input
               type="text"
               value={text}
@@ -710,12 +856,14 @@ export function ChatRoomView() {
               className="w-full bg-transparent text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none"
             />
           </div>
+
+          {/* Send button */}
           <button
             onClick={handleSend}
-            disabled={!text.trim() || sending || !otherId || chatLoading}
+            disabled={(!text.trim() && !imagePreview) || sending || !otherId || chatLoading}
             className={cn(
-              'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0',
-              text.trim() && !sending && otherId
+              'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0 mb-0.5',
+              (text.trim() || imagePreview) && !sending && otherId
                 ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed]'
                 : 'bg-white/[0.06] text-[#64748b]'
             )}
