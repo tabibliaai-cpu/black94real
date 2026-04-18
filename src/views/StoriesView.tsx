@@ -327,15 +327,22 @@ export function StoriesView() {
   const loadStories = useCallback(async () => {
     try {
       setLoading(true)
+      // Fetch groups and user stories in parallel
       const [groups, mySt] = await Promise.all([
-        fetchStoryGroups(),
-        user ? fetchUserStories(user.id) : Promise.resolve([]),
+        fetchStoryGroups().catch((e) => {
+          console.error('[StoriesView] fetchStoryGroups failed:', e)
+          toast.error('Failed to load stories. Check your connection.')
+          return [] as StoryGroup[]
+        }),
+        user ? fetchUserStories(user.id).catch((e) => {
+          console.error('[StoriesView] fetchUserStories failed:', e)
+          return [] as Story[]
+        }) : Promise.resolve([]),
       ])
       setFirestoreGroups(groups)
       setMyStories(mySt)
     } catch (err) {
-      console.error('Failed to fetch stories:', err)
-      toast.error('Failed to load stories')
+      console.error('[StoriesView] loadStories error:', err)
     } finally {
       setLoading(false)
     }

@@ -4,13 +4,13 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useAppStore } from '@/stores/app'
 import { createStory } from '@/lib/stories-db'
-import { IMAGE_FILTERS, getFilterById, type ImageFilter } from '@/lib/image-filters'
+import { IMAGE_FILTERS, type ImageFilter } from '@/lib/image-filters'
 import { toast } from 'sonner'
 
 interface StoryUploadSheetProps {
   open: boolean
   onClose: () => void
-  onStoryUploaded: () => void   // now just signals "done"
+  onStoryUploaded: () => void
 }
 
 /* ── Image compression (9:16 optimized for stories) ─────────────────────── */
@@ -71,12 +71,12 @@ function compressStoryImage(
 export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUploadSheetProps) {
   const user = useAppStore((s) => s.user)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)  // raw for preview
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [selectedFilter, setSelectedFilter] = useState<ImageFilter>(IMAGE_FILTERS[0])
   const [caption, setCaption] = useState('')
   const [isDragging, setIsDragging] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [compressing, setCompressing] = useState(false)
+  const [step, setStep] = useState<'idle' | 'compressing' | 'uploading' | 'done'>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const filtersScrollRef = useRef<HTMLDivElement>(null)
 
@@ -88,7 +88,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
       setSelectedFilter(IMAGE_FILTERS[0])
       setCaption('')
       setUploading(false)
-      setCompressing(false)
+      setStep('idle')
     }
   }, [open])
 
@@ -130,10 +130,26 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
   const handleShare = useCallback(async () => {
     if (!previewUrl || !selectedFile || !user || uploading) return
     setUploading(true)
-    setCompressing(true)
+
+    // Step 1: Compress image
+    let compressed = ''
     try {
-      const compressed = await compressStoryImage(selectedFile, selectedFilter.css)
-      setCompressing(false)
+      setStep('compressing')
+      console.log('[StoryUpload] Compressing image…')
+      compressed = await compressStoryImage(selectedFile, selectedFilter.css)
+      console.log('[StoryUpload] Compression done. Size:', Math.round(compressed.length / 1024), 'KB')
+    } catch (compressErr) {
+      console.error('[StoryUpload] Compression FAILED:', compressErr)
+      setUploading(false)
+      setStep('idle')
+      toast.error('Failed to process image. Try a different photo.')
+      return
+    }
+
+    // Step 2: Upload to Firestore
+    try {
+      setStep('uploading')
+      console.log('[StoryUpload] Uploading to Firestore…')
       await createStory({
         userId: user.id,
         username: user.username,
@@ -143,21 +159,30 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
         mediaUrl: compressed,
         caption: caption.trim(),
       })
-      toast.success('Story shared!')
-      onStoryUploaded()
-      onClose()
-    } catch (err) {
-      console.error('Story upload failed:', err)
-      setCompressing(false)
-      toast.error('Failed to upload story. Try again.')
-    } finally {
+      console.log('[StoryUpload] Firestore write ✅')
+    } catch (uploadErr) {
+      console.error('[StoryUpload] Firestore write FAILED:', uploadErr)
       setUploading(false)
+      setStep('idle')
+      const msg = uploadErr instanceof Error ? uploadErr.message : String(uploadErr)
+      toast.error(`Upload failed: ${msg}`)
+      return
     }
+
+    // All done
+    setStep('done')
+    toast.success('Story shared!')
+    onStoryUploaded()
+    onClose()
+    setUploading(false)
   }, [previewUrl, selectedFile, selectedFilter, caption, user, uploading, onStoryUploaded, onClose])
 
   const handleClose = useCallback(() => {
     onClose()
   }, [onClose])
+
+  // Derive status text from step
+  const statusText = step === 'compressing' ? 'Compressing…' : step === 'uploading' ? 'Sharing to cloud…' : uploading ? 'Sharing…' : 'Share Story'
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose() }}>
@@ -310,19 +335,19 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
           {/* Share button */}
           <button
             onClick={handleShare}
-            disabled={!previewUrl || uploading || compressing}
+            disabled={!previewUrl || uploading}
             className={`
               w-full py-3 rounded-full text-[15px] font-bold transition-all flex items-center justify-center gap-2
-              ${previewUrl && !uploading && !compressing
+              ${previewUrl && !uploading
                 ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.98]'
                 : 'bg-white/[0.08] text-[#64748b] cursor-not-allowed'
               }
             `}
           >
-            {compressing && (
+            {uploading && (
               <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
             )}
-            {uploading ? 'Sharing...' : compressing ? 'Processing...' : 'Share Story'}
+            {statusText}
           </button>
         </div>
       </SheetContent>
