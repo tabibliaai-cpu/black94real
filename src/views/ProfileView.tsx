@@ -5,8 +5,10 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { getUser, toggleFollow } from '@/lib/db'
 import { fetchUserPostsNoIndex, checkPostInteractions, togglePostLike, togglePostRepost, togglePostBookmark } from '@/lib/social'
+import { fetchBusinessProducts } from '@/lib/shop'
 import { PAvatar } from '@/components/PAvatar'
 import { UserPostCard } from '@/components/UserPostCard'
+import { ProductCard } from '@/components/ProductCard'
 import type { Black94User } from '@/lib/db'
 
 export function ProfileView() {
@@ -17,11 +19,14 @@ export function ProfileView() {
   const [profile, setProfile] = useState<Black94User | null>(null)
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'posts' | 'replies' | 'likes'>('posts')
+  const [activeTab, setActiveTab] = useState<'posts' | 'replies' | 'likes' | 'store'>('posts')
   const [isFollowing, setIsFollowing] = useState(false)
+  const [products, setProducts] = useState<any[]>([])
+  const [productsLoading, setProductsLoading] = useState(false)
 
   const targetUserId = viewParams?.userId || user?.id
   const isOwnProfile = !viewParams?.userId || viewParams.userId === user?.id
+  const isBusinessAccount = profile?.role === 'business'
 
   // Fetch profile + posts
   useEffect(() => {
@@ -41,6 +46,16 @@ export function ProfileView() {
       })
       .finally(() => setLoading(false))
   }, [targetUserId])
+
+  // Fetch products when store tab is active
+  useEffect(() => {
+    if (activeTab !== 'store' || !targetUserId) return
+    setProductsLoading(true)
+    fetchBusinessProducts(targetUserId, 20)
+      .then(({ products: prods }) => setProducts(prods))
+      .catch(() => setProducts([]))
+      .finally(() => setProductsLoading(false))
+  }, [activeTab, targetUserId])
 
   // Check interaction status for posts
   useEffect(() => {
@@ -209,7 +224,7 @@ export function ProfileView() {
       {/* Tabs */}
       <div className="sticky top-[53px] z-20 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex">
-          {(['posts', 'replies', 'likes'] as const).map((tab) => (
+          {(isBusinessAccount ? ['posts', 'store', 'likes'] : ['posts', 'replies', 'likes'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -227,8 +242,44 @@ export function ProfileView() {
         </div>
       </div>
 
-      {/* Posts */}
-      {posts.length === 0 ? (
+      {/* Tab Content */}
+      {activeTab === 'store' ? (
+        <>
+          {productsLoading ? (
+            <div className="grid grid-cols-2 gap-3 p-4">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="rounded-xl bg-white/[0.06] aspect-square animate-pulse" />
+              ))}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
+              <svg className="w-12 h-12 text-[#71767b] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3 6h18" strokeLinecap="round" />
+                <path d="M16 10a4 4 0 01-8 0" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <p className="text-[15px] text-[#71767b]">No products listed yet</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 p-4">
+              {products.map((p: any) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          )}
+          {isOwnProfile && (
+            <button
+              onClick={() => navigate('add-product')}
+              className="fixed bottom-20 right-4 w-14 h-14 rounded-full bg-[#a3d977] flex items-center justify-center shadow-lg shadow-[#a3d977]/30 hover:bg-[#8cc65e] active:scale-90 transition-all z-30"
+              aria-label="Add product"
+            >
+              <svg className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </button>
+          )}
+        </>
+      ) : posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
           <p className="text-[15px] text-[#71767b]">No posts yet</p>
         </div>

@@ -30,7 +30,6 @@ import { ArticleView } from '@/views/ArticleView'
 import { AffiliatesView } from '@/views/AffiliatesView'
 import { SalaryView } from '@/views/SalaryView'
 import { PerformanceView } from '@/views/PerformanceView'
-import { StoreView } from '@/views/StoreView'
 import { StorefrontView } from '@/views/StorefrontView'
 import { ProductDetailView } from '@/views/ProductDetailView'
 import { CartView } from '@/views/CartView'
@@ -207,7 +206,6 @@ function ViewRouter() {
     'affiliates': <AffiliatesView />,
     'salary': <SalaryView />,
     'performance': <PerformanceView />,
-    'store': <StoreView />,
     'storefront': <StorefrontView />,
     'product-detail': <ProductDetailView />,
     'cart': <CartView />,
@@ -374,7 +372,6 @@ export default function Black94App() {
     'affiliates': 'Affiliates',
     'salary': 'Salary',
     'performance': 'Performance',
-    'store': 'Store',
     'storefront': 'Store',
     'product-detail': 'Product',
     'cart': 'Cart',

@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
+import { useAppStore } from '@/stores/app'
+import { StoryUploadSheet } from '@/components/StoryUploadSheet'
 
 /* ── Types ───────────────────────────────────────────────────────────── */
 
@@ -351,8 +353,11 @@ function StoryViewer({
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export function StoriesView() {
+  const user = useAppStore((s) => s.user)
   const [groups, setGroups] = useState(MOCK_STORIES)
   const [activeGroupIdx, setActiveGroupIdx] = useState<number | null>(null)
+  const [uploadOpen, setUploadOpen] = useState(false)
+  const [myStories, setMyStories] = useState<Array<{ id: string; imageUrl: string }>>([])
 
   const openStory = (idx: number) => {
     setActiveGroupIdx(idx)
@@ -361,6 +366,28 @@ export function StoriesView() {
   const closeStory = () => {
     setActiveGroupIdx(null)
   }
+
+  const handleStoryUploaded = (imageUrl: string) => {
+    const newStory = { id: `my-${Date.now()}`, imageUrl }
+    setMyStories((prev) => [...prev, newStory])
+    setUploadOpen(false)
+  }
+
+  // Prepend user's own stories if they have any
+  const allGroups = user && myStories.length > 0
+    ? [
+        {
+          userId: user.id,
+          username: user.username,
+          displayName: user.displayName || 'You',
+          profileImage: user.profileImage || '',
+          verified: user.isVerified,
+          viewed: false,
+          stories: myStories,
+        },
+        ...groups,
+      ]
+    : groups
 
   // Group stories: unviewed first
   const unviewed = groups.filter((g) => !g.viewed)
@@ -377,12 +404,34 @@ export function StoriesView() {
       {/* Your story + Add */}
       <div className="px-4 pb-4">
         <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-1">
-          {/* Add Story */}
-          <button className="flex flex-col items-center gap-1.5 shrink-0">
-            <div className="w-16 h-16 rounded-full bg-white/[0.06] border-2 border-dashed border-white/[0.2] flex items-center justify-center relative">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#0a0a0a] flex items-center justify-center">
-                <svg className="w-7 h-7 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+          {/* Your Story */}
+          <button
+            onClick={() => setUploadOpen(true)}
+            className="flex flex-col items-center gap-1.5 shrink-0"
+          >
+            <div className="relative">
+              {myStories.length > 0 ? (
+                <StoryRing viewed={false} size={64}>
+                  <img
+                    src={myStories[0].imageUrl}
+                    alt="Your story"
+                    className="w-full h-full object-cover"
+                  />
+                </StoryRing>
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-white/[0.06] border-2 border-dashed border-white/[0.2] flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#0a0a0a] flex items-center justify-center">
+                    <svg className="w-7 h-7 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+              {/* Camera icon overlay */}
+              <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-[#a3d977] flex items-center justify-center border-2 border-[#0a0a0a]">
+                <svg className="w-3.5 h-3.5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+                  <circle cx="12" cy="13" r="4" />
                 </svg>
               </div>
             </div>
@@ -393,7 +442,7 @@ export function StoriesView() {
           {unviewed.map((g, i) => (
             <button
               key={g.userId}
-              onClick={() => openStory(groups.indexOf(g))}
+              onClick={() => openStory(allGroups.indexOf(g))}
               className="flex flex-col items-center gap-1.5 shrink-0"
             >
               <StoryRing viewed={false} size={64}>
@@ -422,7 +471,7 @@ export function StoriesView() {
             {viewed.map((g) => (
               <button
                 key={g.userId}
-                onClick={() => openStory(groups.indexOf(g))}
+                onClick={() => openStory(allGroups.indexOf(g))}
                 className="relative rounded-xl overflow-hidden aspect-[9/16] bg-white/[0.04] group"
               >
                 <img
@@ -491,11 +540,18 @@ export function StoriesView() {
       {/* Full-screen Story Viewer */}
       {activeGroupIdx !== null && (
         <StoryViewer
-          groups={groups}
+          groups={allGroups}
           initialGroupIndex={activeGroupIdx}
           onClose={closeStory}
         />
       )}
+
+      {/* Story Upload Sheet */}
+      <StoryUploadSheet
+        open={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        onStoryUploaded={handleStoryUploaded}
+      />
     </div>
   )
 }
