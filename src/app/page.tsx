@@ -30,6 +30,15 @@ import { ArticleView } from '@/views/ArticleView'
 import { AffiliatesView } from '@/views/AffiliatesView'
 import { SalaryView } from '@/views/SalaryView'
 import { PerformanceView } from '@/views/PerformanceView'
+import { StoreView } from '@/views/StoreView'
+import { StorefrontView } from '@/views/StorefrontView'
+import { ProductDetailView } from '@/views/ProductDetailView'
+import { CartView } from '@/views/CartView'
+import { CheckoutView } from '@/views/CheckoutView'
+import { MyStoreView } from '@/views/MyStoreView'
+import { AddProductView } from '@/views/AddProductView'
+import { OrderTrackingView } from '@/views/OrderTrackingView'
+import { BusinessOrdersView } from '@/views/BusinessOrdersView'
 import { useDualPaneChat } from '@/stores/dualPaneChat'
 import { MobileNav } from '@/components/MobileNav'
 import { MobileHeader } from '@/components/MobileHeader'
@@ -198,6 +207,15 @@ function ViewRouter() {
     'affiliates': <AffiliatesView />,
     'salary': <SalaryView />,
     'performance': <PerformanceView />,
+    'store': <StoreView />,
+    'storefront': <StorefrontView />,
+    'product-detail': <ProductDetailView />,
+    'cart': <CartView />,
+    'checkout': <CheckoutView />,
+    'my-store': <MyStoreView />,
+    'add-product': <AddProductView />,
+    'order-tracking': <OrderTrackingView />,
+    'business-orders': <BusinessOrdersView />,
   }
   return <>{views[currentView] || <FeedView />}</>
 }
@@ -330,7 +348,7 @@ export default function Black94App() {
   if (screen === 'loading') return <LoadingScreen />
   if (screen === 'login') return <LoginScreen onSignIn={handleSignIn} busy={busy} />
 
-  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article'].includes(currentView)
+  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article', 'checkout'].includes(currentView)
   const isHomeFeed = currentView === 'feed'
 
   // Title for header
@@ -356,6 +374,14 @@ export default function Black94App() {
     'affiliates': 'Affiliates',
     'salary': 'Salary',
     'performance': 'Performance',
+    'store': 'Store',
+    'storefront': 'Store',
+    'product-detail': 'Product',
+    'cart': 'Cart',
+    'my-store': 'My Store',
+    'add-product': 'Add Product',
+    'order-tracking': 'My Orders',
+    'business-orders': 'Orders',
   }
 
   const isDualPaneChat = currentView === 'dual-pane-chat' || currentView === 'chat'

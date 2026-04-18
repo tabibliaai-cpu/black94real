@@ -8,6 +8,8 @@ export type AppView =
   | 'crm-analytics' | 'affiliates' | 'subscriptions' | 'share-profile'
   | 'user-profile' | 'threads' | 'thread-detail'
   | 'anonymous-chat' | 'anonymous-room' | 'reels' | 'stories' | 'dual-pane-chat'
+  | 'store' | 'storefront' | 'product-detail' | 'cart' | 'checkout'
+  | 'my-store' | 'add-product' | 'order-tracking' | 'business-orders'
 
 export type AccountType = 'personal' | 'creator' | 'professional' | 'business'
 

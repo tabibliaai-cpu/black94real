@@ -192,6 +192,34 @@ export function SettingsView() {
         />
       </div>
 
+      {/* ─── Store & Commerce ─── */}
+      <div className="border-t border-white/[0.06] pt-4 space-y-1">
+        <SectionHeader label="Store & Commerce" />
+        <MenuRow
+          icon={<svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>}
+          label="Browse Store"
+          badge="Market"
+          onClick={() => navigate('store')}
+        />
+        {isBusiness && (
+          <MenuRow
+            icon={<svg className="w-[18px] h-[18px] text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>}
+            label="My Store"
+            onClick={() => navigate('my-store')}
+          />
+        )}
+        <MenuRow
+          icon={<svg className="w-[18px] h-[18px] text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
+          label="My Orders"
+          onClick={() => navigate('order-tracking')}
+        />
+        <MenuRow
+          icon={<svg className="w-[18px] h-[18px] text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>}
+          label="Cart"
+          onClick={() => navigate('cart')}
+        />
+      </div>
+
       {/* ─── Business & Advertising ─── */}
       <div className="border-t border-white/[0.06] pt-4 space-y-1">
         <SectionHeader label="Business & Advertising" />

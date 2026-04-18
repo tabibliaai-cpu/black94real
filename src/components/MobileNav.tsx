@@ -20,21 +20,14 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     ),
   },
   {
-    view: 'stories',
-    label: 'Stories',
+    view: 'store',
+    label: 'Store',
     icon: (active) => (
-      <div className="relative w-[26px] h-[26px]">
-        <div className={cn(
-          'w-[26px] h-[26px] rounded-full',
-          active ? 'ring-[2.5px] ring-[#a3d977]' : 'ring-[1.5px] ring-[#536471]'
-        )} />
-        <div className="absolute inset-[5px] rounded-full bg-black" />
-        <div className="absolute inset-[5px] rounded-full bg-black flex items-center justify-center">
-          <svg className={cn('w-3 h-3', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
-            <circle cx="12" cy="12" r="5" />
-          </svg>
-        </div>
-      </div>
+      <svg className={cn('w-[26px] h-[26px]', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.5 : 1.8}>
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="3" y1="6" x2="21" y2="6" strokeLinecap="round" />
+        <path d="M16 10a4 4 0 01-8 0" strokeLinecap="round" />
+      </svg>
     ),
   },
   {
