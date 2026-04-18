@@ -266,7 +266,7 @@ export function UserPostCard({
               <ExpandableText
                 id={post.id}
                 text={post.caption}
-                maxLines={3}
+                maxLines={4}
                 className="mt-1 text-[15px] leading-[22px] text-[#f0eef6]"
                 renderContent={highlightContent}
               />
