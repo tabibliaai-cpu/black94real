@@ -5,11 +5,22 @@ import { cn } from '@/lib/utils'
 import { useDualPaneChat, type ChatMsg, type MessageReaction, type MockChatItem } from '@/stores/dualPaneChat'
 import { useAppStore } from '@/stores/app'
 import { PAvatar } from '@/components/PAvatar'
-import { fetchChats } from '@/lib/db'
+import { getUser } from '@/lib/db'
 import type { Chat as FbChat } from '@/lib/db'
 import { onSnapshot, collection, query, where } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { toast } from 'sonner'
+
+/* ── Helper: Firestore Timestamp → ISO string ──────────────────────────── */
+function tsToISO(value: unknown): string {
+  if (value && typeof value === 'object' && 'seconds' in value) {
+    const ts = value as { seconds: number; nanoseconds: number }
+    return new Date(ts.seconds * 1000 + ts.nanoseconds / 1_000_000).toISOString()
+  }
+  if (value instanceof Date) return value.toISOString()
+  if (typeof value === 'string') return value
+  return new Date().toISOString()
+}
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -897,29 +908,78 @@ function ChatListView() {
   useEffect(() => {
     if (!user) return
 
-    // Initial fetch
-    fetchChats(user.id).then(setFbChats).catch(() => {})
-
-    // Real-time listener: watch for chat document changes
+    // Direct onSnapshot approach — no composite index required.
+    // Both queries feed into the same merged map; changes are debounced
+    // before enriching with other-user info and updating state.
     const chatsRef = collection(db, 'chats')
     const q1 = query(chatsRef, where('user1Id', '==', user.id))
     const q2 = query(chatsRef, where('user2Id', '==', user.id))
 
-    let timer: ReturnType<typeof setTimeout>
-    const refetch = () => {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        fetchChats(user.id).then(setFbChats).catch(() => {})
-      }, 500)
+    const mergedDocs = new Map<string, FbChat>()
+    let debounceTimer: ReturnType<typeof setTimeout>
+
+    const enrichAndSet = async () => {
+      try {
+        const chats = Array.from(mergedDocs.values())
+        const enriched = await Promise.all(
+          chats.map(async (chat) => {
+            const otherUserId = chat.user1Id === user.id ? chat.user2Id : chat.user1Id
+            let otherUser
+            try {
+              otherUser = await getUser(otherUserId)
+            } catch {
+              otherUser = null
+            }
+            return { ...chat, otherUser: otherUser ?? undefined } as FbChat
+          }),
+        )
+        // Sort by updatedAt descending (most recent first)
+        enriched.sort((a, b) => {
+          const ta = a.updatedAt ? new Date(a.updatedAt).getTime() : 0
+          const tb = b.updatedAt ? new Date(b.updatedAt).getTime() : 0
+          return tb - ta
+        })
+        setFbChats(enriched)
+      } catch (err) {
+        console.error('[ChatListView] enrichAndSet failed:', err)
+      }
     }
 
-    const unsub1 = onSnapshot(q1, refetch)
-    const unsub2 = onSnapshot(q2, refetch)
+    const handleSnapshot = (snap: any) => {
+      let changed = false
+      for (const change of snap.docChanges()) {
+        if (change.type === 'removed') {
+          if (mergedDocs.delete(change.doc.id)) changed = true
+        } else {
+          const d = change.doc.data()
+          mergedDocs.set(change.doc.id, {
+            id: change.doc.id,
+            user1Id: d.user1Id ?? '',
+            user2Id: d.user2Id ?? '',
+            isPaidChat: d.isPaidChat ?? false,
+            chatPrice: d.chatPrice ?? 0,
+            isPaidBy: d.isPaidBy ?? null,
+            isDeleted: d.isDeleted ?? false,
+            unreadCount: d.unreadCount ?? 0,
+            createdAt: tsToISO(d.createdAt),
+            updatedAt: tsToISO(d.updatedAt),
+          } as FbChat)
+          changed = true
+        }
+      }
+      if (changed) {
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(enrichAndSet, 300)
+      }
+    }
+
+    const unsub1 = onSnapshot(q1, handleSnapshot)
+    const unsub2 = onSnapshot(q2, handleSnapshot)
 
     return () => {
       unsub1()
       unsub2()
-      clearTimeout(timer)
+      clearTimeout(debounceTimer)
     }
   }, [user])
 
@@ -1072,7 +1132,7 @@ function ChatListView() {
                     {chat.otherUser?.displayName || 'User'}
                   </span>
                   <span className="text-[12px] text-[#536471] shrink-0 ml-2">
-                    {timeAgo(chat.lastMessage?.createdAt)}
+                    {timeAgo(chat.updatedAt)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-0.5">
