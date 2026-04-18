@@ -1,0 +1,31 @@
+{
+  "cookies": [
+    {
+      "name": "NID",
+      "value": "530=sZgA4mWgBQLJ8lXZ5K_cYx9ixWCPrrmPYUJKENZi87sn8Yc6RWJk7T0ApRrLqHxIJDX02mZOVKkAHcQFKGs79i42T1tYSxdOgyaB3Cvu1V_DHmLmBCKy_K7tXPSfGXLPIPDbAdgcShlglu3gAqWrAb-XGiWqs9XdDv2HIc1ZZYfZKETSKoW3F23gpN66pnyuntvYe2eFvCoVKDXRQw",
+      "domain": ".google.com",
+      "path": "/",
+      "expires": 1792151194.022519,
+      "size": 217,
+      "httpOnly": true,
+      "secure": false,
+      "session": false
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "black94_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbW8xZXpsM2IwMDBhcTlpN3FtMDZqMmV4IiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNzc2MzQwMDI3LCJleHAiOjE3NzY5NDQ4Mjd9.EiJzLRR1lnHTYeAu7BG7SW7tqCz2_Ahb8E1gTmNqY8g"
+        },
+        {
+          "name": "black94_user",
+          "value": "{\"id\":\"me\",\"email\":\"test@test.com\",\"username\":\"testuser\",\"displayName\":\"Test User\",\"bio\":\"\",\"profileImage\":\"\",\"coverImage\":\"\",\"role\":\"personal\",\"badge\":\"\",\"subscription\":\"free\",\"isVerified\":false,\"nameVisibility\":\"public\",\"dmPermission\":\"all\",\"searchVisibility\":\"public\",\"paidChatEnabled\":false,\"paidChatPrice\":0,\"createdAt\":\"2024-01-01\"}"
+        }
+      ],
+      "sessionStorage": []
+    }
+  ]
+}
