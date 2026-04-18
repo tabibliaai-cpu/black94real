@@ -7,6 +7,8 @@ import { useAppStore } from '@/stores/app'
 import { PAvatar } from '@/components/PAvatar'
 import { fetchChats } from '@/lib/db'
 import type { Chat as FbChat } from '@/lib/db'
+import { onSnapshot, collection, query, where } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 import { toast } from 'sonner'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
@@ -894,7 +896,31 @@ function ChatListView() {
 
   useEffect(() => {
     if (!user) return
+
+    // Initial fetch
     fetchChats(user.id).then(setFbChats).catch(() => {})
+
+    // Real-time listener: watch for chat document changes
+    const chatsRef = collection(db, 'chats')
+    const q1 = query(chatsRef, where('user1Id', '==', user.id))
+    const q2 = query(chatsRef, where('user2Id', '==', user.id))
+
+    let timer: ReturnType<typeof setTimeout>
+    const refetch = () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        fetchChats(user.id).then(setFbChats).catch(() => {})
+      }, 500)
+    }
+
+    const unsub1 = onSnapshot(q1, refetch)
+    const unsub2 = onSnapshot(q2, refetch)
+
+    return () => {
+      unsub1()
+      unsub2()
+      clearTimeout(timer)
+    }
   }, [user])
 
   const filteredMock = mockChatList.filter((c) =>
