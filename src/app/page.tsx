@@ -324,6 +324,7 @@ export default function Black94App() {
 
   // Title for header
   const viewTitles: Record<string, string> = {
+    chat: 'Messages',
     search: 'Search',
     notifications: 'Notifications',
     settings: 'Edit Profile',

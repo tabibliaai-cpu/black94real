@@ -6,6 +6,7 @@ import { useAppStore } from '@/stores/app'
 import { fetchChats, sendMessage, fetchMessages } from '@/lib/db'
 import { PAvatar } from '@/components/PAvatar'
 import type { Chat, Message } from '@/lib/db'
+import { toast } from 'sonner'
 
 function timeAgo(dateStr?: string): string {
   if (!dateStr) return ''
@@ -136,8 +137,9 @@ export function ChatRoomView() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Resolve other user's ID from the chat document (user1Id/user2Id)
+  // Resolve other user's ID and profile from the chat document
   const [otherId, setOtherId] = useState<string | null>(null)
+  const [otherUser, setOtherUser] = useState<{ displayName: string; profileImage: string; username: string } | null>(null)
   const [chatLoading, setChatLoading] = useState(false)
 
   useEffect(() => {
@@ -145,11 +147,25 @@ export function ChatRoomView() {
     setChatLoading(true)
     import('firebase/firestore').then(({ getDoc, doc: docFn }) => {
       import('@/lib/firebase').then(({ db }) => {
-        getDoc(docFn(db, 'chats', chatId)).then(snap => {
+        getDoc(docFn(db, 'chats', chatId)).then(async snap => {
           if (snap.exists()) {
             const data = snap.data()!
             const resolvedOtherId = data.user1Id === user.id ? data.user2Id : data.user1Id
             setOtherId(resolvedOtherId)
+            // Fetch other user's profile
+            try {
+              const { getUser } = await import('@/lib/db')
+              const otherProfile = await getUser(resolvedOtherId)
+              if (otherProfile) {
+                setOtherUser({
+                  displayName: otherProfile.displayName,
+                  profileImage: otherProfile.profileImage,
+                  username: otherProfile.username,
+                })
+              }
+            } catch (e) {
+              console.error('Failed to fetch other user:', e)
+            }
           }
           setChatLoading(false)
         }).catch(() => setChatLoading(false))
@@ -172,7 +188,56 @@ export function ChatRoomView() {
   }, [text, user, chatId, sending, otherId])
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100vh-90px)]">
+      {/* Header */}
+      <div className="flex items-center gap-3 px-3 py-2.5 border-b border-white/[0.06] bg-black/90 backdrop-blur-xl shrink-0">
+        <button
+          onClick={() => navigate('chat')}
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+        >
+          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+        </button>
+        {chatLoading ? (
+          <div className="flex items-center gap-3 flex-1">
+            <div className="w-9 h-9 rounded-full bg-white/[0.06] animate-pulse" />
+            <div className="h-4 w-28 rounded bg-white/[0.06] animate-pulse" />
+          </div>
+        ) : otherUser ? (
+          <>
+            <PAvatar src={otherUser.profileImage} name={otherUser.displayName} size={36} />
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-[15px] text-[#e8f0dc] truncate">{otherUser.displayName}</p>
+              <p className="text-[12px] text-[#71767b] truncate">@{otherUser.username}</p>
+            </div>
+          </>
+        ) : (
+          <div className="flex-1">
+            <p className="font-bold text-[15px] text-[#e8f0dc]">Chat</p>
+          </div>
+        )}
+        <button
+          onClick={() => navigate('audio-call', { chatName: otherUser?.displayName || 'User' })}
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+          aria-label="Audio call"
+        >
+          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+          </svg>
+        </button>
+        <button
+          onClick={() => toast.info('Video call coming soon!')}
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+          aria-label="Video call"
+        >
+          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7" />
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+          </svg>
+        </button>
+      </div>
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
         {loading ? (

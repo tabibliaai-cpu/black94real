@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAppStore } from '@/stores/app'
 import { searchUsers, searchPosts } from '@/lib/db'
 import { PAvatar } from '@/components/PAvatar'
@@ -14,24 +14,49 @@ export function SearchView() {
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
   const [tab, setTab] = useState<'people' | 'posts'>('people')
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>()
 
-  const handleSearch = async () => {
-    if (!query.trim()) return
+  const handleSearch = async (searchQuery: string) => {
+    if (!searchQuery.trim()) return
     setLoading(true)
     setSearched(true)
     try {
-      const [u, p] = await Promise.all([
-        searchUsers(query.trim(), 10),
-        searchPosts(query.trim(), 10),
-      ])
+      // Always search users first
+      const u = await searchUsers(searchQuery.trim(), 10)
       setUsers(u)
+    } catch (err) {
+      console.error('User search failed:', err)
+      setUsers([])
+    }
+
+    // Search posts separately so it doesn't block user results
+    try {
+      const p = await searchPosts(searchQuery.trim(), 10)
       setPosts(p)
     } catch (err) {
-      console.error('Search failed:', err)
+      console.error('Post search failed (missing composite index):', err)
+      setPosts([])
     } finally {
       setLoading(false)
     }
   }
+
+  // Debounce auto-search
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (!query.trim()) {
+      setSearched(false)
+      setUsers([])
+      setPosts([])
+      return
+    }
+    debounceRef.current = setTimeout(() => {
+      handleSearch(query)
+    }, 300)
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [query])
 
   const trendingTopics = [
     { tag: 'Black94', category: 'Technology', count: '2.4K' },
@@ -54,10 +79,19 @@ export function SearchView() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             placeholder="Search"
             className="flex-1 bg-transparent text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none"
           />
+          <button
+            onClick={() => handleSearch(query)}
+            disabled={loading || !query.trim()}
+            className="text-[#a3d977] hover:text-[#c4e899] transition-colors disabled:text-[#536471] disabled:pointer-events-none shrink-0"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
       </div>
 

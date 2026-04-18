@@ -11,6 +11,8 @@ import { UserPostCard } from '@/components/UserPostCard'
 import { ProductCard } from '@/components/ProductCard'
 import type { Black94User } from '@/lib/db'
 import { getBusinessTrial, type BusinessTrial } from '@/lib/business'
+import { createOrGetChat } from '@/lib/chat'
+import { toast } from 'sonner'
 
 export function ProfileView() {
   const user = useAppStore((s) => s.user)
@@ -23,6 +25,7 @@ export function ProfileView() {
   const [activeTab, setActiveTab] = useState<'posts' | 'replies' | 'likes' | 'store'>('posts')
   const [isFollowing, setIsFollowing] = useState(false)
   const [products, setProducts] = useState<any[]>([])
+  const [messaging, setMessaging] = useState(false)
   const [productsLoading, setProductsLoading] = useState(false)
   const [trial, setTrial] = useState<BusinessTrial | null>(null)
 
@@ -86,7 +89,21 @@ export function ProfileView() {
     }).catch((err) => {
       console.error('Failed to check interactions:', err)
     })
-  }, [user, posts.length]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, posts.length])
+
+  const handleMessage = useCallback(async () => {
+    if (!user || !targetUserId || targetUserId === user.id) return
+    setMessaging(true)
+    try {
+      const chat = await createOrGetChat(user.id, targetUserId)
+      navigate('chat-room', { chatId: chat.id })
+    } catch (err) {
+      console.error('Failed to start DM:', err)
+      toast.error('Could not start message')
+    } finally {
+      setMessaging(false)
+    }
+  }, [user, targetUserId, navigate])
 
   const handleToggleFollow = useCallback(async () => {
     if (!user || !targetUserId || targetUserId === user.id) return
@@ -197,17 +214,33 @@ export function ProfileView() {
               Edit profile
             </button>
           ) : (
-            <button
-              onClick={handleToggleFollow}
-              className={cn(
-                'px-5 py-1.5 rounded-full text-[15px] font-bold transition-colors',
-                isFollowing
-                  ? 'border border-[#536471] text-[#e8f0dc] hover:border-red-500 hover:text-red-500 hover:bg-red-500/10'
-                  : 'bg-[#e8f0dc] text-black hover:bg-gray-200'
-              )}
-            >
-              {isFollowing ? 'Following' : 'Follow'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleToggleFollow}
+                className={cn(
+                  'px-5 py-1.5 rounded-full text-[15px] font-bold transition-colors',
+                  isFollowing
+                    ? 'border border-[#536471] text-[#e8f0dc] hover:border-red-500 hover:text-red-500 hover:bg-red-500/10'
+                    : 'bg-[#e8f0dc] text-black hover:bg-gray-200'
+                )}
+              >
+                {isFollowing ? 'Following' : 'Follow'}
+              </button>
+              <button
+                onClick={handleMessage}
+                disabled={messaging}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-[#a3d977]/40 text-[15px] font-bold text-[#a3d977] hover:bg-[#a3d977]/10 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {messaging ? (
+                  <div className="w-4 h-4 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+                ) : (
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                  </svg>
+                )}
+                Message
+              </button>
+            </div>
           )}
         </div>
 
