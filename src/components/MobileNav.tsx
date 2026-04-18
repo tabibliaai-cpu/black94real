@@ -83,7 +83,7 @@ export function MobileNav({ currentView, onNavigate }: MobileNavProps) {
   const user = useAppStore((s) => s.user)
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-30 bg-black/90 backdrop-blur-xl border-t border-white/[0.08] safe-area-bottom">
+    <nav className="fixed bottom-0 inset-x-0 z-30 bg-black/90 backdrop-blur-xl border-t border-white/[0.08] safe-area-bottom shrink-0">
       <div className="flex items-center justify-around h-[50px]">
         {NAV_ITEMS.map(({ view, label, icon }) => {
           const isActive = currentView === view

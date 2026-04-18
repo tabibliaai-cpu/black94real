@@ -388,7 +388,7 @@ export default function Black94App() {
   const headerTitle = isDualPaneChat ? undefined : viewTitles[currentView]
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="h-dvh h-[100vh] flex flex-col bg-black overflow-hidden">
       {/* ─── Header (scroll-hide/show on feed, always visible on other pages) ─── */}
       {showChrome && (
         <MobileHeader
@@ -406,7 +406,7 @@ export default function Black94App() {
       )}
 
       {/* ─── Views ─── */}
-      <main><ViewRouter /></main>
+      <main className="flex-1 min-h-0 overflow-y-auto"><ViewRouter /></main>
 
       {/* ─── FAB — compose button ─── */}
       {isHomeFeed && (

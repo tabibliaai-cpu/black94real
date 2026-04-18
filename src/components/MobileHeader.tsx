@@ -41,7 +41,7 @@ export function MobileHeader({
   return (
     <header
       className={cn(
-        'sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-white/[0.08] safe-area-top',
+        'sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-white/[0.08] safe-area-top shrink-0',
         stateClass
       )}
     >

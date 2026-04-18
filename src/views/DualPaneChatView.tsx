@@ -715,14 +715,14 @@ export function DualPaneChatView() {
 
   if (!initialized) {
     return (
-      <div className="h-[calc(100vh-90px)] flex items-center justify-center">
+      <div className="h-full flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="h-[calc(100vh-90px)] flex flex-col animate-fade-in">
+    <div className="h-full flex flex-col animate-fade-in">
       <div className="flex-1 min-h-0 overflow-hidden hidden md:flex gap-0">
         {/* Desktop: Show both panels side by side */}
         <div className="w-1/2 border-r border-white/[0.06] min-h-0">

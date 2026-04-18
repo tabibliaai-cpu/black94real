@@ -77,7 +77,7 @@ function LobbyScreen() {
   }, [started, room?.status])
 
   return (
-    <div className="min-h-[calc(100vh-90px)] flex flex-col items-center justify-center px-6 relative overflow-hidden">
+    <div className="min-h-full flex flex-col items-center justify-center px-6 relative overflow-hidden">
       {/* Background mesh */}
       <div className="absolute inset-0 liquid-bg opacity-60" />
 
