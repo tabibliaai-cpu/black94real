@@ -4,22 +4,18 @@ import {
   useState,
   useRef,
   useEffect,
-  useCallback,
   type ReactNode,
 } from 'react'
 import { cn } from '@/lib/utils'
-import { useExpandableTextStore } from '@/stores/expandableText'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ExpandableText
 
-   Truncates long text after N lines with "… See more" / "See less" toggle.
+   Truncates long text after N lines. Tap "See more" to expand.
 
-   Strategy (bulletproof, no animation tricks):
-   1. Always render text in a div
-   2. When collapsed: apply -webkit-line-clamp via inline style
-   3. When expanded: no inline style → normal block display → full text
-   4. Detect overflow once via scrollHeight > clientHeight after mount
+   - Local state (no external store — zero dependency)
+   - Real <button> for reliable click/touch handling
+   - scrollHeight > clientHeight for overflow detection
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export interface ExpandableTextProps {
@@ -39,13 +35,11 @@ export function ExpandableText({
   linkColor = '#8b5cf6',
   renderContent,
 }: ExpandableTextProps) {
-  const isExpanded = useExpandableTextStore((s) => s.expanded.has(id))
-  const toggle = useExpandableTextStore((s) => s.toggle)
-
-  const textRef = useRef<HTMLDivElement>(null)
+  const [expanded, setExpanded] = useState(false)
   const [needsTruncation, setNeedsTruncation] = useState(false)
+  const textRef = useRef<HTMLDivElement>(null)
 
-  /* ── One-time overflow check after layout settles ── */
+  /* ── Detect overflow after mount ── */
   useEffect(() => {
     const el = textRef.current
     if (!el || !text) {
@@ -58,19 +52,10 @@ export function ExpandableText({
     return () => cancelAnimationFrame(raf)
   }, [text, maxLines])
 
-  const handleToggle = useCallback(
-    (e: React.MouseEvent | React.KeyboardEvent) => {
-      e.stopPropagation()
-      e.preventDefault()
-      toggle(id)
-    },
-    [toggle, id],
-  )
-
   if (!text) return null
 
-  /* ── Short text fits in clamp → no toggle needed ── */
-  if (!needsTruncation) {
+  /* ── Short text → just render it ── */
+  if (!needsTruncation && !expanded) {
     return (
       <div className={className}>
         {renderContent ? renderContent(text) : text}
@@ -80,12 +65,11 @@ export function ExpandableText({
 
   return (
     <div className={cn('relative', className)}>
-      {/* Text: clamped when collapsed, full when expanded */}
       <div
         ref={textRef}
         className="whitespace-pre-wrap break-words"
         style={
-          isExpanded
+          expanded
             ? { display: 'block', overflow: 'visible' }
             : {
                 display: '-webkit-box',
@@ -98,27 +82,25 @@ export function ExpandableText({
         {renderContent ? renderContent(text) : text}
       </div>
 
-      {/* Toggle link */}
-      <span
-        role="button"
-        tabIndex={0}
-        onClick={handleToggle}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            handleToggle(e)
-          }
-        }}
-        className={cn(
-          'inline cursor-pointer select-none font-semibold',
-          'hover:underline focus-visible:outline-none',
-          'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50',
-          'focus-visible:ring-offset-1 rounded-sm ml-0.5'
-        )}
-        style={{ color: linkColor, fontSize: 'inherit', lineHeight: 'inherit' }}
-      >
-        {isExpanded ? 'See less' : '\u2026 See more'}
-      </span>
+      {needsTruncation && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setExpanded((v) => !v)
+          }}
+          className={cn(
+            'inline cursor-pointer select-none font-semibold',
+            'bg-transparent border-none p-0 m-0',
+            'hover:underline focus-visible:outline-none',
+            'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50',
+            'focus-visible:ring-offset-1 rounded-sm ml-0.5'
+          )}
+          style={{ color: linkColor, fontSize: 'inherit', lineHeight: 'inherit' }}
+        >
+          {expanded ? 'See less' : '\u2026 See more'}
+        </button>
+      )}
     </div>
   )
 }
