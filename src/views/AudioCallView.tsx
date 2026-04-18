@@ -8,6 +8,7 @@ import { useAppStore } from '@/stores/app'
 
 export function AudioCallView() {
   const navigate = useAppStore((s) => s.navigate)
+  const previousView = useAppStore((s) => s.previousView)
   const viewParams = useAppStore((s) => s.viewParams)
   const chatName = viewParams?.chatName || 'Unknown'
 
@@ -49,9 +50,10 @@ export function AudioCallView() {
     setCallState('ended')
     if (timerRef.current) clearInterval(timerRef.current)
     setTimeout(() => {
-      navigate('dual-pane-chat')
+      // Go back to whichever view the user came from (chat-room or dual-pane-chat)
+      navigate(previousView === 'chat-room' ? 'chat' : previousView === 'dual-pane-chat' ? 'dual-pane-chat' : 'chat')
     }, 1500)
-  }, [navigate])
+  }, [navigate, previousView])
 
   // Initial letter and color for avatar
   const initial = chatName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
