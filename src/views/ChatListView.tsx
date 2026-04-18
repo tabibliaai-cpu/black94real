@@ -688,8 +688,11 @@ export function ChatRoomView() {
             canvas.height = height
             const ctx = canvas.getContext('2d')
             if (!ctx) { reject(new Error('No canvas')); return }
+            // Fill white background before drawing — JPEG has no alpha, transparent = black
+            ctx.fillStyle = '#FFFFFF'
+            ctx.fillRect(0, 0, width, height)
             ctx.drawImage(img, 0, 0, width, height)
-            resolve(canvas.toDataURL('image/jpeg', 0.6))
+            resolve(canvas.toDataURL('image/jpeg', 0.82))
           }
           img.src = reader.result as string
         }
@@ -697,7 +700,6 @@ export function ChatRoomView() {
       })
       setImagePreview(compressed)
     } catch (err) {
-      console.error('Image compression failed:', err)
       toast.error('Failed to process image')
     }
   }, [])

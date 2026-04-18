@@ -15,7 +15,7 @@ interface ComposeDialogProps {
 }
 
 /* ── Image compression helper — fits within Firestore 1MB doc limit ── */
-function compressImage(file: File, maxDim = 1200, quality = 0.7): Promise<string> {
+function compressImage(file: File, maxDim = 1200, quality = 0.82): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = () => reject(new Error('Failed to read file'))
@@ -38,11 +38,15 @@ function compressImage(file: File, maxDim = 1200, quality = 0.7): Promise<string
         canvas.height = height
         const ctx = canvas.getContext('2d')
         if (!ctx) { reject(new Error('Canvas not supported')); return }
+        // CRITICAL: Fill white background BEFORE drawing the image.
+        // Without this, JPEG (no alpha support) renders transparent pixels as black.
+        ctx.fillStyle = '#FFFFFF'
+        ctx.fillRect(0, 0, width, height)
         ctx.drawImage(img, 0, 0, width, height)
         const dataUrl = canvas.toDataURL('image/jpeg', quality)
         // If still too large (base64 > ~750KB raw), compress more aggressively
         if (dataUrl.length > 750_000) {
-          const dataUrl2 = canvas.toDataURL('image/jpeg', 0.4)
+          const dataUrl2 = canvas.toDataURL('image/jpeg', 0.5)
           resolve(dataUrl2.length < dataUrl.length ? dataUrl2 : dataUrl)
         } else {
           resolve(dataUrl)
