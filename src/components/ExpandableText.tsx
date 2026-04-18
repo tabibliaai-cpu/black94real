@@ -6,7 +6,6 @@ import {
   useEffect,
   useCallback,
   type ReactNode,
-  type CSSProperties,
   memo,
 } from 'react'
 import { cn } from '@/lib/utils'
@@ -15,106 +14,85 @@ import { useExpandableTextStore } from '@/stores/expandableText'
 /* ═══════════════════════════════════════════════════════════════════════════
    ExpandableText
 
-   A production-ready, reusable component for truncating long text in a
-   social media feed with "See more / See less" toggle.
+   Truncates long text after N lines with a "See more / See less" toggle.
+
+   How it works:
+   1. Renders text with `-webkit-line-clamp` applied
+   2. After layout, compares scrollHeight vs clientHeight to detect overflow
+   3. If overflow → shows "… See more" inline
+   4. On tap → removes clamp with a smooth max-height transition
 
    Features:
-   - CSS line-clamp for truncation (3 lines default, configurable)
-   - JS measurement fallback to detect overflow
-   - Smooth height animation on expand/collapse
    - Zustand-backed per-item expanded state (survives scroll)
-   - Accessible: keyboard focusable, aria-expanded
-   - Supports emojis, hashtags, mentions, links (via children)
+   - Smooth max-height animation on expand/collapse
+   - Hashtag/mention highlighting via renderContent
    - Memoized — no unnecessary re-renders in large feeds
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export interface ExpandableTextProps {
-  /** Unique identifier for this text block (e.g., post.id) */
   id: string
-  /** The full text content to display */
   text: string
-  /** Maximum visible lines before truncation (default: 3) */
   maxLines?: number
-  /** CSS class for the text container */
   className?: string
-  /** Accent color for "See more / See less" (default: theme purple) */
   linkColor?: string
-  /** Custom render function for text content (e.g., hashtag highlighting) */
   renderContent?: (text: string) => ReactNode
-  /** Smooth height transition duration in ms (default: 250) */
   transitionDuration?: number
 }
 
 export const ExpandableText = memo(function ExpandableText({
   id,
   text,
-  maxLines = 3,
+  maxLines = 4,
   className,
   linkColor = '#8b5cf6',
   renderContent,
-  transitionDuration = 250,
+  transitionDuration = 300,
 }: ExpandableTextProps) {
   const isExpanded = useExpandableTextStore((s) => s.expanded.has(id))
   const toggle = useExpandableTextStore((s) => s.toggle)
 
-  const innerRef = useRef<HTMLSpanElement>(null)
+  const textRef = useRef<HTMLDivElement>(null)
   const [needsTruncation, setNeedsTruncation] = useState(false)
   const [measured, setMeasured] = useState(false)
-  const [contentHeight, setContentHeight] = useState<number | null>(null)
-  const [collapsedHeight, setCollapsedHeight] = useState<number | null>(null)
+  const [scrollH, setScrollH] = useState(0)
 
-  /* ── Measure: check if content overflows the clamped height ── */
+  /* ── Measure overflow after mount & on text/maxLines change ── */
   useEffect(() => {
-    const el = innerRef.current
+    const el = textRef.current
     if (!el || !text) {
       setNeedsTruncation(false)
       setMeasured(true)
       return
     }
 
-    // Temporarily remove clamp to measure full height
-    el.style.webkitLineClamp = 'unset'
-    el.style.display = 'block'
-    el.style.overflow = 'visible'
+    // Use rAF to ensure layout is settled after style changes
+    const raf = requestAnimationFrame(() => {
+      // When -webkit-line-clamp is active:
+      // clientHeight = visible clamped height
+      // scrollHeight = full content height
+      const overflow = el.scrollHeight > el.clientHeight + 2
+      setNeedsTruncation(overflow)
+      setScrollH(el.scrollHeight)
+      setMeasured(true)
+    })
 
-    const fullHeight = el.scrollHeight
-
-    // Apply clamp and measure
-    el.style.webkitLineClamp = String(maxLines)
-    el.style.display = '-webkit-box'
-    el.style.overflow = 'hidden'
-
-    const clampedHeight = el.scrollHeight
-
-    setContentHeight(fullHeight)
-    setCollapsedHeight(clampedHeight)
-    setNeedsTruncation(fullHeight > clampedHeight + 1)
-    setMeasured(true)
+    return () => cancelAnimationFrame(raf)
   }, [text, maxLines])
 
   /* ── Recalculate on resize ── */
   useEffect(() => {
-    if (!needsTruncation || !measured) return
+    const el = textRef.current
+    if (!el || !measured) return
 
     const handleResize = () => {
-      const el = innerRef.current
-      if (!el) return
-      el.style.webkitLineClamp = 'unset'
-      el.style.display = 'block'
-      el.style.overflow = 'visible'
-      const fullHeight = el.scrollHeight
-      el.style.webkitLineClamp = String(maxLines)
-      el.style.display = '-webkit-box'
-      el.style.overflow = 'hidden'
-      const clampedHeight = el.scrollHeight
-      setContentHeight(fullHeight)
-      setCollapsedHeight(clampedHeight)
-      setNeedsTruncation(fullHeight > clampedHeight + 1)
+      const overflow = el.scrollHeight > el.clientHeight + 2
+      setNeedsTruncation(overflow)
+      setScrollH(el.scrollHeight)
     }
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [needsTruncation, measured, maxLines])
+  }, [measured])
 
   const handleToggle = useCallback(
     (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -135,52 +113,46 @@ export const ExpandableText = memo(function ExpandableText({
     [handleToggle],
   )
 
-  /* ── Don't render if no text ── */
   if (!text) return null
 
-  /* ── Short text: render directly without truncation UI ── */
+  /* ── Short text: no truncation needed → render plain ── */
   if (measured && !needsTruncation) {
     return (
-      <span className={className}>
+      <div className={className}>
         {renderContent ? renderContent(text) : text}
-      </span>
+      </div>
     )
   }
 
-  /* ── Animated height style ── */
-  const heightStyle: CSSProperties =
-    measured && contentHeight !== null && collapsedHeight !== null
-      ? {
-          height: isExpanded ? `${contentHeight}px` : `${collapsedHeight}px`,
-          overflow: 'hidden',
-          transition: `height ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
-        }
-      : {}
-
-  const clampStyle: CSSProperties = isExpanded
-    ? { WebkitLineClamp: 'unset', display: 'block', overflow: 'visible' }
-    : { WebkitLineClamp: String(maxLines), display: '-webkit-box', overflow: 'hidden' }
-
   return (
-    <div
-      className={cn('relative', className)}
-      style={heightStyle}
-    >
-      {/* Hidden measurer — always renders full content for measurement */}
-      <span
-        ref={innerRef}
+    <div className={cn('relative', className)}>
+      <div
+        ref={textRef}
         className="whitespace-pre-wrap break-words"
         style={{
-          ...clampStyle,
-          WebkitBoxOrient: 'vertical',
-          visibility: measured ? 'visible' : 'hidden',
+          display: '-webkit-box',
+          WebkitLineClamp: isExpanded ? 'unset' : String(maxLines),
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
+          // Smooth expand: animate from clamped height to full scrollHeight
+          ...(isExpanded && measured
+            ? {
+                maxHeight: `${scrollH}px`,
+                transition: `max-height ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+              }
+            : {}),
+          ...(measured && !isExpanded && needsTruncation
+            ? {
+                maxHeight: 'none', // Let line-clamp handle it when collapsed
+              }
+            : {}),
         }}
         aria-expanded={needsTruncation ? isExpanded : undefined}
       >
         {renderContent ? renderContent(text) : text}
-      </span>
+      </div>
 
-      {/* "See more / See less" — inline with text */}
+      {/* "… See more" / "See less" */}
       {measured && needsTruncation && (
         <span
           role="button"
@@ -188,10 +160,15 @@ export const ExpandableText = memo(function ExpandableText({
           aria-expanded={isExpanded}
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
-          className="inline cursor-pointer select-none font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-1 rounded-sm ml-0.5"
+          className={cn(
+            'inline cursor-pointer select-none font-semibold',
+            'hover:underline focus-visible:outline-none',
+            'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50',
+            'focus-visible:ring-offset-1 rounded-sm ml-0.5'
+          )}
           style={{ color: linkColor, fontSize: 'inherit', lineHeight: 'inherit' }}
         >
-          {isExpanded ? 'See less' : '… See more'}
+          {isExpanded ? 'See less' : '\u2026 See more'}
         </span>
       )}
     </div>
