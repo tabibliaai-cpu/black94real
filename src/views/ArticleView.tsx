@@ -104,40 +104,40 @@ export function ArticleView() {
   // ── Article not found ──
   if (!article) {
     return (
-      <div className="min-h-screen bg-black">
-        <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-md border-b border-white/[0.06]">
+      <div className="min-h-screen bg-[#09080f]">
+        <header className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-b border-white/[0.06]">
           <div className="flex items-center gap-3 px-4 h-14">
             <button
               onClick={handleBack}
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Go back"
             >
-              <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-[17px] font-bold text-[#e8f0dc]">Article</h1>
+            <h1 className="text-[17px] font-bold text-[#f0eef6]">Article</h1>
           </div>
         </header>
         <div className="flex flex-col items-center justify-center py-32 px-4">
           <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
-            <svg className="w-8 h-8 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-8 h-8 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-4.35-4.35" />
             </svg>
           </div>
-          <p className="text-[17px] font-semibold text-[#e8f0dc] mb-1">Article not found</p>
-          <p className="text-[14px] text-[#71767b]">This article may have been removed or doesn&apos;t exist.</p>
+          <p className="text-[17px] font-semibold text-[#f0eef6] mb-1">Article not found</p>
+          <p className="text-[14px] text-[#94a3b8]">This article may have been removed or doesn&apos;t exist.</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#09080f]">
       {/* ─── Sticky Header ─── */}
-      <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-b border-white/[0.06]">
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-3">
             <button
@@ -145,12 +145,12 @@ export function ArticleView() {
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Go back"
             >
-              <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-[17px] font-bold text-[#e8f0dc]">Article</h1>
+            <h1 className="text-[17px] font-bold text-[#f0eef6]">Article</h1>
           </div>
           <div className="flex items-center gap-1">
             <button
@@ -158,7 +158,7 @@ export function ArticleView() {
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Edit article"
             >
-              <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
@@ -168,7 +168,7 @@ export function ArticleView() {
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Share article"
             >
-              <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3" />
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="19" r="3" />
@@ -196,29 +196,29 @@ export function ArticleView() {
         {/* Article Body */}
         <div className="px-5 pt-6">
           {/* Title */}
-          <h1 className="text-[28px] sm:text-[36px] font-bold text-[#e8f0dc] leading-tight tracking-tight mb-5">
+          <h1 className="text-[28px] sm:text-[36px] font-bold text-[#f0eef6] leading-tight tracking-tight mb-5">
             {article.title}
           </h1>
 
           {/* Author Bar */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#a3d977] to-[#7ab856] flex items-center justify-center flex-shrink-0">
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7ab856] flex items-center justify-center flex-shrink-0">
               <span className="text-[14px] font-bold text-black">
                 {(article.author?.displayName ?? article.author?.username ?? 'A').charAt(0).toUpperCase()}
               </span>
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-[14px] font-semibold text-[#e8f0dc] truncate">
+                <span className="text-[14px] font-semibold text-[#f0eef6] truncate">
                   {article.author?.displayName ?? 'Anonymous'}
                 </span>
                 {article.author?.isVerified && (
-                  <svg className="w-[16px] h-[16px] text-[#a3d977] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-[16px] h-[16px] text-[#8b5cf6] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 )}
               </div>
-              <div className="flex items-center gap-1.5 text-[13px] text-[#71767b]">
+              <div className="flex items-center gap-1.5 text-[13px] text-[#94a3b8]">
                 <span>@{article.author?.username ?? 'anonymous'}</span>
                 <span>·</span>
                 <span>{formatDate(article.createdAt)}</span>
@@ -238,7 +238,7 @@ export function ArticleView() {
                 className={cn(
                   'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold transition-colors',
                   factCheck.status === 'Verified'
-                    ? 'bg-[#a3d977]/10 text-[#a3d977] hover:bg-[#a3d977]/20'
+                    ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] hover:bg-[#8b5cf6]/20'
                     : factCheck.status === 'Not Verified'
                     ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
                     : 'bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20'
@@ -267,7 +267,7 @@ export function ArticleView() {
 
           {/* Views */}
           <div className="mt-8 pt-4 border-t border-white/[0.06]">
-            <span className="text-[13px] text-[#71767b]">
+            <span className="text-[13px] text-[#94a3b8]">
               {article.views + 1} view{article.views + 1 !== 1 ? 's' : ''}
             </span>
           </div>
@@ -275,7 +275,7 @@ export function ArticleView() {
       </article>
 
       {/* ─── Sticky Engagement Bar ─── */}
-      <div className="fixed bottom-0 inset-x-0 z-30 bg-black/80 backdrop-blur-md border-t border-white/[0.06]">
+      <div className="fixed bottom-0 inset-x-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto flex items-center justify-around px-4 py-2">
           {/* Like */}
           <button
@@ -286,7 +286,7 @@ export function ArticleView() {
             <svg
               className={cn(
                 'w-[22px] h-[22px] transition-colors',
-                liked ? 'text-red-500' : 'text-[#71767b] group-hover:text-red-400'
+                liked ? 'text-red-500' : 'text-[#94a3b8] group-hover:text-red-400'
               )}
               viewBox="0 0 24 24"
               fill={liked ? 'currentColor' : 'none'}
@@ -297,7 +297,7 @@ export function ArticleView() {
             >
               <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
             </svg>
-            <span className={cn('text-[12px] font-semibold', liked ? 'text-red-500' : 'text-[#71767b]')}>
+            <span className={cn('text-[12px] font-semibold', liked ? 'text-red-500' : 'text-[#94a3b8]')}>
               {likeCount}
             </span>
           </button>
@@ -308,10 +308,10 @@ export function ArticleView() {
             className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
             aria-label="Comment"
           >
-            <svg className="w-[22px] h-[22px] text-[#71767b] group-hover:text-[#a3d977] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
             </svg>
-            <span className="text-[12px] font-semibold text-[#71767b]">{commentCount}</span>
+            <span className="text-[12px] font-semibold text-[#94a3b8]">{commentCount}</span>
           </button>
 
           {/* Share */}
@@ -320,7 +320,7 @@ export function ArticleView() {
             className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
             aria-label="Share"
           >
-            <svg className="w-[22px] h-[22px] text-[#71767b] group-hover:text-[#a3d977] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="18" cy="5" r="3" />
               <circle cx="6" cy="12" r="3" />
               <circle cx="18" cy="19" r="3" />
@@ -338,7 +338,7 @@ export function ArticleView() {
             <svg
               className={cn(
                 'w-[22px] h-[22px] transition-colors',
-                bookmarked ? 'text-[#a3d977]' : 'text-[#71767b] group-hover:text-[#a3d977]'
+                bookmarked ? 'text-[#8b5cf6]' : 'text-[#94a3b8] group-hover:text-[#8b5cf6]'
               )}
               viewBox="0 0 24 24"
               fill={bookmarked ? 'currentColor' : 'none'}

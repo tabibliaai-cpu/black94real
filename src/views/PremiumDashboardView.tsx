@@ -32,13 +32,13 @@ function MenuRow({
         <span className={cn('w-8 h-8 rounded-lg flex items-center justify-center', danger ? 'bg-red-500/10' : 'bg-white/[0.06]')}>
           {icon}
         </span>
-        <span className={cn('text-[15px]', danger ? 'text-red-400' : 'text-[#e8f0dc]')}>{label}</span>
+        <span className={cn('text-[15px]', danger ? 'text-red-400' : 'text-[#f0eef6]')}>{label}</span>
       </div>
       <div className="flex items-center gap-2">
         {badge && (
-          <span className="text-[11px] font-semibold px-2 py-[2px] rounded-full bg-[#a3d977]/15 text-[#a3d977]">{badge}</span>
+          <span className="text-[11px] font-semibold px-2 py-[2px] rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6]">{badge}</span>
         )}
-        <svg className={cn('w-4 h-4', danger ? 'text-red-400/40' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <svg className={cn('w-4 h-4', danger ? 'text-red-400/40' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
           <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
@@ -51,7 +51,7 @@ function MenuRow({
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function SectionHeader({ label }: { label: string }) {
-  return <p className="text-[12px] font-semibold text-[#536471] uppercase tracking-wider px-4 mb-1">{label}</p>
+  return <p className="text-[12px] font-semibold text-[#64748b] uppercase tracking-wider px-4 mb-1">{label}</p>
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -116,27 +116,27 @@ export function PremiumDashboardView() {
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('feed')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#e8f0dc]">Dashboard</h1>
+        <h1 className="text-xl font-bold text-[#f0eef6]">Dashboard</h1>
       </div>
 
       {/* ─── Account Status Card ─── */}
-      <div className="rounded-xl bg-gradient-to-br from-[#a3d977]/10 via-black to-[#ffd700]/5 border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-gradient-to-br from-[#8b5cf6]/10 via-black to-[#ffd700]/5 border border-white/[0.06] p-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#a3d977] to-[#8cc65e] flex items-center justify-center text-black font-bold text-lg">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-black font-bold text-lg">
             {user?.displayName?.[0]?.toUpperCase() || 'U'}
           </div>
           <div>
-            <p className="text-[17px] font-bold text-[#e8f0dc]">{user?.displayName || 'User'}</p>
+            <p className="text-[17px] font-bold text-[#f0eef6]">{user?.displayName || 'User'}</p>
             <div className="flex items-center gap-2 mt-0.5">
               <span className={cn(
                 'text-[12px] font-semibold px-2 py-0.5 rounded-full',
-                isPremium ? 'bg-[#ffd700]/15 text-[#ffd700]' : 'bg-white/[0.08] text-[#71767b]'
+                isPremium ? 'bg-[#ffd700]/15 text-[#ffd700]' : 'bg-white/[0.08] text-[#94a3b8]'
               )}>
                 {isPremium ? (isBusiness ? 'Business' : 'Premium') : 'Free Plan'}
               </span>
-              <span className="text-[12px] text-[#536471]">@{user?.username}</span>
+              <span className="text-[12px] text-[#64748b]">@{user?.username}</span>
             </div>
           </div>
         </div>
@@ -148,14 +148,14 @@ export function PremiumDashboardView() {
         {isBusiness ? (
           <div className="space-y-2">
             <div className="px-4 py-3 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#a3d977]/10">
-                <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#8b5cf6]/10">
+                <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               </span>
               <div className="flex-1">
-                <p className="text-[15px] font-semibold text-[#a3d977]">Business Account</p>
-                <p className="text-[12px] text-[#71767b]">Store, products & commerce enabled</p>
+                <p className="text-[15px] font-semibold text-[#8b5cf6]">Business Account</p>
+                <p className="text-[12px] text-[#94a3b8]">Store, products & commerce enabled</p>
               </div>
-              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#a3d977]/15 text-[#a3d977]">Active</span>
+              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6]">Active</span>
             </div>
             {trial && (
               <div className={cn(
@@ -163,20 +163,20 @@ export function PremiumDashboardView() {
                 trial.isActive
                   ? trial.daysRemaining <= 7
                     ? 'bg-amber-500/5 border-amber-500/20'
-                    : 'bg-[#a3d977]/5 border-[#a3d977]/15'
+                    : 'bg-[#8b5cf6]/5 border-[#8b5cf6]/15'
                   : 'bg-red-500/5 border-red-500/20'
               )}>
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-2">
-                    <svg className={cn('w-4 h-4', trial.isActive ? (trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#a3d977]') : 'text-red-400')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <p className="text-[13px] font-semibold text-[#e8f0dc]">Free Trial</p>
+                    <svg className={cn('w-4 h-4', trial.isActive ? (trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#8b5cf6]') : 'text-red-400')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <p className="text-[13px] font-semibold text-[#f0eef6]">Free Trial</p>
                   </div>
                   <span className={cn(
                     'text-[11px] font-bold px-2 py-0.5 rounded-full',
                     trial.isActive
                       ? trial.daysRemaining <= 7
                         ? 'bg-amber-500/15 text-amber-400'
-                        : 'bg-[#a3d977]/15 text-[#a3d977]'
+                        : 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
                       : 'bg-red-500/15 text-red-400'
                   )}>
                     {trial.isActive ? `${trial.daysRemaining}d left` : 'Expired'}
@@ -187,13 +187,13 @@ export function PremiumDashboardView() {
                     className={cn(
                       'h-1.5 rounded-full transition-all',
                       trial.isActive
-                        ? trial.daysRemaining <= 7 ? 'bg-amber-400' : 'bg-[#a3d977]'
+                        ? trial.daysRemaining <= 7 ? 'bg-amber-400' : 'bg-[#8b5cf6]'
                         : 'bg-red-400'
                     )}
                     style={{ width: `${Math.max(2, (trial.daysRemaining / 30) * 100)}%` }}
                   />
                 </div>
-                <p className="text-[11px] text-[#536471]">
+                <p className="text-[11px] text-[#64748b]">
                   {trial.isActive
                     ? trial.daysRemaining <= 7
                       ? `Trial ends in ${trial.daysRemaining} day${trial.daysRemaining !== 1 ? 's' : ''}. Subscribe to continue.`
@@ -201,7 +201,7 @@ export function PremiumDashboardView() {
                     : 'Your free trial has ended. Subscribe to continue using business features.'}
                 </p>
                 {!trial.isActive && (
-                  <button className="w-full mt-2.5 py-2 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[13px] active:scale-[0.98] transition-all">
+                  <button className="w-full mt-2.5 py-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[13px] active:scale-[0.98] transition-all">
                     Subscribe Now
                   </button>
                 )}
@@ -209,16 +209,16 @@ export function PremiumDashboardView() {
             )}
           </div>
         ) : (
-          <div className="mx-4 mb-2 p-4 rounded-xl bg-gradient-to-br from-[#a3d977]/10 via-transparent to-amber-500/5 border border-[#a3d977]/20">
+          <div className="mx-4 mb-2 p-4 rounded-xl bg-gradient-to-br from-[#8b5cf6]/10 via-transparent to-amber-500/5 border border-[#8b5cf6]/20">
             <div className="flex items-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-              <p className="text-[15px] font-bold text-[#e8f0dc]">Upgrade to Business</p>
+              <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              <p className="text-[15px] font-bold text-[#f0eef6]">Upgrade to Business</p>
             </div>
-            <p className="text-[13px] text-[#71767b] mb-3">Enable your store, sell products, manage orders & shipping partners. Start with a <span className="text-[#a3d977] font-semibold">30-day free trial</span>.</p>
+            <p className="text-[13px] text-[#94a3b8] mb-3">Enable your store, sell products, manage orders & shipping partners. Start with a <span className="text-[#8b5cf6] font-semibold">30-day free trial</span>.</p>
             <button
               onClick={handleUpgradeToBusiness}
               disabled={upgrading}
-              className="w-full py-3 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[14px] shadow-lg shadow-[#a3d977]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="w-full py-3 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[14px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {upgrading ? 'Upgrading...' : 'Start Free Trial'}
             </button>
@@ -230,7 +230,7 @@ export function PremiumDashboardView() {
       <div className="border-t border-white/[0.06] pt-4 space-y-1">
         <SectionHeader label="Messaging & Privacy" />
         <MenuRow
-          icon={<svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>}
+          icon={<svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>}
           label="Privacy Settings"
           badge="Nuclear Block"
           onClick={() => navigate('privacy-settings')}
@@ -379,18 +379,18 @@ export function PremiumDashboardView() {
         >
           <div className="flex items-center gap-3">
             <span className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/[0.06]">
-              <svg className="w-[18px] h-[18px] text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
               </svg>
             </span>
-            <span className="text-[15px] text-[#e8f0dc]">Dark mode</span>
+            <span className="text-[15px] text-[#f0eef6]">Dark mode</span>
           </div>
-          <div className={cn('w-11 h-6 rounded-full transition-colors relative', isDark ? 'bg-[#a3d977]' : 'bg-white/[0.15]')}>
+          <div className={cn('w-11 h-6 rounded-full transition-colors relative', isDark ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]')}>
             <div className={cn('w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform', isDark ? 'translate-x-[22px]' : 'translate-x-0.5')} />
           </div>
         </button>
         <MenuRow
-          icon={<svg className="w-[18px] h-[18px] text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
+          icon={<svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
           label="Edit Profile"
           onClick={() => navigate('edit-profile')}
         />

@@ -75,7 +75,7 @@ export function ProductDetailView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-53px)]">
-        <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
       </div>
     )
   }
@@ -83,8 +83,8 @@ export function ProductDetailView() {
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-53px)] px-4">
-        <p className="text-[15px] text-[#71767b] mb-4">Product not found</p>
-        <button onClick={() => navigate('store')} className="px-6 py-2 rounded-full bg-[#a3d977] text-black font-bold text-sm">
+        <p className="text-[15px] text-[#94a3b8] mb-4">Product not found</p>
+        <button onClick={() => navigate('store')} className="px-6 py-2 rounded-full bg-[#8b5cf6] text-black font-bold text-sm">
           Back to Store
         </button>
       </div>
@@ -144,7 +144,7 @@ export function ProductDetailView() {
     <div className="pb-32">
       {/* Image Carousel */}
       <div className="relative">
-        <div className="aspect-square bg-[#0a0a0a] overflow-hidden">
+        <div className="aspect-square bg-[#110f1a] overflow-hidden">
           <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
         </div>
 
@@ -156,7 +156,7 @@ export function ProductDetailView() {
 
         <button
           onClick={() => navigate('store')}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#09080f]/50 backdrop-blur-sm flex items-center justify-center"
         >
           <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
             <path d="M6 18L18 6M6 6l12 12" />
@@ -184,7 +184,7 @@ export function ProductDetailView() {
             <button
               key={i}
               onClick={() => setActiveImage(i)}
-              className={`w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${i === activeImage ? 'border-[#a3d977]' : 'border-transparent opacity-60'}`}
+              className={`w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${i === activeImage ? 'border-[#8b5cf6]' : 'border-transparent opacity-60'}`}
             >
               <img src={img} alt="" className="w-full h-full object-cover" />
             </button>
@@ -196,65 +196,65 @@ export function ProductDetailView() {
       <div className="px-4">
         {/* Price Row */}
         <div className="flex items-baseline gap-3 mb-1">
-          <span className="text-[26px] font-bold text-[#e8f0dc]">₹{product.price.toLocaleString()}</span>
+          <span className="text-[26px] font-bold text-[#f0eef6]">₹{product.price.toLocaleString()}</span>
           {hasDiscount && (
-            <span className="text-[16px] text-[#71767b] line-through">₹{product.compareAtPrice!.toLocaleString()}</span>
+            <span className="text-[16px] text-[#94a3b8] line-through">₹{product.compareAtPrice!.toLocaleString()}</span>
           )}
         </div>
 
         {/* Rating */}
         <div className="flex items-center gap-2 mb-3">
           <StarDisplay rating={product.rating} size={14} />
-          <span className="text-[13px] text-[#71767b]">{product.rating.toFixed(1)} ({product.reviewCount} reviews)</span>
-          <span className="text-[13px] text-[#71767b]">•</span>
-          <span className="text-[13px] text-[#71767b]">{product.soldCount} sold</span>
+          <span className="text-[13px] text-[#94a3b8]">{product.rating.toFixed(1)} ({product.reviewCount} reviews)</span>
+          <span className="text-[13px] text-[#94a3b8]">•</span>
+          <span className="text-[13px] text-[#94a3b8]">{product.soldCount} sold</span>
         </div>
 
         {/* Name */}
-        <h1 className="text-[18px] font-bold text-[#e8f0dc] leading-tight mb-4">{product.name}</h1>
+        <h1 className="text-[18px] font-bold text-[#f0eef6] leading-tight mb-4">{product.name}</h1>
 
         {/* Business Card */}
         <button
           onClick={() => navigate('storefront', { id: product.businessId })}
           className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-4 hover:bg-white/[0.06] transition-colors"
         >
-          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#1a1a1a] flex-shrink-0">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#18152b] flex-shrink-0">
             {product.businessImage ? (
               <img src={product.businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#a3d977] to-[#8cc65e] flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center">
                 <span className="text-sm font-bold text-black">{product.businessName[0]?.toUpperCase()}</span>
               </div>
             )}
           </div>
           <div className="flex-1 text-left">
-            <p className="text-[14px] font-semibold text-[#e8f0dc]">{product.businessName}</p>
-            <p className="text-[12px] text-[#71767b]">Visit Store →</p>
+            <p className="text-[14px] font-semibold text-[#f0eef6]">{product.businessName}</p>
+            <p className="text-[12px] text-[#94a3b8]">Visit Store →</p>
           </div>
-          <svg className="w-5 h-5 text-[#71767b] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5 text-[#94a3b8] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
 
         {/* Description */}
         <div className="mb-4">
-          <h3 className="text-[14px] font-semibold text-[#e8f0dc] mb-2">Description</h3>
-          <p className="text-[14px] text-[#71767b] leading-relaxed">{product.description}</p>
+          <h3 className="text-[14px] font-semibold text-[#f0eef6] mb-2">Description</h3>
+          <p className="text-[14px] text-[#94a3b8] leading-relaxed">{product.description}</p>
         </div>
 
         {/* Category & Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="px-3 py-1 rounded-full bg-[#a3d977]/10 text-[#a3d977] text-[12px] font-medium">{product.category}</span>
+          <span className="px-3 py-1 rounded-full bg-[#8b5cf6]/10 text-[#8b5cf6] text-[12px] font-medium">{product.category}</span>
           {product.tags.slice(0, 3).map((tag) => (
-            <span key={tag} className="px-3 py-1 rounded-full bg-white/[0.06] text-[#71767b] text-[12px]">#{tag}</span>
+            <span key={tag} className="px-3 py-1 rounded-full bg-white/[0.06] text-[#94a3b8] text-[12px]">#{tag}</span>
           ))}
         </div>
 
         {/* Variants */}
         {variants.length > 0 && variants.map((variant) => (
           <div key={variant.name} className="mb-4">
-            <h3 className="text-[14px] font-semibold text-[#e8f0dc] mb-2">
-              {variant.name}: <span className="text-[#a3d977]">{selectedVariant[variant.name] || 'Select'}</span>
+            <h3 className="text-[14px] font-semibold text-[#f0eef6] mb-2">
+              {variant.name}: <span className="text-[#8b5cf6]">{selectedVariant[variant.name] || 'Select'}</span>
             </h3>
             <div className="flex flex-wrap gap-2">
               {variant.values.map((value) => (
@@ -263,8 +263,8 @@ export function ProductDetailView() {
                   onClick={() => setSelectedVariant((prev) => ({ ...prev, [variant.name]: value }))}
                   className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-all ${
                     selectedVariant[variant.name] === value
-                      ? 'bg-[#a3d977] text-black'
-                      : 'bg-white/[0.06] text-[#71767b] hover:bg-white/[0.1]'
+                      ? 'bg-[#8b5cf6] text-black'
+                      : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1]'
                   }`}
                 >
                   {value}
@@ -276,7 +276,7 @@ export function ProductDetailView() {
 
         {/* Quantity */}
         <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-4">
-          <span className="text-[14px] font-semibold text-[#e8f0dc]">Quantity</span>
+          <span className="text-[14px] font-semibold text-[#f0eef6]">Quantity</span>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -286,7 +286,7 @@ export function ProductDetailView() {
                 <path d="M5 12h14" />
               </svg>
             </button>
-            <span className="text-[16px] font-bold text-[#e8f0dc] w-8 text-center">{quantity}</span>
+            <span className="text-[16px] font-bold text-[#f0eef6] w-8 text-center">{quantity}</span>
             <button
               onClick={() => setQuantity((q) => Math.min(product.stock > 0 ? product.stock : 99, q + 1))}
               className="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1] transition-colors"
@@ -299,7 +299,7 @@ export function ProductDetailView() {
         </div>
 
         {/* Stock */}
-        <p className="text-[12px] text-[#71767b] mb-6">
+        <p className="text-[12px] text-[#94a3b8] mb-6">
           {product.stock > 0 ? `${product.stock} in stock` : product.isDigital ? 'Digital product' : 'Out of stock'}
           {product.sku && ` • SKU: ${product.sku}`}
         </p>
@@ -307,26 +307,26 @@ export function ProductDetailView() {
         {/* Reviews Section */}
         {reviews.length > 0 && (
           <div className="border-t border-white/[0.06] pt-5 mb-4">
-            <h3 className="text-[15px] font-bold text-[#e8f0dc] mb-4">Reviews ({reviews.length})</h3>
+            <h3 className="text-[15px] font-bold text-[#f0eef6] mb-4">Reviews ({reviews.length})</h3>
 
             {/* Star Breakdown */}
             <div className="flex gap-6 mb-5">
               <div className="text-center">
-                <p className="text-[36px] font-bold text-[#e8f0dc]">{product.rating.toFixed(1)}</p>
+                <p className="text-[36px] font-bold text-[#f0eef6]">{product.rating.toFixed(1)}</p>
                 <StarDisplay rating={product.rating} size={14} />
-                <p className="text-[11px] text-[#71767b] mt-1">{product.reviewCount} reviews</p>
+                <p className="text-[11px] text-[#94a3b8] mt-1">{product.reviewCount} reviews</p>
               </div>
               <div className="flex-1 space-y-1.5">
                 {starBreakdown.map(({ star, count, percent }) => (
                   <div key={star} className="flex items-center gap-2">
-                    <span className="text-[11px] text-[#71767b] w-3">{star}</span>
+                    <span className="text-[11px] text-[#94a3b8] w-3">{star}</span>
                     <svg className="w-3 h-3 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                     <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
                       <div className="h-full rounded-full bg-amber-400 transition-all" style={{ width: `${percent}%` }} />
                     </div>
-                    <span className="text-[11px] text-[#71767b] w-6 text-right">{count}</span>
+                    <span className="text-[11px] text-[#94a3b8] w-6 text-right">{count}</span>
                   </div>
                 ))}
               </div>
@@ -337,22 +337,22 @@ export function ProductDetailView() {
               {reviews.map((review) => (
                 <div key={review.id} className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                   <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1a1a1a]">
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-[#18152b]">
                       {review.buyerImage ? (
                         <img src={review.buyerImage} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center text-[10px] font-bold text-[#e8f0dc]">
+                        <div className="w-full h-full bg-[#18152b] flex items-center justify-center text-[10px] font-bold text-[#f0eef6]">
                           {review.buyerName[0]?.toUpperCase()}
                         </div>
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-[13px] font-semibold text-[#e8f0dc]">{review.buyerName}</p>
-                      <p className="text-[11px] text-[#71767b]">{new Date(review.createdAt).toLocaleDateString()}</p>
+                      <p className="text-[13px] font-semibold text-[#f0eef6]">{review.buyerName}</p>
+                      <p className="text-[11px] text-[#94a3b8]">{new Date(review.createdAt).toLocaleDateString()}</p>
                     </div>
                     <StarDisplay rating={review.rating} size={12} />
                   </div>
-                  <p className="text-[13px] text-[#71767b] leading-relaxed">{review.comment}</p>
+                  <p className="text-[13px] text-[#94a3b8] leading-relaxed">{review.comment}</p>
                 </div>
               ))}
             </div>
@@ -361,17 +361,17 @@ export function ProductDetailView() {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-black/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-[#09080f]/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <div className="flex gap-3">
           <button
             onClick={handleAddToCart}
-            className="flex-1 py-3.5 rounded-full border border-[#a3d977] text-[#a3d977] font-bold text-[15px] hover:bg-[#a3d977]/10 transition-colors active:scale-[0.98]"
+            className="flex-1 py-3.5 rounded-full border border-[#8b5cf6] text-[#8b5cf6] font-bold text-[15px] hover:bg-[#8b5cf6]/10 transition-colors active:scale-[0.98]"
           >
             Add to Cart
           </button>
           <button
             onClick={handleBuyNow}
-            className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[15px] shadow-lg shadow-[#a3d977]/20 hover:shadow-xl transition-all active:scale-[0.98]"
+            className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 hover:shadow-xl transition-all active:scale-[0.98]"
           >
             Buy Now
           </button>

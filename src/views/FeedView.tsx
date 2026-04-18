@@ -13,16 +13,16 @@ import type { DocumentSnapshot, DocumentData } from 'firebase/firestore'
 
 function FeedSkeleton() {
   return (
-    <div className="border-b border-white/[0.06] px-4 py-3">
+    <div className="border-b border-white/[0.06] px-5 py-4">
       <div className="flex gap-3">
-        <div className="w-10 h-10 rounded-full bg-white/[0.06] shimmer relative overflow-hidden" />
+        <div className="w-11 h-11 rounded-full bg-white/[0.06] shimmer relative overflow-hidden" />
         <div className="flex-1 space-y-2.5">
           <div className="flex gap-2">
-            <div className="h-4 w-24 rounded bg-white/[0.06] shimmer relative overflow-hidden" />
-            <div className="h-4 w-16 rounded bg-white/[0.06] shimmer relative overflow-hidden" />
+            <div className="h-4 w-24 rounded-2xl bg-white/[0.06] shimmer relative overflow-hidden" />
+            <div className="h-4 w-16 rounded-2xl bg-white/[0.06] shimmer relative overflow-hidden" />
           </div>
-          <div className="h-4 w-full rounded bg-white/[0.06] shimmer relative overflow-hidden" />
-          <div className="h-4 w-3/4 rounded bg-white/[0.06] shimmer relative overflow-hidden" />
+          <div className="h-4 w-full rounded-2xl bg-white/[0.06] shimmer relative overflow-hidden" />
+          <div className="h-4 w-3/4 rounded-2xl bg-white/[0.06] shimmer relative overflow-hidden" />
           <div className="flex gap-8 pt-2">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-4 w-8 rounded bg-white/[0.06] shimmer relative overflow-hidden" />
@@ -204,20 +204,20 @@ export function FeedView() {
   return (
     <div>
       {/* Tabs */}
-      <div className="sticky top-[53px] z-20 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-[56px] z-20 bg-[#09080f]/90 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={cn(
-                'flex-1 py-3.5 text-[15px] font-medium relative transition-colors',
-                activeTab === tab ? 'text-[#e8f0dc] font-bold' : 'text-[#71767b]'
+                'flex-1 py-4 text-[15px] font-medium relative transition-colors',
+                activeTab === tab ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
               )}
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#a3d977] rounded-full animate-tab-indicator" />
+                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#8b5cf6] rounded-full animate-tab-indicator" />
               )}
             </button>
           ))}
@@ -227,7 +227,7 @@ export function FeedView() {
       {/* Refreshing indicator */}
       {refreshing && (
         <div className="flex items-center justify-center py-2">
-          <div className="w-5 h-5 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
         </div>
       )}
 
@@ -239,14 +239,14 @@ export function FeedView() {
           ))}
         </div>
       ) : posts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
-            <svg className="w-8 h-8 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <div className="flex flex-col items-center justify-center py-24 px-8 text-center">
+          <div className="w-20 h-20 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
+            <svg className="w-10 h-10 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
               <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-[#e8f0dc] mb-1">No posts yet</h3>
-          <p className="text-[15px] text-[#71767b]">When people post, their posts will show up here.</p>
+          <h3 className="text-lg font-bold text-[#f0eef6] mb-1">No posts yet</h3>
+          <p className="text-[15px] text-[#94a3b8]">When people post, their posts will show up here.</p>
         </div>
       ) : (
         <div>
@@ -272,7 +272,7 @@ export function FeedView() {
 
           {/* Loading more */}
           {loadingMore && (
-            <div className="py-4">
+            <div className="py-4 space-y-0">
               <FeedSkeleton />
               <FeedSkeleton />
             </div>
@@ -280,8 +280,8 @@ export function FeedView() {
 
           {/* End of feed */}
           {allLoaded && posts.length > 0 && (
-            <div className="py-8 text-center">
-              <p className="text-[15px] text-[#71767b]">You&apos;re caught up</p>
+            <div className="border-t border-white/[0.06] py-12 text-center">
+              <p className="text-[15px] text-[#94a3b8]">You&apos;re caught up</p>
             </div>
           )}
         </div>

@@ -225,7 +225,7 @@ export function Sidebar() {
       role="navigation"
       aria-label="Main navigation"
       className={cn(
-        'flex h-full flex-col bg-black',
+        'flex h-full flex-col bg-[#09080f]',
         // Smooth width transition
         'transition-[width] duration-[250ms] ease-in-out',
         // Desktop
@@ -302,7 +302,7 @@ export function Sidebar() {
             className={cn(
               'mb-2 flex items-center gap-3 rounded-xl px-3 py-2.5 text-gray-300 transition-all duration-200',
               'hover:bg-white/[0.04] hover:text-white',
-              'focus-visible:ring-2 focus-visible:ring-[#a3d977]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+              'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
               'outline-none',
               !isExpanded && 'justify-center'
             )}
@@ -326,7 +326,7 @@ export function Sidebar() {
           className={cn(
             'group flex w-full items-center gap-3 rounded-xl p-2.5 transition-all duration-200',
             'hover:bg-white/[0.04]',
-            'focus-visible:ring-2 focus-visible:ring-[#a3d977]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+            'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
             'outline-none',
             !isExpanded && 'justify-center'
           )}
@@ -362,7 +362,7 @@ export function Sidebar() {
           role="dialog"
           aria-hidden="true"
           className={cn(
-            'fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300',
+            'fixed inset-0 z-40 bg-[#09080f]/50 backdrop-blur-sm transition-opacity duration-300',
             showDrawer
               ? 'opacity-100 pointer-events-auto'
               : 'opacity-0 pointer-events-none'

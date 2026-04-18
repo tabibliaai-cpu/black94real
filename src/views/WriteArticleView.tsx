@@ -107,9 +107,9 @@ export function WriteArticleView() {
   }, [navigate, previousView])
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#09080f]">
       {/* ─── Sticky Header ─── */}
-      <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-b border-white/[0.06]">
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-3">
             <button
@@ -117,12 +117,12 @@ export function WriteArticleView() {
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Go back"
             >
-              <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-[17px] font-bold text-[#e8f0dc]">
+            <h1 className="text-[17px] font-bold text-[#f0eef6]">
               {existingArticle ? 'Edit Article' : 'Write Article'}
             </h1>
           </div>
@@ -133,8 +133,8 @@ export function WriteArticleView() {
             className={cn(
               'px-5 py-2 rounded-full text-[14px] font-bold transition-all duration-200',
               publishing
-                ? 'bg-[#a3d977]/40 text-black/60 cursor-not-allowed'
-                : 'bg-[#a3d977] text-black hover:bg-[#8cc65e] active:scale-95'
+                ? 'bg-[#8b5cf6]/40 text-black/60 cursor-not-allowed'
+                : 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-95'
             )}
           >
             {publishing ? 'Publishing...' : 'Publish'}
@@ -147,7 +147,7 @@ export function WriteArticleView() {
         {/* Cover Image */}
         <button
           onClick={handleCoverClick}
-          className="w-full relative group mb-6 rounded-2xl overflow-hidden border border-dashed border-white/[0.12] hover:border-[#a3d977]/40 transition-colors"
+          className="w-full relative group mb-6 rounded-2xl overflow-hidden border border-dashed border-white/[0.12] hover:border-[#8b5cf6]/40 transition-colors"
           style={{ aspectRatio: '16/9' }}
         >
           {coverImage ? (
@@ -157,14 +157,14 @@ export function WriteArticleView() {
               className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0a0a0a]">
-              <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center group-hover:bg-[#a3d977]/10 transition-colors">
-                <svg className="w-6 h-6 text-[#71767b] group-hover:text-[#a3d977] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#110f1a]">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center group-hover:bg-[#8b5cf6]/10 transition-colors">
+                <svg className="w-6 h-6 text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
                   <circle cx="12" cy="13" r="4" />
                 </svg>
               </div>
-              <span className="text-[14px] text-[#71767b] group-hover:text-[#a3d977] transition-colors">
+              <span className="text-[14px] text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors">
                 Add Cover Image
               </span>
             </div>
@@ -177,7 +177,7 @@ export function WriteArticleView() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Article Title..."
-          className="w-full bg-transparent text-[28px] sm:text-[36px] font-bold text-[#e8f0dc] placeholder-[#536471] outline-none leading-tight mb-6 tracking-tight"
+          className="w-full bg-transparent text-[28px] sm:text-[36px] font-bold text-[#f0eef6] placeholder-[#64748b] outline-none leading-tight mb-6 tracking-tight"
         />
 
         {/* Content Textarea */}
@@ -185,40 +185,40 @@ export function WriteArticleView() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write your article content here..."
-          className="w-full min-h-[300px] bg-transparent text-[17px] leading-relaxed text-[#c8d0bc] placeholder-[#536471] outline-none resize-none"
+          className="w-full min-h-[300px] bg-transparent text-[17px] leading-relaxed text-[#c8d0bc] placeholder-[#64748b] outline-none resize-none"
         />
 
         {/* ─── Toolbar (word/char/readtime) ─── */}
         <div className="flex items-center gap-4 mt-4 pt-4 border-t border-white/[0.06]">
-          <span className="text-[13px] text-[#71767b]">
-            <span className="text-[#a3d977] font-semibold">{wordCount}</span> words
+          <span className="text-[13px] text-[#94a3b8]">
+            <span className="text-[#8b5cf6] font-semibold">{wordCount}</span> words
           </span>
-          <span className="text-[13px] text-[#71767b]">
-            <span className="text-[#a3d977] font-semibold">{charCount}</span> characters
+          <span className="text-[13px] text-[#94a3b8]">
+            <span className="text-[#8b5cf6] font-semibold">{charCount}</span> characters
           </span>
-          <span className="text-[13px] text-[#71767b]">
-            <span className="text-[#a3d977] font-semibold">{readTime}</span>
+          <span className="text-[13px] text-[#94a3b8]">
+            <span className="text-[#8b5cf6] font-semibold">{readTime}</span>
           </span>
         </div>
 
         {/* ─── Fact Check Section (collapsible) ─── */}
-        <div className="mt-8 bg-[#0a0a0a] rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div className="mt-8 bg-[#110f1a] rounded-2xl border border-white/[0.06] overflow-hidden">
           <button
             onClick={() => setFactCheckEnabled((v) => !v)}
             className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
           >
             <div className="flex items-center gap-3">
-              <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
                 <path d="M22 4L12 14.01l-3-3" />
               </svg>
-              <span className="text-[15px] font-semibold text-[#e8f0dc]">Fact Check</span>
+              <span className="text-[15px] font-semibold text-[#f0eef6]">Fact Check</span>
             </div>
             {/* Toggle switch */}
             <div
               className={cn(
                 'w-11 h-6 rounded-full transition-colors relative flex-shrink-0',
-                factCheckEnabled ? 'bg-[#a3d977]' : 'bg-white/[0.15]'
+                factCheckEnabled ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]'
               )}
             >
               <div
@@ -234,18 +234,18 @@ export function WriteArticleView() {
             <div className="px-5 pb-5 space-y-4 animate-fade-in">
               {/* Status Dropdown */}
               <div className="space-y-1.5">
-                <label className="text-[13px] text-[#71767b]">Status</label>
+                <label className="text-[13px] text-[#94a3b8]">Status</label>
                 <div className="relative">
                   <select
                     value={factCheckStatus}
                     onChange={(e) => setFactCheckStatus(e.target.value as FactCheckStatus)}
-                    className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e8f0dc] outline-none focus:border-[#a3d977]/50 transition-colors cursor-pointer"
+                    className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors cursor-pointer"
                   >
-                    <option value="Pending Review" className="bg-[#1a1a1a] text-[#e8f0dc]">Pending Review</option>
-                    <option value="Verified" className="bg-[#1a1a1a] text-[#e8f0dc]">Verified</option>
-                    <option value="Not Verified" className="bg-[#1a1a1a] text-[#e8f0dc]">Not Verified</option>
+                    <option value="Pending Review" className="bg-[#18152b] text-[#f0eef6]">Pending Review</option>
+                    <option value="Verified" className="bg-[#18152b] text-[#f0eef6]">Verified</option>
+                    <option value="Not Verified" className="bg-[#18152b] text-[#f0eef6]">Not Verified</option>
                   </select>
-                  <svg className="w-4 h-4 text-[#71767b] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-[#94a3b8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
@@ -253,13 +253,13 @@ export function WriteArticleView() {
 
               {/* Source URL */}
               <div className="space-y-1.5">
-                <label className="text-[13px] text-[#71767b]">Source URL</label>
+                <label className="text-[13px] text-[#94a3b8]">Source URL</label>
                 <input
                   type="url"
                   value={factCheckUrl}
                   onChange={(e) => setFactCheckUrl(e.target.value)}
                   placeholder="https://example.com/source"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                 />
               </div>
             </div>
@@ -268,7 +268,7 @@ export function WriteArticleView() {
       </div>
 
       {/* ─── Sticky Bottom Actions ─── */}
-      <div className="fixed bottom-0 inset-x-0 z-30 bg-black/80 backdrop-blur-md border-t border-white/[0.06]">
+      <div className="fixed bottom-0 inset-x-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto flex items-center gap-3 px-4 py-3">
           <button
             onClick={handleSaveDraft}
@@ -276,8 +276,8 @@ export function WriteArticleView() {
             className={cn(
               'flex-1 py-2.5 rounded-full text-[14px] font-bold border transition-all duration-200',
               saving
-                ? 'border-white/[0.06] text-[#536471] cursor-not-allowed'
-                : 'border-[#a3d977]/40 text-[#a3d977] hover:bg-[#a3d977]/10 active:scale-[0.98]'
+                ? 'border-white/[0.06] text-[#64748b] cursor-not-allowed'
+                : 'border-[#8b5cf6]/40 text-[#8b5cf6] hover:bg-[#8b5cf6]/10 active:scale-[0.98]'
             )}
           >
             {saving ? 'Saving...' : 'Save as Draft'}
@@ -288,8 +288,8 @@ export function WriteArticleView() {
             className={cn(
               'flex-1 py-2.5 rounded-full text-[14px] font-bold transition-all duration-200',
               publishing
-                ? 'bg-[#a3d977]/40 text-black/60 cursor-not-allowed'
-                : 'bg-[#a3d977] text-black hover:bg-[#8cc65e] active:scale-[0.98]'
+                ? 'bg-[#8b5cf6]/40 text-black/60 cursor-not-allowed'
+                : 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.98]'
             )}
           >
             {publishing ? 'Publishing...' : 'Publish'}

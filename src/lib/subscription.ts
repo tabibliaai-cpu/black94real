@@ -16,7 +16,7 @@ export const PLANS: Plan[] = [
     price: 0,
     currency: '₹',
     billingCycle: 'Forever free',
-    badgeColor: '#71767b',
+    badgeColor: '#94a3b8',
     features: [
       'Post creation',
       'Chat messaging',

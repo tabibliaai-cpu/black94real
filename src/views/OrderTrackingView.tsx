@@ -42,13 +42,13 @@ function OrderTimeline({ order }: { order: ShopOrder }) {
   const isRefunded = order.status === 'refunded'
 
   return (
-    <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-      <h3 className="text-[14px] font-bold text-[#e8f0dc] mb-5">Order Status</h3>
+    <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+      <h3 className="text-[14px] font-bold text-[#f0eef6] mb-5">Order Status</h3>
 
       {/* Current status badge */}
       <div className="flex items-center gap-2 mb-5">
         <div className={`w-3 h-3 rounded-full ${STATUS_COLORS[order.status] || 'bg-gray-500'}`} />
-        <span className={`text-[15px] font-bold ${STATUS_TEXT_COLORS[order.status] || 'text-[#e8f0dc]'}`}>
+        <span className={`text-[15px] font-bold ${STATUS_TEXT_COLORS[order.status] || 'text-[#f0eef6]'}`}>
           {STATUS_LABELS[order.status] || order.status}
         </span>
       </div>
@@ -64,25 +64,25 @@ function OrderTimeline({ order }: { order: ShopOrder }) {
             <div key={step} className="relative mb-6 last:mb-0">
               {/* Vertical line */}
               {!isLast && (
-                <div className={`absolute left-[-21px] top-5 w-0.5 h-full ${isCompleted ? 'bg-[#a3d977]' : 'bg-white/[0.08]'}`} />
+                <div className={`absolute left-[-21px] top-5 w-0.5 h-full ${isCompleted ? 'bg-[#8b5cf6]' : 'bg-white/[0.08]'}`} />
               )}
 
               {/* Dot */}
               <div className={`absolute left-[-25px] top-1 w-3 h-3 rounded-full border-2 transition-all ${
                 isCompleted
-                  ? 'bg-[#a3d977] border-[#a3d977]'
+                  ? 'bg-[#8b5cf6] border-[#8b5cf6]'
                   : isCurrent
-                    ? 'border-[#a3d977] bg-black'
-                    : 'border-[#536471] bg-black'
+                    ? 'border-[#8b5cf6] bg-[#09080f]'
+                    : 'border-[#64748b] bg-[#09080f]'
               }`} />
 
               {/* Label */}
               <div>
-                <p className={`text-[13px] font-medium ${isCompleted ? 'text-[#e8f0dc]' : 'text-[#536471]'}`}>
+                <p className={`text-[13px] font-medium ${isCompleted ? 'text-[#f0eef6]' : 'text-[#64748b]'}`}>
                   {STATUS_LABELS[step]}
                 </p>
                 {isCurrent && (
-                  <p className="text-[11px] text-[#71767b] mt-0.5">Current status</p>
+                  <p className="text-[11px] text-[#94a3b8] mt-0.5">Current status</p>
                 )}
               </div>
             </div>
@@ -129,7 +129,7 @@ export function OrderTrackingView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-53px-50px)]">
-        <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
       </div>
     )
   }
@@ -138,16 +138,16 @@ export function OrderTrackingView() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-53px-50px)] px-4">
         <div className="w-20 h-20 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
-          <svg className="w-10 h-10 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+          <svg className="w-10 h-10 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
             <line x1="1" y1="10" x2="23" y2="10" />
           </svg>
         </div>
-        <h2 className="text-[18px] font-bold text-[#e8f0dc] mb-2">No orders yet</h2>
-        <p className="text-[14px] text-[#71767b] mb-6">Your order history will appear here</p>
+        <h2 className="text-[18px] font-bold text-[#f0eef6] mb-2">No orders yet</h2>
+        <p className="text-[14px] text-[#94a3b8] mb-6">Your order history will appear here</p>
         <button
           onClick={() => useAppStore.getState().navigate('store')}
-          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[15px]"
+          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px]"
         >
           Start Shopping
         </button>
@@ -174,8 +174,8 @@ export function OrderTrackingView() {
                 onClick={() => setSelectedOrder(o)}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${
                   selectedOrder?.id === o.id
-                    ? 'bg-[#a3d977] text-black'
-                    : 'bg-white/[0.06] text-[#71767b] hover:bg-white/[0.1]'
+                    ? 'bg-[#8b5cf6] text-black'
+                    : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1]'
                 }`}
               >
                 #{o.id.slice(-6)} • ₹{o.total.toLocaleString()}
@@ -190,24 +190,24 @@ export function OrderTrackingView() {
         <OrderTimeline order={order} />
 
         {/* Order Info */}
-        <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+        <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[14px] font-bold text-[#e8f0dc]">Order #{order.id.slice(-8).toUpperCase()}</h3>
-            <span className="text-[12px] text-[#71767b]">{new Date(order.createdAt).toLocaleDateString()}</span>
+            <h3 className="text-[14px] font-bold text-[#f0eef6]">Order #{order.id.slice(-8).toUpperCase()}</h3>
+            <span className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</span>
           </div>
 
           {/* Items */}
           <div className="space-y-3 mb-4">
             {items.map((item, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                   <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#e8f0dc] line-clamp-1">{item.productName}</p>
-                  <p className="text-[12px] text-[#71767b]">Qty: {item.quantity}{item.variant ? ` • ${item.variant}` : ''}</p>
+                  <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                  <p className="text-[12px] text-[#94a3b8]">Qty: {item.quantity}{item.variant ? ` • ${item.variant}` : ''}</p>
                 </div>
-                <span className="text-[13px] font-semibold text-[#e8f0dc]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                <span className="text-[13px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -215,42 +215,42 @@ export function OrderTrackingView() {
           {/* Totals */}
           <div className="border-t border-white/[0.06] pt-3 space-y-1.5">
             <div className="flex justify-between text-[13px]">
-              <span className="text-[#71767b]">Subtotal</span>
-              <span className="text-[#e8f0dc]">₹{order.subtotal.toLocaleString()}</span>
+              <span className="text-[#94a3b8]">Subtotal</span>
+              <span className="text-[#f0eef6]">₹{order.subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-[13px]">
-              <span className="text-[#71767b]">Shipping</span>
-              <span className="text-[#e8f0dc]">{order.shipping === 0 ? 'FREE' : `₹${order.shipping.toLocaleString()}`}</span>
+              <span className="text-[#94a3b8]">Shipping</span>
+              <span className="text-[#f0eef6]">{order.shipping === 0 ? 'FREE' : `₹${order.shipping.toLocaleString()}`}</span>
             </div>
             <div className="flex justify-between text-[13px]">
-              <span className="text-[#71767b]">Tax</span>
-              <span className="text-[#e8f0dc]">₹{order.tax.toLocaleString()}</span>
+              <span className="text-[#94a3b8]">Tax</span>
+              <span className="text-[#f0eef6]">₹{order.tax.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-[15px] font-bold pt-1">
-              <span className="text-[#e8f0dc]">Total</span>
-              <span className="text-[#a3d977]">₹{order.total.toLocaleString()}</span>
+              <span className="text-[#f0eef6]">Total</span>
+              <span className="text-[#8b5cf6]">₹{order.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
 
         {/* Shipping Address */}
         {shippingAddress && (
-          <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-            <h3 className="text-[14px] font-bold text-[#e8f0dc] mb-2">Delivery Address</h3>
-            <p className="text-[13px] text-[#e8f0dc]">{shippingAddress.name}</p>
-            <p className="text-[13px] text-[#71767b]">{shippingAddress.line1}</p>
-            {shippingAddress.line2 && <p className="text-[13px] text-[#71767b]">{shippingAddress.line2}</p>}
-            <p className="text-[13px] text-[#71767b]">{shippingAddress.city}, {shippingAddress.state} - {shippingAddress.pincode}</p>
-            <p className="text-[13px] text-[#71767b]">{shippingAddress.phone}</p>
+          <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <h3 className="text-[14px] font-bold text-[#f0eef6] mb-2">Delivery Address</h3>
+            <p className="text-[13px] text-[#f0eef6]">{shippingAddress.name}</p>
+            <p className="text-[13px] text-[#94a3b8]">{shippingAddress.line1}</p>
+            {shippingAddress.line2 && <p className="text-[13px] text-[#94a3b8]">{shippingAddress.line2}</p>}
+            <p className="text-[13px] text-[#94a3b8]">{shippingAddress.city}, {shippingAddress.state} - {shippingAddress.pincode}</p>
+            <p className="text-[13px] text-[#94a3b8]">{shippingAddress.phone}</p>
           </div>
         )}
 
         {/* Tracking */}
         {order.trackingNumber && (
-          <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-            <h3 className="text-[14px] font-bold text-[#e8f0dc] mb-2">Tracking</h3>
-            <p className="text-[13px] text-[#71767b]">Partner: {order.trackingPartner || 'N/A'}</p>
-            <p className="text-[13px] text-[#a3d977] font-mono">{order.trackingNumber}</p>
+          <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <h3 className="text-[14px] font-bold text-[#f0eef6] mb-2">Tracking</h3>
+            <p className="text-[13px] text-[#94a3b8]">Partner: {order.trackingPartner || 'N/A'}</p>
+            <p className="text-[13px] text-[#8b5cf6] font-mono">{order.trackingNumber}</p>
           </div>
         )}
       </div>

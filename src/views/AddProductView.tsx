@@ -123,7 +123,7 @@ export function AddProductView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-53px)]">
-        <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
       </div>
     )
   }
@@ -131,65 +131,65 @@ export function AddProductView() {
   return (
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       <div className="px-4 pt-2">
-        <h2 className="text-[18px] font-bold text-[#e8f0dc] mb-1">
+        <h2 className="text-[18px] font-bold text-[#f0eef6] mb-1">
           {isEditing ? 'Edit Product' : 'Add New Product'}
         </h2>
-        <p className="text-[13px] text-[#71767b] mb-5">
+        <p className="text-[13px] text-[#94a3b8] mb-5">
           {isEditing ? 'Update your product details' : 'List a new product on Black94 Market'}
         </p>
 
         <div className="space-y-4">
           {/* Name */}
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Product Name *</label>
+            <label className="text-[13px] text-[#94a3b8]">Product Name *</label>
             <input
               type="text"
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="e.g. Wireless Headphones Pro"
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
 
           {/* Description */}
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Description</label>
+            <label className="text-[13px] text-[#94a3b8]">Description</label>
             <textarea
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="Describe your product..."
               rows={4}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors resize-none"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
             />
           </div>
 
           {/* Price Row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-[13px] text-[#71767b]">Price (₹) *</label>
+              <label className="text-[13px] text-[#94a3b8]">Price (₹) *</label>
               <input
                 type="number"
                 value={form.price}
                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                 placeholder="0"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[13px] text-[#71767b]">Compare at Price</label>
+              <label className="text-[13px] text-[#94a3b8]">Compare at Price</label>
               <input
                 type="number"
                 value={form.compareAtPrice}
                 onChange={(e) => setForm((f) => ({ ...f, compareAtPrice: e.target.value }))}
                 placeholder="Original price"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
           </div>
 
           {/* Category */}
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Category</label>
+            <label className="text-[13px] text-[#94a3b8]">Category</label>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((cat) => (
                 <button
@@ -197,8 +197,8 @@ export function AddProductView() {
                   onClick={() => setForm((f) => ({ ...f, category: cat }))}
                   className={`px-3 py-1.5 rounded-full text-[12px] font-medium transition-all ${
                     form.category === cat
-                      ? 'bg-[#a3d977] text-black'
-                      : 'bg-white/[0.06] text-[#71767b] hover:bg-white/[0.1]'
+                      ? 'bg-[#8b5cf6] text-black'
+                      : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1]'
                   }`}
                 >
                   {cat}
@@ -209,25 +209,25 @@ export function AddProductView() {
 
           {/* Tags */}
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Tags (comma separated)</label>
+            <label className="text-[13px] text-[#94a3b8]">Tags (comma separated)</label>
             <input
               type="text"
               value={form.tags}
               onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
               placeholder="e.g. wireless, audio, premium"
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
 
           {/* Images */}
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Image URLs (comma separated)</label>
+            <label className="text-[13px] text-[#94a3b8]">Image URLs (comma separated)</label>
             <textarea
               value={form.images}
               onChange={(e) => setForm((f) => ({ ...f, images: e.target.value }))}
               placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
               rows={2}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors resize-none"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
             />
             {form.images && (
               <div className="flex gap-2 overflow-x-auto pt-1">
@@ -235,7 +235,7 @@ export function AddProductView() {
                   const trimmed = url.trim()
                   if (!trimmed) return null
                   return (
-                    <div key={i} className="w-16 h-16 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                    <div key={i} className="w-16 h-16 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                       <img src={trimmed} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
                     </div>
                   )
@@ -247,61 +247,61 @@ export function AddProductView() {
           {/* Stock & SKU */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-[13px] text-[#71767b]">Stock</label>
+              <label className="text-[13px] text-[#94a3b8]">Stock</label>
               <input
                 type="number"
                 value={form.stock}
                 onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                 placeholder="0"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[13px] text-[#71767b]">SKU</label>
+              <label className="text-[13px] text-[#94a3b8]">SKU</label>
               <input
                 type="text"
                 value={form.sku}
                 onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))}
                 placeholder="PROD-001"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
           </div>
 
           {/* Variants */}
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Variants (JSON)</label>
+            <label className="text-[13px] text-[#94a3b8]">Variants (JSON)</label>
             <textarea
               value={form.variants}
               onChange={(e) => setForm((f) => ({ ...f, variants: e.target.value }))}
               placeholder='[{"name":"Size","values":["S","M","L"]}]'
               rows={3}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors resize-none font-mono"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none font-mono"
             />
           </div>
 
           {/* Toggles */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <div>
-                <p className="text-[14px] text-[#e8f0dc]">Digital Product</p>
-                <p className="text-[12px] text-[#71767b]">No shipping required</p>
+                <p className="text-[14px] text-[#f0eef6]">Digital Product</p>
+                <p className="text-[12px] text-[#94a3b8]">No shipping required</p>
               </div>
               <button
                 onClick={() => setForm((f) => ({ ...f, isDigital: !f.isDigital }))}
-                className={`w-11 h-6 rounded-full transition-colors relative ${form.isDigital ? 'bg-[#a3d977]' : 'bg-white/[0.15]'}`}
+                className={`w-11 h-6 rounded-full transition-colors relative ${form.isDigital ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]'}`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${form.isDigital ? 'translate-x-[22px]' : 'translate-x-0.5'}`} />
               </button>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <div>
-                <p className="text-[14px] text-[#e8f0dc]">Featured Product</p>
-                <p className="text-[12px] text-[#71767b]">Show in featured section</p>
+                <p className="text-[14px] text-[#f0eef6]">Featured Product</p>
+                <p className="text-[12px] text-[#94a3b8]">Show in featured section</p>
               </div>
               <button
                 onClick={() => setForm((f) => ({ ...f, isFeatured: !f.isFeatured }))}
-                className={`w-11 h-6 rounded-full transition-colors relative ${form.isFeatured ? 'bg-[#a3d977]' : 'bg-white/[0.15]'}`}
+                className={`w-11 h-6 rounded-full transition-colors relative ${form.isFeatured ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]'}`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${form.isFeatured ? 'translate-x-[22px]' : 'translate-x-0.5'}`} />
               </button>
@@ -311,11 +311,11 @@ export function AddProductView() {
       </div>
 
       {/* Save Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 bg-black/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#09080f]/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[15px] shadow-lg shadow-[#a3d977]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+          className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all disabled:opacity-50"
         >
           {saving ? (
             <span className="flex items-center justify-center gap-2">

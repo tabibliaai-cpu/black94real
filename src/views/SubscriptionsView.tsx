@@ -86,7 +86,7 @@ function CurrentPlanBanner() {
   const plan = getCurrentPlan(user?.subscription || 'free')
 
   const badgeColorMap: Record<string, string> = {
-    free: 'bg-[#71767b]/20 text-[#71767b] border-[#71767b]/30',
+    free: 'bg-[#94a3b8]/20 text-[#94a3b8] border-[#94a3b8]/30',
     pro: 'bg-[#1d9bf0]/15 text-[#1d9bf0] border-[#1d9bf0]/30',
     gold: 'bg-[#ffd700]/15 text-[#ffd700] border-[#ffd700]/30',
   }
@@ -100,7 +100,7 @@ function CurrentPlanBanner() {
   return (
     <div
       className={cn(
-        'rounded-2xl border border-white/[0.08] bg-[#0a0a0a] p-5',
+        'rounded-2xl border border-white/[0.08] bg-[#110f1a] p-5',
         glowMap[plan.id]
       )}
     >
@@ -108,8 +108,8 @@ function CurrentPlanBanner() {
         <div className="flex items-center gap-2">
           {plan.id === 'gold' && <CrownIcon className="w-5 h-5 text-[#ffd700]" />}
           {plan.id === 'pro' && <StarIcon className="w-5 h-5 text-[#1d9bf0]" />}
-          {plan.id === 'free' && <LightningIcon className="w-5 h-5 text-[#71767b]" />}
-          <span className="text-[15px] font-semibold text-[#e8f0dc]">Current Plan</span>
+          {plan.id === 'free' && <LightningIcon className="w-5 h-5 text-[#94a3b8]" />}
+          <span className="text-[15px] font-semibold text-[#f0eef6]">Current Plan</span>
         </div>
         <span
           className={cn(
@@ -121,13 +121,13 @@ function CurrentPlanBanner() {
         </span>
       </div>
 
-      <p className="text-[13px] text-[#71767b] mb-4">
+      <p className="text-[13px] text-[#94a3b8] mb-4">
         Next billing: May 18, 2026
       </p>
 
       <button
         onClick={() => toast.info('Subscription management coming soon!')}
-        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#e8f0dc] hover:bg-white/[0.1] transition-all duration-200 active:scale-[0.97]"
+        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#f0eef6] hover:bg-white/[0.1] transition-all duration-200 active:scale-[0.97]"
       >
         <ManageIcon className="w-4 h-4" />
         Manage Subscription
@@ -159,9 +159,9 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
   }
 
   const btnClass = isCurrent
-    ? 'bg-white/[0.06] text-[#71767b] cursor-default'
+    ? 'bg-white/[0.06] text-[#94a3b8] cursor-default'
     : plan.id === 'pro'
-    ? 'bg-[#a3d977] text-black hover:bg-[#8cc65e] active:scale-[0.97]'
+    ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.97]'
     : plan.id === 'gold'
     ? 'bg-gradient-to-r from-[#ffd700] to-[#f0c800] text-black hover:from-[#f0c800] hover:to-[#e0b800] active:scale-[0.97]'
     : ''
@@ -174,7 +174,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
   return (
     <div
       className={cn(
-        'flex-shrink-0 w-[280px] rounded-2xl border bg-[#0a0a0a] p-5 transition-all duration-300 hover:scale-[1.02] hover:border-opacity-60',
+        'flex-shrink-0 w-[280px] rounded-2xl border bg-[#110f1a] p-5 transition-all duration-300 hover:scale-[1.02] hover:border-opacity-60',
         borderColor[plan.id],
         glowClass[plan.id],
         plan.popular && 'relative'
@@ -190,23 +190,23 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       <div className="mb-4">
         {plan.id === 'gold' && <CrownIcon className="w-8 h-8 text-[#ffd700]" />}
         {plan.id === 'pro' && <StarIcon className="w-8 h-8 text-[#1d9bf0]" />}
-        {plan.id === 'free' && <LightningIcon className="w-8 h-8 text-[#71767b]" />}
+        {plan.id === 'free' && <LightningIcon className="w-8 h-8 text-[#94a3b8]" />}
       </div>
 
       {/* Plan name & price */}
-      <h3 className="text-[17px] font-bold text-[#e8f0dc] mb-1">{plan.name}</h3>
+      <h3 className="text-[17px] font-bold text-[#f0eef6] mb-1">{plan.name}</h3>
       <div className="flex items-baseline gap-1 mb-1">
         {plan.price === 0 ? (
-          <span className="text-[28px] font-bold text-[#e8f0dc]">Free</span>
+          <span className="text-[28px] font-bold text-[#f0eef6]">Free</span>
         ) : (
           <>
-            <span className="text-[28px] font-bold text-[#e8f0dc]">{plan.currency}{plan.price.toLocaleString()}</span>
-            <span className="text-[13px] text-[#71767b]">/{plan.billingCycle}</span>
+            <span className="text-[28px] font-bold text-[#f0eef6]">{plan.currency}{plan.price.toLocaleString()}</span>
+            <span className="text-[13px] text-[#94a3b8]">/{plan.billingCycle}</span>
           </>
         )}
       </div>
       {plan.id === 'gold' && (
-        <p className="text-[12px] text-[#536471] mb-3">
+        <p className="text-[12px] text-[#64748b] mb-3">
           Affiliate badges: 2 free, extra ₹99 each
         </p>
       )}
@@ -218,7 +218,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
         className={cn(
           'w-full py-2.5 rounded-full text-[14px] font-bold transition-all duration-200',
           btnClass,
-          !isCurrent && !canUpgrade && 'bg-white/[0.04] text-[#536471] cursor-not-allowed'
+          !isCurrent && !canUpgrade && 'bg-white/[0.04] text-[#64748b] cursor-not-allowed'
         )}
       >
         {isCurrent ? 'Current Plan' : canUpgrade ? 'Upgrade' : 'Unavailable'}
@@ -231,7 +231,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       <ul className="space-y-2.5">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-2.5">
-            <CheckIcon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', plan.id === 'gold' ? 'text-[#ffd700]' : plan.id === 'pro' ? 'text-[#1d9bf0]' : 'text-[#71767b]')} />
+            <CheckIcon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', plan.id === 'gold' ? 'text-[#ffd700]' : plan.id === 'pro' ? 'text-[#1d9bf0]' : 'text-[#94a3b8]')} />
             <span className="text-[13px] text-[#c0c0c0] leading-snug">{feature}</span>
           </li>
         ))}
@@ -249,10 +249,10 @@ function FeatureComparisonTable() {
   const currentSub = user?.subscription || 'free'
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0a0a0a] overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#110f1a] overflow-hidden">
       <div className="px-5 py-4 border-b border-white/[0.06]">
-        <h3 className="text-[17px] font-bold text-[#e8f0dc]">Feature Comparison</h3>
-        <p className="text-[13px] text-[#71767b] mt-0.5">See what's included in each plan</p>
+        <h3 className="text-[17px] font-bold text-[#f0eef6]">Feature Comparison</h3>
+        <p className="text-[13px] text-[#94a3b8] mt-0.5">See what's included in each plan</p>
       </div>
 
       {/* Desktop Table */}
@@ -260,8 +260,8 @@ function FeatureComparisonTable() {
         <table className="w-full min-w-[520px]">
           <thead>
             <tr className="border-b border-white/[0.06]">
-              <th className="text-left text-[13px] font-semibold text-[#71767b] px-5 py-3">Feature</th>
-              <th className="text-center text-[13px] font-semibold text-[#71767b] px-3 py-3 w-20">Free</th>
+              <th className="text-left text-[13px] font-semibold text-[#94a3b8] px-5 py-3">Feature</th>
+              <th className="text-center text-[13px] font-semibold text-[#94a3b8] px-3 py-3 w-20">Free</th>
               <th className="text-center text-[13px] font-semibold text-[#1d9bf0] px-3 py-3 w-20">Premium</th>
               <th className="text-center text-[13px] font-semibold text-[#ffd700] px-3 py-3 w-20">Business</th>
             </tr>
@@ -310,20 +310,20 @@ function FeatureCell({
           className={cn(
             'w-6 h-6 rounded-full flex items-center justify-center',
             highlight
-              ? 'bg-[#a3d977]/15'
+              ? 'bg-[#8b5cf6]/15'
               : 'bg-white/[0.04]'
           )}
         >
           <CheckIcon
             className={cn(
               'w-3.5 h-3.5',
-              highlight ? 'text-[#a3d977]' : accentColor ? '' : 'text-[#536471]'
+              highlight ? 'text-[#8b5cf6]' : accentColor ? '' : 'text-[#64748b]'
             )}
             style={highlight ? undefined : { stroke: accentColor || undefined }}
           />
         </div>
       ) : (
-        <CrossIcon className="w-4 h-4 text-[#536471]/50" />
+        <CrossIcon className="w-4 h-4 text-[#64748b]/50" />
       )}
     </div>
   )
@@ -348,12 +348,12 @@ function BillingHistory() {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0a0a0a] overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#110f1a] overflow-hidden">
       <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2">
-        <ReceiptIcon className="w-5 h-5 text-[#71767b]" />
+        <ReceiptIcon className="w-5 h-5 text-[#94a3b8]" />
         <div>
-          <h3 className="text-[17px] font-bold text-[#e8f0dc]">Billing History</h3>
-          <p className="text-[13px] text-[#71767b] mt-0.5">Your recent invoices</p>
+          <h3 className="text-[17px] font-bold text-[#f0eef6]">Billing History</h3>
+          <p className="text-[13px] text-[#94a3b8] mt-0.5">Your recent invoices</p>
         </div>
       </div>
 
@@ -365,23 +365,23 @@ function BillingHistory() {
           >
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-white/[0.04] flex items-center justify-center flex-shrink-0">
-                <ReceiptIcon className="w-4 h-4 text-[#536471]" />
+                <ReceiptIcon className="w-4 h-4 text-[#64748b]" />
               </div>
               <div>
-                <p className="text-[14px] font-medium text-[#e8f0dc]">{entry.plan}</p>
-                <p className="text-[12px] text-[#71767b]">{formatDate(entry.date)}</p>
+                <p className="text-[14px] font-medium text-[#f0eef6]">{entry.plan}</p>
+                <p className="text-[12px] text-[#94a3b8]">{formatDate(entry.date)}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-[14px] font-semibold text-[#e8f0dc]">
+              <span className="text-[14px] font-semibold text-[#f0eef6]">
                 ₹{entry.amount.toLocaleString()}
               </span>
               <span
                 className={cn(
                   'text-[11px] font-semibold px-2 py-0.5 rounded-full',
                   entry.status === 'paid'
-                    ? 'bg-[#a3d977]/15 text-[#a3d977]'
+                    ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
                     : 'bg-[#f59e0b]/15 text-[#f59e0b]'
                 )}
               >
@@ -411,7 +411,7 @@ export function SubscriptionsView() {
 
       {/* B. Pricing Cards */}
       <div>
-        <h3 className="text-[17px] font-bold text-[#e8f0dc] mb-4">Choose your plan</h3>
+        <h3 className="text-[17px] font-bold text-[#f0eef6] mb-4">Choose your plan</h3>
         <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory custom-scrollbar">
           {PLANS.map((plan) => (
             <div key={plan.id} className="snap-start">

@@ -16,7 +16,7 @@ export default function Error({
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#07060b',
+      background: '#09080f',
       color: '#fff',
       display: 'flex',
       alignItems: 'center',
@@ -47,7 +47,7 @@ export default function Error({
         <button
           onClick={reset}
           style={{
-            background: '#a3d977',
+            background: '#8b5cf6',
             color: '#000',
             border: 'none',
             borderRadius: 8,

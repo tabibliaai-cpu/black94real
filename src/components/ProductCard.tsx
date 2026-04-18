@@ -57,10 +57,10 @@ export function ProductCard({ product }: { product: ShopProduct }) {
   return (
     <div
       onClick={() => navigate('product-detail', { id: product.id })}
-      className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1 cursor-pointer group active:scale-[0.98]"
+      className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1 cursor-pointer group active:scale-[0.98]"
     >
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-[#141414]">
+      <div className="relative aspect-square overflow-hidden bg-[#14112a]">
         <img
           src={mainImage}
           alt={product.name}
@@ -87,7 +87,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
 
         {/* Sold count */}
         {product.soldCount > 0 && (
-          <div className="absolute bottom-2 left-2 bg-black/70 backdrop-blur-sm text-[10px] text-[#e8f0dc] px-2 py-0.5 rounded-full">
+          <div className="absolute bottom-2 left-2 bg-[#09080f]/70 backdrop-blur-sm text-[10px] text-[#f0eef6] px-2 py-0.5 rounded-full">
             {product.soldCount} sold
           </div>
         )}
@@ -95,7 +95,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
 
       {/* Info */}
       <div className="p-3">
-        <p className="text-[13px] font-semibold text-[#e8f0dc] line-clamp-2 leading-tight mb-1.5 min-h-[2.5em]">
+        <p className="text-[13px] font-semibold text-[#f0eef6] line-clamp-2 leading-tight mb-1.5 min-h-[2.5em]">
           {product.name}
         </p>
 
@@ -107,25 +107,25 @@ export function ProductCard({ product }: { product: ShopProduct }) {
           }}
           className="flex items-center gap-1.5 mb-2 group/biz"
         >
-          <div className="w-4 h-4 rounded-full overflow-hidden bg-[#1a1a1a] flex-shrink-0">
+          <div className="w-4 h-4 rounded-full overflow-hidden bg-[#18152b] flex-shrink-0">
             {product.businessImage ? (
               <img src={product.businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-[#1a1a1a]" />
+              <div className="w-full h-full bg-[#18152b]" />
             )}
           </div>
-          <span className="text-[11px] text-[#71767b] group-hover/biz:text-[#a3d977] transition-colors truncate">
+          <span className="text-[11px] text-[#94a3b8] group-hover/biz:text-[#8b5cf6] transition-colors truncate">
             {product.businessName}
           </span>
         </button>
 
         {/* Price */}
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-[16px] font-bold text-[#e8f0dc]">
+          <span className="text-[16px] font-bold text-[#f0eef6]">
             ₹{product.price.toLocaleString()}
           </span>
           {hasDiscount && (
-            <span className="text-[12px] text-[#71767b] line-through">
+            <span className="text-[12px] text-[#94a3b8] line-through">
               ₹{product.compareAtPrice!.toLocaleString()}
             </span>
           )}
@@ -135,12 +135,12 @@ export function ProductCard({ product }: { product: ShopProduct }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <StarRating rating={product.rating} />
-            <span className="text-[11px] text-[#71767b]">({product.reviewCount})</span>
+            <span className="text-[11px] text-[#94a3b8]">({product.reviewCount})</span>
           </div>
 
           <button
             onClick={handleAddToCart}
-            className="w-8 h-8 rounded-full bg-[#a3d977] flex items-center justify-center hover:bg-[#8cc65e] active:scale-90 transition-all shadow-md shadow-[#a3d977]/20"
+            className="w-8 h-8 rounded-full bg-[#8b5cf6] flex items-center justify-center hover:bg-[#7c3aed] active:scale-90 transition-all shadow-md shadow-[#8b5cf6]/20"
             aria-label="Add to cart"
           >
             <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">

@@ -28,7 +28,7 @@ const REACTION_EMOJIS = ['❤️', '😂', '🔥', '😍', '😮', '😢', '💯
 function VerifiedBadge({ size = 14 }: { size?: number }) {
   return (
     <svg className="shrink-0" width={size} height={size} viewBox="0 0 22 22" fill="none">
-      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.853-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.69-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.636.433 1.221.878 1.69.47.446 1.055.752 1.69.883.635.13 1.294.083 1.902-.143.271.586.702 1.084 1.24 1.438.54.354 1.167.551 1.813.568.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.225 1.261.275 1.894.144.634-.13 1.219-.435 1.69-.882.445-.47.749-1.055.878-1.691.13-.634.084-1.292-.139-1.899.586-.272 1.084-.701 1.438-1.24.354-.542.551-1.172.57-1.82z" fill="#a3d977"/>
+      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.853-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.69-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.636.433 1.221.878 1.69.47.446 1.055.752 1.69.883.635.13 1.294.083 1.902-.143.271.586.702 1.084 1.24 1.438.54.354 1.167.551 1.813.568.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.225 1.261.275 1.894.144.634-.13 1.219-.435 1.69-.882.445-.47.749-1.055.878-1.691.13-.634.084-1.292-.139-1.899.586-.272 1.084-.701 1.438-1.24.354-.542.551-1.172.57-1.82z" fill="#8b5cf6"/>
       <path d="M9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" fill="#000"/>
     </svg>
   )
@@ -38,11 +38,11 @@ function VerifiedBadge({ size = 14 }: { size?: number }) {
 
 function E2EEBadge() {
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#a3d977]/10 border border-[#a3d977]/20">
-      <svg className="w-3.5 h-3.5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20">
+      <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
-      <span className="text-[11px] text-[#a3d977] font-semibold tracking-wide">E2E ENCRYPTED</span>
+      <span className="text-[11px] text-[#8b5cf6] font-semibold tracking-wide">E2E ENCRYPTED</span>
     </div>
   )
 }
@@ -128,9 +128,9 @@ function ReactionsBar({
             'inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-full text-[13px] transition-all duration-200 border animate-scale-in',
             r.reacted
               ? isMine
-                ? 'bg-black/20 border-black/30 text-black'
-                : 'bg-[#a3d977]/15 border-[#a3d977]/25 text-[#a3d977]'
-              : 'bg-white/[0.04] border-white/[0.06] text-[#71767b] hover:border-white/[0.12]'
+                ? 'bg-[#09080f]/20 border-black/30 text-black'
+                : 'bg-[#8b5cf6]/15 border-[#8b5cf6]/25 text-[#8b5cf6]'
+              : 'bg-white/[0.04] border-white/[0.06] text-[#94a3b8] hover:border-white/[0.12]'
           )}
         >
           <span className="text-[13px] leading-none">{r.emoji}</span>
@@ -212,21 +212,21 @@ function MessageBubble({
       <div className={cn(
         'max-w-[82%] animate-fade-in',
         isMine
-          ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black rounded-2xl rounded-br-sm'
-          : 'bg-white/[0.06] text-[#e8f0dc] rounded-2xl rounded-bl-sm border border-white/[0.06]'
+          ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black rounded-2xl rounded-br-sm'
+          : 'bg-white/[0.06] text-[#f0eef6] rounded-2xl rounded-bl-sm border border-white/[0.06]'
       )}>
         {/* Inline reply preview */}
         {msg.replyTo && (
           <div className={cn(
             'mx-2 mt-2 mb-1 px-2.5 py-1.5 rounded-lg border-l-[3px]',
             isMine
-              ? 'bg-black/10 border-l-black/40'
-              : 'bg-white/[0.04] border-l-[#a3d977]/50'
+              ? 'bg-[#09080f]/10 border-l-black/40'
+              : 'bg-white/[0.04] border-l-[#8b5cf6]/50'
           )}>
-            <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#a3d977]')}>
+            <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#8b5cf6]')}>
               {msg.replyTo.isMine ? 'You' : msg.replyTo.senderName}
             </span>
-            <span className={cn('text-[12px] block leading-snug mt-0.5 line-clamp-1', isMine ? 'text-black/50' : 'text-[#536471]')}>
+            <span className={cn('text-[12px] block leading-snug mt-0.5 line-clamp-1', isMine ? 'text-black/50' : 'text-[#64748b]')}>
               {msg.replyTo.content}
             </span>
           </div>
@@ -239,9 +239,9 @@ function MessageBubble({
 
       {/* Timestamp + read receipt */}
       <div className={cn('flex items-center gap-1 mt-0.5 px-1', isMine ? 'flex-row-reverse' : '')}>
-        <span className="text-[10px] text-[#536471]">{formatTime(msg.timestamp)}</span>
+        <span className="text-[10px] text-[#64748b]">{formatTime(msg.timestamp)}</span>
         {isMine && (
-          <svg className="w-3.5 h-3.5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
             <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         )}
@@ -261,7 +261,7 @@ function MessageBubble({
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/[0.08] transition-colors"
           title="Reply"
         >
-          <svg className="w-3.5 h-3.5 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 00-4-4H4"/>
           </svg>
         </button>
@@ -300,23 +300,23 @@ function ReplyBar() {
   if (!replyTo) return null
 
   return (
-    <div className="shrink-0 px-3 pt-2 bg-black/80 backdrop-blur-xl animate-reply-slide-in">
+    <div className="shrink-0 px-3 pt-2 bg-[#09080f]/80 backdrop-blur-xl animate-reply-slide-in">
       <div className="flex items-center gap-2.5 px-3 py-2 rounded-t-xl bg-white/[0.04] border-x border-t border-white/[0.06]">
         {/* Left accent bar */}
-        <div className="w-[3px] h-8 rounded-full bg-[#a3d977] shrink-0" />
+        <div className="w-[3px] h-8 rounded-full bg-[#8b5cf6] shrink-0" />
         {/* Reply content */}
         <div className="flex-1 min-w-0">
-          <span className="text-[12px] font-bold text-[#a3d977] block">
+          <span className="text-[12px] font-bold text-[#8b5cf6] block">
             {replyTo.isMine ? 'You' : replyTo.senderName}
           </span>
-          <span className="text-[12px] text-[#536471] block truncate">{replyTo.content}</span>
+          <span className="text-[12px] text-[#64748b] block truncate">{replyTo.content}</span>
         </div>
         {/* Dismiss */}
         <button
           onClick={() => setReplyTo(null)}
           className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0"
         >
-          <svg className="w-3.5 h-3.5 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-3.5 h-3.5 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
             <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
           </svg>
         </button>
@@ -336,7 +336,7 @@ function PrivateChatPanel() {
     msgId: string
     position: { x: number; y: number; alignRight: boolean }
   } | null>(null)
-  const [chatPartner] = useState({ name: 'Sarah Chen', initial: 'S', color: '#a3d977', online: true })
+  const [chatPartner] = useState({ name: 'Sarah Chen', initial: 'S', color: '#8b5cf6', online: true })
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -411,10 +411,10 @@ function PrivateChatPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* ─── Chat Header ─── */}
-      <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-black/60 backdrop-blur-xl">
+      <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#a3d977] to-[#6ba84a] flex items-center justify-center text-black font-bold text-sm">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-black font-bold text-sm">
               {chatPartner.initial}
             </div>
             {chatPartner.online && (
@@ -426,7 +426,7 @@ function PrivateChatPanel() {
               <span className="text-[14px] font-bold text-white">{chatPartner.name}</span>
               <VerifiedBadge size={14} />
             </div>
-            <span className="text-[11px] text-[#a3d977]">{chatPartner.online ? 'Online' : 'Offline'}</span>
+            <span className="text-[11px] text-[#8b5cf6]">{chatPartner.online ? 'Online' : 'Offline'}</span>
           </div>
         </div>
         <E2EEBadge />
@@ -436,7 +436,7 @@ function PrivateChatPanel() {
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-2 no-scrollbar relative">
         {/* Date separator */}
         <div className="flex justify-center py-2">
-          <span className="text-[11px] text-[#536471] bg-white/[0.04] px-3 py-0.5 rounded-full">Today</span>
+          <span className="text-[11px] text-[#64748b] bg-white/[0.04] px-3 py-0.5 rounded-full">Today</span>
         </div>
 
         {messages.map((msg) => (
@@ -473,16 +473,16 @@ function PrivateChatPanel() {
       <ReplyBar />
 
       {/* ─── Input Bar ─── */}
-      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-black/80 backdrop-blur-xl safe-area-bottom">
+      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl safe-area-bottom">
         <div className="flex items-end gap-2.5">
           {/* Emoji / React */}
           <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
-            <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
             </svg>
           </button>
           {/* Text input */}
-          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#a3d977]/40 transition-all px-4 py-2.5">
+          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-all px-4 py-2.5">
             <input
               ref={inputRef}
               type="text"
@@ -490,12 +490,12 @@ function PrivateChatPanel() {
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
               placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'End-to-end encrypted message...'}
-              className="w-full bg-transparent text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none"
+              className="w-full bg-transparent text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none"
             />
           </div>
           {/* Attachment */}
           <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
-            <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
             </svg>
           </button>
@@ -506,8 +506,8 @@ function PrivateChatPanel() {
             className={cn(
               'w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-200',
               text.trim()
-                ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black shadow-md hover:scale-[1.05] active:scale-90'
-                : 'bg-white/[0.06] text-[#536471]'
+                ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black shadow-md hover:scale-[1.05] active:scale-90'
+                : 'bg-white/[0.06] text-[#64748b]'
             )}
           >
             <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -536,7 +536,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
       {/* Brand header */}
       <div className="flex items-center justify-between px-3.5 py-2.5">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#0a0a0a] flex items-center justify-center text-[12px] text-[#a3d977] font-bold border border-white/[0.08]">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[12px] text-[#8b5cf6] font-bold border border-white/[0.08]">
             {ad.brandInitial}
           </div>
           <div>
@@ -544,7 +544,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
               <span className="text-[13px] font-semibold text-white">{ad.brandName}</span>
               {ad.verified && <VerifiedBadge size={13} />}
             </div>
-            <span className="text-[11px] text-[#536471]">Sponsored · {timeAgo(ad.timestamp)}</span>
+            <span className="text-[11px] text-[#64748b]">Sponsored · {timeAgo(ad.timestamp)}</span>
           </div>
         </div>
         <button
@@ -552,7 +552,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
           className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           aria-label="Dismiss"
         >
-          <svg className="w-3.5 h-3.5 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-3.5 h-3.5 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
             <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
           </svg>
         </button>
@@ -561,7 +561,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
       {/* Ad content */}
       <div className="px-3.5 pb-2">
         <p className="text-[14px] font-semibold text-white leading-snug">{ad.headline}</p>
-        <p className="text-[13px] text-[#71767b] mt-1 leading-relaxed">{ad.body}</p>
+        <p className="text-[13px] text-[#94a3b8] mt-1 leading-relaxed">{ad.body}</p>
       </div>
 
       {/* Ad image */}
@@ -583,7 +583,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
       {/* Bottom: reward + actions */}
       <div className="flex items-center justify-between px-3.5 py-2 border-t border-white/[0.04]">
         <div className="flex items-center gap-1">
-          <span className="text-[11px] text-[#536471]">Earn</span>
+          <span className="text-[11px] text-[#64748b]">Earn</span>
           <span className="text-[13px] font-bold text-[#f59e0b]">{ad.reward}</span>
         </div>
         <div className="flex items-center gap-0.5">
@@ -591,7 +591,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
             onClick={() => likeAd(ad.id)}
             className={cn(
               'flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] transition-all duration-200',
-              ad.liked ? 'bg-[#f91880]/15 text-[#f91880]' : 'text-[#71767b] hover:bg-white/[0.06]'
+              ad.liked ? 'bg-[#f91880]/15 text-[#f91880]' : 'text-[#94a3b8] hover:bg-white/[0.06]'
             )}
           >
             <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill={ad.liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2}>
@@ -603,7 +603,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
             onClick={() => saveAd(ad.id)}
             className={cn(
               'flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] transition-all duration-200',
-              ad.saved ? 'bg-[#2a7fff]/15 text-[#2a7fff]' : 'text-[#71767b] hover:bg-white/[0.06]'
+              ad.saved ? 'bg-[#2a7fff]/15 text-[#2a7fff]' : 'text-[#94a3b8] hover:bg-white/[0.06]'
             )}
           >
             <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill={ad.saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -613,7 +613,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
           </button>
           <button
             onClick={() => skipAd(ad.id)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] text-[#71767b] hover:bg-white/[0.06] transition-all duration-200"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] text-[#94a3b8] hover:bg-white/[0.06] transition-all duration-200"
           >
             <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
               <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
@@ -649,7 +649,7 @@ function ChatAdsPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* ─── Ads Stats Bar ─── */}
-      <div className="shrink-0 px-4 py-3 flex items-center justify-between border-b border-white/[0.06] bg-black/60 backdrop-blur-xl">
+      <div className="shrink-0 px-4 py-3 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f59e0b]/10 border border-[#f59e0b]/20">
             <svg className="w-3.5 h-3.5 text-[#f59e0b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -678,18 +678,18 @@ function ChatAdsPanel() {
         {visibleAds.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <svg className="w-6 h-6 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
             </div>
-            <p className="text-[14px] text-[#71767b]">No more ads right now</p>
-            <p className="text-[12px] text-[#536471] mt-1">Check back later for new sponsored content</p>
+            <p className="text-[14px] text-[#94a3b8]">No more ads right now</p>
+            <p className="text-[12px] text-[#64748b] mt-1">Check back later for new sponsored content</p>
           </div>
         )}
 
         {visibleCount < ads.length && (
           <div className="flex justify-center py-4">
-            <div className="w-5 h-5 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
           </div>
         )}
       </div>
@@ -716,7 +716,7 @@ export function DualPaneChatView() {
   if (!initialized) {
     return (
       <div className="h-[calc(100vh-90px)] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
       </div>
     )
   }
@@ -724,33 +724,33 @@ export function DualPaneChatView() {
   return (
     <div className="h-[calc(100vh-90px)] flex flex-col animate-fade-in">
       {/* ─── Mobile Tab Switcher ─── */}
-      <div className="shrink-0 flex border-b border-white/[0.06] bg-black/80 backdrop-blur-xl md:hidden">
+      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl md:hidden">
         <button
           onClick={() => setActiveTab('chat')}
           className={cn(
             'flex-1 py-3 text-[15px] font-medium relative transition-colors',
-            activeTab === 'chat' ? 'text-[#e8f0dc] font-bold' : 'text-[#71767b]'
+            activeTab === 'chat' ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
           )}
         >
           <div className="flex items-center justify-center gap-2">
-            <svg className={cn('w-[18px] h-[18px]', activeTab === 'chat' ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'chat' ? 2.2 : 1.8}>
+            <svg className={cn('w-[18px] h-[18px]', activeTab === 'chat' ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'chat' ? 2.2 : 1.8}>
               <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             Chat
           </div>
           {activeTab === 'chat' && (
-            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#a3d977] rounded-full animate-tab-indicator" />
+            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#8b5cf6] rounded-full animate-tab-indicator" />
           )}
         </button>
         <button
           onClick={() => setActiveTab('ads')}
           className={cn(
             'flex-1 py-3 text-[15px] font-medium relative transition-colors',
-            activeTab === 'ads' ? 'text-[#e8f0dc] font-bold' : 'text-[#71767b]'
+            activeTab === 'ads' ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
           )}
         >
           <div className="flex items-center justify-center gap-2">
-            <svg className={cn('w-[18px] h-[18px]', activeTab === 'ads' ? 'text-[#f59e0b]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'ads' ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className={cn('w-[18px] h-[18px]', activeTab === 'ads' ? 'text-[#f59e0b]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'ads' ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
               <line x1="1" y1="10" x2="23" y2="10"/>
             </svg>
@@ -759,7 +759,7 @@ export function DualPaneChatView() {
               'text-[10px] px-1.5 py-0.5 rounded-full font-bold',
               activeTab === 'ads'
                 ? 'bg-[#f59e0b]/20 text-[#f59e0b]'
-                : 'bg-white/[0.06] text-[#536471]'
+                : 'bg-white/[0.06] text-[#64748b]'
             )}>
               NEW
             </span>

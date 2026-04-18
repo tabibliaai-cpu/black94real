@@ -205,7 +205,7 @@ export const dailyImpressionsData = [
 /* ── Lead source distribution ───────────────────────────────────────────── */
 
 export const leadSourceData = [
-  { source: 'Ad', count: 3, color: '#a3d977' },
+  { source: 'Ad', count: 3, color: '#8b5cf6' },
   { source: 'Organic', count: 2, color: '#ffd700' },
   { source: 'Referral', count: 1, color: '#ff6b6b' },
   { source: 'Chat', count: 2, color: '#6bc5ff' },
@@ -245,13 +245,13 @@ export const recentActivity = [
 /* ── Utility Functions ──────────────────────────────────────────────────── */
 
 export function getLeadScoreColor(score: number): string {
-  if (score > 80) return 'text-[#a3d977]'
+  if (score > 80) return 'text-[#8b5cf6]'
   if (score >= 50) return 'text-[#ffd700]'
   return 'text-[#ff6b6b]'
 }
 
 export function getLeadScoreBg(score: number): string {
-  if (score > 80) return 'bg-[#a3d977]/15 text-[#a3d977]'
+  if (score > 80) return 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
   if (score >= 50) return 'bg-[#ffd700]/15 text-[#ffd700]'
   return 'bg-[#ff6b6b]/15 text-[#ff6b6b]'
 }
@@ -262,9 +262,9 @@ export function getStageColor(stage: string): string {
     case 'Contacted': return 'bg-yellow-500/15 text-yellow-400'
     case 'Proposal': return 'bg-purple-500/15 text-purple-400'
     case 'Negotiation': return 'bg-orange-500/15 text-orange-400'
-    case 'Won': return 'bg-[#a3d977]/15 text-[#a3d977]'
+    case 'Won': return 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
     case 'Lost': return 'bg-red-500/15 text-red-400'
-    default: return 'bg-white/10 text-[#71767b]'
+    default: return 'bg-white/10 text-[#94a3b8]'
   }
 }
 
@@ -273,28 +273,28 @@ export function getOrderStatusColor(status: string): string {
     case 'Pending': return 'bg-yellow-500/15 text-yellow-400'
     case 'Processing': return 'bg-blue-500/15 text-blue-400'
     case 'Shipped': return 'bg-purple-500/15 text-purple-400'
-    case 'Delivered': return 'bg-[#a3d977]/15 text-[#a3d977]'
+    case 'Delivered': return 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
     case 'Cancelled': return 'bg-red-500/15 text-red-400'
-    default: return 'bg-white/10 text-[#71767b]'
+    default: return 'bg-white/10 text-[#94a3b8]'
   }
 }
 
 export function getAdStatusColor(status: string): string {
   switch (status) {
-    case 'Active': return 'bg-[#a3d977]/15 text-[#a3d977]'
+    case 'Active': return 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
     case 'Paused': return 'bg-yellow-500/15 text-yellow-400'
-    case 'Ended': return 'bg-white/10 text-[#71767b]'
-    default: return 'bg-white/10 text-[#71767b]'
+    case 'Ended': return 'bg-white/10 text-[#94a3b8]'
+    default: return 'bg-white/10 text-[#94a3b8]'
   }
 }
 
 export function getLeadSourceColor(source: string): string {
   switch (source) {
-    case 'Ad': return 'bg-[#a3d977]/15 text-[#a3d977]'
+    case 'Ad': return 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
     case 'Organic': return 'bg-[#ffd700]/15 text-[#ffd700]'
     case 'Referral': return 'bg-purple-500/15 text-purple-400'
     case 'Chat': return 'bg-blue-500/15 text-blue-400'
-    default: return 'bg-white/10 text-[#71767b]'
+    default: return 'bg-white/10 text-[#94a3b8]'
   }
 }
 

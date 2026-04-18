@@ -104,7 +104,7 @@ export function ShareMenu({
       label: isReposted ? 'Undo Repost' : 'Repost',
       sublabel: isReposted ? 'Remove from your profile' : 'Share on your timeline',
       onClick: () => { onRepost(); onClose() },
-      color: isReposted ? '#00ba7c' : '#e8f0dc',
+      color: isReposted ? '#00ba7c' : '#f0eef6',
     },
     {
       icon: (
@@ -115,7 +115,7 @@ export function ShareMenu({
       label: 'Quote Post',
       sublabel: 'Add your thoughts to this post',
       onClick: () => { onQuote(); onClose() },
-      color: '#e8f0dc',
+      color: '#f0eef6',
     },
     {
       icon: (
@@ -127,7 +127,7 @@ export function ShareMenu({
       label: 'Send via Direct Message',
       sublabel: 'Share privately with someone',
       onClick: () => { onClose() },
-      color: '#e8f0dc',
+      color: '#f0eef6',
     },
     {
       icon: copied ? (
@@ -143,7 +143,7 @@ export function ShareMenu({
       label: copied ? 'Copied!' : 'Copy Link',
       sublabel: copied ? 'Link copied to clipboard' : 'Copy post link to clipboard',
       onClick: handleCopyLink,
-      color: copied ? '#00ba7c' : '#e8f0dc',
+      color: copied ? '#00ba7c' : '#f0eef6',
     },
     {
       icon: (
@@ -156,7 +156,7 @@ export function ShareMenu({
       label: 'Share via...',
       sublabel: 'Share on other platforms',
       onClick: handleShareNative,
-      color: '#e8f0dc',
+      color: '#f0eef6',
     },
   ]
 
@@ -175,7 +175,7 @@ export function ShareMenu({
     >
       {/* Header */}
       <div className="px-4 pt-3 pb-2 border-b border-white/[0.06]">
-        <h4 className="text-[15px] font-bold text-[#e8f0dc]">Share</h4>
+        <h4 className="text-[15px] font-bold text-[#f0eef6]">Share</h4>
       </div>
 
       {/* Menu items */}
@@ -196,7 +196,7 @@ export function ShareMenu({
               <div className="text-[14px] font-semibold" style={{ color: item.color }}>
                 {item.label}
               </div>
-              <div className="text-[12px] text-[#536471] truncate">{item.sublabel}</div>
+              <div className="text-[12px] text-[#64748b] truncate">{item.sublabel}</div>
             </div>
           </button>
         ))}

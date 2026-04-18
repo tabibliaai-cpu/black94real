@@ -59,23 +59,23 @@ export function CrmAnalyticsView() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('business-dashboard')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-            <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </button>
-          <h1 className="text-xl font-bold text-[#e8f0dc]">Analytics</h1>
+          <h1 className="text-xl font-bold text-[#f0eef6]">Analytics</h1>
         </div>
         <select
           value={dateRange}
           onChange={e => setDateRange(e.target.value)}
-          className="bg-[#0a0a0a] border border-white/[0.08] rounded-full px-3 py-1.5 text-[12px] text-[#e8f0dc] outline-none appearance-none cursor-pointer"
+          className="bg-[#110f1a] border border-white/[0.08] rounded-full px-3 py-1.5 text-[12px] text-[#f0eef6] outline-none appearance-none cursor-pointer"
         >
-          {DATE_RANGES.map(r => <option key={r} value={r} className="bg-[#0a0a0a] text-[#e8f0dc]">{r}</option>)}
+          {DATE_RANGES.map(r => <option key={r} value={r} className="bg-[#110f1a] text-[#f0eef6]">{r}</option>)}
         </select>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: 'Total Revenue', value: formatCurrency(mockAnalytics.totalRevenue), gradient: 'from-[#a3d977]/10 to-transparent', change: '+27.8%' },
+          { label: 'Total Revenue', value: formatCurrency(mockAnalytics.totalRevenue), gradient: 'from-[#8b5cf6]/10 to-transparent', change: '+27.8%' },
           { label: 'Total Leads', value: String(mockAnalytics.totalLeads), gradient: 'from-blue-500/10 to-transparent', change: '+15%' },
           { label: 'Conversion Rate', value: `${mockAnalytics.conversionRate}%`, gradient: 'from-[#ffd700]/10 to-transparent', change: '+3.2%' },
           { label: 'Avg Deal Size', value: formatCurrency(mockAnalytics.avgDealSize), gradient: 'from-purple-500/10 to-transparent', change: '+8.1%' },
@@ -83,33 +83,33 @@ export function CrmAnalyticsView() {
           { label: 'Active Customers', value: String(mockAnalytics.activeCustomers), gradient: 'from-cyan-500/10 to-transparent', change: '+5.4%' },
         ].map((kpi) => (
           <div key={kpi.label} className={cn('rounded-xl bg-gradient-to-br p-4 border border-white/[0.06]', kpi.gradient)}>
-            <p className="text-[12px] text-[#71767b] font-medium">{kpi.label}</p>
-            <p className="text-xl font-bold text-[#e8f0dc] mt-1">{kpi.value}</p>
-            <p className="text-[11px] text-[#a3d977] mt-0.5">{kpi.change} ↑</p>
+            <p className="text-[12px] text-[#94a3b8] font-medium">{kpi.label}</p>
+            <p className="text-xl font-bold text-[#f0eef6] mt-1">{kpi.value}</p>
+            <p className="text-[11px] text-[#8b5cf6] mt-0.5">{kpi.change} ↑</p>
           </div>
         ))}
       </div>
 
       {/* Revenue Chart */}
-      <div className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#e8f0dc] mb-4">Monthly Revenue</h3>
+      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Monthly Revenue</h3>
         <div className="flex items-end gap-3 h-36">
           {filteredRevenueData.map((d) => (
             <div key={d.month} className="flex-1 flex flex-col items-center gap-1.5">
-              <span className="text-[10px] text-[#71767b]">{formatCurrency(d.revenue)}</span>
+              <span className="text-[10px] text-[#94a3b8]">{formatCurrency(d.revenue)}</span>
               <div
-                className="w-full rounded-t-md bg-gradient-to-t from-[#a3d977]/30 to-[#a3d977] transition-all duration-500"
+                className="w-full rounded-t-md bg-gradient-to-t from-[#8b5cf6]/30 to-[#8b5cf6] transition-all duration-500"
                 style={{ height: `${(d.revenue / maxRevenue) * 100}%` }}
               />
-              <span className="text-[11px] text-[#71767b]">{d.month}</span>
+              <span className="text-[11px] text-[#94a3b8]">{d.month}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Lead Sources */}
-      <div className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#e8f0dc] mb-4">Lead Sources</h3>
+      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Lead Sources</h3>
         <div className="flex items-center gap-6">
           {/* Pie-like Chart */}
           <div
@@ -124,11 +124,11 @@ export function CrmAnalyticsView() {
               <div key={source.source} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: source.color }} />
-                  <span className="text-[13px] text-[#e8f0dc]">{source.source}</span>
+                  <span className="text-[13px] text-[#f0eef6]">{source.source}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] font-semibold text-[#e8f0dc]">{source.count}</span>
-                  <span className="text-[11px] text-[#536471]">{((source.count / totalSourceCount) * 100).toFixed(0)}%</span>
+                  <span className="text-[13px] font-semibold text-[#f0eef6]">{source.count}</span>
+                  <span className="text-[11px] text-[#64748b]">{((source.count / totalSourceCount) * 100).toFixed(0)}%</span>
                 </div>
               </div>
             ))}
@@ -137,8 +137,8 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* Top Products */}
-      <div className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#e8f0dc] mb-4">Top Products / Services</h3>
+      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Top Products / Services</h3>
         <div className="space-y-3">
           {[...topProductsData].sort((a, b) => b.revenue - a.revenue).map((product, i) => (
             <div key={product.name}>
@@ -149,17 +149,17 @@ export function CrmAnalyticsView() {
                     i === 0 ? 'bg-[#ffd700]/20 text-[#ffd700]' :
                     i === 1 ? 'bg-gray-400/20 text-gray-400' :
                     i === 2 ? 'bg-orange-400/20 text-orange-400' :
-                    'bg-white/[0.06] text-[#71767b]'
+                    'bg-white/[0.06] text-[#94a3b8]'
                   )}>
                     {i + 1}
                   </span>
-                  <span className="text-[13px] text-[#e8f0dc] truncate">{product.name}</span>
+                  <span className="text-[13px] text-[#f0eef6] truncate">{product.name}</span>
                 </div>
-                <span className="text-[13px] font-bold text-[#a3d977]">{formatCurrency(product.revenue)}</span>
+                <span className="text-[13px] font-bold text-[#8b5cf6]">{formatCurrency(product.revenue)}</span>
               </div>
               <div className="ml-8 h-2 bg-white/[0.04] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#a3d977]/60 to-[#a3d977] rounded-full transition-all duration-700"
+                  className="h-full bg-gradient-to-r from-[#8b5cf6]/60 to-[#8b5cf6] rounded-full transition-all duration-700"
                   style={{ width: `${(product.revenue / maxProductRevenue) * 100}%` }}
                 />
               </div>
@@ -169,19 +169,19 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* Customer Acquisition Trend */}
-      <div className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#e8f0dc] mb-4">Customer Acquisition</h3>
+      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Customer Acquisition</h3>
         <div className="flex items-end gap-3 h-28">
           {filteredAcquisitionData.map((d, i) => {
             const height = (d.customers / maxCustomers) * 100
             return (
               <div key={d.month} className="flex-1 flex flex-col items-center gap-1.5 relative">
-                <span className="text-[10px] text-[#71767b]">{d.customers}</span>
+                <span className="text-[10px] text-[#94a3b8]">{d.customers}</span>
                 <div
                   className="w-full rounded-t-sm bg-gradient-to-t from-[#ffd700]/30 to-[#ffd700] transition-all duration-500"
                   style={{ height: `${height}%` }}
                 />
-                <span className="text-[11px] text-[#71767b]">{d.month}</span>
+                <span className="text-[11px] text-[#94a3b8]">{d.month}</span>
                 {/* Trend line dot */}
                 {i < filteredAcquisitionData.length - 1 && (
                   <div
@@ -196,7 +196,7 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* AI Recommendations */}
-      <div className="rounded-xl bg-gradient-to-br from-[#1a1a2a] to-[#0a0a0a] border border-purple-500/20 p-4">
+      <div className="rounded-xl bg-gradient-to-br from-[#1a1a2a] to-[#110f1a] border border-purple-500/20 p-4">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">🧠</span>
           <h3 className="text-sm font-semibold text-purple-300">AI Recommendations</h3>

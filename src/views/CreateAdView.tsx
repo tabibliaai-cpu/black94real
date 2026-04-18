@@ -92,30 +92,30 @@ export function CreateAdView() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('ads-manager')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#e8f0dc]">Create Ad</h1>
+        <h1 className="text-xl font-bold text-[#f0eef6]">Create Ad</h1>
       </div>
 
       {/* Form */}
       <div className="space-y-4">
         {/* Ad Name */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b] font-medium">Ad Name *</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">Ad Name *</label>
           <input
             type="text"
             value={form.name}
             onChange={e => update('name', e.target.value)}
             placeholder="e.g., Summer Sale Campaign"
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
         {/* Headline */}
         <div className="space-y-1.5">
           <div className="flex justify-between">
-            <label className="text-[13px] text-[#71767b] font-medium">Headline *</label>
-            <span className="text-[12px] text-[#536471]">{form.headline.length}/50</span>
+            <label className="text-[13px] text-[#94a3b8] font-medium">Headline *</label>
+            <span className="text-[12px] text-[#64748b]">{form.headline.length}/50</span>
           </div>
           <input
             type="text"
@@ -123,15 +123,15 @@ export function CreateAdView() {
             onChange={e => update('headline', e.target.value.slice(0, 50))}
             placeholder="Grab attention in 50 chars"
             maxLength={50}
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
         {/* Description */}
         <div className="space-y-1.5">
           <div className="flex justify-between">
-            <label className="text-[13px] text-[#71767b] font-medium">Description *</label>
-            <span className="text-[12px] text-[#536471]">{form.description.length}/150</span>
+            <label className="text-[13px] text-[#94a3b8] font-medium">Description *</label>
+            <span className="text-[12px] text-[#64748b]">{form.description.length}/150</span>
           </div>
           <textarea
             value={form.description}
@@ -139,58 +139,58 @@ export function CreateAdView() {
             placeholder="Describe your ad in detail..."
             maxLength={150}
             rows={3}
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors resize-none"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
 
         {/* CTA Text */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b] font-medium">CTA Text</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">CTA Text</label>
           <select
             value={form.ctaText}
             onChange={e => update('ctaText', e.target.value)}
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] outline-none focus:border-[#a3d977]/50 transition-colors appearance-none"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
           >
-            {CTA_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-[#0a0a0a] text-[#e8f0dc]">{opt}</option>)}
+            {CTA_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-[#110f1a] text-[#f0eef6]">{opt}</option>)}
           </select>
         </div>
 
         {/* CTA URL */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b] font-medium">CTA URL *</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">CTA URL *</label>
           <input
             type="url"
             value={form.ctaUrl}
             onChange={e => update('ctaUrl', e.target.value)}
             placeholder="https://your-landing-page.com"
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
         {/* Image Upload */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b] font-medium">Ad Image</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">Ad Image</label>
           <button
             onClick={() => toast.info('Upload coming soon')}
-            className="w-full border-2 border-dashed border-white/[0.1] rounded-lg p-6 flex flex-col items-center gap-2 hover:border-[#a3d977]/30 transition-colors"
+            className="w-full border-2 border-dashed border-white/[0.1] rounded-lg p-6 flex flex-col items-center gap-2 hover:border-[#8b5cf6]/30 transition-colors"
           >
-            <svg className="w-8 h-8 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
               <circle cx="8.5" cy="8.5" r="1.5"/>
               <path d="M21 15l-5-5L5 21"/>
             </svg>
-            <span className="text-[13px] text-[#536471]">Tap to upload image</span>
+            <span className="text-[13px] text-[#64748b]">Tap to upload image</span>
           </button>
         </div>
 
         {/* Budget */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b] font-medium">Budget (₹)</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">Budget (₹)</label>
           <input
             type="number"
             value={form.budget}
             onChange={e => update('budget', parseInt(e.target.value) || 0)}
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
           <div className="flex gap-2">
             {BUDGET_PRESETS.map(amount => (
@@ -200,8 +200,8 @@ export function CreateAdView() {
                 className={cn(
                   'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                   form.budget === amount
-                    ? 'bg-[#a3d977] text-black'
-                    : 'bg-white/[0.06] text-[#e8f0dc] hover:bg-white/[0.1]'
+                    ? 'bg-[#8b5cf6] text-black'
+                    : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
                 )}
               >
                 ₹{amount.toLocaleString('en-IN')}
@@ -212,23 +212,23 @@ export function CreateAdView() {
 
         {/* Duration */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b] font-medium">Duration</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">Duration</label>
           <select
             value={form.duration}
             onChange={e => update('duration', parseInt(e.target.value))}
-            className="w-full bg-[#0a0a0a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] outline-none focus:border-[#a3d977]/50 transition-colors appearance-none"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
           >
-            {DURATION_OPTIONS.map(d => <option key={d.value} value={d.value} className="bg-[#0a0a0a] text-[#e8f0dc]">{d.label}</option>)}
+            {DURATION_OPTIONS.map(d => <option key={d.value} value={d.value} className="bg-[#110f1a] text-[#f0eef6]">{d.label}</option>)}
           </select>
         </div>
 
         {/* Target Audience */}
         <div className="space-y-3">
-          <label className="text-[13px] text-[#71767b] font-medium">Target Audience</label>
+          <label className="text-[13px] text-[#94a3b8] font-medium">Target Audience</label>
 
           {/* Age Range */}
           <div className="space-y-1.5">
-            <p className="text-[12px] text-[#536471]">Age Range</p>
+            <p className="text-[12px] text-[#64748b]">Age Range</p>
             <div className="flex gap-2 flex-wrap">
               {AGE_OPTIONS.map(age => (
                 <button
@@ -237,8 +237,8 @@ export function CreateAdView() {
                   className={cn(
                     'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                     form.targetAge === age
-                      ? 'bg-[#a3d977] text-black'
-                      : 'bg-white/[0.06] text-[#e8f0dc] hover:bg-white/[0.1]'
+                      ? 'bg-[#8b5cf6] text-black'
+                      : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
                   )}
                 >
                   {age}
@@ -249,7 +249,7 @@ export function CreateAdView() {
 
           {/* Location */}
           <div className="space-y-1.5">
-            <p className="text-[12px] text-[#536471]">Location</p>
+            <p className="text-[12px] text-[#64748b]">Location</p>
             <div className="flex gap-2 flex-wrap">
               {LOCATION_OPTIONS.map(loc => (
                 <button
@@ -258,8 +258,8 @@ export function CreateAdView() {
                   className={cn(
                     'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                     form.targetLocation === loc
-                      ? 'bg-[#a3d977] text-black'
-                      : 'bg-white/[0.06] text-[#e8f0dc] hover:bg-white/[0.1]'
+                      ? 'bg-[#8b5cf6] text-black'
+                      : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
                   )}
                 >
                   {loc}
@@ -270,7 +270,7 @@ export function CreateAdView() {
 
           {/* Interest Tags */}
           <div className="space-y-1.5">
-            <p className="text-[12px] text-[#536471]">Interests</p>
+            <p className="text-[12px] text-[#64748b]">Interests</p>
             <div className="flex gap-2 flex-wrap">
               {INTEREST_OPTIONS.map(interest => (
                 <button
@@ -279,8 +279,8 @@ export function CreateAdView() {
                   className={cn(
                     'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                     form.interests.includes(interest)
-                      ? 'bg-[#a3d977] text-black'
-                      : 'bg-white/[0.06] text-[#e8f0dc] hover:bg-white/[0.1]'
+                      ? 'bg-[#8b5cf6] text-black'
+                      : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
                   )}
                 >
                   {interest}
@@ -292,25 +292,25 @@ export function CreateAdView() {
       </div>
 
       {/* Preview Card */}
-      <div className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] overflow-hidden">
+      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden">
         <div className="px-4 py-2 border-b border-white/[0.06]">
-          <p className="text-[11px] text-[#71767b] font-semibold uppercase tracking-wide">Ad Preview</p>
+          <p className="text-[11px] text-[#94a3b8] font-semibold uppercase tracking-wide">Ad Preview</p>
         </div>
         <div className="p-4">
           <div className="rounded-lg border border-white/[0.06] overflow-hidden">
             {/* Mock image area */}
-            <div className="h-32 bg-gradient-to-br from-[#1a2a1a] to-[#0a0a0a] flex items-center justify-center">
-              <span className="text-[#536471] text-[13px]">Ad Image Preview</span>
+            <div className="h-32 bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center">
+              <span className="text-[#64748b] text-[13px]">Ad Image Preview</span>
             </div>
             <div className="p-3">
-              <h4 className="text-[15px] font-bold text-[#e8f0dc]">{form.headline || 'Your headline here'}</h4>
-              <p className="text-[13px] text-[#71767b] mt-1 line-clamp-2">{form.description || 'Your description will appear here...'}</p>
+              <h4 className="text-[15px] font-bold text-[#f0eef6]">{form.headline || 'Your headline here'}</h4>
+              <p className="text-[13px] text-[#94a3b8] mt-1 line-clamp-2">{form.description || 'Your description will appear here...'}</p>
               <div className="flex items-center gap-2 mt-3">
-                <span className="text-[11px] text-[#536471]">Sponsored</span>
-                <span className="text-[11px] text-[#536471]">•</span>
-                <span className="text-[11px] text-[#536471]">black94.in</span>
+                <span className="text-[11px] text-[#64748b]">Sponsored</span>
+                <span className="text-[11px] text-[#64748b]">•</span>
+                <span className="text-[11px] text-[#64748b]">black94.in</span>
               </div>
-              <button className="mt-3 w-full py-2 rounded-lg bg-[#a3d977] text-black text-[13px] font-bold text-center">
+              <button className="mt-3 w-full py-2 rounded-lg bg-[#8b5cf6] text-black text-[13px] font-bold text-center">
                 {form.ctaText}
               </button>
             </div>
@@ -325,8 +325,8 @@ export function CreateAdView() {
         className={cn(
           'w-full py-3 rounded-full text-[15px] font-bold transition-all duration-200',
           isValid && !submitting
-            ? 'bg-[#a3d977] text-black hover:bg-[#8cc65e] active:scale-[0.98]'
-            : 'bg-white/[0.06] text-[#536471] pointer-events-none'
+            ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.98]'
+            : 'bg-white/[0.06] text-[#64748b] pointer-events-none'
         )}
       >
         {submitting ? (

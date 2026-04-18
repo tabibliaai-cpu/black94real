@@ -92,7 +92,7 @@ function LobbyScreen() {
               height: `${3 + Math.random() * 5}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              background: `rgba(163, 217, 119, ${0.1 + Math.random() * 0.3})`,
+              background: `rgba(139, 92, 246, ${0.1 + Math.random() * 0.3})`,
               animationDelay: `${Math.random() * 5}s`,
               animationDuration: `${8 + Math.random() * 12}s`,
             }}
@@ -105,7 +105,7 @@ function LobbyScreen() {
         <div className="relative mb-8">
           <GhostIcon
             className={cn(
-              'w-24 h-24 text-[#a3d977] transition-all duration-700',
+              'w-24 h-24 text-[#8b5cf6] transition-all duration-700',
               started ? 'scale-110 opacity-80' : 'scale-100 opacity-100'
             )}
           />
@@ -122,14 +122,14 @@ function LobbyScreen() {
         <h1 className="text-2xl font-bold text-white mb-2 tracking-tight">
           Anonymous Chat
         </h1>
-        <p className="text-[15px] text-[#71767b] mb-2">
+        <p className="text-[15px] text-[#94a3b8] mb-2">
           Talk freely. Stay unknown.
         </p>
 
         {/* Alias display */}
         {myAlias && (
           <div className="mb-6 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.1] animate-fade-in">
-            <span className="text-[13px] text-[#a3d977] font-mono">Your identity: {myAlias}</span>
+            <span className="text-[13px] text-[#8b5cf6] font-mono">Your identity: {myAlias}</span>
           </div>
         )}
 
@@ -137,18 +137,18 @@ function LobbyScreen() {
         {started && room?.status === 'matching' && (
           <div className="flex flex-col items-center gap-3 animate-fade-in">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#a3d977] animate-pulse-soft" />
-              <span className="text-[14px] text-[#e8f0dc]">Looking for someone...</span>
+              <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse-soft" />
+              <span className="text-[14px] text-[#f0eef6]">Looking for someone...</span>
             </div>
             <div className="w-48 h-1 rounded-full bg-white/[0.08] overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-[#a3d977] to-[#2a7fff] rounded-full animate-matching-progress" />
+              <div className="h-full bg-gradient-to-r from-[#8b5cf6] to-[#2a7fff] rounded-full animate-matching-progress" />
             </div>
 
             {/* Icebreaker tip */}
             {showIcebreaker && (
               <div className="mt-4 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] max-w-[280px] animate-slide-up">
-                <p className="text-[12px] text-[#71767b] mb-1 font-medium">Icebreaker</p>
-                <p className="text-[13px] text-[#a3d977]">
+                <p className="text-[12px] text-[#94a3b8] mb-1 font-medium">Icebreaker</p>
+                <p className="text-[13px] text-[#8b5cf6]">
                   {ICEBREAKERS[Math.floor(Math.random() * ICEBREAKERS.length)]}
                 </p>
               </div>
@@ -160,7 +160,7 @@ function LobbyScreen() {
         {!started && (
           <button
             onClick={handleStart}
-            className="mt-8 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-semibold text-[15px] shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-200"
+            className="mt-8 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-semibold text-[15px] shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-200"
           >
             Start Chat
           </button>
@@ -176,7 +176,7 @@ function LobbyScreen() {
             ].map((f) => (
               <div key={f.label} className="flex flex-col items-center gap-1.5">
                 <span className="text-xl">{f.icon}</span>
-                <span className="text-[11px] text-[#71767b]">{f.label}</span>
+                <span className="text-[11px] text-[#94a3b8]">{f.label}</span>
               </div>
             ))}
           </div>
@@ -300,9 +300,9 @@ function AnonChatRoom() {
   if (!room) return null
 
   return (
-    <div className="fixed inset-0 z-40 bg-black flex flex-col animate-fade-in">
+    <div className="fixed inset-0 z-40 bg-[#09080f] flex flex-col animate-fade-in">
       {/* ─── Top Bar ─── */}
-      <div className="shrink-0 h-[56px] flex items-center justify-between px-3 bg-black/80 backdrop-blur-xl border-b border-white/[0.06] relative liquid-refract-bottom z-10">
+      <div className="shrink-0 h-[56px] flex items-center justify-between px-3 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06] relative liquid-refract-bottom z-10">
         <div className="flex items-center gap-2">
           <button onClick={handleBack} className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors">
             <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
@@ -312,7 +312,7 @@ function AnonChatRoom() {
           <div className="flex items-center gap-2">
             {/* Ghost icon */}
             <div className="w-8 h-8 rounded-full bg-white/[0.08] flex items-center justify-center">
-              <GhostIcon className="w-5 h-5 text-[#a3d977]" />
+              <GhostIcon className="w-5 h-5 text-[#8b5cf6]" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -320,10 +320,10 @@ function AnonChatRoom() {
                   {isConnected ? room.strangerAlias : isMatching ? 'Searching...' : 'Disconnected'}
                 </span>
                 {isConnected && (
-                  <div className="w-2 h-2 rounded-full bg-[#a3d977] animate-pulse-soft" />
+                  <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse-soft" />
                 )}
               </div>
-              <span className="text-[11px] text-[#71767b]">
+              <span className="text-[11px] text-[#94a3b8]">
                 {isConnected ? 'Online' : isMatching ? 'Looking for someone' : 'Stranger left'}
               </span>
             </div>
@@ -336,7 +336,7 @@ function AnonChatRoom() {
             onClick={() => setShowReport(true)}
             className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
               <line x1="4" y1="22" x2="4" y2="15" />
             </svg>
@@ -346,7 +346,7 @@ function AnonChatRoom() {
             onClick={isConnected ? skipToStranger : handleNewChat}
             className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <path d="M1 4v6h6" />
               <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
             </svg>
@@ -359,13 +359,13 @@ function AnonChatRoom() {
         {/* Matching state */}
         {isMatching && (
           <div className="flex flex-col items-center justify-center h-full gap-4">
-            <GhostIcon className="w-16 h-16 text-[#a3d977] animate-pulse-soft" />
+            <GhostIcon className="w-16 h-16 text-[#8b5cf6] animate-pulse-soft" />
             <div className="flex items-center gap-2">
               <div className="typing-dot" />
               <div className="typing-dot" />
               <div className="typing-dot" />
             </div>
-            <p className="text-[14px] text-[#71767b]">Searching for a stranger...</p>
+            <p className="text-[14px] text-[#94a3b8]">Searching for a stranger...</p>
           </div>
         )}
 
@@ -374,7 +374,7 @@ function AnonChatRoom() {
           if (msg.type === 'system') {
             return (
               <div key={msg.id} className="flex justify-center py-1">
-                <span className="text-[12px] text-[#71767b] bg-white/[0.04] px-3 py-1 rounded-full">
+                <span className="text-[12px] text-[#94a3b8] bg-white/[0.04] px-3 py-1 rounded-full">
                   {msg.content}
                 </span>
               </div>
@@ -396,7 +396,7 @@ function AnonChatRoom() {
               {/* Alias label */}
               <span className={cn(
                 'text-[11px] mb-1 ml-1 font-mono',
-                msg.isMine ? 'text-[#a3d977]' : 'text-[#71767b]'
+                msg.isMine ? 'text-[#8b5cf6]' : 'text-[#94a3b8]'
               )}>
                 {msg.isMine ? myAlias : msg.senderAlias}
               </span>
@@ -405,14 +405,14 @@ function AnonChatRoom() {
                 className={cn(
                   'max-w-[80%] px-4 py-2.5 text-[14px] leading-relaxed animate-slide-up',
                   msg.isMine
-                    ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black rounded-2xl rounded-br-md'
+                    ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black rounded-2xl rounded-br-md'
                     : 'bg-white/[0.06] text-white rounded-2xl rounded-bl-md border border-white/[0.06]'
                 )}
               >
                 {msg.content}
               </div>
               {/* Timestamp */}
-              <span className="text-[10px] text-[#536471] mt-0.5 ml-1">
+              <span className="text-[10px] text-[#64748b] mt-0.5 ml-1">
                 {formatTime(msg.timestamp)}
               </span>
             </div>
@@ -422,7 +422,7 @@ function AnonChatRoom() {
         {/* Typing indicator */}
         {strangerTyping && isConnected && (
           <div className="flex items-start animate-fade-in">
-            <span className="text-[11px] text-[#71767b] font-mono ml-1 mb-1">
+            <span className="text-[11px] text-[#94a3b8] font-mono ml-1 mb-1">
               {room.strangerAlias}
             </span>
             <div className="bg-white/[0.06] border border-white/[0.06] rounded-2xl rounded-bl-md px-4 py-3 ml-2">
@@ -438,13 +438,13 @@ function AnonChatRoom() {
         {/* Disconnected state */}
         {isDisconnected && (
           <div className="flex flex-col items-center gap-4 pt-8 animate-fade-in">
-            <GhostIcon className="w-14 h-14 text-[#536471]" />
-            <p className="text-[14px] text-[#71767b] text-center">
+            <GhostIcon className="w-14 h-14 text-[#64748b]" />
+            <p className="text-[14px] text-[#94a3b8] text-center">
               Stranger has disconnected
             </p>
             <button
               onClick={handleNewChat}
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-semibold text-[14px] shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-200"
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-semibold text-[14px] shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-200"
             >
               Find New Stranger
             </button>
@@ -464,7 +464,7 @@ function AnonChatRoom() {
 
       {/* ─── Reaction picker ─── */}
       {showReactions && (
-        <div className="shrink-0 px-4 py-2 bg-black/90 backdrop-blur-xl border-t border-white/[0.08] animate-slide-up">
+        <div className="shrink-0 px-4 py-2 bg-[#09080f]/90 backdrop-blur-xl border-t border-white/[0.08] animate-slide-up">
           <div className="flex items-center justify-center gap-3">
             {reactions.map((emoji) => (
               <button
@@ -479,7 +479,7 @@ function AnonChatRoom() {
               onClick={() => setShowReactions(false)}
               className="w-11 h-11 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.12] transition-colors"
             >
-              <svg className="w-5 h-5 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
               </svg>
             </button>
@@ -488,7 +488,7 @@ function AnonChatRoom() {
       )}
 
       {/* ─── Input Area (15%) ─── */}
-      <div className="shrink-0 px-3 py-2.5 bg-black/90 backdrop-blur-xl border-t border-white/[0.08] safe-area-bottom relative liquid-refract-top">
+      <div className="shrink-0 px-3 py-2.5 bg-[#09080f]/90 backdrop-blur-xl border-t border-white/[0.08] safe-area-bottom relative liquid-refract-top">
         <div className="flex items-center gap-2">
           {/* Emoji / Reaction toggle */}
           <button
@@ -510,8 +510,8 @@ function AnonChatRoom() {
             placeholder="Say something anonymously..."
             disabled={!isConnected}
             className={cn(
-              'flex-1 h-10 rounded-full bg-white/[0.06] border border-white/[0.1] px-4 text-[14px] text-white placeholder:text-[#536471] outline-none transition-all duration-200',
-              'focus:border-[#a3d977]/40 focus:bg-white/[0.08]',
+              'flex-1 h-10 rounded-full bg-white/[0.06] border border-white/[0.1] px-4 text-[14px] text-white placeholder:text-[#64748b] outline-none transition-all duration-200',
+              'focus:border-[#8b5cf6]/40 focus:bg-white/[0.08]',
               'disabled:opacity-40 disabled:cursor-not-allowed'
             )}
           />
@@ -523,8 +523,8 @@ function AnonChatRoom() {
             className={cn(
               'w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 shrink-0',
               input.trim() && isConnected
-                ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black shadow-md hover:scale-[1.05] active:scale-90'
-                : 'bg-white/[0.06] text-[#536471]'
+                ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black shadow-md hover:scale-[1.05] active:scale-90'
+                : 'bg-white/[0.06] text-[#64748b]'
             )}
           >
             <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -537,9 +537,9 @@ function AnonChatRoom() {
 
       {/* ─── Report Dialog ─── */}
       {showReport && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setShowReport(false)}>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#09080f]/60 backdrop-blur-sm animate-fade-in" onClick={() => setShowReport(false)}>
           <div
-            className="w-full max-w-lg bg-[#0a0a0a] border border-white/[0.1] rounded-t-2xl p-5 animate-slide-up safe-area-bottom"
+            className="w-full max-w-lg bg-[#110f1a] border border-white/[0.1] rounded-t-2xl p-5 animate-slide-up safe-area-bottom"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-10 h-1 rounded-full bg-white/20 mx-auto mb-4" />
@@ -560,7 +560,7 @@ function AnonChatRoom() {
             </div>
             <button
               onClick={() => setShowReport(false)}
-              className="w-full mt-3 py-3 rounded-xl text-[14px] text-[#71767b] font-medium hover:bg-white/[0.04] transition-colors"
+              className="w-full mt-3 py-3 rounded-xl text-[14px] text-[#94a3b8] font-medium hover:bg-white/[0.04] transition-colors"
             >
               Cancel
             </button>

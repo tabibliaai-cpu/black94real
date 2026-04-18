@@ -63,36 +63,36 @@ export function MyStoreView() {
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 px-4 mt-3">
-        <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-3.5 text-center">
-          <div className="w-9 h-9 rounded-lg bg-[#a3d977]/10 flex items-center justify-center mx-auto mb-2">
-            <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
+          <div className="w-9 h-9 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center mx-auto mb-2">
+            <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
           </div>
-          <p className="text-[20px] font-bold text-[#e8f0dc]">{products.length}</p>
-          <p className="text-[11px] text-[#71767b]">Products</p>
+          <p className="text-[20px] font-bold text-[#f0eef6]">{products.length}</p>
+          <p className="text-[11px] text-[#94a3b8]">Products</p>
         </div>
-        <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-3.5 text-center">
+        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
           <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center mx-auto mb-2">
             <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
               <line x1="1" y1="10" x2="23" y2="10" />
             </svg>
           </div>
-          <p className="text-[20px] font-bold text-[#e8f0dc]">{activeOrders}</p>
-          <p className="text-[11px] text-[#71767b]">Active</p>
+          <p className="text-[20px] font-bold text-[#f0eef6]">{activeOrders}</p>
+          <p className="text-[11px] text-[#94a3b8]">Active</p>
         </div>
-        <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-3.5 text-center">
+        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
           <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2">
             <svg className="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="12" y1="1" x2="12" y2="23" />
               <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
             </svg>
           </div>
-          <p className="text-[20px] font-bold text-[#e8f0dc]">₹{(totalRevenue / 1000).toFixed(1)}k</p>
-          <p className="text-[11px] text-[#71767b]">Revenue</p>
+          <p className="text-[20px] font-bold text-[#f0eef6]">₹{(totalRevenue / 1000).toFixed(1)}k</p>
+          <p className="text-[11px] text-[#94a3b8]">Revenue</p>
         </div>
       </div>
 
@@ -103,7 +103,7 @@ export function MyStoreView() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2 rounded-full text-[13px] font-semibold capitalize transition-all ${
-              activeTab === tab ? 'bg-[#a3d977] text-black shadow-md' : 'text-[#71767b] hover:text-[#e8f0dc]'
+              activeTab === tab ? 'bg-[#8b5cf6] text-black shadow-md' : 'text-[#94a3b8] hover:text-[#f0eef6]'
             }`}
           >
             {tab} ({tab === 'products' ? products.length : orders.length})
@@ -115,41 +115,41 @@ export function MyStoreView() {
       <div className="mt-4 px-4">
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
           </div>
         ) : activeTab === 'products' ? (
           <div className="space-y-2">
             {products.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-[14px] text-[#71767b] mb-4">No products yet</p>
+                <p className="text-[14px] text-[#94a3b8] mb-4">No products yet</p>
                 <button
                   onClick={() => navigate('add-product')}
-                  className="px-6 py-2.5 rounded-full bg-[#a3d977] text-black font-bold text-sm"
+                  className="px-6 py-2.5 rounded-full bg-[#8b5cf6] text-black font-bold text-sm"
                 >
                   Add Your First Product
                 </button>
               </div>
             ) : (
               products.map((product) => (
-                <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-                  <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+                  <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                     {product.images ? (
                       <img src={product.images.split(',')[0]} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-[#141414]" />
+                      <div className="w-full h-full bg-[#14112a]" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] font-semibold text-[#e8f0dc] line-clamp-1">{product.name}</p>
-                    <p className="text-[13px] font-semibold text-[#a3d977]">₹{product.price.toLocaleString()}</p>
-                    <p className="text-[11px] text-[#71767b]">{product.stock} in stock • {product.soldCount} sold</p>
+                    <p className="text-[14px] font-semibold text-[#f0eef6] line-clamp-1">{product.name}</p>
+                    <p className="text-[13px] font-semibold text-[#8b5cf6]">₹{product.price.toLocaleString()}</p>
+                    <p className="text-[11px] text-[#94a3b8]">{product.stock} in stock • {product.soldCount} sold</p>
                   </div>
                   <div className="flex gap-1">
                     <button
                       onClick={() => navigate('add-product', { id: product.id })}
                       className="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1]"
                     >
-                      <svg className="w-4 h-4 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <svg className="w-4 h-4 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                         <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                         <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                       </svg>
@@ -172,7 +172,7 @@ export function MyStoreView() {
           <div className="space-y-2">
             {orders.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-[14px] text-[#71767b]">No orders yet</p>
+                <p className="text-[14px] text-[#94a3b8]">No orders yet</p>
               </div>
             ) : (
               orders.map((order) => {
@@ -182,17 +182,17 @@ export function MyStoreView() {
                   <button
                     key={order.id}
                     onClick={() => navigate('business-orders')}
-                    className="w-full text-left p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]"
+                    className="w-full text-left p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[12px] text-[#71767b]">{new Date(order.createdAt).toLocaleDateString()}</span>
+                      <span className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</span>
                       <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full capitalize ${statusColors[order.status] || ''}`}>
                         {order.status}
                       </span>
                     </div>
-                    <p className="text-[13px] text-[#e8f0dc] line-clamp-1">{order.buyerName}</p>
-                    <p className="text-[12px] text-[#71767b]">{items.map((i) => i.productName).join(', ')}</p>
-                    <p className="text-[14px] font-bold text-[#a3d977] mt-1">₹{order.total.toLocaleString()}</p>
+                    <p className="text-[13px] text-[#f0eef6] line-clamp-1">{order.buyerName}</p>
+                    <p className="text-[12px] text-[#94a3b8]">{items.map((i) => i.productName).join(', ')}</p>
+                    <p className="text-[14px] font-bold text-[#8b5cf6] mt-1">₹{order.total.toLocaleString()}</p>
                   </button>
                 )
               })
@@ -204,7 +204,7 @@ export function MyStoreView() {
       {/* FAB: Add Product */}
       <button
         onClick={() => navigate('add-product')}
-        className="fixed bottom-[68px] right-4 z-20 w-14 h-14 rounded-full bg-gradient-to-br from-[#a3d977] to-[#8cc65e] flex items-center justify-center shadow-lg shadow-[#a3d977]/30 hover:scale-110 active:scale-90 transition-all"
+        className="fixed bottom-[68px] right-4 z-20 w-14 h-14 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#8b5cf6]/30 hover:scale-110 active:scale-90 transition-all"
       >
         <svg className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
           <path d="M12 5v14M5 12h14" />

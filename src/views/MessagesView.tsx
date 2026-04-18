@@ -50,7 +50,7 @@ const REACTION_EMOJIS = ['❤️', '😂', '🔥', '😍', '😮', '😢', '💯
 function VerifiedBadge({ size = 14 }: { size?: number }) {
   return (
     <svg className="shrink-0" width={size} height={size} viewBox="0 0 22 22" fill="none">
-      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.853-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.69-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.636.433 1.221.878 1.69.47.446 1.055.752 1.69.883.635.13 1.294.083 1.902-.143.271.586.702 1.084 1.24 1.438.54.354 1.167.551 1.813.568.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.225 1.261.275 1.894.144.634-.13 1.219-.435 1.69-.882.445-.47.749-1.055.878-1.691.13-.634.084-1.292-.139-1.899.586-.272 1.084-.701 1.438-1.24.354-.542.551-1.172.57-1.82z" fill="#a3d977"/>
+      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.853-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.69-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.636.433 1.221.878 1.69.47.446 1.055.752 1.69.883.635.13 1.294.083 1.902-.143.271.586.702 1.084 1.24 1.438.54.354 1.167.551 1.813.568.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.225 1.261.275 1.894.144.634-.13 1.219-.435 1.69-.882.445-.47.749-1.055.878-1.691.13-.634.084-1.292-.139-1.899.586-.272 1.084-.701 1.438-1.24.354-.542.551-1.172.57-1.82z" fill="#8b5cf6"/>
       <path d="M9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" fill="#000"/>
     </svg>
   )
@@ -60,11 +60,11 @@ function VerifiedBadge({ size = 14 }: { size?: number }) {
 
 function E2EEBadge() {
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#a3d977]/10 border border-[#a3d977]/20">
-      <svg className="w-3.5 h-3.5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20">
+      <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
-      <span className="text-[11px] text-[#a3d977] font-semibold tracking-wide">E2E ENCRYPTED</span>
+      <span className="text-[11px] text-[#8b5cf6] font-semibold tracking-wide">E2E ENCRYPTED</span>
     </div>
   )
 }
@@ -149,9 +149,9 @@ function ReactionsBar({
             'inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-full text-[13px] transition-all duration-200 border animate-scale-in',
             r.reacted
               ? isMine
-                ? 'bg-black/20 border-black/30 text-black'
-                : 'bg-[#a3d977]/15 border-[#a3d977]/25 text-[#a3d977]'
-              : 'bg-white/[0.04] border-white/[0.06] text-[#71767b] hover:border-white/[0.12]'
+                ? 'bg-[#09080f]/20 border-black/30 text-black'
+                : 'bg-[#8b5cf6]/15 border-[#8b5cf6]/25 text-[#8b5cf6]'
+              : 'bg-white/[0.04] border-white/[0.06] text-[#94a3b8] hover:border-white/[0.12]'
           )}
         >
           <span className="text-[13px] leading-none">{r.emoji}</span>
@@ -216,20 +216,20 @@ function MessageBubble({
       <div className={cn(
         'max-w-[82%] animate-fade-in',
         isMine
-          ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black rounded-2xl rounded-br-sm'
-          : 'bg-white/[0.06] text-[#e8f0dc] rounded-2xl rounded-bl-sm border border-white/[0.06]'
+          ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black rounded-2xl rounded-br-sm'
+          : 'bg-white/[0.06] text-[#f0eef6] rounded-2xl rounded-bl-sm border border-white/[0.06]'
       )}>
         {msg.replyTo && (
           <div className={cn(
             'mx-2 mt-2 mb-1 px-2.5 py-1.5 rounded-lg border-l-[3px]',
             isMine
-              ? 'bg-black/10 border-l-black/40'
-              : 'bg-white/[0.04] border-l-[#a3d977]/50'
+              ? 'bg-[#09080f]/10 border-l-black/40'
+              : 'bg-white/[0.04] border-l-[#8b5cf6]/50'
           )}>
-            <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#a3d977]')}>
+            <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#8b5cf6]')}>
               {msg.replyTo.isMine ? 'You' : msg.replyTo.senderName}
             </span>
-            <span className={cn('text-[12px] block leading-snug mt-0.5 line-clamp-1', isMine ? 'text-black/50' : 'text-[#536471]')}>
+            <span className={cn('text-[12px] block leading-snug mt-0.5 line-clamp-1', isMine ? 'text-black/50' : 'text-[#64748b]')}>
               {msg.replyTo.content}
             </span>
           </div>
@@ -240,9 +240,9 @@ function MessageBubble({
       </div>
 
       <div className={cn('flex items-center gap-1 mt-0.5 px-1', isMine ? 'flex-row-reverse' : '')}>
-        <span className="text-[10px] text-[#536471]">{formatTime(msg.timestamp)}</span>
+        <span className="text-[10px] text-[#64748b]">{formatTime(msg.timestamp)}</span>
         {isMine && (
-          <svg className="w-3.5 h-3.5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
             <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         )}
@@ -261,7 +261,7 @@ function MessageBubble({
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/[0.08] transition-colors"
           title="Reply"
         >
-          <svg className="w-3.5 h-3.5 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 00-4-4H4"/>
           </svg>
         </button>
@@ -299,20 +299,20 @@ function ReplyBar() {
   if (!replyTo) return null
 
   return (
-    <div className="shrink-0 px-3 pt-2 bg-black/80 backdrop-blur-xl animate-reply-slide-in">
+    <div className="shrink-0 px-3 pt-2 bg-[#09080f]/80 backdrop-blur-xl animate-reply-slide-in">
       <div className="flex items-center gap-2.5 px-3 py-2 rounded-t-xl bg-white/[0.04] border-x border-t border-white/[0.06]">
-        <div className="w-[3px] h-8 rounded-full bg-[#a3d977] shrink-0" />
+        <div className="w-[3px] h-8 rounded-full bg-[#8b5cf6] shrink-0" />
         <div className="flex-1 min-w-0">
-          <span className="text-[12px] font-bold text-[#a3d977] block">
+          <span className="text-[12px] font-bold text-[#8b5cf6] block">
             {replyTo.isMine ? 'You' : replyTo.senderName}
           </span>
-          <span className="text-[12px] text-[#536471] block truncate">{replyTo.content}</span>
+          <span className="text-[12px] text-[#64748b] block truncate">{replyTo.content}</span>
         </div>
         <button
           onClick={() => setReplyTo(null)}
           className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0"
         >
-          <svg className="w-3.5 h-3.5 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-3.5 h-3.5 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
             <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
           </svg>
         </button>
@@ -356,7 +356,7 @@ function ChatItemMenu({
         onClick={(e) => { e.stopPropagation(); setOpen(!open) }}
         className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
       >
-        <svg className="w-4 h-4 text-[#536471]" viewBox="0 0 24 24" fill="currentColor">
+        <svg className="w-4 h-4 text-[#64748b]" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="12" cy="5" r="1.5"/>
           <circle cx="12" cy="12" r="1.5"/>
           <circle cx="12" cy="19" r="1.5"/>
@@ -368,10 +368,10 @@ function ChatItemMenu({
             onClick={(e) => { e.stopPropagation(); setOpen(false); onSettings() }}
             className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
           >
-            <svg className="w-4 h-4 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4 h-4 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
             </svg>
-            <span className="text-[14px] text-[#e8f0dc]">Settings</span>
+            <span className="text-[14px] text-[#f0eef6]">Settings</span>
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); setOpen(false); onDelete() }}
@@ -408,10 +408,10 @@ function ChatSettingsSheet({
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center" onClick={onClose}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-[#09080f]/60 backdrop-blur-sm" />
       {/* Sheet */}
       <div
-        className="relative w-full max-w-lg bg-[#0a0a0a] rounded-t-2xl border-t border-white/[0.08] animate-slide-up-sheet max-h-[85vh] overflow-y-auto no-scrollbar"
+        className="relative w-full max-w-lg bg-[#110f1a] rounded-t-2xl border-t border-white/[0.08] animate-slide-up-sheet max-h-[85vh] overflow-y-auto no-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}
@@ -421,8 +421,8 @@ function ChatSettingsSheet({
 
         {/* Header */}
         <div className="px-5 pb-4">
-          <h2 className="text-[18px] font-bold text-[#e8f0dc]">{chatName}</h2>
-          <p className="text-[13px] text-[#536471] mt-0.5">Chat settings and privacy</p>
+          <h2 className="text-[18px] font-bold text-[#f0eef6]">{chatName}</h2>
+          <p className="text-[13px] text-[#64748b] mt-0.5">Chat settings and privacy</p>
         </div>
 
         <div className="border-t border-white/[0.06]" />
@@ -438,8 +438,8 @@ function ChatSettingsSheet({
                 </svg>
               </div>
               <div>
-                <span className="text-[14px] text-[#e8f0dc] font-medium block">Nuclear Block</span>
-                <span className="text-[12px] text-[#536471]">Permanently block all communication</span>
+                <span className="text-[14px] text-[#f0eef6] font-medium block">Nuclear Block</span>
+                <span className="text-[12px] text-[#64748b]">Permanently block all communication</span>
               </div>
             </div>
             <button
@@ -468,8 +468,8 @@ function ChatSettingsSheet({
                 </svg>
               </div>
               <div>
-                <span className="text-[14px] text-[#e8f0dc] font-medium block">Mute Notifications</span>
-                <span className="text-[12px] text-[#536471]">Silence incoming messages</span>
+                <span className="text-[14px] text-[#f0eef6] font-medium block">Mute Notifications</span>
+                <span className="text-[12px] text-[#64748b]">Silence incoming messages</span>
               </div>
             </div>
             <button
@@ -479,7 +479,7 @@ function ChatSettingsSheet({
               }}
               className={cn(
                 'relative w-11 h-6 rounded-full transition-colors duration-200 shrink-0',
-                isMuted ? 'bg-[#a3d977]' : 'bg-white/[0.15]'
+                isMuted ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]'
               )}
             >
               <div className={cn(
@@ -500,13 +500,13 @@ function ChatSettingsSheet({
             className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.03] transition-colors"
           >
             <div className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
               </svg>
             </div>
             <div className="text-left">
-              <span className="text-[14px] text-[#e8f0dc] font-medium block">Clear Chat History</span>
-              <span className="text-[12px] text-[#536471]">Delete all messages</span>
+              <span className="text-[14px] text-[#f0eef6] font-medium block">Clear Chat History</span>
+              <span className="text-[12px] text-[#64748b]">Delete all messages</span>
             </div>
           </button>
 
@@ -520,10 +520,10 @@ function ChatSettingsSheet({
               </svg>
             </div>
             <div className="flex-1 text-left">
-              <span className="text-[14px] text-[#e8f0dc] font-medium block">Media, Links, and Docs</span>
-              <span className="text-[12px] text-[#536471]">Shared files and media</span>
+              <span className="text-[14px] text-[#f0eef6] font-medium block">Media, Links, and Docs</span>
+              <span className="text-[12px] text-[#64748b]">Shared files and media</span>
             </div>
-            <svg className="w-4 h-4 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4 h-4 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
@@ -537,11 +537,11 @@ function ChatSettingsSheet({
                 </svg>
               </div>
               <div className="text-left">
-                <span className="text-[14px] text-[#e8f0dc] font-medium block">Disappearing Messages</span>
-                <span className="text-[12px] text-[#536471]">Off — messages stay forever</span>
+                <span className="text-[14px] text-[#f0eef6] font-medium block">Disappearing Messages</span>
+                <span className="text-[12px] text-[#64748b]">Off — messages stay forever</span>
               </div>
             </div>
-            <svg className="w-4 h-4 text-[#536471] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4 h-4 text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
@@ -549,14 +549,14 @@ function ChatSettingsSheet({
           {/* Encryption */}
           <div className="flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.03] transition-colors">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#a3d977]/10 flex items-center justify-center">
-                <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
+                <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
               </div>
               <div>
-                <span className="text-[14px] text-[#e8f0dc] font-medium block">Encryption</span>
-                <span className="text-[12px] text-[#a3d977]">End-to-end encrypted</span>
+                <span className="text-[14px] text-[#f0eef6] font-medium block">Encryption</span>
+                <span className="text-[12px] text-[#8b5cf6]">End-to-end encrypted</span>
               </div>
             </div>
           </div>
@@ -664,13 +664,13 @@ function ChatRoomView() {
     return (
       <div className="flex flex-col h-[calc(100vh-90px)] animate-fade-in">
         {/* Header */}
-        <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-black/60 backdrop-blur-xl">
+        <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
           <div className="flex items-center gap-3">
             <button
               onClick={() => selectChat(null)}
               className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
             >
-              <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6"/>
               </svg>
             </button>
@@ -680,7 +680,7 @@ function ChatRoomView() {
               </div>
             </div>
             <div>
-              <span className="text-[14px] font-bold text-[#71767b]">{chatPartner.name}</span>
+              <span className="text-[14px] font-bold text-[#94a3b8]">{chatPartner.name}</span>
               <span className="block text-[11px] text-[#ef4444]">Blocked</span>
             </div>
           </div>
@@ -692,8 +692,8 @@ function ChatRoomView() {
               <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
             </svg>
           </div>
-          <h3 className="text-[18px] font-bold text-[#e8f0dc] mb-1">Chat Blocked</h3>
-          <p className="text-[14px] text-[#71767b] text-center max-w-[280px]">
+          <h3 className="text-[18px] font-bold text-[#f0eef6] mb-1">Chat Blocked</h3>
+          <p className="text-[14px] text-[#94a3b8] text-center max-w-[280px]">
             You have nuclear-blocked {chatPartner.name}. All communication has been permanently restricted.
           </p>
           <button
@@ -701,7 +701,7 @@ function ChatRoomView() {
               useDualPaneChat.getState().toggleNuclearBlock(selectedChatId!)
               toast.success(`${chatPartner.name} unblocked`)
             }}
-            className="mt-6 px-6 py-2.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] text-[#e8f0dc] font-semibold hover:bg-white/[0.1] transition-colors"
+            className="mt-6 px-6 py-2.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] text-[#f0eef6] font-semibold hover:bg-white/[0.1] transition-colors"
           >
             Unblock {chatPartner.name}
           </button>
@@ -713,18 +713,18 @@ function ChatRoomView() {
   return (
     <div className="flex flex-col h-[calc(100vh-90px)] animate-fade-in">
       {/* ─── Chat Header ─── */}
-      <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-black/60 backdrop-blur-xl">
+      <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button
             onClick={() => selectChat(null)}
             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
           </button>
           <div className="relative">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#a3d977] to-[#6ba84a] flex items-center justify-center text-black font-bold text-sm">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-black font-bold text-sm">
               {chatPartner.initial}
             </div>
             {chatPartner.online && (
@@ -736,7 +736,7 @@ function ChatRoomView() {
               <span className="text-[14px] font-bold text-white">{chatPartner.name}</span>
               {chatPartner.verified && <VerifiedBadge size={14} />}
             </div>
-            <span className="text-[11px] text-[#a3d977]">{chatPartner.online ? 'Online' : 'Offline'}</span>
+            <span className="text-[11px] text-[#8b5cf6]">{chatPartner.online ? 'Online' : 'Offline'}</span>
           </div>
         </div>
 
@@ -746,7 +746,7 @@ function ChatRoomView() {
             onClick={() => navigate('audio-call', { chatName: chatPartner.name })}
             className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-[18px] h-[18px] text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
             </svg>
           </button>
@@ -755,7 +755,7 @@ function ChatRoomView() {
             onClick={() => toast.info('Video call coming soon')}
             className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-[18px] h-[18px] text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
             </svg>
           </button>
@@ -765,7 +765,7 @@ function ChatRoomView() {
               onClick={() => setHeaderMenuOpen(!headerMenuOpen)}
               className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
             >
-              <svg className="w-5 h-5 text-[#71767b]" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="currentColor">
                 <circle cx="12" cy="5" r="1.5"/>
                 <circle cx="12" cy="12" r="1.5"/>
                 <circle cx="12" cy="19" r="1.5"/>
@@ -777,16 +777,16 @@ function ChatRoomView() {
                   onClick={() => { setHeaderMenuOpen(false); setSettingsOpen(true) }}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
                 >
-                  <svg className="w-4 h-4 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
                   </svg>
-                  <span className="text-[14px] text-[#e8f0dc]">Chat Settings</span>
+                  <span className="text-[14px] text-[#f0eef6]">Chat Settings</span>
                 </button>
                 <button
                   onClick={() => { setHeaderMenuOpen(false); selectChat(null) }}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
                 >
-                  <svg className="w-4 h-4 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
                   </svg>
                   <span className="text-[14px] text-[#ef4444]">Clear Chat</span>
@@ -806,7 +806,7 @@ function ChatRoomView() {
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 no-scrollbar relative">
         {/* Date separator */}
         <div className="flex justify-center py-2">
-          <span className="text-[11px] text-[#536471] bg-white/[0.04] px-3 py-0.5 rounded-full">Today</span>
+          <span className="text-[11px] text-[#64748b] bg-white/[0.04] px-3 py-0.5 rounded-full">Today</span>
         </div>
 
         {messages.map((msg) => (
@@ -842,14 +842,14 @@ function ChatRoomView() {
       <ReplyBar />
 
       {/* ─── Input Bar ─── */}
-      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-black/80 backdrop-blur-xl safe-area-bottom">
+      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl safe-area-bottom">
         <div className="flex items-end gap-2.5">
           <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
-            <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
             </svg>
           </button>
-          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#a3d977]/40 transition-all px-4 py-2.5">
+          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-all px-4 py-2.5">
             <input
               ref={inputRef}
               type="text"
@@ -857,11 +857,11 @@ function ChatRoomView() {
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
               placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'End-to-end encrypted message...'}
-              className="w-full bg-transparent text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none"
+              className="w-full bg-transparent text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none"
             />
           </div>
           <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
-            <svg className="w-[18px] h-[18px] text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
             </svg>
           </button>
@@ -871,8 +871,8 @@ function ChatRoomView() {
             className={cn(
               'w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-200',
               text.trim()
-                ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black shadow-md hover:scale-[1.05] active:scale-90'
-                : 'bg-white/[0.06] text-[#536471]'
+                ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black shadow-md hover:scale-[1.05] active:scale-90'
+                : 'bg-white/[0.06] text-[#64748b]'
             )}
           >
             <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -995,13 +995,13 @@ function ChatListView() {
     <div className="flex flex-col h-[calc(100vh-90px)] animate-fade-in">
       {/* ─── Header ─── */}
       <div className="shrink-0 px-4 pt-3 pb-2 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#e8f0dc]">Messages</h2>
+        <h2 className="text-xl font-bold text-[#f0eef6]">Messages</h2>
         <button
           onClick={() => toast.info('New chat — coming soon')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           aria-label="Compose new message"
         >
-          <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
           </svg>
         </button>
@@ -1010,7 +1010,7 @@ function ChatListView() {
       {/* ─── Search Bar ─── */}
       <div className="shrink-0 px-4 pb-3">
         <div className="flex items-center gap-2.5 bg-white/[0.04] rounded-xl border border-white/[0.06] px-3.5 py-2.5">
-          <svg className="w-4 h-4 text-[#536471] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-4 h-4 text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <input
@@ -1018,11 +1018,11 @@ function ChatListView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search messages..."
-            className="flex-1 bg-transparent text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none"
+            className="flex-1 bg-transparent text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none"
           />
           {searchQuery && (
             <button onClick={() => setSearchQuery('')} className="shrink-0">
-              <svg className="w-4 h-4 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+              <svg className="w-4 h-4 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
               </svg>
             </button>
@@ -1035,7 +1035,7 @@ function ChatListView() {
         {/* Mock conversations */}
         <div className="py-1">
           <div className="px-4 py-2">
-            <span className="text-[12px] font-bold text-[#536471] uppercase tracking-wider">Recent</span>
+            <span className="text-[12px] font-bold text-[#64748b] uppercase tracking-wider">Recent</span>
           </div>
 
           {filteredMock.map((chat) => {
@@ -1060,26 +1060,26 @@ function ChatListView() {
                     <div className="flex items-center gap-1.5 min-w-0">
                       {chat.verified && <VerifiedBadge size={13} />}
                       <span className={cn(
-                        'font-bold text-[15px] text-[#e8f0dc] truncate',
-                        isBlocked && 'line-through text-[#536471]'
+                        'font-bold text-[15px] text-[#f0eef6] truncate',
+                        isBlocked && 'line-through text-[#64748b]'
                       )}>
                         {chat.name}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
                       {isMuted && (
-                        <svg className="w-3.5 h-3.5 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-3.5 h-3.5 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                           <path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
                         </svg>
                       )}
-                      <span className="text-[12px] text-[#536471]">{timeAgo(chat.lastMessageTime)}</span>
+                      <span className="text-[12px] text-[#64748b]">{timeAgo(chat.lastMessageTime)}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between mt-0.5">
                     <p className={cn(
                       'text-[14px] truncate flex-1',
-                      chat.unreadCount > 0 ? 'text-[#e8f0dc] font-semibold' : 'text-[#71767b]',
-                      isBlocked && 'text-[#536471] italic'
+                      chat.unreadCount > 0 ? 'text-[#f0eef6] font-semibold' : 'text-[#94a3b8]',
+                      isBlocked && 'text-[#64748b] italic'
                     )}>
                       {isBlocked ? 'Chat blocked' : chat.lastMessage}
                     </p>
@@ -1088,7 +1088,7 @@ function ChatListView() {
 
                 <div className="flex items-center gap-1 shrink-0">
                   {chat.unreadCount > 0 && !isBlocked && (
-                    <div className="w-5 h-5 rounded-full bg-[#a3d977] flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-[#8b5cf6] flex items-center justify-center">
                       <span className="text-[10px] font-bold text-black">{chat.unreadCount}</span>
                     </div>
                   )}
@@ -1128,24 +1128,24 @@ function ChatListView() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[15px] text-[#e8f0dc] truncate">
+                  <span className="font-bold text-[15px] text-[#f0eef6] truncate">
                     {chat.otherUser?.displayName || 'User'}
                   </span>
-                  <span className="text-[12px] text-[#536471] shrink-0 ml-2">
+                  <span className="text-[12px] text-[#64748b] shrink-0 ml-2">
                     {timeAgo(chat.updatedAt)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-0.5">
                   <p className={cn(
                     'text-[14px] truncate',
-                    (chat.unreadCount ?? 0) > 0 ? 'text-[#e8f0dc] font-semibold' : 'text-[#71767b]'
+                    (chat.unreadCount ?? 0) > 0 ? 'text-[#f0eef6] font-semibold' : 'text-[#94a3b8]'
                   )}>
                     {chat.lastMessage?.content || 'No messages yet'}
                   </p>
                 </div>
               </div>
               {(chat.unreadCount ?? 0) > 0 && (
-                <div className="w-5 h-5 rounded-full bg-[#a3d977] flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 rounded-full bg-[#8b5cf6] flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-bold text-black">{chat.unreadCount}</span>
                 </div>
               )}
@@ -1156,12 +1156,12 @@ function ChatListView() {
           {filteredMock.length === 0 && filteredFb.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
               <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                   <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-[#e8f0dc] mb-1">No conversations found</h3>
-              <p className="text-[14px] text-[#71767b]">Start a new chat to begin messaging.</p>
+              <h3 className="text-lg font-bold text-[#f0eef6] mb-1">No conversations found</h3>
+              <p className="text-[14px] text-[#94a3b8]">Start a new chat to begin messaging.</p>
             </div>
           )}
         </div>

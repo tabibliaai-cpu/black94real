@@ -131,7 +131,7 @@ export function CheckoutView() {
           {STEPS.map((s, i) => (
             <div key={s} className="flex items-center gap-2 flex-1">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold transition-all ${
-                i <= step ? 'bg-[#a3d977] text-black' : 'bg-white/[0.06] text-[#71767b]'
+                i <= step ? 'bg-[#8b5cf6] text-black' : 'bg-white/[0.06] text-[#94a3b8]'
               }`}>
                 {i < step ? (
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
@@ -139,11 +139,11 @@ export function CheckoutView() {
                   </svg>
                 ) : i + 1}
               </div>
-              <span className={`text-[13px] font-medium hidden sm:inline ${i <= step ? 'text-[#e8f0dc]' : 'text-[#71767b]'}`}>
+              <span className={`text-[13px] font-medium hidden sm:inline ${i <= step ? 'text-[#f0eef6]' : 'text-[#94a3b8]'}`}>
                 {s}
               </span>
               {i < STEPS.length - 1 && (
-                <div className={`flex-1 h-0.5 rounded-full ${i < step ? 'bg-[#a3d977]' : 'bg-white/[0.06]'}`} />
+                <div className={`flex-1 h-0.5 rounded-full ${i < step ? 'bg-[#8b5cf6]' : 'bg-white/[0.06]'}`} />
               )}
             </div>
           ))}
@@ -155,7 +155,7 @@ export function CheckoutView() {
         {/* Step 0: Address */}
         {step === 0 && (
           <div className="space-y-3">
-            <h2 className="text-[16px] font-bold text-[#e8f0dc] mb-4">Shipping Address</h2>
+            <h2 className="text-[16px] font-bold text-[#f0eef6] mb-4">Shipping Address</h2>
             {[
               { key: 'name' as const, label: 'Full Name', placeholder: 'John Doe', type: 'text' },
               { key: 'phone' as const, label: 'Phone Number', placeholder: '10-digit number', type: 'tel' },
@@ -166,13 +166,13 @@ export function CheckoutView() {
               { key: 'pincode' as const, label: 'Pincode', placeholder: '6-digit pincode', type: 'text' },
             ].map((field) => (
               <div key={field.key} className="space-y-1.5">
-                <label className="text-[13px] text-[#71767b]">{field.label}</label>
+                <label className="text-[13px] text-[#94a3b8]">{field.label}</label>
                 <input
                   type={field.type}
                   value={address[field.key]}
                   onChange={(e) => setAddress((prev) => ({ ...prev, [field.key]: e.target.value }))}
                   placeholder={field.placeholder}
-                  className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                  className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                 />
               </div>
             ))}
@@ -182,7 +182,7 @@ export function CheckoutView() {
         {/* Step 1: Shipping */}
         {step === 1 && (
           <div className="space-y-3">
-            <h2 className="text-[16px] font-bold text-[#e8f0dc] mb-4">Shipping Method</h2>
+            <h2 className="text-[16px] font-bold text-[#f0eef6] mb-4">Shipping Method</h2>
             {partners.map((partner) => {
               const cost = calculateShipping(partner, 0.5, address.pincode)
               const isSelected = selectedPartner?.id === partner.id
@@ -195,26 +195,26 @@ export function CheckoutView() {
                   }}
                   className={`w-full p-4 rounded-xl border transition-all text-left ${
                     isSelected
-                      ? 'border-[#a3d977] bg-[#a3d977]/5'
-                      : 'border-white/[0.06] bg-[#0a0a0a] hover:border-white/[0.12]'
+                      ? 'border-[#8b5cf6] bg-[#8b5cf6]/5'
+                      : 'border-white/[0.06] bg-[#110f1a] hover:border-white/[0.12]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isSelected ? 'border-[#a3d977]' : 'border-[#536471]'
+                        isSelected ? 'border-[#8b5cf6]' : 'border-[#64748b]'
                       }`}>
-                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-[#a3d977]" />}
+                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]" />}
                       </div>
                       <div>
-                        <p className="text-[14px] font-semibold text-[#e8f0dc]">{partner.name}</p>
-                        <p className="text-[12px] text-[#71767b]">
+                        <p className="text-[14px] font-semibold text-[#f0eef6]">{partner.name}</p>
+                        <p className="text-[12px] text-[#94a3b8]">
                           {partner.estimatedDays} days
                           {partner.supportsCOD && ' • COD available'}
                         </p>
                       </div>
                     </div>
-                    <span className="text-[15px] font-bold text-[#a3d977]">
+                    <span className="text-[15px] font-bold text-[#8b5cf6]">
                       {cost === 0 ? 'FREE' : `₹${cost}`}
                     </span>
                   </div>
@@ -227,67 +227,67 @@ export function CheckoutView() {
         {/* Step 2: Confirm */}
         {step === 2 && (
           <div className="space-y-4">
-            <h2 className="text-[16px] font-bold text-[#e8f0dc] mb-4">Order Confirmation</h2>
+            <h2 className="text-[16px] font-bold text-[#f0eef6] mb-4">Order Confirmation</h2>
 
             {/* Address Summary */}
-            <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[13px] font-semibold text-[#71767b] uppercase tracking-wider">Shipping To</h3>
-                <button onClick={() => setStep(0)} className="text-[12px] text-[#a3d977]">Edit</button>
+                <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping To</h3>
+                <button onClick={() => setStep(0)} className="text-[12px] text-[#8b5cf6]">Edit</button>
               </div>
-              <p className="text-[14px] text-[#e8f0dc] font-medium">{address.name}</p>
-              <p className="text-[13px] text-[#71767b]">{address.line1}</p>
-              {address.line2 && <p className="text-[13px] text-[#71767b]">{address.line2}</p>}
-              <p className="text-[13px] text-[#71767b]">{address.city}, {address.state} - {address.pincode}</p>
-              <p className="text-[13px] text-[#71767b]">{address.phone}</p>
+              <p className="text-[14px] text-[#f0eef6] font-medium">{address.name}</p>
+              <p className="text-[13px] text-[#94a3b8]">{address.line1}</p>
+              {address.line2 && <p className="text-[13px] text-[#94a3b8]">{address.line2}</p>}
+              <p className="text-[13px] text-[#94a3b8]">{address.city}, {address.state} - {address.pincode}</p>
+              <p className="text-[13px] text-[#94a3b8]">{address.phone}</p>
             </div>
 
             {/* Shipping Summary */}
-            <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[13px] font-semibold text-[#71767b] uppercase tracking-wider">Shipping</h3>
-                <button onClick={() => setStep(1)} className="text-[12px] text-[#a3d977]">Edit</button>
+                <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping</h3>
+                <button onClick={() => setStep(1)} className="text-[12px] text-[#8b5cf6]">Edit</button>
               </div>
-              <p className="text-[14px] text-[#e8f0dc] font-medium">{selectedPartner?.name}</p>
-              <p className="text-[13px] text-[#71767b]">Estimated: {selectedPartner?.estimatedDays} days</p>
+              <p className="text-[14px] text-[#f0eef6] font-medium">{selectedPartner?.name}</p>
+              <p className="text-[13px] text-[#94a3b8]">Estimated: {selectedPartner?.estimatedDays} days</p>
             </div>
 
             {/* Items */}
-            <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-              <h3 className="text-[13px] font-semibold text-[#71767b] uppercase tracking-wider mb-3">Items ({items.length})</h3>
+            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+              <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider mb-3">Items ({items.length})</h3>
               <div className="space-y-3">
                 {items.map((item) => (
                   <div key={item.productId} className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                       <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-medium text-[#e8f0dc] line-clamp-1">{item.productName}</p>
-                      <p className="text-[12px] text-[#71767b]">Qty: {item.quantity}{item.variant ? ` • ${item.variant}` : ''}</p>
+                      <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                      <p className="text-[12px] text-[#94a3b8]">Qty: {item.quantity}{item.variant ? ` • ${item.variant}` : ''}</p>
                     </div>
-                    <span className="text-[13px] font-semibold text-[#e8f0dc]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                    <span className="text-[13px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Totals */}
-            <div className="p-4 rounded-xl bg-[#0a0a0a] border border-white/[0.06] space-y-2">
+            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06] space-y-2">
               <div className="flex justify-between">
-                <span className="text-[13px] text-[#71767b]">Subtotal</span>
-                <span className="text-[13px] text-[#e8f0dc]">₹{subtotal.toLocaleString()}</span>
+                <span className="text-[13px] text-[#94a3b8]">Subtotal</span>
+                <span className="text-[13px] text-[#f0eef6]">₹{subtotal.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[13px] text-[#71767b]">Shipping</span>
-                <span className="text-[13px] text-[#e8f0dc]">{shippingCost === 0 ? 'FREE' : `₹${shippingCost}`}</span>
+                <span className="text-[13px] text-[#94a3b8]">Shipping</span>
+                <span className="text-[13px] text-[#f0eef6]">{shippingCost === 0 ? 'FREE' : `₹${shippingCost}`}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[13px] text-[#71767b]">Tax (5%)</span>
-                <span className="text-[13px] text-[#e8f0dc]">₹{tax.toLocaleString()}</span>
+                <span className="text-[13px] text-[#94a3b8]">Tax (5%)</span>
+                <span className="text-[13px] text-[#f0eef6]">₹{tax.toLocaleString()}</span>
               </div>
               <div className="border-t border-white/[0.06] pt-2 flex justify-between">
-                <span className="text-[16px] font-bold text-[#e8f0dc]">Total</span>
-                <span className="text-[20px] font-bold text-[#a3d977]">₹{total.toLocaleString()}</span>
+                <span className="text-[16px] font-bold text-[#f0eef6]">Total</span>
+                <span className="text-[20px] font-bold text-[#8b5cf6]">₹{total.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -295,12 +295,12 @@ export function CheckoutView() {
       </div>
 
       {/* Action Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 bg-black/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#09080f]/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <div className="flex gap-3">
           {step > 0 && (
             <button
               onClick={() => setStep(step - 1)}
-              className="px-6 py-3.5 rounded-full border border-white/[0.12] text-[#e8f0dc] font-bold text-[15px] hover:bg-white/[0.06] transition-colors"
+              className="px-6 py-3.5 rounded-full border border-white/[0.12] text-[#f0eef6] font-bold text-[15px] hover:bg-white/[0.06] transition-colors"
             >
               Back
             </button>
@@ -308,7 +308,7 @@ export function CheckoutView() {
           {step < 2 ? (
             <button
               onClick={handleNext}
-              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[15px] shadow-lg shadow-[#a3d977]/20 active:scale-[0.98] transition-all"
+              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all"
             >
               Continue
             </button>
@@ -316,7 +316,7 @@ export function CheckoutView() {
             <button
               onClick={handlePlaceOrder}
               disabled={placing}
-              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[15px] shadow-lg shadow-[#a3d977]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {placing ? (
                 <span className="flex items-center justify-center gap-2">

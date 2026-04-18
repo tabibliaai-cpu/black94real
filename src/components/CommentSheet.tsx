@@ -170,12 +170,12 @@ export function CommentSheet({
     <div className="fixed inset-0 z-[100]">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-[#09080f]/60 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
       {/* Sheet */}
-      <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] flex flex-col bg-[#0a0a0a] border-t border-white/[0.08] rounded-t-2xl animate-comment-slide-up safe-area-bottom">
+      <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] flex flex-col bg-[#110f1a] border-t border-white/[0.08] rounded-t-2xl animate-comment-slide-up safe-area-bottom">
         {/* Handle bar */}
         <div className="flex justify-center pt-2.5 pb-1 shrink-0">
           <div className="w-9 h-1 rounded-full bg-white/[0.2]" />
@@ -187,24 +187,24 @@ export function CommentSheet({
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
             </svg>
           </button>
-          <h3 className="text-[15px] font-bold text-[#e8f0dc]">Post</h3>
+          <h3 className="text-[15px] font-bold text-[#f0eef6]">Post</h3>
           <div className="w-8" />
         </div>
 
         {/* Original post preview */}
         <div className="px-4 py-3 border-b border-white/[0.06] shrink-0">
           <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#a3d977] to-[#6ba84a] flex items-center justify-center text-[10px] text-black font-bold">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-[10px] text-black font-bold">
               {postAuthor.charAt(0).toUpperCase()}
             </div>
-            <span className="text-[13px] font-semibold text-[#e8f0dc]">{postAuthor}</span>
+            <span className="text-[13px] font-semibold text-[#f0eef6]">{postAuthor}</span>
           </div>
           {postCaption && (
-            <p className="text-[14px] text-[#71767b] line-clamp-2 leading-relaxed">{postCaption}</p>
+            <p className="text-[14px] text-[#94a3b8] line-clamp-2 leading-relaxed">{postCaption}</p>
           )}
         </div>
 
@@ -212,11 +212,11 @@ export function CommentSheet({
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-2 no-scrollbar">
           {comments.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <svg className="w-10 h-10 text-[#536471] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <svg className="w-10 h-10 text-[#64748b] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <p className="text-[14px] text-[#71767b]">No comments yet</p>
-              <p className="text-[13px] text-[#536471] mt-1">Be the first to share your thoughts</p>
+              <p className="text-[14px] text-[#94a3b8]">No comments yet</p>
+              <p className="text-[13px] text-[#64748b] mt-1">Be the first to share your thoughts</p>
             </div>
           ) : (
             comments.map((comment) => (
@@ -226,7 +226,7 @@ export function CommentSheet({
                   {comment.authorProfileImage ? (
                     <img src={comment.authorProfileImage} alt="" className="w-8 h-8 rounded-full object-cover" />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#a3d977]/30 to-[#a3d977]/10 flex items-center justify-center text-[12px] text-[#a3d977] font-bold border border-[#a3d977]/20">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6]/30 to-[#8b5cf6]/10 flex items-center justify-center text-[12px] text-[#8b5cf6] font-bold border border-[#8b5cf6]/20">
                       {(comment.authorDisplayName || comment.authorUsername).charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -235,13 +235,13 @@ export function CommentSheet({
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[14px] font-bold text-[#e8f0dc] truncate">
+                    <span className="text-[14px] font-bold text-[#f0eef6] truncate">
                       {comment.authorDisplayName || comment.authorUsername}
                     </span>
-                    <span className="text-[13px] text-[#536471] shrink-0">@{comment.authorUsername}</span>
-                    <span className="text-[13px] text-[#536471] shrink-0">· {timeAgo(comment.createdAt)}</span>
+                    <span className="text-[13px] text-[#64748b] shrink-0">@{comment.authorUsername}</span>
+                    <span className="text-[13px] text-[#64748b] shrink-0">· {timeAgo(comment.createdAt)}</span>
                   </div>
-                  <p className="text-[15px] text-[#e8f0dc] mt-0.5 whitespace-pre-wrap break-words leading-[20px]">
+                  <p className="text-[15px] text-[#f0eef6] mt-0.5 whitespace-pre-wrap break-words leading-[20px]">
                     {comment.content}
                   </p>
 
@@ -257,15 +257,15 @@ export function CommentSheet({
                             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                           </svg>
                         ) : (
-                          <svg className="w-[14px] h-[14px] text-[#536471] group-hover:text-[#f91880]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                          <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#f91880]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                           </svg>
                         )}
                       </div>
                     </button>
                     <button className="flex items-center gap-1 group">
-                      <div className="p-1.5 rounded-full group-hover:bg-[#a3d977]/10 transition-colors">
-                        <svg className="w-[14px] h-[14px] text-[#536471] group-hover:text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                      <div className="p-1.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+                        <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                           <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
@@ -279,28 +279,28 @@ export function CommentSheet({
           {/* Sending indicator */}
           {sending && (
             <div className="flex items-center gap-2 py-3 animate-fade-in">
-              <div className="w-2 h-2 rounded-full bg-[#a3d977] animate-pulse-soft" />
-              <span className="text-[13px] text-[#536471]">Posting...</span>
+              <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse-soft" />
+              <span className="text-[13px] text-[#64748b]">Posting...</span>
             </div>
           )}
         </div>
 
         {/* Input bar */}
-        <div className="shrink-0 px-4 py-3 border-t border-white/[0.06] bg-[#0a0a0a]">
+        <div className="shrink-0 px-4 py-3 border-t border-white/[0.06] bg-[#110f1a]">
           <div className="flex items-end gap-3">
             {/* User avatar */}
             <div className="shrink-0 mb-0.5">
               {userProfileImage ? (
                 <img src={userProfileImage} alt="" className="w-8 h-8 rounded-full object-cover" />
               ) : (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#a3d977] to-[#6ba84a] flex items-center justify-center text-[10px] text-black font-bold">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-[10px] text-black font-bold">
                   {(userDisplayName || 'Y').charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
 
             {/* Input */}
-            <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#a3d977]/40 transition-all px-4 py-2.5">
+            <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-all px-4 py-2.5">
               <input
                 ref={inputRef}
                 type="text"
@@ -308,7 +308,7 @@ export function CommentSheet({
                 onChange={(e) => setNewComment(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
                 placeholder="Post your reply..."
-                className="w-full bg-transparent text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none"
+                className="w-full bg-transparent text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none"
               />
             </div>
 
@@ -319,8 +319,8 @@ export function CommentSheet({
               className={cn(
                 'w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 mb-0.5',
                 newComment.trim()
-                  ? 'bg-gradient-to-br from-[#a3d977] to-[#8cc65e] text-black shadow-md hover:scale-[1.05] active:scale-90'
-                  : 'bg-white/[0.06] text-[#536471]'
+                  ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black shadow-md hover:scale-[1.05] active:scale-90'
+                  : 'bg-white/[0.06] text-[#64748b]'
               )}
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">

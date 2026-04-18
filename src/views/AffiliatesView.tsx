@@ -101,36 +101,36 @@ export function AffiliatesView() {
           onClick={() => navigate('business-dashboard')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.06] transition-colors"
         >
-          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="text-xl font-bold text-[#e8f0dc]">Affiliate Badges</h1>
+        <h1 className="text-xl font-bold text-[#f0eef6]">Affiliate Badges</h1>
       </div>
 
       {/* ── Plan Info Card ──────────────────────────────── */}
-      <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4">
+      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-[#a3d977]/10 flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center">
+            <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z" />
               <path d="M2 17l10 5 10-5" />
               <path d="M2 12l10 5 10-5" />
             </svg>
           </div>
           <div>
-            <p className="text-[15px] font-semibold text-[#e8f0dc]">Business Plan</p>
-            <p className="text-[13px] text-[#71767b]">2 free badges included</p>
+            <p className="text-[15px] font-semibold text-[#f0eef6]">Business Plan</p>
+            <p className="text-[13px] text-[#94a3b8]">2 free badges included</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] transition-all duration-500"
               style={{ width: `${Math.min((freeBadgesUsed / FREE_BADGES) * 100, 100)}%` }}
             />
           </div>
-          <span className="text-[13px] text-[#71767b] shrink-0">
+          <span className="text-[13px] text-[#94a3b8] shrink-0">
             {freeBadgesUsed}/{FREE_BADGES} used
           </span>
         </div>
@@ -139,28 +139,28 @@ export function AffiliatesView() {
       {/* ── Active Affiliates ───────────────────────────── */}
       {activeAffiliates.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-[15px] font-semibold text-[#e8f0dc]">Active Affiliates</h2>
+          <h2 className="text-[15px] font-semibold text-[#f0eef6]">Active Affiliates</h2>
           <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
             {activeAffiliates.map((affiliate) => (
               <div
                 key={affiliate.id}
-                className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4"
+                className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 rounded-full bg-[#a3d977]/15 flex items-center justify-center shrink-0">
-                    <span className="text-[14px] font-bold text-[#a3d977]">
+                  <div className="w-11 h-11 rounded-full bg-[#8b5cf6]/15 flex items-center justify-center shrink-0">
+                    <span className="text-[14px] font-bold text-[#8b5cf6]">
                       {getInitials(affiliate.name)}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-[15px] font-semibold text-[#e8f0dc] truncate">
+                      <p className="text-[15px] font-semibold text-[#f0eef6] truncate">
                         {affiliate.name}
                       </p>
                     </div>
-                    <p className="text-[13px] text-[#536471] truncate">{affiliate.email}</p>
+                    <p className="text-[13px] text-[#64748b] truncate">{affiliate.email}</p>
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#a3d977]/10 border border-[#a3d977]/20 text-[#a3d977] text-[12px] font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 text-[#8b5cf6] text-[12px] font-medium">
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                         </svg>
@@ -173,18 +173,18 @@ export function AffiliatesView() {
                           type="text"
                           value={editRole}
                           onChange={(e) => setEditRole(e.target.value)}
-                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-1.5 text-[14px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-1.5 text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                           placeholder="Role/Title"
                         />
                         <button
                           onClick={() => handleEditSave(affiliate.id)}
-                          className="px-3 py-1.5 rounded-lg bg-[#a3d977] text-black text-[13px] font-semibold hover:bg-[#8cc65e] transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-[#8b5cf6] text-black text-[13px] font-semibold hover:bg-[#7c3aed] transition-colors"
                         >
                           Save
                         </button>
                         <button
                           onClick={() => setEditingId(null)}
-                          className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-[#71767b] text-[13px] font-medium hover:bg-white/[0.1] transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-[#94a3b8] text-[13px] font-medium hover:bg-white/[0.1] transition-colors"
                         >
                           Cancel
                         </button>
@@ -192,10 +192,10 @@ export function AffiliatesView() {
                     ) : (
                       <div className="mt-2 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="text-[13px] text-[#71767b]">
+                          <span className="text-[13px] text-[#94a3b8]">
                             {affiliate.role}
                           </span>
-                          <span className="text-[13px] text-[#536471]">
+                          <span className="text-[13px] text-[#64748b]">
                             Since {formatDate(affiliate.badgeAssignedAt)}
                           </span>
                         </div>
@@ -208,7 +208,7 @@ export function AffiliatesView() {
                             setEditingId(affiliate.id)
                             setEditRole(affiliate.role)
                           }}
-                          className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-[#e8f0dc] text-[13px] font-medium hover:bg-white/[0.1] transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-[#f0eef6] text-[13px] font-medium hover:bg-white/[0.1] transition-colors"
                         >
                           Edit
                         </button>
@@ -230,36 +230,36 @@ export function AffiliatesView() {
 
       {/* ── Add Affiliate Section ───────────────────────── */}
       <div className="space-y-3">
-        <h2 className="text-[15px] font-semibold text-[#e8f0dc]">Add New Affiliate</h2>
-        <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4 space-y-3">
+        <h2 className="text-[15px] font-semibold text-[#f0eef6]">Add New Affiliate</h2>
+        <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Full Name</label>
+            <label className="text-[13px] text-[#94a3b8]">Full Name</label>
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Enter full name"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Email Address</label>
+            <label className="text-[13px] text-[#94a3b8]">Email Address</label>
             <input
               type="email"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               placeholder="Enter email address"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[13px] text-[#71767b]">Role / Title</label>
+            <label className="text-[13px] text-[#94a3b8]">Role / Title</label>
             <input
               type="text"
               value={newRole}
               onChange={(e) => setNewRole(e.target.value)}
               placeholder="e.g. Sales Lead, Account Executive"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
           {!allFreeUsed ? (
@@ -269,15 +269,15 @@ export function AffiliatesView() {
               className={cn(
                 'w-full py-2.5 rounded-xl text-[15px] font-bold transition-all duration-200',
                 newName.trim() && newEmail.trim() && newRole.trim()
-                  ? 'bg-[#a3d977] text-black hover:bg-[#8cc65e] active:scale-[0.98]'
-                  : 'bg-white/[0.06] text-[#536471] cursor-not-allowed'
+                  ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.98]'
+                  : 'bg-white/[0.06] text-[#64748b] cursor-not-allowed'
               )}
             >
               Assign Badge ({freeBadgesRemaining} free remaining)
             </button>
           ) : (
             <div className="text-center py-2">
-              <p className="text-[13px] text-[#71767b] mb-1">No free badges remaining</p>
+              <p className="text-[13px] text-[#94a3b8] mb-1">No free badges remaining</p>
             </div>
           )}
         </div>
@@ -285,7 +285,7 @@ export function AffiliatesView() {
 
       {/* ── Purchase Section ────────────────────────────── */}
       {allFreeUsed && (
-        <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4 space-y-4">
+        <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#ffd700]/10 flex items-center justify-center">
               <svg className="w-5 h-5 text-[#ffd700]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -294,8 +294,8 @@ export function AffiliatesView() {
               </svg>
             </div>
             <div>
-              <p className="text-[15px] font-semibold text-[#e8f0dc]">Need more badges?</p>
-              <p className="text-[13px] text-[#71767b]">
+              <p className="text-[15px] font-semibold text-[#f0eef6]">Need more badges?</p>
+              <p className="text-[13px] text-[#94a3b8]">
                 ₹{BADGE_COST} per additional badge
               </p>
             </div>
@@ -303,22 +303,22 @@ export function AffiliatesView() {
 
           {/* Quantity Selector */}
           <div className="flex items-center justify-between">
-            <span className="text-[14px] text-[#71767b]">Quantity</span>
+            <span className="text-[14px] text-[#94a3b8]">Quantity</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setPurchaseQty((q) => Math.max(1, q - 1))}
-                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#e8f0dc] hover:bg-white/[0.06] transition-colors"
+                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#f0eef6] hover:bg-white/[0.06] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                   <path d="M5 12h14" />
                 </svg>
               </button>
-              <span className="text-[18px] font-bold text-[#e8f0dc] w-8 text-center">
+              <span className="text-[18px] font-bold text-[#f0eef6] w-8 text-center">
                 {purchaseQty}
               </span>
               <button
                 onClick={() => setPurchaseQty((q) => Math.min(10, q + 1))}
-                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#e8f0dc] hover:bg-white/[0.06] transition-colors"
+                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#f0eef6] hover:bg-white/[0.06] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                   <path d="M12 5v14M5 12h14" />
@@ -329,7 +329,7 @@ export function AffiliatesView() {
 
           {/* Total */}
           <div className="flex items-center justify-between py-2 border-t border-white/[0.06]">
-            <span className="text-[14px] text-[#71767b]">Total</span>
+            <span className="text-[14px] text-[#94a3b8]">Total</span>
             <span className="text-[18px] font-bold text-[#ffd700]">
               ₹{BADGE_COST * purchaseQty}
             </span>
@@ -337,12 +337,12 @@ export function AffiliatesView() {
 
           <button
             onClick={handlePurchase}
-            className="w-full py-2.5 rounded-xl bg-[#a3d977] text-black text-[15px] font-bold hover:bg-[#8cc65e] active:scale-[0.98] transition-all duration-200"
+            className="w-full py-2.5 rounded-xl bg-[#8b5cf6] text-black text-[15px] font-bold hover:bg-[#7c3aed] active:scale-[0.98] transition-all duration-200"
           >
             Purchase
           </button>
 
-          <p className="text-[12px] text-[#536471] text-center">
+          <p className="text-[12px] text-[#64748b] text-center">
             Badges will be added to your account immediately after payment
           </p>
         </div>

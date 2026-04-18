@@ -78,14 +78,14 @@ export function BusinessOrdersView() {
   return (
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       {/* Revenue Summary */}
-      <div className="mx-4 mt-3 p-4 rounded-xl bg-gradient-to-r from-[#a3d977]/10 via-transparent to-[#ffd700]/5 border border-[#a3d977]/20">
+      <div className="mx-4 mt-3 p-4 rounded-xl bg-gradient-to-r from-[#8b5cf6]/10 via-transparent to-[#ffd700]/5 border border-[#8b5cf6]/20">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-[11px] text-[#71767b] uppercase tracking-wider">Total Revenue</p>
-            <p className="text-[22px] font-bold text-[#a3d977]">₹{totalRevenue.toLocaleString()}</p>
+            <p className="text-[11px] text-[#94a3b8] uppercase tracking-wider">Total Revenue</p>
+            <p className="text-[22px] font-bold text-[#8b5cf6]">₹{totalRevenue.toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-[11px] text-[#71767b] uppercase tracking-wider">Pending Orders</p>
+            <p className="text-[11px] text-[#94a3b8] uppercase tracking-wider">Pending Orders</p>
             <p className="text-[22px] font-bold text-amber-400">{pendingOrders}</p>
           </div>
         </div>
@@ -99,8 +99,8 @@ export function BusinessOrdersView() {
             onClick={() => setActiveFilter(f)}
             className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all ${
               activeFilter === f
-                ? 'bg-[#a3d977] text-black'
-                : 'bg-white/[0.06] text-[#71767b] hover:text-[#e8f0dc]'
+                ? 'bg-[#8b5cf6] text-black'
+                : 'bg-white/[0.06] text-[#94a3b8] hover:text-[#f0eef6]'
             }`}
           >
             {f}
@@ -112,11 +112,11 @@ export function BusinessOrdersView() {
       <div className="px-4 mt-4 space-y-3">
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
           </div>
         ) : filteredOrders.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-[14px] text-[#71767b]">No orders found</p>
+            <p className="text-[14px] text-[#94a3b8]">No orders found</p>
           </div>
         ) : (
           filteredOrders.map((order) => {
@@ -125,7 +125,7 @@ export function BusinessOrdersView() {
             const isExpanded = expandedOrder === order.id
 
             return (
-              <div key={order.id} className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] overflow-hidden">
+              <div key={order.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden">
                 {/* Order Header */}
                 <button
                   onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
@@ -133,19 +133,19 @@ export function BusinessOrdersView() {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-[12px] text-[#71767b] font-mono">#{order.id.slice(-8).toUpperCase()}</span>
+                      <span className="text-[12px] text-[#94a3b8] font-mono">#{order.id.slice(-8).toUpperCase()}</span>
                       <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full capitalize ${STATUS_OPTIONS.find((s) => s.value === order.status)?.color || ''}`}>
                         {order.status}
                       </span>
                     </div>
-                    <svg className={`w-4 h-4 text-[#71767b] transition-transform ${isExpanded ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <svg className={`w-4 h-4 text-[#94a3b8] transition-transform ${isExpanded ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                       <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <p className="text-[13px] text-[#e8f0dc] font-medium">{order.buyerName}</p>
+                  <p className="text-[13px] text-[#f0eef6] font-medium">{order.buyerName}</p>
                   <div className="flex items-center justify-between mt-1">
-                    <p className="text-[12px] text-[#71767b]">{new Date(order.createdAt).toLocaleDateString()}</p>
-                    <p className="text-[15px] font-bold text-[#a3d977]">₹{order.total.toLocaleString()}</p>
+                    <p className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</p>
+                    <p className="text-[15px] font-bold text-[#8b5cf6]">₹{order.total.toLocaleString()}</p>
                   </div>
                 </button>
 
@@ -154,18 +154,18 @@ export function BusinessOrdersView() {
                   <div className="border-t border-white/[0.06] p-4 space-y-4">
                     {/* Items */}
                     <div>
-                      <h4 className="text-[12px] text-[#71767b] uppercase tracking-wider mb-2">Items</h4>
+                      <h4 className="text-[12px] text-[#94a3b8] uppercase tracking-wider mb-2">Items</h4>
                       <div className="space-y-2">
                         {items.map((item, i) => (
                           <div key={i} className="flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                               <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-[12px] text-[#e8f0dc] line-clamp-1">{item.productName}</p>
-                              <p className="text-[11px] text-[#71767b]">x{item.quantity}</p>
+                              <p className="text-[12px] text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                              <p className="text-[11px] text-[#94a3b8]">x{item.quantity}</p>
                             </div>
-                            <span className="text-[12px] font-semibold text-[#e8f0dc]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                            <span className="text-[12px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
                           </div>
                         ))}
                       </div>
@@ -173,7 +173,7 @@ export function BusinessOrdersView() {
 
                     {/* Status Update */}
                     <div>
-                      <h4 className="text-[12px] text-[#71767b] uppercase tracking-wider mb-2">Update Status</h4>
+                      <h4 className="text-[12px] text-[#94a3b8] uppercase tracking-wider mb-2">Update Status</h4>
                       <div className="flex flex-wrap gap-2">
                         {STATUS_OPTIONS.map((opt) => (
                           <button
@@ -183,7 +183,7 @@ export function BusinessOrdersView() {
                             className={`px-3 py-1.5 rounded-full text-[12px] font-medium transition-all ${
                               order.status === opt.value
                                 ? opt.color
-                                : 'bg-white/[0.06] text-[#71767b] hover:bg-white/[0.1] disabled:opacity-50'
+                                : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1] disabled:opacity-50'
                             }`}
                           >
                             {updating === order.id ? '...' : opt.label}
@@ -194,27 +194,27 @@ export function BusinessOrdersView() {
 
                     {/* Tracking Number */}
                     <div>
-                      <h4 className="text-[12px] text-[#71767b] uppercase tracking-wider mb-2">Tracking Number</h4>
+                      <h4 className="text-[12px] text-[#94a3b8] uppercase tracking-wider mb-2">Tracking Number</h4>
                       <div className="flex gap-2">
                         <input
                           type="text"
                           value={trackingInput[order.id] || ''}
                           onChange={(e) => setTrackingInput((prev) => ({ ...prev, [order.id]: e.target.value }))}
                           placeholder={order.trackingNumber || 'Enter tracking number'}
-                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[13px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[13px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                         />
                         <button
                           onClick={() => {
                             if (!trackingInput[order.id]?.trim()) return
                             handleStatusChange(order.id, order.status)
                           }}
-                          className="px-4 py-2 rounded-lg bg-[#a3d977]/10 text-[#a3d977] text-[13px] font-medium hover:bg-[#a3d977]/20 transition-colors"
+                          className="px-4 py-2 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] text-[13px] font-medium hover:bg-[#8b5cf6]/20 transition-colors"
                         >
                           Save
                         </button>
                       </div>
                       {order.trackingNumber && (
-                        <p className="text-[11px] text-[#71767b] mt-1">Current: {order.trackingNumber} ({order.trackingPartner})</p>
+                        <p className="text-[11px] text-[#94a3b8] mt-1">Current: {order.trackingNumber} ({order.trackingPartner})</p>
                       )}
                     </div>
                   </div>

@@ -188,28 +188,28 @@ export function ProfileView() {
   return (
     <div>
       {/* Cover */}
-      <div className="h-32 bg-[#1a1a1a] relative overflow-hidden">
+      <div className="h-32 bg-[#18152b] relative overflow-hidden">
         {coverImage ? (
           <img src={coverImage} alt="" className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#1a2a1a] to-[#0a0a0a]" />
+          <div className="w-full h-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a]" />
         )}
       </div>
 
       {/* Profile header */}
-      <div className="px-4 pb-3 border-b border-white/[0.06]">
+      <div className="px-5 pb-4 border-b border-white/[0.06]">
         <div className="flex items-end justify-between -mt-8 mb-3">
           <PAvatar
             src={profileImage}
             name={displayName}
             size={80}
             verified={isVerified}
-            className="ring-4 ring-black"
+            className="ring-4 ring-[#09080f]"
           />
           {isOwnProfile ? (
             <button
               onClick={() => navigate('edit-profile')}
-              className="px-5 py-1.5 rounded-full border border-[#536471] text-[15px] font-bold text-[#e8f0dc] hover:bg-white/[0.06] transition-colors"
+              className="px-5 py-1.5 rounded-full border border-[#64748b] text-[15px] font-bold text-[#f0eef6] hover:bg-white/[0.06] transition-colors"
             >
               Edit profile
             </button>
@@ -218,10 +218,10 @@ export function ProfileView() {
               <button
                 onClick={handleToggleFollow}
                 className={cn(
-                  'px-5 py-1.5 rounded-full text-[15px] font-bold transition-colors',
+                  'px-6 py-2 rounded-full text-[15px] font-bold transition-colors',
                   isFollowing
-                    ? 'border border-[#536471] text-[#e8f0dc] hover:border-red-500 hover:text-red-500 hover:bg-red-500/10'
-                    : 'bg-[#e8f0dc] text-black hover:bg-gray-200'
+                    ? 'border border-[#64748b] text-[#f0eef6] hover:border-red-500 hover:text-red-500 hover:bg-red-500/10'
+                    : 'bg-[#f0eef6] text-black hover:bg-gray-200'
                 )}
               >
                 {isFollowing ? 'Following' : 'Follow'}
@@ -229,10 +229,10 @@ export function ProfileView() {
               <button
                 onClick={handleMessage}
                 disabled={messaging}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-[#a3d977]/40 text-[15px] font-bold text-[#a3d977] hover:bg-[#a3d977]/10 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-full border border-[#8b5cf6]/40 text-[15px] font-bold text-[#8b5cf6] hover:bg-[#8b5cf6]/10 transition-colors disabled:opacity-50 disabled:pointer-events-none"
               >
                 {messaging ? (
-                  <div className="w-4 h-4 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
                 ) : (
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
@@ -245,42 +245,42 @@ export function ProfileView() {
         </div>
 
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-[#e8f0dc]">{displayName}</h2>
+          <h2 className="text-xl font-bold text-[#f0eef6]">{displayName}</h2>
           {isBusinessAccount && (
-            <span className="flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#a3d977]/15 text-[#a3d977]">
+            <span className="flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6]">
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
               Business
             </span>
           )}
         </div>
-        <p className="text-[15px] text-[#71767b]">@{username}</p>
+        <p className="text-[15px] text-[#94a3b8]">@{username}</p>
         {isBusinessAccount && trial && trial.isActive && (
           <div className="flex items-center gap-1.5 mt-1.5">
-            <svg className={cn('w-3.5 h-3.5', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#a3d977]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span className={cn('text-[12px] font-medium', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#71767b]')}>
+            <svg className={cn('w-3.5 h-3.5', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#8b5cf6]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span className={cn('text-[12px] font-medium', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#94a3b8]')}>
               Free Trial — {trial.daysRemaining} day{trial.daysRemaining !== 1 ? 's' : ''} remaining
             </span>
           </div>
         )}
 
         {bio && (
-          <p className="text-[15px] text-[#e8f0dc] mt-2 leading-relaxed">{bio}</p>
+          <p className="text-[15px] text-[#f0eef6] mt-2 leading-relaxed">{bio}</p>
         )}
 
-        <div className="flex items-center gap-4 mt-3 text-[14px]">
-          <span className="text-[#e8f0dc]">
+        <div className="flex items-center gap-5 mt-4 text-[14px]">
+          <span className="text-[#f0eef6]">
             <span className="font-bold">{followingCount}</span>{' '}
-            <span className="text-[#71767b]">Following</span>
+            <span className="text-[#94a3b8]">Following</span>
           </span>
-          <span className="text-[#e8f0dc]">
+          <span className="text-[#f0eef6]">
             <span className="font-bold">{followerCount}</span>{' '}
-            <span className="text-[#71767b]">Followers</span>
+            <span className="text-[#94a3b8]">Followers</span>
           </span>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="sticky top-[53px] z-20 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-[53px] z-20 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex">
           {(showStoreTab ? ['posts', 'store', 'likes'] : ['posts', 'replies', 'likes'] as const).map((tab) => (
             <button
@@ -288,12 +288,12 @@ export function ProfileView() {
               onClick={() => setActiveTab(tab)}
               className={cn(
                 'flex-1 py-3.5 text-[15px] font-medium relative transition-colors capitalize',
-                activeTab === tab ? 'text-[#e8f0dc] font-bold' : 'text-[#71767b]'
+                activeTab === tab ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
               )}
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#a3d977] rounded-full animate-tab-indicator" />
+                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#8b5cf6] rounded-full animate-tab-indicator" />
               )}
             </button>
           ))}
@@ -304,22 +304,22 @@ export function ProfileView() {
       {activeTab === 'store' ? (
         <>
           {productsLoading ? (
-            <div className="grid grid-cols-2 gap-3 p-4">
+            <div className="grid grid-cols-2 gap-3 p-5">
               {[0, 1, 2, 3].map((i) => (
                 <div key={i} className="rounded-xl bg-white/[0.06] aspect-square animate-pulse" />
               ))}
             </div>
           ) : products.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
-              <svg className="w-12 h-12 text-[#71767b] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <svg className="w-12 h-12 text-[#94a3b8] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M3 6h18" strokeLinecap="round" />
                 <path d="M16 10a4 4 0 01-8 0" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <p className="text-[15px] text-[#71767b]">No products listed yet</p>
+              <p className="text-[15px] text-[#94a3b8]">No products listed yet</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 p-4">
+            <div className="grid grid-cols-2 gap-3 p-5">
               {products.map((p: any) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -329,7 +329,7 @@ export function ProfileView() {
             <div className="flex flex-col items-center gap-3 pt-4 pb-24">
               <button
                 onClick={() => navigate('store-dashboard')}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[14px] shadow-lg shadow-[#a3d977]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[14px] shadow-lg shadow-[#8b5cf6]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -340,7 +340,7 @@ export function ProfileView() {
               </button>
               <button
                 onClick={() => navigate('add-product')}
-                className="flex items-center gap-1.5 text-[13px] font-medium text-[#a3d977] hover:text-[#c4e899] transition-colors"
+                className="flex items-center gap-1.5 text-[13px] font-medium text-[#8b5cf6] hover:text-[#c4e899] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                   <path d="M12 5v14M5 12h14" />
@@ -352,7 +352,7 @@ export function ProfileView() {
         </>
       ) : posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
-          <p className="text-[15px] text-[#71767b]">No posts yet</p>
+          <p className="text-[15px] text-[#94a3b8]">No posts yet</p>
         </div>
       ) : (
         posts.map((post: any) => (

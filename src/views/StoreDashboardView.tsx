@@ -53,17 +53,17 @@ const STATUS_COLORS: Record<string, string> = {
 
 function DashHeader({ title, onBack }: { title: string; onBack: () => void }) {
   return (
-    <div className="sticky top-0 z-40 bg-black/95 backdrop-blur-xl border-b border-white/[0.08]">
+    <div className="sticky top-0 z-40 bg-[#09080f]/95 backdrop-blur-xl border-b border-white/[0.08]">
       <div className="flex items-center gap-3 px-4 h-[53px]">
         <button
           onClick={onBack}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors -ml-1"
         >
-          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
-        <h1 className="text-[17px] font-bold text-[#e8f0dc]">{title}</h1>
+        <h1 className="text-[17px] font-bold text-[#f0eef6]">{title}</h1>
       </div>
     </div>
   )
@@ -78,7 +78,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'overview',
     label: 'Overview',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
       </svg>
     ),
@@ -87,7 +87,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'products',
     label: 'Products',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" />
       </svg>
     ),
@@ -96,7 +96,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'inventory',
     label: 'Inventory',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
       </svg>
     ),
@@ -105,7 +105,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'orders',
     label: 'Orders',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" />
       </svg>
     ),
@@ -114,7 +114,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'settings',
     label: 'Settings',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
       </svg>
     ),
@@ -132,8 +132,8 @@ function SectionTabs({ active, onChange }: { active: DashTab; onChange: (tab: Da
             className={cn(
               'flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold whitespace-nowrap transition-all flex-shrink-0',
               active === tab.key
-                ? 'bg-[#a3d977] text-black shadow-md shadow-[#a3d977]/20'
-                : 'text-[#71767b] hover:text-[#e8f0dc]'
+                ? 'bg-[#8b5cf6] text-black shadow-md shadow-[#8b5cf6]/20'
+                : 'text-[#94a3b8] hover:text-[#f0eef6]'
             )}
           >
             {tab.icon(active === tab.key)}
@@ -163,7 +163,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
   const recentOrders = orders.slice(0, 3)
 
   const stats = [
-    { label: 'Revenue', value: `₹${totalRevenue.toLocaleString()}`, icon: '💰', color: 'from-[#a3d977]/20 to-[#a3d977]/5 border-[#a3d977]/20' },
+    { label: 'Revenue', value: `₹${totalRevenue.toLocaleString()}`, icon: '💰', color: 'from-[#8b5cf6]/20 to-[#8b5cf6]/5 border-[#8b5cf6]/20' },
     { label: 'Products', value: products.length.toString(), icon: '📦', color: 'from-blue-500/20 to-blue-500/5 border-blue-500/20' },
     { label: 'Total Sold', value: totalSold.toString(), icon: '🛒', color: 'from-purple-500/20 to-purple-500/5 border-purple-500/20' },
     { label: 'Active Orders', value: activeOrders.toString(), icon: '📋', color: 'from-amber-500/20 to-amber-500/5 border-amber-500/20' },
@@ -184,18 +184,18 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
             )}
           >
             <span className="text-lg">{s.icon}</span>
-            <p className="text-[20px] font-bold text-[#e8f0dc] mt-1">{s.value}</p>
-            <p className="text-[11px] text-[#71767b]">{s.label}</p>
+            <p className="text-[20px] font-bold text-[#f0eef6] mt-1">{s.value}</p>
+            <p className="text-[11px] text-[#94a3b8]">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Quick Actions */}
       <div>
-        <h3 className="text-[15px] font-bold text-[#e8f0dc] mb-3">Quick Actions</h3>
+        <h3 className="text-[15px] font-bold text-[#f0eef6] mb-3">Quick Actions</h3>
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Add Product', view: 'add-product' as const, icon: '➕', color: 'bg-[#a3d977]/10 border-[#a3d977]/20 text-[#a3d977]' },
+            { label: 'Add Product', view: 'add-product' as const, icon: '➕', color: 'bg-[#8b5cf6]/10 border-[#8b5cf6]/20 text-[#8b5cf6]' },
             { label: 'View Orders', view: 'business-orders' as const, icon: '📋', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
             { label: 'Inventory', view: '' as const, icon: '📦', color: 'bg-purple-500/10 border-purple-500/20 text-purple-400' },
           ].map((action) => (
@@ -207,19 +207,19 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
       {/* Recent Orders */}
       {recentOrders.length > 0 && (
         <div>
-          <h3 className="text-[15px] font-bold text-[#e8f0dc] mb-3">Recent Orders</h3>
+          <h3 className="text-[15px] font-bold text-[#f0eef6] mb-3">Recent Orders</h3>
           <div className="space-y-2">
             {recentOrders.map((order) => (
-              <div key={order.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+              <div key={order.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
                 <div className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center justify-center text-[18px]">
                   🛍️
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#e8f0dc] truncate">{order.buyerName}</p>
-                  <p className="text-[11px] text-[#71767b]">{new Date(order.createdAt).toLocaleDateString()}</p>
+                  <p className="text-[13px] font-medium text-[#f0eef6] truncate">{order.buyerName}</p>
+                  <p className="text-[11px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[14px] font-bold text-[#a3d977]">₹{order.total.toLocaleString()}</p>
+                  <p className="text-[14px] font-bold text-[#8b5cf6]">₹{order.total.toLocaleString()}</p>
                   <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize', STATUS_COLORS[order.status] || '')}>
                     {order.status}
                   </span>
@@ -233,24 +233,24 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
       {/* Top Products */}
       {products.length > 0 && (
         <div>
-          <h3 className="text-[15px] font-bold text-[#e8f0dc] mb-3">Top Products</h3>
+          <h3 className="text-[15px] font-bold text-[#f0eef6] mb-3">Top Products</h3>
           <div className="space-y-2">
             {products.sort((a, b) => b.soldCount - a.soldCount).slice(0, 3).map((p) => {
               const images = p.images ? p.images.split(',').map((s) => s.trim()).filter(Boolean) : []
               return (
-                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                     {images[0] ? (
                       <img src={images[0]} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-[#141414] flex items-center justify-center text-[#536471] text-[10px]">No img</div>
+                      <div className="w-full h-full bg-[#14112a] flex items-center justify-center text-[#64748b] text-[10px]">No img</div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-medium text-[#e8f0dc] line-clamp-1">{p.name}</p>
-                    <p className="text-[11px] text-[#71767b]">{p.soldCount} sold • ₹{p.price.toLocaleString()}</p>
+                    <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{p.name}</p>
+                    <p className="text-[11px] text-[#94a3b8]">{p.soldCount} sold • ₹{p.price.toLocaleString()}</p>
                   </div>
-                  <span className="text-[14px] font-bold text-[#e8f0dc]">₹{(p.soldCount * p.price).toLocaleString()}</span>
+                  <span className="text-[14px] font-bold text-[#f0eef6]">₹{(p.soldCount * p.price).toLocaleString()}</span>
                 </div>
               )
             })}
@@ -295,12 +295,12 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-[15px] font-bold text-[#e8f0dc]">Your Products</h3>
-          <p className="text-[12px] text-[#71767b]">{products.length} products listed</p>
+          <h3 className="text-[15px] font-bold text-[#f0eef6]">Your Products</h3>
+          <p className="text-[12px] text-[#94a3b8]">{products.length} products listed</p>
         </div>
         <button
           onClick={() => navigate('add-product')}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#a3d977] text-black text-[13px] font-bold shadow-md shadow-[#a3d977]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#8b5cf6] text-black text-[13px] font-bold shadow-md shadow-[#8b5cf6]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
             <path d="M12 5v14M5 12h14" />
@@ -312,52 +312,52 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
       {/* Products List */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-16">
           <div className="w-16 h-16 rounded-2xl bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
               <line x1="3" y1="6" x2="21" y2="6" strokeLinecap="round" />
             </svg>
           </div>
-          <p className="text-[14px] text-[#71767b] mb-1">No products yet</p>
-          <p className="text-[12px] text-[#536471]">Start selling by adding your first product</p>
+          <p className="text-[14px] text-[#94a3b8] mb-1">No products yet</p>
+          <p className="text-[12px] text-[#64748b]">Start selling by adding your first product</p>
         </div>
       ) : (
         products.map((product) => {
           const images = product.images ? product.images.split(',').map((s) => s.trim()).filter(Boolean) : []
           const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
           return (
-            <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+            <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <button
                 onClick={() => navigate('product-detail', { id: product.id })}
-                className="w-16 h-16 rounded-xl overflow-hidden bg-[#141414] flex-shrink-0"
+                className="w-16 h-16 rounded-xl overflow-hidden bg-[#14112a] flex-shrink-0"
               >
                 {images[0] ? (
                   <img src={images[0]} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full bg-[#141414] flex items-center justify-center text-[#536471] text-[10px]">No img</div>
+                  <div className="w-full h-full bg-[#14112a] flex items-center justify-center text-[#64748b] text-[10px]">No img</div>
                 )}
               </button>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-[14px] font-semibold text-[#e8f0dc] line-clamp-1 flex-1">{product.name}</p>
+                  <p className="text-[14px] font-semibold text-[#f0eef6] line-clamp-1 flex-1">{product.name}</p>
                   {product.isFeatured && (
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 flex-shrink-0">Featured</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[13px] font-bold text-[#a3d977]">₹{product.price.toLocaleString()}</span>
+                  <span className="text-[13px] font-bold text-[#8b5cf6]">₹{product.price.toLocaleString()}</span>
                   {hasDiscount && (
-                    <span className="text-[11px] text-[#71767b] line-through">₹{product.compareAtPrice!.toLocaleString()}</span>
+                    <span className="text-[11px] text-[#94a3b8] line-through">₹{product.compareAtPrice!.toLocaleString()}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-3 mt-1">
-                  <span className="text-[11px] text-[#71767b]">{product.stock} in stock</span>
-                  <span className="text-[11px] text-[#71767b]">{product.soldCount} sold</span>
-                  <span className="text-[11px] text-[#71767b]">{product.category}</span>
+                  <span className="text-[11px] text-[#94a3b8]">{product.stock} in stock</span>
+                  <span className="text-[11px] text-[#94a3b8]">{product.soldCount} sold</span>
+                  <span className="text-[11px] text-[#94a3b8]">{product.category}</span>
                 </div>
               </div>
               <div className="flex flex-col gap-1 flex-shrink-0">
@@ -365,7 +365,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
                   onClick={() => navigate('add-product', { id: product.id })}
                   className="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                 >
-                  <svg className="w-4 h-4 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                     <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
@@ -417,17 +417,17 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
     const isEditing = editingId === product.id
 
     return (
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
-        <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+        <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
           {images[0] ? (
             <img src={images[0]} alt="" className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-[#141414]" />
+            <div className="w-full h-full bg-[#14112a]" />
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[13px] font-medium text-[#e8f0dc] line-clamp-1">{product.name}</p>
-          <p className="text-[11px] text-[#71767b]">SKU: {product.sku || 'N/A'} • {product.category}</p>
+          <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{product.name}</p>
+          <p className="text-[11px] text-[#94a3b8]">SKU: {product.sku || 'N/A'} • {product.category}</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           {isEditing ? (
@@ -436,13 +436,13 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
                 type="number"
                 value={stockInput}
                 onChange={(e) => setStockInput(e.target.value)}
-                className="w-16 bg-transparent border border-[#a3d977]/40 rounded-lg px-2 py-1.5 text-[13px] text-[#e8f0dc] text-center outline-none focus:border-[#a3d977]"
+                className="w-16 bg-transparent border border-[#8b5cf6]/40 rounded-lg px-2 py-1.5 text-[13px] text-[#f0eef6] text-center outline-none focus:border-[#8b5cf6]"
                 autoFocus
                 min={0}
               />
               <button
                 onClick={() => handleSaveStock(product.id)}
-                className="w-8 h-8 rounded-lg bg-[#a3d977] flex items-center justify-center"
+                className="w-8 h-8 rounded-lg bg-[#8b5cf6] flex items-center justify-center"
               >
                 <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round">
                   <path d="M20 6L9 17l-5-5" />
@@ -473,17 +473,17 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
     <div className="px-4 pb-6 space-y-5">
       {/* Summary Cards */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-xl p-3 text-center">
-          <p className="text-[20px] font-bold text-[#e8f0dc]">{inStock.length}</p>
-          <p className="text-[11px] text-[#71767b]">In Stock</p>
+        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
+          <p className="text-[20px] font-bold text-[#f0eef6]">{inStock.length}</p>
+          <p className="text-[11px] text-[#94a3b8]">In Stock</p>
         </div>
-        <div className="bg-[#0a0a0a] border border-amber-500/20 rounded-xl p-3 text-center">
+        <div className="bg-[#110f1a] border border-amber-500/20 rounded-xl p-3 text-center">
           <p className="text-[20px] font-bold text-amber-400">{lowStock.length}</p>
-          <p className="text-[11px] text-[#71767b]">Low Stock</p>
+          <p className="text-[11px] text-[#94a3b8]">Low Stock</p>
         </div>
-        <div className="bg-[#0a0a0a] border border-red-500/20 rounded-xl p-3 text-center">
+        <div className="bg-[#110f1a] border border-red-500/20 rounded-xl p-3 text-center">
           <p className="text-[20px] font-bold text-red-400">{outOfStock.length}</p>
-          <p className="text-[11px] text-[#71767b]">Out of Stock</p>
+          <p className="text-[11px] text-[#94a3b8]">Out of Stock</p>
         </div>
       </div>
 
@@ -521,7 +521,7 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
         </h4>
         <div className="space-y-2">
           {inStock.length === 0 ? (
-            <p className="text-[12px] text-[#536471] text-center py-8">No products in stock</p>
+            <p className="text-[12px] text-[#64748b] text-center py-8">No products in stock</p>
           ) : (
             inStock.map((p) => <StockRow key={p.id} product={p} />)
           )}
@@ -566,7 +566,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
             onClick={() => setFilter(f)}
             className={cn(
               'flex-shrink-0 px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all',
-              filter === f ? 'bg-[#a3d977] text-black' : 'bg-white/[0.06] text-[#71767b]'
+              filter === f ? 'bg-[#8b5cf6] text-black' : 'bg-white/[0.06] text-[#94a3b8]'
             )}
           >
             {f}
@@ -577,17 +577,17 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
       {/* Orders */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
         </div>
       ) : filteredOrders.length === 0 ? (
         <div className="text-center py-16">
           <div className="w-16 h-16 rounded-2xl bg-white/[0.06] flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
               <line x1="1" y1="10" x2="23" y2="10" />
             </svg>
           </div>
-          <p className="text-[14px] text-[#71767b]">No orders found</p>
+          <p className="text-[14px] text-[#94a3b8]">No orders found</p>
         </div>
       ) : (
         filteredOrders.map((order) => {
@@ -596,26 +596,26 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
           const isExpanded = expandedOrder === order.id
 
           return (
-            <div key={order.id} className="rounded-xl bg-[#0a0a0a] border border-white/[0.06] overflow-hidden">
+            <div key={order.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden">
               <button
                 onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
                 className="w-full p-4 text-left"
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-[#71767b] font-mono">#{order.id.slice(-8).toUpperCase()}</span>
+                    <span className="text-[11px] text-[#94a3b8] font-mono">#{order.id.slice(-8).toUpperCase()}</span>
                     <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize', STATUS_COLORS[order.status] || '')}>
                       {order.status}
                     </span>
                   </div>
-                  <svg className={cn('w-4 h-4 text-[#71767b] transition-transform', isExpanded ? 'rotate-180' : '')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <svg className={cn('w-4 h-4 text-[#94a3b8] transition-transform', isExpanded ? 'rotate-180' : '')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <p className="text-[13px] text-[#e8f0dc] font-medium">{order.buyerName}</p>
+                <p className="text-[13px] text-[#f0eef6] font-medium">{order.buyerName}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <p className="text-[12px] text-[#71767b]">{items.map((i) => i.productName).join(', ')}</p>
-                  <p className="text-[15px] font-bold text-[#a3d977]">₹{order.total.toLocaleString()}</p>
+                  <p className="text-[12px] text-[#94a3b8]">{items.map((i) => i.productName).join(', ')}</p>
+                  <p className="text-[15px] font-bold text-[#8b5cf6]">₹{order.total.toLocaleString()}</p>
                 </div>
               </button>
 
@@ -625,21 +625,21 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                   <div className="space-y-2">
                     {items.map((item, i) => (
                       <div key={i} className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#141414] flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                           <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[12px] text-[#e8f0dc] line-clamp-1">{item.productName}</p>
-                          <p className="text-[11px] text-[#71767b]">x{item.quantity}</p>
+                          <p className="text-[12px] text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                          <p className="text-[11px] text-[#94a3b8]">x{item.quantity}</p>
                         </div>
-                        <span className="text-[12px] font-semibold text-[#e8f0dc]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                        <span className="text-[12px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Status Update */}
                   <div>
-                    <h4 className="text-[11px] text-[#71767b] uppercase tracking-wider mb-2">Update Status</h4>
+                    <h4 className="text-[11px] text-[#94a3b8] uppercase tracking-wider mb-2">Update Status</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {STATUS_OPTIONS.map((opt) => (
                         <button
@@ -650,7 +650,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                             'px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all',
                             order.status === opt.value
                               ? opt.color
-                              : 'bg-white/[0.06] text-[#71767b] hover:bg-white/[0.1] disabled:opacity-50'
+                              : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1] disabled:opacity-50'
                           )}
                         >
                           {opt.label}
@@ -662,16 +662,16 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                   {/* Order Details */}
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-white/[0.03] rounded-lg p-2 text-center">
-                      <p className="text-[10px] text-[#71767b]">Subtotal</p>
-                      <p className="text-[12px] font-semibold text-[#e8f0dc]">₹{order.subtotal.toLocaleString()}</p>
+                      <p className="text-[10px] text-[#94a3b8]">Subtotal</p>
+                      <p className="text-[12px] font-semibold text-[#f0eef6]">₹{order.subtotal.toLocaleString()}</p>
                     </div>
                     <div className="bg-white/[0.03] rounded-lg p-2 text-center">
-                      <p className="text-[10px] text-[#71767b]">Shipping</p>
-                      <p className="text-[12px] font-semibold text-[#e8f0dc]">₹{order.shipping.toLocaleString()}</p>
+                      <p className="text-[10px] text-[#94a3b8]">Shipping</p>
+                      <p className="text-[12px] font-semibold text-[#f0eef6]">₹{order.shipping.toLocaleString()}</p>
                     </div>
                     <div className="bg-white/[0.03] rounded-lg p-2 text-center">
-                      <p className="text-[10px] text-[#71767b]">Date</p>
-                      <p className="text-[12px] font-semibold text-[#e8f0dc]">{new Date(order.createdAt).toLocaleDateString()}</p>
+                      <p className="text-[10px] text-[#94a3b8]">Date</p>
+                      <p className="text-[12px] font-semibold text-[#f0eef6]">{new Date(order.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>
@@ -732,66 +732,66 @@ function SettingsSection() {
     <div className="px-4 pb-6 space-y-6">
       {/* Store Info */}
       <div className="space-y-4">
-        <h3 className="text-[15px] font-bold text-[#e8f0dc]">Store Information</h3>
+        <h3 className="text-[15px] font-bold text-[#f0eef6]">Store Information</h3>
 
         {/* Cover Preview */}
-        <div className="relative h-28 rounded-xl overflow-hidden bg-[#1a1a1a]">
+        <div className="relative h-28 rounded-xl overflow-hidden bg-[#18152b]">
           {settings.storeCover ? (
             <img src={settings.storeCover} alt="" className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#1a2a1a] to-[#0a0a0a] flex items-center justify-center">
-              <svg className="w-8 h-8 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <div className="w-full h-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center">
+              <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                 <circle cx="8.5" cy="8.5" r="1.5" />
                 <polyline points="21 15 16 10 5 21" />
               </svg>
             </div>
           )}
-          <button className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm text-[12px] font-medium text-white hover:bg-black/80 transition-colors">
+          <button className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-[#09080f]/60 backdrop-blur-sm text-[12px] font-medium text-white hover:bg-[#09080f]/80 transition-colors">
             Change Cover
           </button>
         </div>
 
         {/* Store Name */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b]">Store Name</label>
+          <label className="text-[13px] text-[#94a3b8]">Store Name</label>
           <input
             type="text"
             value={settings.storeName}
             onChange={(e) => updateSetting('storeName', e.target.value)}
             placeholder="Your store name"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
         {/* Store Description */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b]">Store Description</label>
+          <label className="text-[13px] text-[#94a3b8]">Store Description</label>
           <textarea
             value={settings.storeDescription}
             onChange={(e) => updateSetting('storeDescription', e.target.value)}
             placeholder="Tell customers about your store..."
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
       </div>
 
       {/* Shipping Settings */}
       <div className="space-y-4">
-        <h3 className="text-[15px] font-bold text-[#e8f0dc]">Shipping Settings</h3>
+        <h3 className="text-[15px] font-bold text-[#f0eef6]">Shipping Settings</h3>
 
         {/* Enable Shipping Toggle */}
-        <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#0a0a0a] border border-white/[0.06]">
+        <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#110f1a] border border-white/[0.06]">
           <div>
-            <p className="text-[14px] text-[#e8f0dc]">Enable Shipping</p>
-            <p className="text-[12px] text-[#71767b]">Enable delivery for physical products</p>
+            <p className="text-[14px] text-[#f0eef6]">Enable Shipping</p>
+            <p className="text-[12px] text-[#94a3b8]">Enable delivery for physical products</p>
           </div>
           <button
             onClick={() => toggleSetting('shippingEnabled')}
             className={cn(
               'w-11 h-6 rounded-full transition-colors relative',
-              settings.shippingEnabled ? 'bg-[#a3d977]' : 'bg-white/[0.15]'
+              settings.shippingEnabled ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]'
             )}
           >
             <div className={cn(
@@ -803,20 +803,20 @@ function SettingsSection() {
 
         {/* Free Shipping Above */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b]">Free Shipping Above (₹)</label>
+          <label className="text-[13px] text-[#94a3b8]">Free Shipping Above (₹)</label>
           <input
             type="number"
             value={settings.freeShippingAbove}
             onChange={(e) => updateSetting('freeShippingAbove', e.target.value)}
             placeholder="500"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
-          <p className="text-[11px] text-[#536471]">Orders above this amount get free shipping</p>
+          <p className="text-[11px] text-[#64748b]">Orders above this amount get free shipping</p>
         </div>
 
         {/* Shipping Partners */}
         <div>
-          <label className="text-[13px] text-[#71767b] mb-2 block">Shipping Partners</label>
+          <label className="text-[13px] text-[#94a3b8] mb-2 block">Shipping Partners</label>
           <div className="space-y-2">
             {shippingPartners.map((partner) => (
               <div
@@ -824,24 +824,24 @@ function SettingsSection() {
                 className={cn(
                   'flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer',
                   settings.defaultShippingPartner === partner.name
-                    ? 'bg-[#a3d977]/10 border-[#a3d977]/30'
-                    : 'bg-[#0a0a0a] border-white/[0.06] hover:border-white/[0.12]'
+                    ? 'bg-[#8b5cf6]/10 border-[#8b5cf6]/30'
+                    : 'bg-[#110f1a] border-white/[0.06] hover:border-white/[0.12]'
                 )}
                 onClick={() => updateSetting('defaultShippingPartner', partner.name)}
               >
                 <div className={cn(
                   'w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0',
                   settings.defaultShippingPartner === partner.name
-                    ? 'border-[#a3d977]'
+                    ? 'border-[#8b5cf6]'
                     : 'border-white/[0.2]'
                 )}>
                   {settings.defaultShippingPartner === partner.name && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#a3d977]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#e8f0dc]">{partner.name}</p>
-                  <p className="text-[11px] text-[#71767b]">{partner.rate}</p>
+                  <p className="text-[13px] font-medium text-[#f0eef6]">{partner.name}</p>
+                  <p className="text-[11px] text-[#94a3b8]">{partner.rate}</p>
                 </div>
                 <div className="flex gap-1.5">
                   {partner.cod && (
@@ -859,23 +859,23 @@ function SettingsSection() {
 
       {/* Tax & Returns */}
       <div className="space-y-4">
-        <h3 className="text-[15px] font-bold text-[#e8f0dc]">Tax & Returns</h3>
+        <h3 className="text-[15px] font-bold text-[#f0eef6]">Tax & Returns</h3>
 
         {/* Tax Rate */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b]">Tax Rate (%)</label>
+          <label className="text-[13px] text-[#94a3b8]">Tax Rate (%)</label>
           <input
             type="number"
             value={settings.taxRate}
             onChange={(e) => updateSetting('taxRate', e.target.value)}
             placeholder="18"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
         {/* Currency */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b]">Currency</label>
+          <label className="text-[13px] text-[#94a3b8]">Currency</label>
           <div className="flex gap-2">
             {['INR', 'USD', 'EUR', 'GBP'].map((cur) => (
               <button
@@ -884,8 +884,8 @@ function SettingsSection() {
                 className={cn(
                   'px-4 py-2 rounded-lg text-[13px] font-semibold transition-all',
                   settings.currency === cur
-                    ? 'bg-[#a3d977] text-black'
-                    : 'bg-white/[0.06] text-[#71767b]'
+                    ? 'bg-[#8b5cf6] text-black'
+                    : 'bg-white/[0.06] text-[#94a3b8]'
                 )}
               >
                 {cur}
@@ -896,13 +896,13 @@ function SettingsSection() {
 
         {/* Return Policy */}
         <div className="space-y-1.5">
-          <label className="text-[13px] text-[#71767b]">Return Policy</label>
+          <label className="text-[13px] text-[#94a3b8]">Return Policy</label>
           <textarea
             value={settings.returnPolicy}
             onChange={(e) => updateSetting('returnPolicy', e.target.value)}
             placeholder="Describe your return policy..."
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e8f0dc] placeholder-[#536471] outline-none focus:border-[#a3d977]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
       </div>
@@ -911,7 +911,7 @@ function SettingsSection() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[15px] shadow-lg shadow-[#a3d977]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+        className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all disabled:opacity-50"
       >
         {saving ? (
           <span className="flex items-center justify-center gap-2">
@@ -995,25 +995,25 @@ export function StoreDashboardView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-[#09080f]">
         <DashHeader title="Store Dashboard" onBack={handleBack} />
         <div className="flex items-center justify-center py-32">
-          <div className="w-8 h-8 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#09080f]">
       <DashHeader title="Store Dashboard" onBack={handleBack} />
 
       {/* Store Banner */}
-      <div className="relative h-20 bg-gradient-to-r from-[#a3d977]/20 via-[#0a0a0a] to-[#a3d977]/10">
-        <div className="absolute inset-0 bg-black/40" />
+      <div className="relative h-20 bg-gradient-to-r from-[#8b5cf6]/20 via-[#110f1a] to-[#8b5cf6]/10">
+        <div className="absolute inset-0 bg-[#09080f]/40" />
         <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black to-transparent" />
         <div className="absolute left-4 bottom-3 flex items-center gap-2 z-10">
-          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-[#a3d977] to-[#8cc65e] flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center flex-shrink-0">
             {user?.profileImage ? (
               <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
             ) : (
@@ -1021,8 +1021,8 @@ export function StoreDashboardView() {
             )}
           </div>
           <div>
-            <p className="text-[13px] font-bold text-[#e8f0dc]">{user?.displayName || 'My Store'}</p>
-            <p className="text-[11px] text-[#71767b]">{products.length} products • {orders.length} orders</p>
+            <p className="text-[13px] font-bold text-[#f0eef6]">{user?.displayName || 'My Store'}</p>
+            <p className="text-[11px] text-[#94a3b8]">{products.length} products • {orders.length} orders</p>
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ function Toggle({ checked, onToggle, disabled }: { checked: boolean; onToggle: (
       disabled={disabled}
       className={cn(
         'w-11 h-6 rounded-full transition-colors relative shrink-0',
-        checked ? 'bg-[#a3d977]' : 'bg-white/[0.15]',
+        checked ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]',
         disabled && 'opacity-50 cursor-not-allowed'
       )}
     >
@@ -51,8 +51,8 @@ function SegmentedControl<T extends string>({
           className={cn(
             'flex-1 px-3 py-[6px] rounded-full text-[13px] font-semibold transition-all duration-300',
             value === opt.value
-              ? 'bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black shadow-md shadow-[#a3d977]/20'
-              : 'text-[#71767b] hover:text-[#c0c0c0]'
+              ? 'bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black shadow-md shadow-[#8b5cf6]/20'
+              : 'text-[#94a3b8] hover:text-[#c0c0c0]'
           )}
         >
           {opt.label}
@@ -165,9 +165,9 @@ export function PrivacySettingsView() {
   }, [user])
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#09080f]">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => navigate('settings')}
@@ -175,7 +175,7 @@ export function PrivacySettingsView() {
             aria-label="Go back"
           >
             <svg
-              className="w-5 h-5 text-[#e8f0dc]"
+              className="w-5 h-5 text-[#f0eef6]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -186,24 +186,24 @@ export function PrivacySettingsView() {
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-lg font-bold text-[#e8f0dc]">Privacy &amp; Security</h1>
+          <h1 className="text-lg font-bold text-[#f0eef6]">Privacy &amp; Security</h1>
         </div>
       </div>
 
       {/* ── Content ────────────────────────────────────────────────────── */}
       <div className="px-4 pt-4 pb-32 space-y-6">
         {/* Name Visibility */}
-        <section className="bg-[#0a0a0a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#a3d977]/10 flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
+              <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#e8f0dc]">Name Visibility</h3>
-              <p className="text-[13px] text-[#71767b] mt-0.5">
+              <h3 className="text-[15px] font-bold text-[#f0eef6]">Name Visibility</h3>
+              <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {nameVisibility === 'public'
                   ? 'Anyone can see your display name on your profile.'
                   : 'Only you can see your display name. Others see your username.'}
@@ -215,26 +215,26 @@ export function PrivacySettingsView() {
             />
           </div>
           <div className="flex items-center gap-2 ml-12">
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'public' ? 'bg-[#a3d977]/15 text-[#a3d977]' : 'text-[#71767b]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'public' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
               Public
             </span>
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'private' ? 'bg-[#a3d977]/15 text-[#a3d977]' : 'text-[#71767b]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'private' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
               Private
             </span>
           </div>
         </section>
 
         {/* DM Permission */}
-        <section className="bg-[#0a0a0a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#a3d977]/10 flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
+              <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#e8f0dc]">Direct Messages</h3>
-              <p className="text-[13px] text-[#71767b] mt-0.5">
+              <h3 className="text-[15px] font-bold text-[#f0eef6]">Direct Messages</h3>
+              <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {dmPermission === 'all' && 'Anyone can send you messages.'}
                 {dmPermission === 'followers' && 'Only your followers can message you.'}
                 {dmPermission === 'paid' && 'Only users who pay can start a chat with you.'}
@@ -255,17 +255,17 @@ export function PrivacySettingsView() {
         </section>
 
         {/* Search Visibility */}
-        <section className="bg-[#0a0a0a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#a3d977]/10 flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
+              <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#e8f0dc]">Search Visibility</h3>
-              <p className="text-[13px] text-[#71767b] mt-0.5">
+              <h3 className="text-[15px] font-bold text-[#f0eef6]">Search Visibility</h3>
+              <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {searchVisibility === 'public'
                   ? 'Your profile appears in search results and suggestions.'
                   : 'Your profile is hidden from search results and suggestions.'}
@@ -277,10 +277,10 @@ export function PrivacySettingsView() {
             />
           </div>
           <div className="flex items-center gap-2 ml-12">
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'public' ? 'bg-[#a3d977]/15 text-[#a3d977]' : 'text-[#71767b]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'public' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
               Public
             </span>
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'private' ? 'bg-[#a3d977]/15 text-[#a3d977]' : 'text-[#71767b]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'private' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
               Private
             </span>
           </div>
@@ -288,17 +288,17 @@ export function PrivacySettingsView() {
 
         {/* Paid Chat */}
         {isCreatorOrPersonal && (
-          <section className="bg-[#0a0a0a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+          <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#a3d977]/10 flex items-center justify-center">
-                <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
+                <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="1" x2="12" y2="23" />
                   <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-[15px] font-bold text-[#e8f0dc]">Paid Chat</h3>
-                <p className="text-[13px] text-[#71767b] mt-0.5">
+                <h3 className="text-[15px] font-bold text-[#f0eef6]">Paid Chat</h3>
+                <p className="text-[13px] text-[#94a3b8] mt-0.5">
                   {paidChatEnabled
                     ? 'Users must pay to start a conversation with you.'
                     : 'Enable paid chat to charge users for messaging you.'}
@@ -309,9 +309,9 @@ export function PrivacySettingsView() {
 
             {paidChatEnabled && (
               <div className="ml-12 animate-fade-in">
-                <label className="text-[13px] text-[#71767b] mb-1.5 block">Chat price</label>
+                <label className="text-[13px] text-[#94a3b8] mb-1.5 block">Chat price</label>
                 <div className="flex items-center gap-2">
-                  <span className="text-[15px] font-bold text-[#a3d977]">₹</span>
+                  <span className="text-[15px] font-bold text-[#8b5cf6]">₹</span>
                   <input
                     type="number"
                     min={1}
@@ -319,12 +319,12 @@ export function PrivacySettingsView() {
                     value={paidChatPrice}
                     onChange={(e) => setPaidChatPrice(e.target.value)}
                     onBlur={handlePaidChatPrice}
-                    className="w-28 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[15px] text-[#e8f0dc] outline-none focus:border-[#a3d977]/50 transition-colors"
+                    className="w-28 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[15px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                   />
                   <button
                     onClick={handlePaidChatPrice}
                     disabled={saving}
-                    className="px-3 py-2 rounded-lg text-[13px] font-bold bg-[#a3d977]/15 text-[#a3d977] hover:bg-[#a3d977]/25 transition-colors disabled:opacity-50"
+                    className="px-3 py-2 rounded-lg text-[13px] font-bold bg-[#8b5cf6]/15 text-[#8b5cf6] hover:bg-[#8b5cf6]/25 transition-colors disabled:opacity-50"
                   >
                     Save
                   </button>
@@ -335,7 +335,7 @@ export function PrivacySettingsView() {
         )}
 
         {/* ── Nuclear Block (Danger Zone) ──────────────────────────────── */}
-        <section className="bg-[#0a0a0a] rounded-2xl p-4 space-y-3 border border-red-500/20">
+        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-red-500/20">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-red-500/10 flex items-center justify-center">
               <svg className="w-[18px] h-[18px] text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -345,7 +345,7 @@ export function PrivacySettingsView() {
             </div>
             <div className="flex-1">
               <h3 className="text-[15px] font-bold text-red-400">Danger Zone</h3>
-              <p className="text-[13px] text-[#71767b] mt-0.5">
+              <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 Permanently delete all your chat data. This action cannot be undone.
               </p>
             </div>
@@ -362,8 +362,8 @@ export function PrivacySettingsView() {
         {/* Saving indicator */}
         {saving && (
           <div className="flex items-center justify-center gap-2 animate-fade-in">
-            <div className="w-4 h-4 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
-            <span className="text-[13px] text-[#71767b]">Saving...</span>
+            <div className="w-4 h-4 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+            <span className="text-[13px] text-[#94a3b8]">Saving...</span>
           </div>
         )}
       </div>
@@ -372,10 +372,10 @@ export function PrivacySettingsView() {
       {showNuclearDialog && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
           <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-[#09080f]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
           />
-          <div className="relative bg-[#0a0a0a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
+          <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
                 <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -384,10 +384,10 @@ export function PrivacySettingsView() {
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-[#e8f0dc]">Nuclear Block</h3>
+              <h3 className="text-lg font-bold text-[#f0eef6]">Nuclear Block</h3>
             </div>
 
-            <p className="text-[14px] text-[#71767b] leading-relaxed mb-4">
+            <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-4">
               This will <span className="text-red-400 font-semibold">permanently delete all your chat data</span> —
               every conversation, message, and media attachment. This is irreversible.
             </p>
@@ -399,7 +399,7 @@ export function PrivacySettingsView() {
                 onChange={(e) => setNuclearConfirmed(e.target.checked)}
                 className="mt-0.5 accent-red-500"
               />
-              <span className="text-[13px] text-[#71767b] group-hover:text-[#e8f0dc] transition-colors">
+              <span className="text-[13px] text-[#94a3b8] group-hover:text-[#f0eef6] transition-colors">
                 I understand this action is permanent and cannot be undone.
               </span>
             </label>
@@ -407,7 +407,7 @@ export function PrivacySettingsView() {
             <div className="flex gap-3">
               <button
                 onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
-                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#e8f0dc] hover:bg-white/[0.04] transition-colors"
+                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#f0eef6] hover:bg-white/[0.04] transition-colors"
               >
                 Cancel
               </button>
@@ -418,7 +418,7 @@ export function PrivacySettingsView() {
                   'flex-1 py-2.5 rounded-full text-[14px] font-bold transition-colors',
                   nuclearConfirmed
                     ? 'bg-red-500 text-white hover:bg-red-600'
-                    : 'bg-white/[0.06] text-[#536471] cursor-not-allowed'
+                    : 'bg-white/[0.06] text-[#64748b] cursor-not-allowed'
                 )}
               >
                 Delete All Chats

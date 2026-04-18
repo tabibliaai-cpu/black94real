@@ -56,7 +56,7 @@ const StoreDashboardView = lazy(() => import('@/views/StoreDashboardView').then(
 function ViewLoader() {
   return (
     <div className="flex items-center justify-center h-[40vh]">
-      <div className="w-6 h-6 border-2 border-[#a3d977]/30 border-t-[#a3d977] rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
     </div>
   )
 }
@@ -86,12 +86,12 @@ function toStoreUser(fb: FirebaseUser, db: Awaited<ReturnType<typeof createUserF
 
 function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }) {
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-[#09080f] flex flex-col items-center justify-center relative overflow-hidden">
       <div className="relative z-10 flex flex-col items-center px-6 max-w-[420px] w-full animate-fade-in">
         <div className="mb-8 flex flex-col items-center">
           <img src="/logo.png" alt="Black94" className="w-20 h-20 object-contain mb-5" />
           <h1 className="text-3xl font-bold text-white tracking-tight">Black94</h1>
-          <p className="text-sm text-[#71767b] mt-2 text-center">
+          <p className="text-sm text-[#94a3b8] mt-2 text-center">
             Connect, share, and grow with your community.
           </p>
         </div>
@@ -115,7 +115,7 @@ function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }
             {busy ? 'Signing in...' : 'Sign in with Google'}
           </span>
         </button>
-        <p className="mt-6 text-[11px] text-[#536471] text-center">
+        <p className="mt-6 text-[11px] text-[#64748b] text-center">
           By signing in, you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>
@@ -129,7 +129,7 @@ function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-[#09080f] flex flex-col items-center justify-center">
       <img src="/logo.png" alt="Black94" className="w-14 h-14 object-contain animate-pulse" />
     </div>
   )
@@ -361,7 +361,7 @@ export default function Black94App() {
   const headerTitle = viewTitles[currentView]
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#09080f]">
       {/* ─── Sidebar ─── */}
       <Sidebar />
       {/* ─── Header ─── */}
@@ -387,8 +387,8 @@ export default function Black94App() {
         <button
           onClick={() => setComposeOpen(true)}
           className={cn(
-            'fixed bottom-[62px] right-4 z-30 w-14 h-14 rounded-full bg-[#a3d977] flex items-center justify-center shadow-lg transition-all duration-300',
-            'hover:bg-[#8cc65e] active:scale-90',
+            'fixed bottom-[62px] right-4 z-30 w-14 h-14 rounded-full bg-[#8b5cf6] flex items-center justify-center shadow-lg transition-all duration-300',
+            'hover:bg-[#7c3aed] active:scale-90',
             fabVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-75 pointer-events-none'
           )}
           aria-label="Create new post"

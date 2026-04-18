@@ -52,7 +52,7 @@ function QRCodePlaceholder({ seed }: { seed: string }) {
       {cells.flat().map((filled, i) => (
         <div
           key={i}
-          className={cn('w-[5px] h-[5px]', filled ? 'bg-black' : 'bg-transparent')}
+          className={cn('w-[5px] h-[5px]', filled ? 'bg-[#09080f]' : 'bg-transparent')}
           style={{ width: 5, height: 5 }}
         />
       ))}
@@ -66,7 +66,7 @@ const shareTargets = [
   { label: 'WhatsApp', color: '#25D366', icon: 'M' },
   { label: 'Telegram', color: '#0088cc', icon: 'T' },
   { label: 'Twitter', color: '#1DA1F2', icon: 'X' },
-  { label: 'Copy', color: '#a3d977', icon: 'C' },
+  { label: 'Copy', color: '#8b5cf6', icon: 'C' },
 ]
 
 function ShareRow({ shareUrl, onCopy }: { shareUrl: string; onCopy: () => void }) {
@@ -101,7 +101,7 @@ function ShareRow({ shareUrl, onCopy }: { shareUrl: string; onCopy: () => void }
           >
             {target.icon}
           </div>
-          <span className="text-[11px] text-[#71767b]">{target.label}</span>
+          <span className="text-[11px] text-[#94a3b8]">{target.label}</span>
         </button>
       ))}
     </div>
@@ -179,9 +179,9 @@ export function ShareProfileView() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#09080f]">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => navigate('profile')}
@@ -189,7 +189,7 @@ export function ShareProfileView() {
             aria-label="Go back"
           >
             <svg
-              className="w-5 h-5 text-[#e8f0dc]"
+              className="w-5 h-5 text-[#f0eef6]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -200,14 +200,14 @@ export function ShareProfileView() {
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-lg font-bold text-[#e8f0dc]">Share Profile</h1>
+          <h1 className="text-lg font-bold text-[#f0eef6]">Share Profile</h1>
         </div>
       </div>
 
       {/* ── Content ────────────────────────────────────────────────────── */}
       <div className="px-4 pt-6 pb-32 flex flex-col items-center">
         {/* Profile Card */}
-        <div className="bg-[#0a0a0a] border border-white/[0.08] rounded-2xl p-6 w-full max-w-sm mb-6">
+        <div className="bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 w-full max-w-sm mb-6">
           <div className="flex flex-col items-center text-center">
             <PAvatar
               src={user.profileImage}
@@ -215,12 +215,12 @@ export function ShareProfileView() {
               size={80}
               verified={user.isVerified}
             />
-            <h2 className="text-lg font-bold text-[#e8f0dc] mt-3">
+            <h2 className="text-lg font-bold text-[#f0eef6] mt-3">
               {user.displayName || user.username}
             </h2>
-            <p className="text-[14px] text-[#71767b] mt-0.5">@{user.username}</p>
+            <p className="text-[14px] text-[#94a3b8] mt-0.5">@{user.username}</p>
             {user.bio && (
-              <p className="text-[14px] text-[#e8f0dc]/80 mt-2 leading-relaxed line-clamp-3">
+              <p className="text-[14px] text-[#f0eef6]/80 mt-2 leading-relaxed line-clamp-3">
                 {user.bio}
               </p>
             )}
@@ -230,28 +230,28 @@ export function ShareProfileView() {
         {/* QR Code */}
         {!expired ? (
           <div className="animate-fade-in flex flex-col items-center mb-6">
-            <p className="text-[13px] text-[#71767b] mb-3">Scan QR code to view profile</p>
+            <p className="text-[13px] text-[#94a3b8] mb-3">Scan QR code to view profile</p>
             <QRCodePlaceholder seed={qrSeed} />
           </div>
         ) : (
           <div className="flex flex-col items-center mb-6 py-6">
             <div className="w-20 h-20 rounded-full bg-white/[0.04] flex items-center justify-center mb-3">
-              <svg className="w-10 h-10 text-[#536471]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-10 h-10 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M4.93 4.93l14.14 14.14" />
               </svg>
             </div>
             <p className="text-[15px] font-bold text-red-400">Link Expired</p>
-            <p className="text-[13px] text-[#71767b] mt-1">This shareable link is no longer active.</p>
+            <p className="text-[13px] text-[#94a3b8] mt-1">This shareable link is no longer active.</p>
           </div>
         )}
 
         {/* Shareable Link */}
-        <div className="w-full max-w-sm bg-[#0a0a0a] border border-white/[0.08] rounded-2xl p-4 mb-4">
-          <p className="text-[13px] text-[#71767b] mb-2">Shareable link</p>
+        <div className="w-full max-w-sm bg-[#110f1a] border border-white/[0.08] rounded-2xl p-4 mb-4">
+          <p className="text-[13px] text-[#94a3b8] mb-2">Shareable link</p>
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-white/[0.04] rounded-lg px-3 py-2.5 overflow-hidden">
-              <p className="text-[13px] text-[#e8f0dc] truncate font-mono">
+              <p className="text-[13px] text-[#f0eef6] truncate font-mono">
                 {shareUrl || 'Generating...'}
               </p>
             </div>
@@ -261,10 +261,10 @@ export function ShareProfileView() {
               className={cn(
                 'shrink-0 px-3.5 py-2.5 rounded-lg text-[13px] font-bold transition-colors',
                 expired
-                  ? 'bg-white/[0.04] text-[#536471] cursor-not-allowed'
+                  ? 'bg-white/[0.04] text-[#64748b] cursor-not-allowed'
                   : linkCopied
-                    ? 'bg-[#a3d977]/20 text-[#a3d977]'
-                    : 'bg-[#a3d977]/15 text-[#a3d977] hover:bg-[#a3d977]/25'
+                    ? 'bg-[#8b5cf6]/20 text-[#8b5cf6]'
+                    : 'bg-[#8b5cf6]/15 text-[#8b5cf6] hover:bg-[#8b5cf6]/25'
               )}
             >
               {linkCopied ? 'Copied!' : 'Copy'}
@@ -281,10 +281,10 @@ export function ShareProfileView() {
             </>
           ) : (
             <>
-              <div className="w-2 h-2 rounded-full bg-[#a3d977] animate-pulse" />
-              <span className="text-[14px] text-[#71767b]">
+              <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse" />
+              <span className="text-[14px] text-[#94a3b8]">
                 Link expires in{' '}
-                <span className="text-[#e8f0dc] font-semibold font-mono">
+                <span className="text-[#f0eef6] font-semibold font-mono">
                   {formatCountdown(remaining)}
                 </span>
               </span>
@@ -299,7 +299,7 @@ export function ShareProfileView() {
         {expired && (
           <button
             onClick={generateNewLink}
-            className="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black text-[14px] font-bold hover:opacity-90 active:scale-95 transition-all shadow-md shadow-[#a3d977]/20"
+            className="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black text-[14px] font-bold hover:opacity-90 active:scale-95 transition-all shadow-md shadow-[#8b5cf6]/20"
           >
             Generate New Link
           </button>

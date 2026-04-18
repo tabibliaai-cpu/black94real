@@ -27,7 +27,7 @@ function ScoreRing({ score, size = 140 }: { score: number; size?: number }) {
   const offset = circumference - progress
 
   const color =
-    score >= 70 ? '#a3d977' : score >= 40 ? '#ffd700' : '#ef4444'
+    score >= 70 ? '#8b5cf6' : score >= 40 ? '#ffd700' : '#ef4444'
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
@@ -62,7 +62,7 @@ function ScoreRing({ score, size = 140 }: { score: number; size?: number }) {
         <span className="text-[32px] font-bold" style={{ color }}>
           {score}
         </span>
-        <span className="text-[11px] text-[#71767b] uppercase tracking-wider">Score</span>
+        <span className="text-[11px] text-[#94a3b8] uppercase tracking-wider">Score</span>
       </div>
     </div>
   )
@@ -71,9 +71,9 @@ function ScoreRing({ score, size = 140 }: { score: number; size?: number }) {
 // ── Status Badge ──────────────────────────────────────────────
 function StatusBadge({ status }: { status: CampaignPerformance['status'] }) {
   const config = {
-    active: { label: 'Active', cls: 'bg-[#a3d977]/10 text-[#a3d977] border-[#a3d977]/20' },
+    active: { label: 'Active', cls: 'bg-[#8b5cf6]/10 text-[#8b5cf6] border-[#8b5cf6]/20' },
     paused: { label: 'Paused', cls: 'bg-[#ffd700]/10 text-[#ffd700] border-[#ffd700]/20' },
-    completed: { label: 'Completed', cls: 'bg-white/[0.06] text-[#71767b] border-white/[0.08]' },
+    completed: { label: 'Completed', cls: 'bg-white/[0.06] text-[#94a3b8] border-white/[0.08]' },
   }
   const { label, cls } = config[status]
   return (
@@ -87,10 +87,10 @@ function StatusBadge({ status }: { status: CampaignPerformance['status'] }) {
 function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
   const utilization = Math.round((campaign.budgetUsed / campaign.budget) * 100)
   return (
-    <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4 space-y-3">
+    <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
       <div className="flex items-start justify-between">
         <div className="min-w-0">
-          <p className="text-[15px] font-semibold text-[#e8f0dc] truncate">{campaign.name}</p>
+          <p className="text-[15px] font-semibold text-[#f0eef6] truncate">{campaign.name}</p>
           <div className="flex items-center gap-2 mt-1">
             <StatusBadge status={campaign.status} />
           </div>
@@ -108,8 +108,8 @@ function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
       {/* Budget Utilization */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <span className="text-[12px] text-[#71767b]">Budget Used</span>
-          <span className="text-[12px] text-[#e8f0dc] font-medium">
+          <span className="text-[12px] text-[#94a3b8]">Budget Used</span>
+          <span className="text-[12px] text-[#f0eef6] font-medium">
             {formatCurrency(campaign.budgetUsed)} / {formatCurrency(campaign.budget)}
           </span>
         </div>
@@ -119,12 +119,12 @@ function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
               'h-full rounded-full transition-all duration-700',
               utilization >= 90
                 ? 'bg-gradient-to-r from-[#ffd700] to-[#f59e0b]'
-                : 'bg-gradient-to-r from-[#a3d977] to-[#8cc65e]'
+                : 'bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed]'
             )}
             style={{ width: `${utilization}%` }}
           />
         </div>
-        <p className="text-[11px] text-[#536471] text-right">{utilization}% utilized</p>
+        <p className="text-[11px] text-[#64748b] text-right">{utilization}% utilized</p>
       </div>
     </div>
   )
@@ -133,11 +133,11 @@ function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
 function MetricRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div>
-      <p className="text-[11px] text-[#536471]">{label}</p>
+      <p className="text-[11px] text-[#64748b]">{label}</p>
       <p
         className={cn(
           'text-[14px] font-medium',
-          highlight ? 'text-[#a3d977]' : 'text-[#e8f0dc]'
+          highlight ? 'text-[#8b5cf6]' : 'text-[#f0eef6]'
         )}
       >
         {value}
@@ -154,32 +154,32 @@ function ChannelBar({ channel, maxImpressions }: { channel: ChannelPerformance; 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <p className="text-[14px] font-medium text-[#e8f0dc]">{channel.channel}</p>
-        <p className="text-[12px] text-[#a3d977] font-medium">{channel.ctr}% CTR</p>
+        <p className="text-[14px] font-medium text-[#f0eef6]">{channel.channel}</p>
+        <p className="text-[12px] text-[#8b5cf6] font-medium">{channel.ctr}% CTR</p>
       </div>
       {/* Impressions bar */}
       <div className="flex items-center gap-2">
-        <span className="text-[11px] text-[#536471] w-14 shrink-0">Imp.</span>
+        <span className="text-[11px] text-[#64748b] w-14 shrink-0">Imp.</span>
         <div className="flex-1 h-2.5 rounded-full bg-white/[0.04] overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-[#a3d977]/70 to-[#a3d977] transition-all duration-700"
+            className="h-full rounded-full bg-gradient-to-r from-[#8b5cf6]/70 to-[#8b5cf6] transition-all duration-700"
             style={{ width: `${impPct}%` }}
           />
         </div>
-        <span className="text-[11px] text-[#71767b] w-14 text-right">
+        <span className="text-[11px] text-[#94a3b8] w-14 text-right">
           {formatNumber(channel.impressions)}
         </span>
       </div>
       {/* Clicks bar */}
       <div className="flex items-center gap-2">
-        <span className="text-[11px] text-[#536471] w-14 shrink-0">Clicks</span>
+        <span className="text-[11px] text-[#64748b] w-14 shrink-0">Clicks</span>
         <div className="flex-1 h-2.5 rounded-full bg-white/[0.04] overflow-hidden">
           <div
             className="h-full rounded-full bg-gradient-to-r from-[#ffd700]/70 to-[#ffd700] transition-all duration-700"
             style={{ width: `${clickPct}%` }}
           />
         </div>
-        <span className="text-[11px] text-[#71767b] w-14 text-right">
+        <span className="text-[11px] text-[#94a3b8] w-14 text-right">
           {formatNumber(channel.clicks)}
         </span>
       </div>
@@ -195,11 +195,11 @@ function ABTestCard({ test }: { test: ABTest }) {
   const clickRateB = test.variantB.impressions > 0 ? ((test.variantB.clicks / test.variantB.impressions) * 100) : 0
 
   return (
-    <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4 space-y-3">
+    <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-[14px] font-semibold text-[#e8f0dc]">{test.name}</p>
+        <p className="text-[14px] font-semibold text-[#f0eef6]">{test.name}</p>
         {test.winner && (
-          <span className="text-[12px] font-medium text-[#a3d977]">
+          <span className="text-[12px] font-medium text-[#8b5cf6]">
             Variant {test.winner} winning
           </span>
         )}
@@ -211,29 +211,29 @@ function ABTestCard({ test }: { test: ABTest }) {
           className={cn(
             'rounded-xl border p-3 space-y-2 transition-colors',
             test.winner === 'A'
-              ? 'bg-[#a3d977]/5 border-[#a3d977]/30'
+              ? 'bg-[#8b5cf6]/5 border-[#8b5cf6]/30'
               : 'bg-white/[0.02] border-white/[0.06]'
           )}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[13px] font-semibold text-[#e8f0dc]">Variant A</span>
+            <span className="text-[13px] font-semibold text-[#f0eef6]">Variant A</span>
             {test.winner === 'A' && (
-              <svg className="w-4 h-4 text-[#a3d977]" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
               </svg>
             )}
           </div>
           <div className="space-y-1">
-            <p className="text-[11px] text-[#536471]">Impressions</p>
-            <p className="text-[13px] text-[#e8f0dc]">{formatNumber(test.variantA.impressions)}</p>
+            <p className="text-[11px] text-[#64748b]">Impressions</p>
+            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantA.impressions)}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-[11px] text-[#536471]">Clicks</p>
-            <p className="text-[13px] text-[#e8f0dc]">{formatNumber(test.variantA.clicks)} <span className="text-[#536471]">({clickRateA.toFixed(1)}%)</span></p>
+            <p className="text-[11px] text-[#64748b]">Clicks</p>
+            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantA.clicks)} <span className="text-[#64748b]">({clickRateA.toFixed(1)}%)</span></p>
           </div>
           <div className="space-y-1">
-            <p className="text-[11px] text-[#536471]">Conversions</p>
-            <p className="text-[13px] text-[#a3d977] font-medium">{formatNumber(test.variantA.conversions)} <span className="text-[#536471] font-normal">({ctrA.toFixed(1)}%)</span></p>
+            <p className="text-[11px] text-[#64748b]">Conversions</p>
+            <p className="text-[13px] text-[#8b5cf6] font-medium">{formatNumber(test.variantA.conversions)} <span className="text-[#64748b] font-normal">({ctrA.toFixed(1)}%)</span></p>
           </div>
         </div>
 
@@ -242,29 +242,29 @@ function ABTestCard({ test }: { test: ABTest }) {
           className={cn(
             'rounded-xl border p-3 space-y-2 transition-colors',
             test.winner === 'B'
-              ? 'bg-[#a3d977]/5 border-[#a3d977]/30'
+              ? 'bg-[#8b5cf6]/5 border-[#8b5cf6]/30'
               : 'bg-white/[0.02] border-white/[0.06]'
           )}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[13px] font-semibold text-[#e8f0dc]">Variant B</span>
+            <span className="text-[13px] font-semibold text-[#f0eef6]">Variant B</span>
             {test.winner === 'B' && (
-              <svg className="w-4 h-4 text-[#a3d977]" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
               </svg>
             )}
           </div>
           <div className="space-y-1">
-            <p className="text-[11px] text-[#536471]">Impressions</p>
-            <p className="text-[13px] text-[#e8f0dc]">{formatNumber(test.variantB.impressions)}</p>
+            <p className="text-[11px] text-[#64748b]">Impressions</p>
+            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantB.impressions)}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-[11px] text-[#536471]">Clicks</p>
-            <p className="text-[13px] text-[#e8f0dc]">{formatNumber(test.variantB.clicks)} <span className="text-[#536471]">({clickRateB.toFixed(1)}%)</span></p>
+            <p className="text-[11px] text-[#64748b]">Clicks</p>
+            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantB.clicks)} <span className="text-[#64748b]">({clickRateB.toFixed(1)}%)</span></p>
           </div>
           <div className="space-y-1">
-            <p className="text-[11px] text-[#536471]">Conversions</p>
-            <p className="text-[13px] text-[#a3d977] font-medium">{formatNumber(test.variantB.conversions)} <span className="text-[#536471] font-normal">({ctrB.toFixed(1)}%)</span></p>
+            <p className="text-[11px] text-[#64748b]">Conversions</p>
+            <p className="text-[13px] text-[#8b5cf6] font-medium">{formatNumber(test.variantB.conversions)} <span className="text-[#64748b] font-normal">({ctrB.toFixed(1)}%)</span></p>
           </div>
         </div>
       </div>
@@ -275,31 +275,31 @@ function ABTestCard({ test }: { test: ABTest }) {
 // ── AI Suggestion Item ────────────────────────────────────────
 function SuggestionItem({ suggestion, onApply }: { suggestion: AISuggestion; onApply: () => void }) {
   const impactConfig = {
-    high: { label: 'High Impact', cls: 'bg-[#a3d977]/10 text-[#a3d977]' },
+    high: { label: 'High Impact', cls: 'bg-[#8b5cf6]/10 text-[#8b5cf6]' },
     medium: { label: 'Medium', cls: 'bg-[#ffd700]/10 text-[#ffd700]' },
-    low: { label: 'Low', cls: 'bg-white/[0.06] text-[#71767b]' },
+    low: { label: 'Low', cls: 'bg-white/[0.06] text-[#94a3b8]' },
   }
   const { label, cls } = impactConfig[suggestion.impact]
 
   return (
     <div className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-      <div className="w-8 h-8 rounded-lg bg-[#a3d977]/10 flex items-center justify-center shrink-0 mt-0.5">
-        <svg className="w-4 h-4 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center shrink-0 mt-0.5">
+        <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2a7 7 0 017 7c0 3-2 5-4 6.5V18H9v-2.5C7 14 5 12 5 9a7 7 0 017-7z" />
           <path d="M9 18h6M10 22h4" />
         </svg>
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-[12px] text-[#536471]">{suggestion.category}</span>
+          <span className="text-[12px] text-[#64748b]">{suggestion.category}</span>
           <span className={cn('px-1.5 py-0.5 rounded text-[10px] font-medium', cls)}>
             {label}
           </span>
         </div>
-        <p className="text-[13px] text-[#e8f0dc] leading-relaxed">{suggestion.text}</p>
+        <p className="text-[13px] text-[#f0eef6] leading-relaxed">{suggestion.text}</p>
         <button
           onClick={onApply}
-          className="mt-2 px-3 py-1 rounded-lg bg-[#a3d977]/10 text-[#a3d977] text-[12px] font-semibold hover:bg-[#a3d977]/20 transition-colors"
+          className="mt-2 px-3 py-1 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] text-[12px] font-semibold hover:bg-[#8b5cf6]/20 transition-colors"
         >
           Apply
         </button>
@@ -335,29 +335,29 @@ export function PerformanceView() {
           onClick={() => navigate('business-dashboard')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.06] transition-colors"
         >
-          <svg className="w-5 h-5 text-[#e8f0dc]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="text-xl font-bold text-[#e8f0dc] flex-1">Performance</h1>
+        <h1 className="text-xl font-bold text-[#f0eef6] flex-1">Performance</h1>
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08]">
-          <svg className="w-3.5 h-3.5 text-[#71767b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
             <line x1="16" y1="2" x2="16" y2="6" />
             <line x1="8" y1="2" x2="8" y2="6" />
             <line x1="3" y1="10" x2="21" y2="10" />
           </svg>
-          <span className="text-[12px] text-[#71767b] font-medium">{dateRange}</span>
+          <span className="text-[12px] text-[#94a3b8] font-medium">{dateRange}</span>
         </div>
       </div>
 
       {/* ── Overall Score ───────────────────────────────── */}
-      <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-5 flex flex-col items-center">
-        <p className="text-[13px] text-[#71767b] font-medium uppercase tracking-wider mb-4">
+      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-5 flex flex-col items-center">
+        <p className="text-[13px] text-[#94a3b8] font-medium uppercase tracking-wider mb-4">
           Overall Performance
         </p>
         <ScoreRing score={overallScore} />
-        <p className="text-[13px] text-[#536471] mt-3">
+        <p className="text-[13px] text-[#64748b] mt-3">
           {overallScore >= 70
             ? 'Great performance across campaigns'
             : overallScore >= 40
@@ -368,7 +368,7 @@ export function PerformanceView() {
 
       {/* ── Campaign Performance ────────────────────────── */}
       <div className="space-y-3">
-        <h2 className="text-[15px] font-semibold text-[#e8f0dc]">Campaign Performance</h2>
+        <h2 className="text-[15px] font-semibold text-[#f0eef6]">Campaign Performance</h2>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
           {mockCampaignPerformance.map((campaign) => (
             <CampaignCard key={campaign.id} campaign={campaign} />
@@ -377,12 +377,12 @@ export function PerformanceView() {
       </div>
 
       {/* ── Channel Performance ─────────────────────────── */}
-      <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.08] p-4 space-y-4">
+      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-4">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 20V10M12 20V4M6 20v-6" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#e8f0dc]">Channel Performance</h2>
+          <h2 className="text-[15px] font-semibold text-[#f0eef6]">Channel Performance</h2>
         </div>
         <div className="space-y-4">
           {mockChannelPerformance.map((channel) => (
@@ -395,12 +395,12 @@ export function PerformanceView() {
         </div>
         <div className="flex items-center gap-4 pt-2 border-t border-white/[0.06]">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-[#a3d977]/70 to-[#a3d977]" />
-            <span className="text-[11px] text-[#536471]">Impressions</span>
+            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-[#8b5cf6]/70 to-[#8b5cf6]" />
+            <span className="text-[11px] text-[#64748b]">Impressions</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-[#ffd700]/70 to-[#ffd700]" />
-            <span className="text-[11px] text-[#536471]">Clicks</span>
+            <span className="text-[11px] text-[#64748b]">Clicks</span>
           </div>
         </div>
       </div>
@@ -408,10 +408,10 @@ export function PerformanceView() {
       {/* ── A/B Test Results ────────────────────────────── */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 3H5a2 2 0 00-2 2v3M21 8V5a2 2 0 00-2-2h-3M3 16v3a2 2 0 002 2h3M16 21h3a2 2 0 002-2v-3" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#e8f0dc]">A/B Test Results</h2>
+          <h2 className="text-[15px] font-semibold text-[#f0eef6]">A/B Test Results</h2>
         </div>
         <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
           {mockABTests.map((test) => (
@@ -423,12 +423,12 @@ export function PerformanceView() {
       {/* ── AI Optimization Suggestions ─────────────────── */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2a7 7 0 017 7c0 3-2 5-4 6.5V18H9v-2.5C7 14 5 12 5 9a7 7 0 017-7z" />
             <path d="M9 18h6M10 22h4" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#e8f0dc]">AI Optimization</h2>
-          <span className="px-2 py-0.5 rounded-full bg-[#a3d977]/10 text-[#a3d977] text-[11px] font-medium">
+          <h2 className="text-[15px] font-semibold text-[#f0eef6]">AI Optimization</h2>
+          <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/10 text-[#8b5cf6] text-[11px] font-medium">
             Smart
           </span>
         </div>
