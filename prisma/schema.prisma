@@ -1,0 +1,322 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USER & AUTH ====================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  username      String    @unique
+  displayName   String?
+  bio           String    @default("")
+  profileImage  String    @default("")
+  coverImage    String    @default("")
+  role          String    @default("user") // user, creator, business, admin
+  badge         String    @default("none") // none, blue, gold
+  subscription  String    @default("free") // free, premium, business
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Privacy Settings
+  nameVisibility   String @default("everyone")   // everyone, selected, none
+  dmPermission     String @default("everyone")    // everyone, selected, noone
+  searchVisibility String @default("both")        // username, profileName, both, hidden
+
+  // Paid Chat Settings
+  paidChatEnabled  Boolean @default(false)
+  paidChatPrice    Float   @default(0)
+
+  // Relations
+  posts           Post[]
+  articles        Article[]
+  sentMessages    Message[]     @relation("SentMessages")
+  receivedMessages Message[]    @relation("ReceivedMessages")
+  chats1          Chat[]        @relation("ChatUser1")
+  chats2          Chat[]        @relation("ChatUser2")
+  comments        Comment[]
+  likes           Like[]
+  leads           Lead[]        @relation("LeadOwner")
+  deals           Deal[]
+  orders          Order[]
+  ads             Ad[]
+  payments        Payment[]
+  sharedProfiles    SharedProfileLink[]
+  affiliateOf       Affiliate[]    @relation("AffiliateBusiness")
+  affiliateMembers  Affiliate[]    @relation("AffiliateMember")
+  notifications     Notification[]
+  followFollowing  Follow[]      @relation("UserFollowing")
+  followFollower   Follow[]      @relation("UserFollower")
+  blockedBy       Block[]        @relation("BlockedUser")
+  blockedUsers    Block[]        @relation("Blocker")
+}
+
+// ==================== FOLLOW SYSTEM ====================
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("UserFollower", fields: [followerId], references: [id])
+  following User @relation("UserFollowing", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
+// ==================== BLOCK SYSTEM ====================
+
+model Block {
+  id         String   @id @default(cuid())
+  blockerId  String
+  blockedId  String
+  createdAt  DateTime @default(now())
+
+  blocker  User @relation("Blocker", fields: [blockerId], references: [id])
+  blocked  User @relation("BlockedUser", fields: [blockedId], references: [id])
+
+  @@unique([blockerId, blockedId])
+}
+
+// ==================== CHAT & MESSAGING ====================
+
+model Chat {
+  id          String   @id @default(cuid())
+  user1Id     String
+  user2Id     String
+  isPaidChat  Boolean  @default(false)
+  chatPrice   Float    @default(0)
+  isPaidBy    String?  // userId who paid
+  isDeleted   Boolean  @default(false) // nuclear block
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user1         User      @relation("ChatUser1", fields: [user1Id], references: [id])
+  user2         User      @relation("ChatUser2", fields: [user2Id], references: [id])
+  messages      Message[]
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  chatId      String
+  senderId    String
+  receiverId  String
+  content     String   // encrypted content
+  messageType String   @default("text") // text, image, video
+  mediaUrl    String?
+  status      String   @default("sent") // sent, delivered, seen
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  chat     Chat  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender   User  @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User  @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+// ==================== CONTENT SYSTEM ====================
+
+model Post {
+  id        String   @id @default(cuid())
+  authorId  String
+  caption   String   @default("")
+  mediaUrls String   @default("[]") // JSON array of URLs
+  factCheck String   @default("not_verified") // verified, not_verified
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User   @relation(fields: [authorId], references: [id])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+}
+
+// ==================== ARTICLE SYSTEM ====================
+
+model Article {
+  id        String   @id @default(cuid())
+  authorId  String
+  title     String
+  content   String   // rich text HTML
+  coverImage String  @default("")
+  factCheck String   @default("not_verified")
+  isPublished Boolean @default(false)
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+}
+
+// ==================== ADS SYSTEM ====================
+
+model Ad {
+  id             String   @id @default(cuid())
+  businessId     String
+  title          String
+  description    String
+  mediaUrl       String   @default("")
+  targetAudience String   @default("{}") // JSON
+  budget         Float
+  spent          Float    @default(0)
+  clicks         Int      @default(0)
+  impressions    Int      @default(0)
+  status         String   @default("active") // active, paused, completed
+  placement      String   @default("feed") // feed, comments, profile
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  business User @relation(fields: [businessId], references: [id])
+}
+
+// ==================== BUSINESS / CRM ====================
+
+model Lead {
+  id             String   @id @default(cuid())
+  businessId     String
+  userId         String?  @unique
+  name           String   @default("")
+  email          String   @default("")
+  phone          String   @default("")
+  source         String   @default("") // ad, chat, activity
+  status         String   @default("new") // new, contacted, qualified, converted, lost
+  value          Float    @default(0)
+  notes          String   @default("")
+  aiScore        Float    @default(0) // AI lead scoring
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  business User @relation("LeadOwner", fields: [businessId], references: [id])
+  deals    Deal[]
+  orders   Order[]
+}
+
+model Deal {
+  id         String   @id @default(cuid())
+  businessId String
+  leadId     String
+  title      String
+  value      Float    @default(0)
+  status     String   @default("open") // open, won, lost
+  stage      String   @default("initial") // initial, negotiation, proposal, closing
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  business User  @relation(fields: [businessId], references: [id])
+  lead     Lead  @relation(fields: [leadId], references: [id])
+}
+
+model Order {
+  id         String   @id @default(cuid())
+  businessId String
+  leadId     String
+  amount     Float
+  status     String   @default("pending") // pending, processing, shipped, delivered, cancelled
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  business User  @relation(fields: [businessId], references: [id])
+  lead     Lead  @relation(fields: [leadId], references: [id])
+}
+
+// ==================== AFFILIATE SYSTEM ====================
+
+model Affiliate {
+  id          String   @id @default(cuid())
+  businessId  String
+  userId      String
+  label       String   @default("") // "Verified Agent - [Business Name]"
+  createdAt   DateTime @default(now())
+
+  business User @relation("AffiliateBusiness", fields: [businessId], references: [id])
+  member   User @relation("AffiliateMember", fields: [userId], references: [id])
+
+  @@unique([businessId, userId])
+}
+
+// ==================== PAYMENT SYSTEM ====================
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String
+  amount        Float
+  currency      String   @default("USD")
+  type          String   @default("") // paid_chat, subscription, affiliate
+  status        String   @default("pending") // pending, completed, failed
+  referenceId   String   @default("") // chat id, subscription id, etc
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ==================== SHARED PROFILE LINKS ====================
+
+model SharedProfileLink {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ==================== NOTIFICATIONS ====================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   @default("") // message, like, comment, follow, system
+  title     String   @default("")
+  content   String   @default("")
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ==================== SUBSCRIPTION ====================
+
+model Subscription {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  plan       String   @default("free") // free, premium, business
+  startDate  DateTime @default(now())
+  endDate    DateTime?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

@@ -1,0 +1,123 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users ───────────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ── Usernames ───────────────────────────────────────────────────────
+    match /usernames/{username} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Posts ───────────────────────────────────────────────────────────
+    match /posts/{postId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null && resource.data.authorId == request.auth.uid;
+
+      // Sub-collection likes
+      match /likes/{userId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null && request.auth.uid == userId;
+        allow delete: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Sub-collection comments
+      match /comments/{commentId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+        allow update: if request.auth != null && resource.data.authorId == request.auth.uid;
+        allow delete: if request.auth != null && resource.data.authorId == request.auth.uid;
+      }
+    }
+
+    // ── Post interactions (top-level collections used by social.ts) ──────
+    match /post_likes/{docId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    match /post_comments/{commentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    match /post_reposts/{docId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    match /post_bookmarks/{docId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // ── Follows ─────────────────────────────────────────────────────────
+    match /follows/{followId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Chats ───────────────────────────────────────────────────────────
+    match /chats/{chatId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (request.auth.uid == resource.data.user1Id || request.auth.uid == resource.data.user2Id);
+      allow update: if request.auth != null && (request.auth.uid == resource.data.user1Id || request.auth.uid == resource.data.user2Id);
+
+      match /messages/{messageId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+      }
+    }
+
+    // ── Notifications ───────────────────────────────────────────────────
+    match /notifications/{notifId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+
+    // ── Articles ────────────────────────────────────────────────────────
+    match /articles/{articleId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null && resource.data.authorId == request.auth.uid;
+    }
+
+    // ── Privacy shares ──────────────────────────────────────────────────
+    match /profile_shares/{shareId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // ── Affiliates ──────────────────────────────────────────────────────
+    match /affiliates/{affId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // ── Subscriptions / billing ─────────────────────────────────────────
+    match /subscriptions/{subId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+  }
+}

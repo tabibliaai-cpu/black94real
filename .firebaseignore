@@ -1,0 +1,36 @@
+# Firebase hosting files
+firebase.json
+.firebaserc
+.firebase/
+firestore.rules
+firestore.indexes.json
+storage.rules
+
+# Dependencies
+node_modules/
+
+# Build outputs (except 'out' which is what we deploy)
+.next/
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Misc
+.git/
+.gitignore
+*.md
