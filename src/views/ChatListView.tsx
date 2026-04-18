@@ -657,16 +657,49 @@ export function ChatRoomView() {
     }
   }, [imagePreview, user, chatId, sending, otherId])
 
-  const handleImageSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be under 5MB')
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file')
       return
     }
-    const reader = new FileReader()
-    reader.onload = () => setImagePreview(reader.result as string)
-    reader.readAsDataURL(file)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Image must be under 10MB')
+      return
+    }
+    // Compress image to fit Firestore limits
+    try {
+      const compressed = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onerror = () => reject(new Error('Failed to read'))
+        reader.onload = () => {
+          const img = new Image()
+          img.onerror = () => reject(new Error('Failed to load'))
+          img.onload = () => {
+            const canvas = document.createElement('canvas')
+            let { width, height } = img
+            const maxDim = 1200
+            if (width > maxDim || height > maxDim) {
+              if (width > height) { height = Math.round((height * maxDim) / width); width = maxDim }
+              else { width = Math.round((width * maxDim) / height); height = maxDim }
+            }
+            canvas.width = width
+            canvas.height = height
+            const ctx = canvas.getContext('2d')
+            if (!ctx) { reject(new Error('No canvas')); return }
+            ctx.drawImage(img, 0, 0, width, height)
+            resolve(canvas.toDataURL('image/jpeg', 0.6))
+          }
+          img.src = reader.result as string
+        }
+        reader.readAsDataURL(file)
+      })
+      setImagePreview(compressed)
+    } catch (err) {
+      console.error('Image compression failed:', err)
+      toast.error('Failed to process image')
+    }
   }, [])
 
   const handleEmojiSelect = (emoji: any) => {
@@ -846,14 +879,24 @@ export function ChatRoomView() {
           />
 
           {/* Text input */}
-          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-colors px-4 py-2.5">
-            <input
-              type="text"
+          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-colors px-4 py-2">
+            <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
+              }}
+              onPaste={(e) => {
+                // Ensure full paste content is captured
+                setTimeout(() => {
+                  const el = e.target as HTMLTextAreaElement
+                  if (el) setText(el.value)
+                }, 0)
+              }}
               placeholder="Start a message"
-              className="w-full bg-transparent text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none"
+              rows={1}
+              className="w-full bg-transparent text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none resize-none max-h-[120px] leading-snug"
+              style={{ minHeight: '36px' }}
             />
           </div>
 

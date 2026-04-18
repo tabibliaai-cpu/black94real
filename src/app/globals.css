@@ -1180,6 +1180,14 @@ html, body {
   animation: pulseScale 2s ease-in-out infinite;
 }
 
+/* ─── Line clamp fallback ─── */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* ─── Settings Sheet Slide Up ─── */
 
 @keyframes slideUpSheet {

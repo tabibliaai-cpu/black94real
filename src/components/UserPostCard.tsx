@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
+import { useState, useCallback, useRef, useMemo, useEffect, createRef } from 'react'
 import { cn } from '@/lib/utils'
 import { PAvatar } from './PAvatar'
 import { CommentSheet } from './CommentSheet'
@@ -121,6 +121,17 @@ export function UserPostCard({
   const [commentSheetOpen, setCommentSheetOpen] = useState(false)
   const [shareMenuOpen, setShareMenuOpen] = useState(false)
   const [toast, setToast] = useState<{ show: boolean; message: string }>({ show: false, message: '' })
+  const [expanded, setExpanded] = useState(false)
+
+  const captionRef = useRef<HTMLParagraphElement>(null)
+  const [isTruncated, setIsTruncated] = useState(false)
+
+  useEffect(() => {
+    if (captionRef.current) {
+      const el = captionRef.current
+      setIsTruncated(el.scrollHeight > el.clientHeight + 2)
+    }
+  }, [post.caption])
 
   const lastTapRef = useRef(0)
   const likeTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
@@ -201,7 +212,7 @@ export function UserPostCard({
 
   return (
     <>
-      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-5 py-4 rounded-none">
+      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-4 py-3 rounded-none">
         {/* Double-tap heart overlay */}
         {showHeart && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -228,7 +239,7 @@ export function UserPostCard({
           </div>
         )}
 
-        <div className="flex gap-3">
+        <div className="flex gap-2.5">
           {/* Avatar */}
           <div className="shrink-0" onClick={() => onProfileTap?.(post.authorId)}>
             <PAvatar
@@ -262,9 +273,25 @@ export function UserPostCard({
 
             {/* Caption */}
             {post.caption && (
-              <p className="text-[15px] leading-[22px] text-[#f0eef6] whitespace-pre-wrap break-words">
-                {highlightContent(post.caption)}
-              </p>
+              <div className="mt-1">
+                <p
+                  ref={captionRef}
+                  className={cn(
+                    'text-[15px] leading-[22px] text-[#f0eef6] whitespace-pre-wrap break-words',
+                    !expanded && isTruncated && 'line-clamp-4'
+                  )}
+                >
+                  {highlightContent(expanded ? post.caption : post.caption)}
+                </p>
+                {isTruncated && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setExpanded(!expanded) }}
+                    className="text-[#8b5cf6] text-[15px] font-semibold mt-1 hover:underline"
+                  >
+                    {expanded ? 'See less' : 'See more'}
+                  </button>
+                )}
+              </div>
             )}
 
             {/* Media */}
@@ -291,7 +318,7 @@ export function UserPostCard({
             )}
 
             {/* Action bar */}
-            <div className="flex items-center justify-between mt-3.5 max-w-[440px] -ml-2">
+            <div className="flex items-center justify-between mt-3 max-w-[440px] -ml-2">
               {/* Reply / Comment */}
               <button
                 className="flex items-center gap-1 group"
