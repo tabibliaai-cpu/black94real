@@ -233,17 +233,30 @@ function ChatAdsPanel() {
 export function ChatListView() {
   const user = useAppStore((s) => s.user)
   const navigate = useAppStore((s) => s.navigate)
+  const currentView = useAppStore((s) => s.currentView)
   const [chats, setChats] = useState<Chat[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'chat' | 'ads'>('chat')
 
-  useEffect(() => {
+  const loadChats = useCallback(() => {
     if (!user) return
+    setLoading(true)
     fetchChats(user.id)
       .then(setChats)
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [user])
+
+  useEffect(() => {
+    loadChats()
+  }, [loadChats])
+
+  // Re-fetch chats whenever user navigates back to the chat list
+  useEffect(() => {
+    if (currentView === 'chat') {
+      loadChats()
+    }
+  }, [currentView, loadChats])
 
   return (
     <div className="flex flex-col h-[calc(100vh-90px)]">
