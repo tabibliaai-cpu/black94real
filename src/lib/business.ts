@@ -86,6 +86,15 @@ export interface AISuggestion {
   category: string
 }
 
+export interface BusinessTrial {
+  uid: string
+  plan: 'trial' | 'pro' | 'enterprise'
+  startDate: string
+  endDate: string
+  isActive: boolean
+  daysRemaining: number
+}
+
 // ── Mock Affiliates ──────────────────────────────────────────
 export const mockAffiliates: Affiliate[] = [
   {
@@ -317,11 +326,11 @@ export function calculateOverallScore(campaigns: CampaignPerformance[]): number 
   if (campaigns.length === 0) return 0
   const avgCtr = campaigns.reduce((s, c) => s + c.ctr, 0) / campaigns.length
   const avgRoi = campaigns.reduce((s, c) => s + c.roi, 0) / campaigns.length
-  const ctrScore = Math.min(avgCtr / 8, 1) * 40 // max 40 points
-  const roiScore = Math.min(avgRoi / 700, 1) * 40 // max 40 points
+  const ctrScore = Math.min(avgCtr / 8, 1) * 40
+  const roiScore = Math.min(avgRoi / 700, 1) * 40
   const budgetEfficiency =
     campaigns.reduce((s, c) => s + c.budgetUsed / c.budget, 0) / campaigns.length
-  const budgetScore = Math.min(budgetEfficiency, 1) * 20 // max 20 points
+  const budgetScore = Math.min(budgetEfficiency, 1) * 20
   return Math.round(ctrScore + roiScore + budgetScore)
 }
 
@@ -338,4 +347,79 @@ export function formatNumber(num: number): string {
   if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'
   if (num >= 1000) return (num / 1000).toFixed(1) + 'K'
   return num.toString()
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════════
+   BUSINESS TRIAL MANAGEMENT
+   ═════════════════════════════════════════════════════════════════════════════════ */
+
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+} from 'firebase/firestore'
+import { db } from './firebase'
+
+const TRIAL_DURATION_DAYS = 30
+
+function tsToISO(value: unknown): string {
+  if (value && typeof value === 'object' && 'seconds' in value) {
+    const ts = value as { seconds: number; nanoseconds: number }
+    return new Date(ts.seconds * 1000 + ts.nanoseconds / 1_000_000).toISOString()
+  }
+  if (value instanceof Date) return value.toISOString()
+  if (typeof value === 'string') return value
+  return new Date().toISOString()
+}
+
+export async function upgradeToBusinessTrial(uid: string): Promise<void> {
+  const now = new Date()
+  const endDate = new Date(now.getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000)
+
+  const userRef = doc(db, 'users', uid)
+  await updateDoc(userRef, {
+    role: 'business',
+    badge: 'gold',
+    updatedAt: serverTimestamp(),
+  })
+
+  const trialRef = doc(db, 'business_trials', uid)
+  await setDoc(trialRef, {
+    uid,
+    plan: 'trial',
+    startDate: now.toISOString(),
+    endDate: endDate.toISOString(),
+    isActive: true,
+    createdAt: serverTimestamp(),
+  })
+}
+
+export async function getBusinessTrial(uid: string): Promise<BusinessTrial | null> {
+  const trialRef = doc(db, 'business_trials', uid)
+  const snap = await getDoc(trialRef)
+
+  if (!snap.exists()) return null
+
+  const d = snap.data()
+  const startDate = tsToISO(d.startDate)
+  const endDate = tsToISO(d.endDate)
+  const now = new Date()
+  const end = new Date(endDate)
+  const isActive = now < end && d.isActive !== false
+  const daysRemaining = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+
+  return {
+    uid: d.uid ?? uid,
+    plan: d.plan ?? 'trial',
+    startDate,
+    endDate,
+    isActive,
+    daysRemaining,
+  }
+}
+
+export function isTrialActive(trial: BusinessTrial): boolean {
+  return trial.isActive && trial.daysRemaining > 0
 }

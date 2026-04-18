@@ -10,6 +10,7 @@ import { PAvatar } from '@/components/PAvatar'
 import { UserPostCard } from '@/components/UserPostCard'
 import { ProductCard } from '@/components/ProductCard'
 import type { Black94User } from '@/lib/db'
+import { getBusinessTrial, type BusinessTrial } from '@/lib/business'
 
 export function ProfileView() {
   const user = useAppStore((s) => s.user)
@@ -23,11 +24,18 @@ export function ProfileView() {
   const [isFollowing, setIsFollowing] = useState(false)
   const [products, setProducts] = useState<any[]>([])
   const [productsLoading, setProductsLoading] = useState(false)
+  const [trial, setTrial] = useState<BusinessTrial | null>(null)
 
   const targetUserId = viewParams?.userId || user?.id
   const isOwnProfile = !viewParams?.userId || viewParams.userId === user?.id
   const isBusinessAccount = profile?.role === 'business'
-  const showStoreTab = isOwnProfile || isBusinessAccount
+  const showStoreTab = isBusinessAccount
+
+  // Fetch trial status for business accounts
+  useEffect(() => {
+    if (!targetUserId || !isBusinessAccount) return
+    getBusinessTrial(targetUserId).then((t) => setTrial(t)).catch(() => {})
+  }, [targetUserId, isBusinessAccount])
 
   // Fetch profile + posts
   useEffect(() => {
@@ -203,8 +211,24 @@ export function ProfileView() {
           )}
         </div>
 
-        <h2 className="text-xl font-bold text-[#e8f0dc]">{displayName}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-bold text-[#e8f0dc]">{displayName}</h2>
+          {isBusinessAccount && (
+            <span className="flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#a3d977]/15 text-[#a3d977]">
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
+              Business
+            </span>
+          )}
+        </div>
         <p className="text-[15px] text-[#71767b]">@{username}</p>
+        {isBusinessAccount && trial && trial.isActive && (
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <svg className={cn('w-3.5 h-3.5', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#a3d977]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span className={cn('text-[12px] font-medium', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#71767b]')}>
+              Free Trial — {trial.daysRemaining} day{trial.daysRemaining !== 1 ? 's' : ''} remaining
+            </span>
+          </div>
+        )}
 
         {bio && (
           <p className="text-[15px] text-[#e8f0dc] mt-2 leading-relaxed">{bio}</p>
