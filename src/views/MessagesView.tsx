@@ -946,33 +946,6 @@ function ChatListView() {
 
       {/* ─── Chat List ─── */}
       <div className="flex-1 overflow-y-auto no-scrollbar">
-        {/* Online now section */}
-        <div className="px-4 py-2">
-          <span className="text-[12px] font-bold text-[#536471] uppercase tracking-wider">Online Now</span>
-        </div>
-        <div className="flex gap-4 px-4 pb-3 overflow-x-auto no-scrollbar">
-          {mockChatList.filter(c => c.online).map((chat) => (
-            <button
-              key={chat.id}
-              onClick={() => selectChat(chat.id)}
-              className="flex flex-col items-center gap-1.5 shrink-0"
-            >
-              <div className="relative">
-                <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                  style={{ background: `linear-gradient(135deg, ${chat.color}, ${chat.color}99)` }}
-                >
-                  {chat.initial}
-                </div>
-                <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#10b981] border-2 border-black" />
-              </div>
-              <span className="text-[11px] text-[#71767b] truncate max-w-[64px]">{chat.name.split(' ')[0]}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="border-t border-white/[0.06]" />
-
         {/* Mock conversations */}
         <div className="py-1">
           <div className="px-4 py-2">

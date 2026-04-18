@@ -702,7 +702,7 @@ function ChatAdsPanel() {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export function DualPaneChatView() {
-  const { activeTab, setIsMobile } = useDualPaneChat()
+  const { activeTab, setActiveTab, setIsMobile } = useDualPaneChat()
   const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
@@ -723,6 +723,53 @@ export function DualPaneChatView() {
 
   return (
     <div className="h-[calc(100vh-90px)] flex flex-col animate-fade-in">
+      {/* ─── Mobile Tab Switcher ─── */}
+      <div className="shrink-0 flex border-b border-white/[0.06] bg-black/80 backdrop-blur-xl md:hidden">
+        <button
+          onClick={() => setActiveTab('chat')}
+          className={cn(
+            'flex-1 py-3 text-[15px] font-medium relative transition-colors',
+            activeTab === 'chat' ? 'text-[#e8f0dc] font-bold' : 'text-[#71767b]'
+          )}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <svg className={cn('w-[18px] h-[18px]', activeTab === 'chat' ? 'text-[#a3d977]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'chat' ? 2.2 : 1.8}>
+              <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Chat
+          </div>
+          {activeTab === 'chat' && (
+            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#a3d977] rounded-full animate-tab-indicator" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab('ads')}
+          className={cn(
+            'flex-1 py-3 text-[15px] font-medium relative transition-colors',
+            activeTab === 'ads' ? 'text-[#e8f0dc] font-bold' : 'text-[#71767b]'
+          )}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <svg className={cn('w-[18px] h-[18px]', activeTab === 'ads' ? 'text-[#f59e0b]' : 'text-[#71767b]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'ads' ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+              <line x1="1" y1="10" x2="23" y2="10"/>
+            </svg>
+            Chat Ads
+            <span className={cn(
+              'text-[10px] px-1.5 py-0.5 rounded-full font-bold',
+              activeTab === 'ads'
+                ? 'bg-[#f59e0b]/20 text-[#f59e0b]'
+                : 'bg-white/[0.06] text-[#536471]'
+            )}>
+              NEW
+            </span>
+          </div>
+          {activeTab === 'ads' && (
+            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#f59e0b] rounded-full animate-tab-indicator" />
+          )}
+        </button>
+      </div>
+
       <div className="flex-1 min-h-0 overflow-hidden hidden md:flex gap-0">
         {/* Desktop: Show both panels side by side */}
         <div className="w-1/2 border-r border-white/[0.06] min-h-0">
