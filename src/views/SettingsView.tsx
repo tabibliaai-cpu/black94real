@@ -6,6 +6,8 @@ import { useAppStore } from '@/stores/app'
 import { updateUser } from '@/lib/db'
 import { PAvatar } from '@/components/PAvatar'
 import { toast } from 'sonner'
+import { getDoc, doc, updateDoc } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    REUSABLE MENU ROW
@@ -70,6 +72,27 @@ export function SettingsView() {
   const [bio, setBio] = useState(user?.bio || '')
   const [saving, setSaving] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
+  const [upgrading, setUpgrading] = useState(false)
+
+  const handleUpgradeToBusiness = async () => {
+    if (!user || isBusiness) return
+    setUpgrading(true)
+    try {
+      const userRef = doc(db, 'users', user.id)
+      await updateDoc(userRef, { role: 'business' })
+      // Update local store
+      useAppStore.getState().setUser({
+        ...user,
+        role: 'business',
+        accountType: 'business' as any,
+      })
+      toast.success('Upgraded to Business Account!')
+    } catch (e: any) {
+      toast.error('Upgrade failed: ' + e.message)
+    } finally {
+      setUpgrading(false)
+    }
+  }
 
   const handleSave = async () => {
     if (!user) return
@@ -196,12 +219,24 @@ export function SettingsView() {
       <div className="border-t border-white/[0.06] pt-4 space-y-1">
         <SectionHeader label="Store & Commerce" />
         {isBusiness && (
-          <MenuRow
-            icon={<svg className="w-[18px] h-[18px] text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>}
-            label="My Store"
-            badge="Manage"
-            onClick={() => navigate('my-store')}
-          />
+          <>
+            <MenuRow
+              icon={<svg className="w-[18px] h-[18px] text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>}
+              label="Store Dashboard"
+              badge="Manage"
+              onClick={() => navigate('store-dashboard')}
+            />
+            <MenuRow
+              icon={<svg className="w-[18px] h-[18px] text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>}
+              label="My Store"
+              onClick={() => navigate('my-store')}
+            />
+            <MenuRow
+              icon={<svg className="w-[18px] h-[18px] text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
+              label="Business Orders"
+              onClick={() => navigate('business-orders')}
+            />
+          </>
         )}
         <MenuRow
           icon={<svg className="w-[18px] h-[18px] text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
@@ -273,6 +308,38 @@ export function SettingsView() {
           label="Performance"
           onClick={() => navigate('performance')}
         />
+      </div>
+
+      {/* ─── Account Type ─── */}
+      <div className="border-t border-white/[0.06] pt-4 space-y-1">
+        <SectionHeader label="Account Type" />
+        {isBusiness ? (
+          <div className="px-4 py-3 flex items-center gap-3">
+            <span className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#a3d977]/10">
+              <svg className="w-[18px] h-[18px] text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </span>
+            <div className="flex-1">
+              <p className="text-[15px] font-semibold text-[#a3d977]">Business Account</p>
+              <p className="text-[12px] text-[#71767b]">Store, products & commerce enabled</p>
+            </div>
+            <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#a3d977]/15 text-[#a3d977]">Active</span>
+          </div>
+        ) : (
+          <div className="mx-4 mb-2 p-4 rounded-xl bg-gradient-to-br from-[#a3d977]/10 via-transparent to-amber-500/5 border border-[#a3d977]/20">
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-[#a3d977]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              <p className="text-[15px] font-bold text-[#e8f0dc]">Upgrade to Business</p>
+            </div>
+            <p className="text-[13px] text-[#71767b] mb-3">Enable your store, sell products, manage orders & shipping partners.</p>
+            <button
+              onClick={handleUpgradeToBusiness}
+              disabled={upgrading}
+              className="w-full py-3 rounded-full bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[14px] shadow-lg shadow-[#a3d977]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+            >
+              {upgrading ? 'Upgrading...' : 'Switch to Business Account'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ─── App Settings ─── */}
