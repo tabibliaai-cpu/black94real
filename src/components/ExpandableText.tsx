@@ -36,7 +36,8 @@ export function ExpandableText({
   renderContent,
 }: ExpandableTextProps) {
   const [expanded, setExpanded] = useState(false)
-  const [needsTruncation, setNeedsTruncation] = useState(false)
+  /* undefined = not yet measured, false = measured & fits, true = measured & overflows */
+  const [needsTruncation, setNeedsTruncation] = useState<boolean | undefined>(undefined)
   const textRef = useRef<HTMLDivElement>(null)
 
   /* ── Detect overflow after mount ── */
@@ -54,8 +55,8 @@ export function ExpandableText({
 
   if (!text) return null
 
-  /* ── Short text → just render it ── */
-  if (!needsTruncation && !expanded) {
+  /* ── Short text → just render it (only after measurement confirms it fits) ── */
+  if (needsTruncation === false && !expanded) {
     return (
       <div className={className}>
         {renderContent ? renderContent(text) : text}
