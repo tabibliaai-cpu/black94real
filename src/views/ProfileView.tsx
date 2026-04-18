@@ -20,7 +20,6 @@ export function ProfileView() {
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'posts' | 'replies' | 'likes' | 'store'>('posts')
-  const showStoreTab = isOwnProfile || isBusinessAccount
   const [isFollowing, setIsFollowing] = useState(false)
   const [products, setProducts] = useState<any[]>([])
   const [productsLoading, setProductsLoading] = useState(false)
@@ -28,6 +27,7 @@ export function ProfileView() {
   const targetUserId = viewParams?.userId || user?.id
   const isOwnProfile = !viewParams?.userId || viewParams.userId === user?.id
   const isBusinessAccount = profile?.role === 'business'
+  const showStoreTab = isOwnProfile || isBusinessAccount
 
   // Fetch profile + posts
   useEffect(() => {
