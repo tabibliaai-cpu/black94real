@@ -127,9 +127,13 @@ export function UserPostCard({
   const likeTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
   const shareBtnRef = useRef<HTMLButtonElement>(null)
 
-  const mediaUrls = post.mediaUrls
-    ? post.mediaUrls.split(',').map((u) => u.trim()).filter(Boolean)
-    : []
+  const mediaUrls: string[] = useMemo(() => {
+    if (!post.mediaUrls) return []
+    // If it's a base64 data URL, use it as-is (don't split on commas inside base64)
+    if (post.mediaUrls.startsWith('data:')) return [post.mediaUrls]
+    // Otherwise treat as comma-separated URL list
+    return post.mediaUrls.split(',').map((u) => u.trim()).filter(Boolean)
+  }, [post.mediaUrls])
 
   const comments = useMemo(() => post.comments ?? [], [post.comments])
 
