@@ -20,6 +20,7 @@ export function ProfileView() {
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'posts' | 'replies' | 'likes' | 'store'>('posts')
+  const showStoreTab = isOwnProfile || isBusinessAccount
   const [isFollowing, setIsFollowing] = useState(false)
   const [products, setProducts] = useState<any[]>([])
   const [productsLoading, setProductsLoading] = useState(false)
@@ -224,7 +225,7 @@ export function ProfileView() {
       {/* Tabs */}
       <div className="sticky top-[53px] z-20 bg-black/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex">
-          {(isBusinessAccount ? ['posts', 'store', 'likes'] : ['posts', 'replies', 'likes'] as const).map((tab) => (
+          {(showStoreTab ? ['posts', 'store', 'likes'] : ['posts', 'replies', 'likes'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -268,15 +269,28 @@ export function ProfileView() {
             </div>
           )}
           {isOwnProfile && (
-            <button
-              onClick={() => navigate('add-product')}
-              className="fixed bottom-20 right-4 w-14 h-14 rounded-full bg-[#a3d977] flex items-center justify-center shadow-lg shadow-[#a3d977]/30 hover:bg-[#8cc65e] active:scale-90 transition-all z-30"
-              aria-label="Add product"
-            >
-              <svg className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-            </button>
+            <div className="flex flex-col items-center gap-3 pt-4 pb-24">
+              <button
+                onClick={() => navigate('store-dashboard')}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#a3d977] to-[#8cc65e] text-black font-bold text-[14px] shadow-lg shadow-[#a3d977]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <path d="M16 10a4 4 0 01-8 0" />
+                </svg>
+                Store Dashboard
+              </button>
+              <button
+                onClick={() => navigate('add-product')}
+                className="flex items-center gap-1.5 text-[13px] font-medium text-[#a3d977] hover:text-[#c4e899] transition-colors"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                Add Product
+              </button>
+            </div>
           )}
         </>
       ) : posts.length === 0 ? (

@@ -10,6 +10,7 @@ export type AppView =
   | 'anonymous-chat' | 'anonymous-room' | 'reels' | 'stories' | 'dual-pane-chat'
   | 'storefront' | 'product-detail' | 'cart' | 'checkout'
   | 'my-store' | 'add-product' | 'order-tracking' | 'business-orders'
+  | 'store-dashboard'
 
 export type AccountType = 'personal' | 'creator' | 'professional' | 'business'
 

@@ -38,6 +38,7 @@ import { MyStoreView } from '@/views/MyStoreView'
 import { AddProductView } from '@/views/AddProductView'
 import { OrderTrackingView } from '@/views/OrderTrackingView'
 import { BusinessOrdersView } from '@/views/BusinessOrdersView'
+import { StoreDashboardView } from '@/views/StoreDashboardView'
 import { useDualPaneChat } from '@/stores/dualPaneChat'
 import { MobileNav } from '@/components/MobileNav'
 import { MobileHeader } from '@/components/MobileHeader'
@@ -214,6 +215,7 @@ function ViewRouter() {
     'add-product': <AddProductView />,
     'order-tracking': <OrderTrackingView />,
     'business-orders': <BusinessOrdersView />,
+    'store-dashboard': <StoreDashboardView />,
   }
   return <>{views[currentView] || <FeedView />}</>
 }
@@ -346,7 +348,7 @@ export default function Black94App() {
   if (screen === 'loading') return <LoadingScreen />
   if (screen === 'login') return <LoginScreen onSignIn={handleSignIn} busy={busy} />
 
-  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article', 'checkout'].includes(currentView)
+  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article', 'checkout', 'store-dashboard'].includes(currentView)
   const isHomeFeed = currentView === 'feed'
 
   // Title for header
@@ -379,6 +381,7 @@ export default function Black94App() {
     'add-product': 'Add Product',
     'order-tracking': 'My Orders',
     'business-orders': 'Orders',
+    'store-dashboard': 'Store Dashboard',
   }
 
   const isDualPaneChat = currentView === 'dual-pane-chat' || currentView === 'chat'
