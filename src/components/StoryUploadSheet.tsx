@@ -1,20 +1,96 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { useAppStore } from '@/stores/app'
+import { createStory } from '@/lib/stories-db'
+import { IMAGE_FILTERS, getFilterById, type ImageFilter } from '@/lib/image-filters'
+import { toast } from 'sonner'
 
 interface StoryUploadSheetProps {
   open: boolean
   onClose: () => void
-  onStoryUploaded: (imageUrl: string) => void
+  onStoryUploaded: () => void   // now just signals "done"
+}
+
+/* ── Image compression (9:16 optimized for stories) ─────────────────────── */
+function compressStoryImage(
+  file: File,
+  filterCss: string,
+  maxWidth = 1080,
+  maxHeight = 1920,
+  quality = 0.82,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () => reject(new Error('Failed to read file'))
+    reader.onload = () => {
+      const img = new Image()
+      img.onerror = () => reject(new Error('Failed to load image'))
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        let { width, height } = img
+
+        // Fit within maxWidth × maxHeight while preserving aspect ratio
+        if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth }
+        if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight }
+
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) { reject(new Error('Canvas not supported')); return }
+
+        // White fill for JPEG transparency
+        ctx.fillStyle = '#FFFFFF'
+        ctx.fillRect(0, 0, width, height)
+
+        // Apply CSS filter if not "Normal"
+        if (filterCss && filterCss !== 'none') {
+          ctx.filter = filterCss
+        }
+
+        ctx.drawImage(img, 0, 0, width, height)
+        ctx.filter = 'none'
+
+        let dataUrl = canvas.toDataURL('image/jpeg', quality)
+
+        // Auto-recompress if too large for Firestore
+        if (dataUrl.length > 750_000) {
+          const dataUrl2 = canvas.toDataURL('image/jpeg', 0.5)
+          resolve(dataUrl2.length < dataUrl.length ? dataUrl2 : dataUrl)
+        } else {
+          resolve(dataUrl)
+        }
+      }
+      img.src = reader.result as string
+    }
+    reader.readAsDataURL(file)
+  })
 }
 
 export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUploadSheetProps) {
+  const user = useAppStore((s) => s.user)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)  // raw for preview
+  const [selectedFilter, setSelectedFilter] = useState<ImageFilter>(IMAGE_FILTERS[0])
   const [caption, setCaption] = useState('')
   const [isDragging, setIsDragging] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [compressing, setCompressing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const filtersScrollRef = useRef<HTMLDivElement>(null)
+
+  // Reset on open
+  useEffect(() => {
+    if (open) {
+      setSelectedFile(null)
+      setPreviewUrl(null)
+      setSelectedFilter(IMAGE_FILTERS[0])
+      setCaption('')
+      setUploading(false)
+      setCompressing(false)
+    }
+  }, [open])
 
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) return
@@ -51,19 +127,35 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     if (file) handleFile(file)
   }, [handleFile])
 
-  const handleShare = useCallback(() => {
-    if (!previewUrl) return
-    onStoryUploaded(previewUrl)
-    // Reset state
-    setSelectedFile(null)
-    setPreviewUrl(null)
-    setCaption('')
-  }, [previewUrl, onStoryUploaded])
+  const handleShare = useCallback(async () => {
+    if (!previewUrl || !selectedFile || !user || uploading) return
+    setUploading(true)
+    setCompressing(true)
+    try {
+      const compressed = await compressStoryImage(selectedFile, selectedFilter.css)
+      setCompressing(false)
+      await createStory({
+        userId: user.id,
+        username: user.username,
+        displayName: user.displayName || 'You',
+        profileImage: user.profileImage || '',
+        verified: user.isVerified,
+        mediaUrl: compressed,
+        caption: caption.trim(),
+      })
+      toast.success('Story shared!')
+      onStoryUploaded()
+      onClose()
+    } catch (err) {
+      console.error('Story upload failed:', err)
+      setCompressing(false)
+      toast.error('Failed to upload story. Try again.')
+    } finally {
+      setUploading(false)
+    }
+  }, [previewUrl, selectedFile, selectedFilter, caption, user, uploading, onStoryUploaded, onClose])
 
   const handleClose = useCallback(() => {
-    setSelectedFile(null)
-    setPreviewUrl(null)
-    setCaption('')
     onClose()
   }, [onClose])
 
@@ -71,7 +163,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose() }}>
       <SheetContent
         side="bottom"
-        className="bg-[#110f1a] border-t border-white/[0.06] rounded-t-2xl max-h-[85vh] overflow-y-auto"
+        className="bg-[#110f1a] border-t border-white/[0.06] rounded-t-2xl max-h-[92vh] overflow-y-auto"
       >
         <SheetHeader className="px-4 pt-2 pb-1">
           <SheetTitle className="text-[18px] font-bold text-[#f0eef6] text-left">
@@ -89,7 +181,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
               onDragLeave={handleDragLeave}
               className={`
                 relative rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer
-                aspect-[9/16] max-h-[400px] flex flex-col items-center justify-center gap-4
+                aspect-[9/16] max-h-[420px] flex flex-col items-center justify-center gap-4
                 ${isDragging
                   ? 'border-[#8b5cf6] bg-[#8b5cf6]/10'
                   : 'border-white/[0.15] bg-white/[0.03] hover:border-white/[0.25] hover:bg-white/[0.05]'
@@ -120,12 +212,13 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Preview */}
-              <div className="relative rounded-2xl overflow-hidden aspect-[9/16] max-h-[400px] mx-auto">
+              {/* Preview with filter */}
+              <div className="relative rounded-2xl overflow-hidden aspect-[9/16] max-h-[420px] mx-auto">
                 <img
                   src={previewUrl}
                   alt="Story preview"
                   className="w-full h-full object-cover"
+                  style={selectedFilter.css !== 'none' ? { filter: selectedFilter.css } : undefined}
                 />
                 {/* Remove button */}
                 <button
@@ -139,6 +232,50 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                     <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
                   </svg>
                 </button>
+                {/* Current filter badge */}
+                {selectedFilter.id !== 'normal' && (
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#09080f]/60 backdrop-blur-sm">
+                    <span className="text-[12px] text-white font-medium">{selectedFilter.name}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* ── Filter selector ── */}
+              <div className="space-y-2">
+                <h4 className="text-[14px] font-semibold text-[#f0eef6]">Filters</h4>
+                <div
+                  ref={filtersScrollRef}
+                  className="flex gap-3 overflow-x-auto no-scrollbar pb-1"
+                >
+                  {IMAGE_FILTERS.map((f) => (
+                    <button
+                      key={f.id}
+                      onClick={() => setSelectedFilter(f)}
+                      className="flex flex-col items-center gap-1 shrink-0"
+                    >
+                      <div
+                        className={`
+                          w-[62px] h-[82px] rounded-xl overflow-hidden border-2 transition-all
+                          ${selectedFilter.id === f.id
+                            ? 'border-[#8b5cf6] scale-105 shadow-lg shadow-[#8b5cf6]/20'
+                            : 'border-transparent opacity-80 hover:opacity-100'
+                          }
+                        `}
+                      >
+                        <img
+                          src={previewUrl}
+                          alt={f.name}
+                          className="w-full h-full object-cover"
+                          style={f.css !== 'none' ? { filter: f.css } : undefined}
+                          draggable={false}
+                        />
+                      </div>
+                      <span className={`text-[10px] truncate max-w-[62px] ${selectedFilter.id === f.id ? 'text-[#8b5cf6] font-bold' : 'text-[#94a3b8]'}`}>
+                        {f.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Caption input */}
@@ -161,6 +298,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                 onClick={() => {
                   setPreviewUrl(null)
                   setSelectedFile(null)
+                  setSelectedFilter(IMAGE_FILTERS[0])
                 }}
                 className="text-[14px] text-[#8b5cf6] font-medium hover:underline"
               >
@@ -172,16 +310,19 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
           {/* Share button */}
           <button
             onClick={handleShare}
-            disabled={!previewUrl}
+            disabled={!previewUrl || uploading || compressing}
             className={`
-              w-full py-3 rounded-full text-[15px] font-bold transition-all
-              ${previewUrl
+              w-full py-3 rounded-full text-[15px] font-bold transition-all flex items-center justify-center gap-2
+              ${previewUrl && !uploading && !compressing
                 ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.98]'
                 : 'bg-white/[0.08] text-[#64748b] cursor-not-allowed'
               }
             `}
           >
-            Share Story
+            {compressing && (
+              <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+            )}
+            {uploading ? 'Sharing...' : compressing ? 'Processing...' : 'Share Story'}
           </button>
         </div>
       </SheetContent>

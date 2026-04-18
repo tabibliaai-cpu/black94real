@@ -8,6 +8,7 @@ import { createPost } from '@/lib/db'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { toast } from 'sonner'
+import { IMAGE_FILTERS, type ImageFilter } from '@/lib/image-filters'
 
 interface ComposeDialogProps {
   open: boolean
@@ -15,7 +16,7 @@ interface ComposeDialogProps {
 }
 
 /* ── Image compression helper — fits within Firestore 1MB doc limit ── */
-function compressImage(file: File, maxDim = 1200, quality = 0.82): Promise<string> {
+function compressImage(file: File, filterCss: string, maxDim = 1200, quality = 0.82): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = () => reject(new Error('Failed to read file'))
@@ -42,7 +43,15 @@ function compressImage(file: File, maxDim = 1200, quality = 0.82): Promise<strin
         // Without this, JPEG (no alpha support) renders transparent pixels as black.
         ctx.fillStyle = '#FFFFFF'
         ctx.fillRect(0, 0, width, height)
+
+        // Apply CSS filter if not "Normal"
+        if (filterCss && filterCss !== 'none') {
+          ctx.filter = filterCss
+        }
+
         ctx.drawImage(img, 0, 0, width, height)
+        ctx.filter = 'none'
+
         const dataUrl = canvas.toDataURL('image/jpeg', quality)
         // If still too large (base64 > ~750KB raw), compress more aggressively
         if (dataUrl.length > 750_000) {
@@ -63,10 +72,13 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
   const [showEmoji, setShowEmoji] = useState(false)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)     // raw preview
+  const [selectedFilter, setSelectedFilter] = useState<ImageFilter>(IMAGE_FILTERS[0])
   const [compressing, setCompressing] = useState(false)
+  const [showFilters, setShowFilters] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const pendingFileRef = useRef<File | null>(null)
 
   // Premium detection: subscription OR badge indicates premium tier
   const isPremium = user?.subscription === 'pro' || user?.subscription === 'gold'
@@ -86,20 +98,22 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
       toast.error('Image must be under 10MB')
       return
     }
-    setCompressing(true)
-    try {
-      const compressed = await compressImage(file)
-      setImagePreview(compressed)
-    } catch (err) {
-      console.error('Image compression failed:', err)
-      toast.error('Failed to process image')
-    } finally {
-      setCompressing(false)
+    // Store raw preview and the file for later compression with selected filter
+    pendingFileRef.current = file
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      setImagePreview(ev.target?.result as string)
+      setSelectedFilter(IMAGE_FILTERS[0])
+      setShowFilters(true)
     }
+    reader.readAsDataURL(file)
   }, [])
 
   const removeImage = useCallback(() => {
     setImagePreview(null)
+    pendingFileRef.current = null
+    setSelectedFilter(IMAGE_FILTERS[0])
+    setShowFilters(false)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
 
@@ -110,11 +124,18 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
       return
     }
     setSending(true)
+    setCompressing(true)
     try {
-      const mediaUrls = imagePreview || ''
+      let mediaUrls = ''
+      if (imagePreview && pendingFileRef.current) {
+        mediaUrls = await compressImage(pendingFileRef.current, selectedFilter.css)
+      }
       await createPost(user.id, text.trim(), mediaUrls)
       setText('')
       setImagePreview(null)
+      pendingFileRef.current = null
+      setSelectedFilter(IMAGE_FILTERS[0])
+      setShowFilters(false)
       setShowEmoji(false)
       onClose()
       toast.success('Post published!')
@@ -122,6 +143,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
       console.error('Failed to create post:', err)
       toast.error('Failed to publish post. Try again.')
     } finally {
+      setCompressing(false)
       setSending(false)
     }
   }
@@ -176,7 +198,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                   : 'bg-white/[0.08] text-[#64748b] cursor-not-allowed'
               )}
             >
-              {sending ? 'Posting...' : 'Post'}
+              {compressing ? 'Processing...' : sending ? 'Posting...' : 'Post'}
             </button>
           </div>
         </div>
@@ -219,22 +241,79 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
               </div>
             )}
 
-            {/* Image Preview */}
+            {/* Image Preview with filter */}
             {imagePreview && (
-              <div className="mt-3 relative inline-block">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="max-h-[200px] max-w-full rounded-2xl border border-white/[0.08] object-cover"
-                />
+              <div className="mt-3 space-y-3">
+                <div className="relative inline-block">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-h-[200px] max-w-full rounded-2xl border border-white/[0.08] object-cover"
+                    style={selectedFilter.css !== 'none' ? { filter: selectedFilter.css } : undefined}
+                  />
+                  {/* Filter badge */}
+                  {selectedFilter.id !== 'normal' && (
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#09080f]/70 backdrop-blur-sm">
+                      <span className="text-[11px] text-white font-medium">{selectedFilter.name}</span>
+                    </div>
+                  )}
+                  <button
+                    onClick={removeImage}
+                    className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[#09080f] border border-white/[0.15] flex items-center justify-center hover:bg-red-500/20 transition-colors"
+                  >
+                    <svg className="w-4 h-4 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                      <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Filter toggle */}
                 <button
-                  onClick={removeImage}
-                  className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[#09080f] border border-white/[0.15] flex items-center justify-center hover:bg-red-500/20 transition-colors"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex items-center gap-1.5 text-[13px] text-[#8b5cf6] font-medium hover:underline"
                 >
-                  <svg className="w-4 h-4 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                    <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" strokeLinecap="round" />
+                    <circle cx="12" cy="12" r="4" />
                   </svg>
+                  {showFilters ? 'Hide Filters' : 'Edit Filters'}
                 </button>
+
+                {/* Filter selector strip */}
+                {showFilters && (
+                  <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 animate-fade-in">
+                    {IMAGE_FILTERS.map((f) => (
+                      <button
+                        key={f.id}
+                        onClick={() => setSelectedFilter(f)}
+                        className="flex flex-col items-center gap-1 shrink-0"
+                      >
+                        <div
+                          className={cn(
+                            'w-[52px] h-[52px] rounded-lg overflow-hidden border-2 transition-all',
+                            selectedFilter.id === f.id
+                              ? 'border-[#8b5cf6] scale-105 shadow-lg shadow-[#8b5cf6]/20'
+                              : 'border-transparent opacity-75 hover:opacity-100'
+                          )}
+                        >
+                          <img
+                            src={imagePreview}
+                            alt={f.name}
+                            className="w-full h-full object-cover"
+                            style={f.css !== 'none' ? { filter: f.css } : undefined}
+                            draggable={false}
+                          />
+                        </div>
+                        <span className={cn(
+                          'text-[9px] max-w-[52px] truncate',
+                          selectedFilter.id === f.id ? 'text-[#8b5cf6] font-bold' : 'text-[#94a3b8]'
+                        )}>
+                          {f.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

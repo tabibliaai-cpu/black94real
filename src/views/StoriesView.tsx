@@ -4,96 +4,25 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { StoryUploadSheet } from '@/components/StoryUploadSheet'
+import { fetchStoryGroups, fetchUserStories, type StoryGroup, type Story } from '@/lib/stories-db'
+import { toast } from 'sonner'
 
 /* ── Types ───────────────────────────────────────────────────────────── */
 
 interface StoryItem {
   id: string
   imageUrl: string
+  caption?: string
 }
 
-interface StoryGroup {
+interface DisplayGroup {
   userId: string
   username: string
   displayName: string
   profileImage: string
   verified: boolean
   stories: StoryItem[]
-  viewed: boolean
 }
-
-/* ── Mock data ───────────────────────────────────────────────────────── */
-
-const MOCK_STORIES: StoryGroup[] = [
-  {
-    userId: 'u1', username: 'sarah_designs', displayName: 'Sarah Chen',
-    profileImage: '', verified: true, viewed: false,
-    stories: [
-      { id: 's1a', imageUrl: 'https://picsum.photos/seed/s1a/1080/1920' },
-      { id: 's1b', imageUrl: 'https://picsum.photos/seed/s1b/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u2', username: 'alex_travel', displayName: 'Alex Rivera',
-    profileImage: '', verified: false, viewed: false,
-    stories: [
-      { id: 's2a', imageUrl: 'https://picsum.photos/seed/s2a/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u3', username: 'maya_photo', displayName: 'Maya Johnson',
-    profileImage: '', verified: true, viewed: false,
-    stories: [
-      { id: 's3a', imageUrl: 'https://picsum.photos/seed/s3a/1080/1920' },
-      { id: 's3b', imageUrl: 'https://picsum.photos/seed/s3b/1080/1920' },
-      { id: 's3c', imageUrl: 'https://picsum.photos/seed/s3c/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u4', username: 'jake_music', displayName: 'Jake Williams',
-    profileImage: '', verified: false, viewed: true,
-    stories: [
-      { id: 's4a', imageUrl: 'https://picsum.photos/seed/s4a/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u5', username: 'priya_food', displayName: 'Priya Patel',
-    profileImage: '', verified: true, viewed: false,
-    stories: [
-      { id: 's5a', imageUrl: 'https://picsum.photos/seed/s5a/1080/1920' },
-      { id: 's5b', imageUrl: 'https://picsum.photos/seed/s5b/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u6', username: 'omar_tech', displayName: 'Omar Hassan',
-    profileImage: '', verified: false, viewed: true,
-    stories: [
-      { id: 's6a', imageUrl: 'https://picsum.photos/seed/s6a/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u7', username: 'luna_art', displayName: 'Luna Kim',
-    profileImage: '', verified: false, viewed: false,
-    stories: [
-      { id: 's7a', imageUrl: 'https://picsum.photos/seed/s7a/1080/1920' },
-      { id: 's7b', imageUrl: 'https://picsum.photos/seed/s7b/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u8', username: 'noah_fitness', displayName: 'Noah Brooks',
-    profileImage: '', verified: true, viewed: false,
-    stories: [
-      { id: 's8a', imageUrl: 'https://picsum.photos/seed/s8a/1080/1920' },
-    ],
-  },
-  {
-    userId: 'u9', username: 'zara_style', displayName: 'Zara Ahmed',
-    profileImage: '', verified: false, viewed: true,
-    stories: [
-      { id: 's9a', imageUrl: 'https://picsum.photos/seed/s9a/1080/1920' },
-    ],
-  },
-]
 
 const STORY_DURATION = 6000 // 6 seconds per story
 
@@ -119,7 +48,7 @@ function StoryRing({ viewed, children, size = 64 }: { viewed: boolean; children:
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   FULL-SCREEN STORY VIEWER
+   FULL-SCREEN STORY VIEWER — with touch swipe
    85% top = pure image, 15% bottom = user info + reactions
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -128,7 +57,7 @@ function StoryViewer({
   initialGroupIndex,
   onClose,
 }: {
-  groups: StoryGroup[]
+  groups: DisplayGroup[]
   initialGroupIndex: number
   onClose: () => void
 }) {
@@ -139,6 +68,11 @@ function StoryViewer({
   const [reactionAnim, setReactionAnim] = useState<'heart' | 'fire' | 'wow' | null>(null)
   const timerRef = useRef<ReturnType<typeof setInterval>>()
   const startRef = useRef(Date.now())
+
+  // Touch / swipe tracking
+  const touchStartX = useRef(0)
+  const touchStartY = useRef(0)
+  const touchDeltaX = useRef(0)
 
   const group = groups[groupIdx]
   const story = group?.stories[storyIdx]
@@ -192,6 +126,36 @@ function StoryViewer({
     else goNext()
   }, [goNext, goPrev])
 
+  // ── Touch swipe handlers ──
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    touchStartX.current = touch.clientX
+    touchStartY.current = touch.clientY
+    touchDeltaX.current = 0
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    touchDeltaX.current = touch.clientX - touchStartX.current
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    const threshold = 50
+    const deltaX = touchDeltaX.current
+    const deltaY = Math.abs(touchStartY.current) // not used for direction, just reference
+
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX < 0) {
+        // Swipe left → next story
+        goNext()
+      } else {
+        // Swipe right → previous story
+        goPrev()
+      }
+    }
+    touchDeltaX.current = 0
+  }, [goNext, goPrev])
+
   // Double-tap to like
   const lastTapRef = useRef(0)
   const handleDoubleTap = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -216,14 +180,6 @@ function StoryViewer({
   }, [goNext, goPrev, onClose])
 
   if (!story) return null
-
-  const reactions = [
-    { type: 'heart' as const, emoji: '❤️', label: 'Love' },
-    { type: 'fire' as const, emoji: '🔥', label: 'Fire' },
-    { type: 'wow' as const, emoji: '😮', label: 'Wow' },
-    { type: 'cry' as const, emoji: '😭', label: 'Sad' },
-    { type: 'clap' as const, emoji: '👏', label: 'Clap' },
-  ]
 
   return (
     <div className="fixed inset-0 z-50 bg-[#09080f] flex flex-col animate-fade-in">
@@ -252,11 +208,14 @@ function StoryViewer({
         </svg>
       </button>
 
-      {/* ─── 85% — Image area ─── */}
+      {/* ─── 85% — Image area (swipeable) ─── */}
       <div
-        className="relative flex-[85] min-h-0 select-none"
+        className="relative flex-[85] min-h-0 select-none overflow-hidden"
         onClick={handleTap}
         onDoubleClick={handleDoubleTap}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Double-tap heart animation */}
         {reactionAnim && (
@@ -274,8 +233,12 @@ function StoryViewer({
           draggable={false}
         />
 
-        {/* Gradient fade at bottom for smooth transition */}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+        {/* Caption overlay */}
+        {story.caption && (
+          <div className="absolute bottom-0 inset-x-0 px-4 pb-2 pt-8 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
+            <p className="text-[14px] text-white/90">{story.caption}</p>
+          </div>
+        )}
       </div>
 
       {/* ─── 15% — User info + Reactions ─── */}
@@ -349,15 +312,74 @@ function StoryViewer({
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   STORIES VIEW — Grid of story avatars
+   STORIES VIEW — Grid of story avatars (real data from Firestore)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export function StoriesView() {
   const user = useAppStore((s) => s.user)
-  const [groups, setGroups] = useState(MOCK_STORIES)
+  const [firestoreGroups, setFirestoreGroups] = useState<StoryGroup[]>([])
+  const [myStories, setMyStories] = useState<Story[]>([])
+  const [loading, setLoading] = useState(true)
   const [activeGroupIdx, setActiveGroupIdx] = useState<number | null>(null)
   const [uploadOpen, setUploadOpen] = useState(false)
-  const [myStories, setMyStories] = useState<Array<{ id: string; imageUrl: string }>>([])
+
+  // Fetch stories from Firestore on mount & after upload
+  const loadStories = useCallback(async () => {
+    try {
+      setLoading(true)
+      const [groups, mySt] = await Promise.all([
+        fetchStoryGroups(),
+        user ? fetchUserStories(user.id) : Promise.resolve([]),
+      ])
+      setFirestoreGroups(groups)
+      setMyStories(mySt)
+    } catch (err) {
+      console.error('Failed to fetch stories:', err)
+      toast.error('Failed to load stories')
+    } finally {
+      setLoading(false)
+    }
+  }, [user])
+
+  useEffect(() => {
+    loadStories()
+  }, [loadStories])
+
+  // Build display groups: user's own first, then other users
+  const displayGroups: DisplayGroup[] = []
+
+  // User's own stories first (if any)
+  if (user && myStories.length > 0) {
+    displayGroups.push({
+      userId: user.id,
+      username: user.username,
+      displayName: user.displayName || 'You',
+      profileImage: user.profileImage || '',
+      verified: user.isVerified,
+      stories: myStories.map((s) => ({
+        id: s.id,
+        imageUrl: s.mediaUrl,
+        caption: s.caption || undefined,
+      })),
+    })
+  }
+
+  // Other users' stories (excluding current user)
+  for (const g of firestoreGroups) {
+    if (user && g.userId === user.id) continue
+    displayGroups.push({
+      userId: g.userId,
+      username: g.username,
+      displayName: g.displayName,
+      profileImage: g.profileImage,
+      verified: g.verified,
+      stories: g.stories.map((s) => ({
+        id: s.id,
+        imageUrl: s.mediaUrl,
+        caption: s.caption || undefined,
+      })),
+    })
+  }
 
   const openStory = (idx: number) => {
     setActiveGroupIdx(idx)
@@ -367,41 +389,20 @@ export function StoriesView() {
     setActiveGroupIdx(null)
   }
 
-  const handleStoryUploaded = (imageUrl: string) => {
-    const newStory = { id: `my-${Date.now()}`, imageUrl }
-    setMyStories((prev) => [...prev, newStory])
-    setUploadOpen(false)
-  }
+  const handleStoryUploaded = useCallback(() => {
+    loadStories()
+  }, [loadStories])
 
-  // Prepend user's own stories if they have any
-  const allGroups = user && myStories.length > 0
-    ? [
-        {
-          userId: user.id,
-          username: user.username,
-          displayName: user.displayName || 'You',
-          profileImage: user.profileImage || '',
-          verified: user.isVerified,
-          viewed: false,
-          stories: myStories,
-        },
-        ...groups,
-      ]
-    : groups
-
-  // Group stories: unviewed first
-  const unviewed = groups.filter((g) => !g.viewed)
-  const viewed = groups.filter((g) => g.viewed)
-
+  // Show all stories as "unviewed" ring style (gradient)
   return (
-    <div>
+    <div className="min-h-screen pb-4">
       {/* Header area */}
       <div className="px-4 pt-3 pb-2">
         <h2 className="text-xl font-bold text-[#f0eef6]">Stories</h2>
         <p className="text-[13px] text-[#94a3b8] mt-0.5">Tap to view updates from people you follow</p>
       </div>
 
-      {/* Your story + Add */}
+      {/* Your story + Story ring bar */}
       <div className="px-4 pb-4">
         <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-1">
           {/* Your Story */}
@@ -413,7 +414,7 @@ export function StoriesView() {
               {myStories.length > 0 ? (
                 <StoryRing viewed={false} size={64}>
                   <img
-                    src={myStories[0].imageUrl}
+                    src={myStories[0].mediaUrl}
                     alt="Your story"
                     className="w-full h-full object-cover"
                   />
@@ -438,11 +439,11 @@ export function StoriesView() {
             <span className="text-[11px] text-[#94a3b8]">Your story</span>
           </button>
 
-          {/* Unviewed stories */}
-          {unviewed.map((g, i) => (
+          {/* Other users' stories (ring bar) */}
+          {displayGroups.filter((g) => g.userId !== user?.id).map((g, i) => (
             <button
               key={g.userId}
-              onClick={() => openStory(allGroups.indexOf(g))}
+              onClick={() => openStory(displayGroups.indexOf(g))}
               className="flex flex-col items-center gap-1.5 shrink-0"
             >
               <StoryRing viewed={false} size={64}>
@@ -463,15 +464,36 @@ export function StoriesView() {
       {/* Divider */}
       <div className="border-t border-white/[0.06] mx-4" />
 
-      {/* Viewed stories */}
-      {viewed.length > 0 && (
+      {/* Loading state */}
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!loading && displayGroups.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-16 px-8">
+          <div className="w-20 h-20 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
+            <svg className="w-10 h-10 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+          </div>
+          <h3 className="text-[16px] font-semibold text-[#f0eef6] mb-1">No stories yet</h3>
+          <p className="text-[14px] text-[#94a3b8] text-center">Be the first to share a story! Tap the button above to get started.</p>
+        </div>
+      )}
+
+      {/* Story grid (thumbnail cards for each group) */}
+      {!loading && displayGroups.length > 0 && (
         <div className="px-4 pt-4">
-          <h3 className="text-[15px] font-bold text-[#94a3b8] mb-3">Viewed</h3>
+          <h3 className="text-[15px] font-bold text-[#94a3b8] mb-3">Recent Stories</h3>
           <div className="grid grid-cols-2 gap-3">
-            {viewed.map((g) => (
+            {displayGroups.map((g) => (
               <button
                 key={g.userId}
-                onClick={() => openStory(allGroups.indexOf(g))}
+                onClick={() => openStory(displayGroups.indexOf(g))}
                 className="relative rounded-xl overflow-hidden aspect-[9/16] bg-white/[0.04] group"
               >
                 <img
@@ -481,6 +503,12 @@ export function StoriesView() {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                {/* Story count badge */}
+                {g.stories.length > 1 && (
+                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#09080f]/60 backdrop-blur-sm flex items-center justify-center">
+                    <span className="text-[11px] text-white font-bold">{g.stories.length}</span>
+                  </div>
+                )}
                 <div className="absolute bottom-0 inset-x-0 p-2.5">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-black font-bold text-[10px] shrink-0 overflow-hidden">
@@ -491,8 +519,18 @@ export function StoriesView() {
                       )}
                     </div>
                     <div className="text-left min-w-0">
-                      <p className="text-[13px] font-semibold text-white truncate">{g.displayName}</p>
-                      <p className="text-[11px] text-[#94a3b8] truncate">@{g.username}</p>
+                      <div className="flex items-center gap-1">
+                        <p className="text-[13px] font-semibold text-white truncate">{g.displayName}</p>
+                        {g.verified && (
+                          <svg className="w-3 h-3 text-[#8b5cf6] shrink-0" viewBox="0 0 22 22" fill="none">
+                            <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.853-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.69-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.636.433 1.221.878 1.69.47.446 1.055.752 1.69.883.635.13 1.294.083 1.902-.143.271.586.702 1.084 1.24 1.438.54.354 1.167.551 1.813.568.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.225 1.261.275 1.894.144.634-.13 1.219-.435 1.69-.882.445-.47.749-1.055.878-1.691.13-.634.084-1.292-.139-1.899.586-.272 1.084-.701 1.438-1.24.354-.542.551-1.172.57-1.82z" fill="#8b5cf6" />
+                            <path d="M9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" fill="#000" />
+                          </svg>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-[#94a3b8] truncate">
+                        @{g.username} · {g.stories.length} {g.stories.length === 1 ? 'story' : 'stories'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -502,45 +540,10 @@ export function StoriesView() {
         </div>
       )}
 
-      {/* Suggested for you */}
-      <div className="px-4 pt-6 pb-4">
-        <h3 className="text-[15px] font-bold text-[#94a3b8] mb-3">Suggested for you</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { name: 'Creative Studio', user: 'creativestudio', seed: 'sug1' },
-            { name: 'Nature Vibes', user: 'naturevibes', seed: 'sug2' },
-            { name: 'Urban Pulse', user: 'urbanpulse', seed: 'sug3' },
-            { name: 'Food Diary', user: 'fooddiary', seed: 'sug4' },
-          ].map((s) => (
-            <div
-              key={s.user}
-              className="relative rounded-xl overflow-hidden aspect-[9/16] bg-white/[0.04] group"
-            >
-              <img
-                src={`https://picsum.photos/seed/${s.seed}/540/960`}
-                alt=""
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-2.5">
-                <p className="text-[13px] font-semibold text-white">{s.name}</p>
-                <p className="text-[11px] text-[#94a3b8]">@{s.user}</p>
-              </div>
-              <div className="absolute top-2 right-2">
-                <button className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-[12px] font-semibold hover:bg-white/30 transition-colors">
-                  Follow
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Full-screen Story Viewer */}
-      {activeGroupIdx !== null && (
+      {activeGroupIdx !== null && displayGroups.length > 0 && (
         <StoryViewer
-          groups={allGroups}
+          groups={displayGroups}
           initialGroupIndex={activeGroupIdx}
           onClose={closeStory}
         />
