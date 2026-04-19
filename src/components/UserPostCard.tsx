@@ -206,7 +206,7 @@ export function UserPostCard({
 
   return (
     <>
-      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-4 py-3 rounded-none">
+      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-4 py-2.5 rounded-none">
         {/* Double-tap heart overlay */}
         {showHeart && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -248,10 +248,10 @@ export function UserPostCard({
           {/* Content */}
           <div className="flex-1 min-w-0" onClick={handleDoubleTap}>
             {/* Header row */}
-            <div className="flex items-center gap-1 flex-wrap">
+            <div className="flex items-center gap-1 flex-wrap leading-none">
               <button
                 onClick={(e) => { e.stopPropagation(); onProfileTap?.(post.authorId) }}
-                className="font-bold text-[15px] text-[#f0eef6] hover:underline truncate"
+                className="font-bold text-[15px] text-[#f0eef6] hover:underline truncate leading-tight"
               >
                 {post.authorDisplayName || post.authorUsername || 'User'}
               </button>
@@ -269,7 +269,7 @@ export function UserPostCard({
                 id={post.id}
                 text={post.caption}
                 maxLines={4}
-                className="text-[15px] leading-[22px] text-[#f0eef6]"
+                className="text-[15px] leading-[20px] text-[#f0eef6] mt-0.5"
                 renderContent={highlightContent}
               />
             )}

@@ -48,16 +48,33 @@ export function ProfileView() {
       getUser(targetUserId),
       fetchUserPostsNoIndex(targetUserId, 20),
     ])
-      .then(([u, p]) => {
+      .then(async ([u, p]) => {
         if (u) setProfile(u)
-        setPosts(p)
+        // Check interaction status BEFORE rendering — no flash
+        if (user && p.length > 0) {
+          try {
+            const postIds = p.map((post: any) => post.id)
+            const statusMap = await checkPostInteractions(postIds, user.id)
+            const enriched = p.map((post: any) => {
+              const status = statusMap[post.id]
+              if (!status) return post
+              return { ...post, isLiked: status.isLiked, isReposted: status.isReposted, isBookmarked: status.isBookmarked }
+            })
+            setPosts(enriched)
+          } catch (err) {
+            console.error('Failed to check interactions:', err)
+            setPosts(p)
+          }
+        } else {
+          setPosts(p)
+        }
       })
       .catch((err) => {
         console.error('Failed to load profile:', err)
         setPosts([])
       })
       .finally(() => setLoading(false))
-  }, [targetUserId])
+  }, [targetUserId, user])
 
   // Fetch products when store tab is active
   useEffect(() => {
@@ -68,28 +85,6 @@ export function ProfileView() {
       .catch(() => setProducts([]))
       .finally(() => setProductsLoading(false))
   }, [activeTab, targetUserId])
-
-  // Check interaction status for posts
-  useEffect(() => {
-    if (!user || posts.length === 0) return
-    const postIds = posts.map((p: any) => p.id)
-    checkPostInteractions(postIds, user.id).then((statusMap) => {
-      setPosts((prev) =>
-        prev.map((p: any) => {
-          const status = statusMap[p.id]
-          if (!status) return p
-          return {
-            ...p,
-            isLiked: status.isLiked,
-            isReposted: status.isReposted,
-            isBookmarked: status.isBookmarked,
-          }
-        })
-      )
-    }).catch((err) => {
-      console.error('Failed to check interactions:', err)
-    })
-  }, [user, posts.length])
 
   const handleMessage = useCallback(async () => {
     if (!user || !targetUserId || targetUserId === user.id) return

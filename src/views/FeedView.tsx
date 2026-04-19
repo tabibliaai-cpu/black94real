@@ -58,6 +58,25 @@ export function FeedView() {
   const sentinelRef = useRef<HTMLDivElement>(null)
   const postsLoadedRef = useRef(false)
 
+  // Check interactions for a batch of posts and return enriched posts
+  const enrichWithInteractions = useCallback(async (postsList: any[]) => {
+    if (!user) return postsList
+    const realPosts = postsList.filter((p: any) => !p.id?.startsWith('mock-'))
+    if (realPosts.length === 0) return postsList
+    try {
+      const postIds = realPosts.map((p: any) => p.id)
+      const statusMap = await checkPostInteractions(postIds, user.id)
+      return postsList.map((p: any) => {
+        const status = statusMap[p.id]
+        if (!status) return p
+        return { ...p, isLiked: status.isLiked, isReposted: status.isReposted, isBookmarked: status.isBookmarked }
+      })
+    } catch (err) {
+      console.error('Failed to check interactions:', err)
+      return postsList
+    }
+  }, [user])
+
   // Fetch posts — stable reference, no state dependencies
   const loadPosts = useCallback(async (reset = false) => {
     if (reset) {
@@ -77,10 +96,14 @@ export function FeedView() {
       } else {
         lastDocRef.current = result.lastDoc
         if (reset) {
-          setPosts(result.posts)
+          // Enrich with interaction status BEFORE rendering — no flash
+          const enriched = await enrichWithInteractions(result.posts)
+          setPosts(enriched)
           postsLoadedRef.current = true
         } else {
-          setPosts((prev) => [...prev, ...result.posts])
+          // For infinite scroll, also check interactions on new batch
+          const enriched = await enrichWithInteractions(result.posts)
+          setPosts((prev) => [...prev, ...enriched])
         }
       }
     } catch (err) {
@@ -91,38 +114,12 @@ export function FeedView() {
       setLoadingMore(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [enrichWithInteractions])
 
   // Initial load
   useEffect(() => {
     loadPosts(true)
   }, [loadPosts])
-
-  // After posts load, check user interaction status (likes, reposts, bookmarks)
-  useEffect(() => {
-    if (!user || !postsLoadedRef.current || posts.length === 0) return
-
-    const realPosts = posts.filter((p: any) => !p.id?.startsWith('mock-'))
-    if (realPosts.length === 0) return
-
-    const postIds = realPosts.map((p: any) => p.id)
-    checkPostInteractions(postIds, user.id).then((statusMap) => {
-      setPosts((prev) =>
-        prev.map((p: any) => {
-          const status = statusMap[p.id]
-          if (!status) return p
-          return {
-            ...p,
-            isLiked: status.isLiked,
-            isReposted: status.isReposted,
-            isBookmarked: status.isBookmarked,
-          }
-        })
-      )
-    }).catch((err) => {
-      console.error('Failed to check interactions:', err)
-    })
-  }, [user, posts.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Pull-to-refresh
   const handleRefresh = useCallback(() => {
