@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { addPostComment, fetchPostComments } from '@/lib/social'
 import { toast } from 'sonner'
-import { PAvatar } from './PAvatar'
+import { PAvatar, VerifiedBadge } from './PAvatar'
 import { useAppStore } from '@/stores/app'
 
 interface CommentData {
@@ -24,6 +24,9 @@ interface CommentSheetProps {
   onClose: () => void
   postId: string
   postAuthor: string
+  postAuthorProfileImage?: string
+  postAuthorIsVerified?: boolean
+  postAuthorBadge?: string
   postCaption?: string
   initialComments?: CommentData[]
   userId?: string
@@ -53,6 +56,9 @@ export function CommentSheet({
   onClose,
   postId,
   postAuthor,
+  postAuthorProfileImage,
+  postAuthorIsVerified,
+  postAuthorBadge,
   postCaption,
   initialComments = [],
   userId,
@@ -209,10 +215,9 @@ export function CommentSheet({
         {/* Original post preview */}
         <div className="px-4 py-3 border-b border-white/[0.06] shrink-0">
           <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-[10px] text-black font-bold">
-              {postAuthor.charAt(0).toUpperCase()}
-            </div>
+            <PAvatar src={postAuthorProfileImage} name={postAuthor} size={24} verified={postAuthorIsVerified} badge={postAuthorBadge} />
             <span className="text-[13px] font-semibold text-[#f0eef6]">{postAuthor}</span>
+            {(postAuthorIsVerified || postAuthorBadge) && <VerifiedBadge size={12} />}
           </div>
           {postCaption && (
             <p className="text-[14px] text-[#94a3b8] line-clamp-2 leading-relaxed">{postCaption}</p>
@@ -249,6 +254,7 @@ export function CommentSheet({
                     <span className="text-[14px] font-bold text-[#f0eef6] truncate">
                       {comment.authorDisplayName || comment.authorUsername}
                     </span>
+                    {(comment.authorIsVerified || comment.authorBadge) && <VerifiedBadge size={13} />}
                     <span className="text-[13px] text-[#64748b] shrink-0">@{comment.authorUsername}</span>
                     <span className="text-[13px] text-[#64748b] shrink-0">· {timeAgo(comment.createdAt)}</span>
                   </div>

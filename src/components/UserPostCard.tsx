@@ -437,6 +437,9 @@ export function UserPostCard({
         onClose={() => setCommentSheetOpen(false)}
         postId={post.id}
         postAuthor={post.authorDisplayName || post.authorUsername || 'User'}
+        postAuthorProfileImage={post.authorProfileImage}
+        postAuthorIsVerified={post.authorIsVerified}
+        postAuthorBadge={post.authorBadge}
         postCaption={post.caption}
         initialComments={comments}
         userId={userId}
