@@ -723,8 +723,8 @@ export function DualPaneChatView() {
 
   return (
     <div className="h-[calc(100vh-90px)] flex flex-col animate-fade-in">
-      {/* ─── Mobile Tab Switcher ─── */}
-      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl md:hidden">
+      {/* ─── Tab Switcher (always visible) ─── */}
+      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl">
         <button
           onClick={() => setActiveTab('chat')}
           className={cn(
@@ -770,12 +770,18 @@ export function DualPaneChatView() {
         </button>
       </div>
 
+      {/* Desktop: Both panels side-by-side with active highlight */}
       <div className="flex-1 min-h-0 overflow-hidden hidden md:flex gap-0">
-        {/* Desktop: Show both panels side by side */}
-        <div className="w-1/2 border-r border-white/[0.06] min-h-0">
+        <div className={cn(
+          'w-1/2 border-r border-white/[0.06] min-h-0 transition-all duration-300',
+          activeTab === 'chat' ? 'ring-2 ring-inset ring-[#8b5cf6]/30' : 'opacity-60'
+        )}>
           <PrivateChatPanel />
         </div>
-        <div className="w-1/2 min-h-0">
+        <div className={cn(
+          'w-1/2 min-h-0 transition-all duration-300',
+          activeTab === 'ads' ? 'ring-2 ring-inset ring-[#f59e0b]/30' : 'opacity-60'
+        )}>
           <ChatAdsPanel />
         </div>
       </div>
