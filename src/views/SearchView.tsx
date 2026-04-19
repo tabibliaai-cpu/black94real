@@ -58,14 +58,6 @@ export function SearchView() {
     }
   }, [query])
 
-  const trendingTopics = [
-    { tag: 'Black94', category: 'Technology', count: '2.4K' },
-    { tag: 'SocialMedia', category: 'Trending', count: '12.1K' },
-    { tag: 'WebDevelopment', category: 'Technology', count: '5.8K' },
-    { tag: 'UIDesign', category: 'Design', count: '3.2K' },
-    { tag: 'AI', category: 'Technology', count: '45.7K' },
-  ]
-
   return (
     <div className="px-4 pt-2">
       {/* Search bar */}
@@ -158,20 +150,16 @@ export function SearchView() {
           )}
         </div>
       ) : (
-        /* Trending */
-        <div>
-          <h3 className="text-xl font-bold text-[#f0eef6] mb-4">Trends for you</h3>
-          {trendingTopics.map((topic, i) => (
-            <button
-              key={i}
-              className="w-full text-left px-4 py-3 hover:bg-white/[0.04] transition-colors rounded-xl"
-              onClick={() => { setQuery(topic.tag); }}
-            >
-              <p className="text-[13px] text-[#94a3b8]">{topic.category}</p>
-              <p className="font-bold text-[15px] text-[#f0eef6] mt-0.5">#{topic.tag}</p>
-              <p className="text-[13px] text-[#94a3b8] mt-0.5">{topic.count} posts</p>
-            </button>
-          ))}
+        /* No trending yet */
+        <div className="flex flex-col items-center justify-center py-20 text-center px-8">
+          <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-3">
+            <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+            </svg>
+          </div>
+          <h3 className="text-[15px] font-bold text-[#f0eef6] mb-1">Search for people and posts</h3>
+          <p className="text-[14px] text-[#94a3b8]">Find users, posts, and topics across Black94.</p>
         </div>
       )}
     </div>

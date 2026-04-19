@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { getUser, toggleFollow } from '@/lib/db'
+import { getUser, toggleFollow, getFollowerCount, getFollowingCount, checkIsFollowing } from '@/lib/db'
 import { fetchUserPostsNoIndex, checkPostInteractions, togglePostLike, togglePostRepost, togglePostBookmark } from '@/lib/social'
 import { fetchBusinessProducts } from '@/lib/shop'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
@@ -24,6 +24,8 @@ export function ProfileView() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'posts' | 'replies' | 'likes' | 'store'>('posts')
   const [isFollowing, setIsFollowing] = useState(false)
+  const [followerCount, setFollowerCount] = useState(0)
+  const [followingCount, setFollowingCount] = useState(0)
   const [products, setProducts] = useState<any[]>([])
   const [messaging, setMessaging] = useState(false)
   const [productsLoading, setProductsLoading] = useState(false)
@@ -164,8 +166,19 @@ export function ProfileView() {
   const coverImage = profile?.coverImage || (isOwnProfile ? user?.coverImage : '') || ''
   const isVerified = profile?.isVerified ?? (isOwnProfile ? user?.isVerified : false) ?? false
   const badge = profile?.badge || (isOwnProfile ? user?.badge : '') || ''
-  const followerCount = profile ? Math.floor(Math.random() * 500) + 50 : 0
-  const followingCount = profile ? Math.floor(Math.random() * 300) + 20 : 0
+  // Fetch real follower/following counts and follow status
+  useEffect(() => {
+    if (!targetUserId) return
+    Promise.all([
+      getFollowerCount(targetUserId),
+      getFollowingCount(targetUserId),
+      ...(user && targetUserId !== user.id ? [checkIsFollowing(user.id, targetUserId)] : [Promise.resolve(false)]),
+    ]).then(([followers, following, following_status]) => {
+      setFollowerCount(followers)
+      setFollowingCount(following)
+      setIsFollowing(following_status)
+    }).catch(() => {})
+  }, [targetUserId, user?.id])
 
   if (loading) {
     return (

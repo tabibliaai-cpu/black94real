@@ -102,7 +102,7 @@ export function UserPostCard({
   const [repostCount, setRepostCount] = useState(post.repostCount ?? 0)
   const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked ?? false)
   const [commentCount, setCommentCount] = useState(post.commentCount ?? 0)
-  const [viewCount] = useState(post.viewCount ?? Math.floor(Math.random() * 5000 + 100))
+  const [viewCount] = useState(post.viewCount ?? 0)
 
   /* ── Sync local state with parent props (e.g., after Firestore check) ── */
   useEffect(() => { setIsLiked(post.isLiked ?? false) }, [post.isLiked])
@@ -455,6 +455,7 @@ export function UserPostCard({
         isReposted={isReposted}
         anchorRef={shareBtnRef.current}
         postCaption={post.caption}
+        postId={post.id}
       />
 
       {/* Toast */}

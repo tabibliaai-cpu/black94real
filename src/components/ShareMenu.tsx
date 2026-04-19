@@ -11,6 +11,7 @@ interface ShareMenuProps {
   isReposted?: boolean
   anchorRef?: HTMLButtonElement | null
   postCaption?: string
+  postId?: string
 }
 
 export function ShareMenu({
@@ -21,6 +22,7 @@ export function ShareMenu({
   isReposted = false,
   anchorRef,
   postCaption,
+  postId,
 }: ShareMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
@@ -65,7 +67,7 @@ export function ShareMenu({
 
   const handleCopyLink = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(`https://black94.web.app/post/${Math.random().toString(36).slice(2, 10)}`)
+      await navigator.clipboard.writeText(`https://black94.web.app/post/${postId || '0'}`)
       setCopied(true)
       setTimeout(() => { setCopied(false); onClose() }, 1500)
     } catch {

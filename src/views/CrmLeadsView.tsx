@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAppStore } from '@/stores/app'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
-import { mockLeads, getLeadScoreBg, getLeadSourceColor } from '@/lib/crm'
+import { getLeadScoreBg, getLeadSourceColor } from '@/lib/crm'
 import type { Lead } from '@/lib/crm'
 
 const FILTER_TABS = ['All', 'Hot', 'Warm', 'Cold', 'Converted'] as const
@@ -29,9 +29,10 @@ export function CrmLeadsView() {
   const navigate = useAppStore((s) => s.navigate)
   const [activeTab, setActiveTab] = useState<FilterTab>('All')
 
+  const leads: Lead[] = []
   const filteredLeads = activeTab === 'All'
-    ? mockLeads
-    : mockLeads.filter(lead => classifyLead(lead) === activeTab)
+    ? leads
+    : leads.filter(lead => classifyLead(lead) === activeTab)
 
   return (
     <div className="px-4 pt-2 pb-24 space-y-4">

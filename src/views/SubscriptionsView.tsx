@@ -8,7 +8,6 @@ import {
   PLANS,
   getCurrentPlan,
   FEATURE_COMPARISON,
-  mockBillingHistory,
   type Plan,
 } from '@/lib/subscription'
 
@@ -358,38 +357,15 @@ function BillingHistory() {
       </div>
 
       <div className="divide-y divide-white/[0.04] max-h-80 overflow-y-auto custom-scrollbar">
-        {mockBillingHistory.map((entry) => (
-          <div
-            key={entry.id}
-            className="flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/[0.04] flex items-center justify-center flex-shrink-0">
-                <ReceiptIcon className="w-4 h-4 text-[#64748b]" />
-              </div>
-              <div>
-                <p className="text-[14px] font-medium text-[#f0eef6]">{entry.plan}</p>
-                <p className="text-[12px] text-[#94a3b8]">{formatDate(entry.date)}</p>
-              </div>
+        <div className="flex items-center justify-center py-10">
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+              <span className="text-2xl">🧾</span>
             </div>
-
-            <div className="flex items-center gap-3">
-              <span className="text-[14px] font-semibold text-[#f0eef6]">
-                ₹{entry.amount.toLocaleString()}
-              </span>
-              <span
-                className={cn(
-                  'text-[11px] font-semibold px-2 py-0.5 rounded-full',
-                  entry.status === 'paid'
-                    ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
-                    : 'bg-[#f59e0b]/15 text-[#f59e0b]'
-                )}
-              >
-                {entry.status}
-              </span>
-            </div>
+            <p className="text-[15px] text-[#f0eef6] font-medium">No billing history</p>
+            <p className="text-[13px] text-[#94a3b8] mt-1">Invoices will appear here after your first payment</p>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   )

@@ -19,6 +19,7 @@ import {
   runTransaction,
   serverTimestamp,
   increment,
+  getCountFromServer,
   DocumentSnapshot,
   DocumentData,
   type User as FirebaseUser,
@@ -515,6 +516,39 @@ export async function toggleFollow(followerId: string, followingId: string): Pro
       createdAt: serverTimestamp(),
     });
     return true;
+  }
+}
+
+/** Count how many users follow the given userId */
+export async function getFollowerCount(userId: string): Promise<number> {
+  try {
+    const q = query(collection(db, 'follows'), where('followingId', '==', userId));
+    const snapshot = await getCountFromServer(q);
+    return snapshot.data().count;
+  } catch {
+    return 0;
+  }
+}
+
+/** Count how many users the given userId follows */
+export async function getFollowingCount(userId: string): Promise<number> {
+  try {
+    const q = query(collection(db, 'follows'), where('followerId', '==', userId));
+    const snapshot = await getCountFromServer(q);
+    return snapshot.data().count;
+  } catch {
+    return 0;
+  }
+}
+
+/** Check if followerId follows followingId */
+export async function checkIsFollowing(followerId: string, followingId: string): Promise<boolean> {
+  try {
+    const ref = doc(db, 'follows', `${followerId}_${followingId}`);
+    const snap = await getDoc(ref);
+    return snap.exists();
+  } catch {
+    return false;
   }
 }
 

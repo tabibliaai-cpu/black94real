@@ -5,10 +5,6 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { toast } from 'sonner'
 import {
-  mockCampaignPerformance,
-  mockChannelPerformance,
-  mockABTests,
-  mockAISuggestions,
   calculateOverallScore,
   formatNumber,
   formatCurrency,
@@ -314,14 +310,11 @@ export function PerformanceView() {
   const [dateRange] = useState('Last 30 days')
 
   const overallScore = useMemo(
-    () => calculateOverallScore(mockCampaignPerformance),
+    () => calculateOverallScore([]),
     []
   )
 
-  const maxChannelImpressions = useMemo(
-    () => Math.max(...mockChannelPerformance.map((c) => c.impressions)),
-    []
-  )
+  const maxChannelImpressions = 0
 
   const handleApplySuggestion = (suggestion: AISuggestion) => {
     toast.success(`Applied: "${suggestion.text.slice(0, 40)}..."`)
@@ -358,11 +351,7 @@ export function PerformanceView() {
         </p>
         <ScoreRing score={overallScore} />
         <p className="text-[13px] text-[#64748b] mt-3">
-          {overallScore >= 70
-            ? 'Great performance across campaigns'
-            : overallScore >= 40
-            ? 'Good results with room to improve'
-            : 'Needs optimization'}
+          No campaigns running yet
         </p>
       </div>
 
@@ -370,9 +359,15 @@ export function PerformanceView() {
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[#f0eef6]">Campaign Performance</h2>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
-          {mockCampaignPerformance.map((campaign) => (
-            <CampaignCard key={campaign.id} campaign={campaign} />
-          ))}
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">📊</span>
+              </div>
+              <p className="text-[15px] text-[#f0eef6] font-medium">No campaign data</p>
+              <p className="text-[13px] text-[#94a3b8] mt-1">Campaign performance will appear here</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -385,13 +380,14 @@ export function PerformanceView() {
           <h2 className="text-[15px] font-semibold text-[#f0eef6]">Channel Performance</h2>
         </div>
         <div className="space-y-4">
-          {mockChannelPerformance.map((channel) => (
-            <ChannelBar
-              key={channel.channel}
-              channel={channel}
-              maxImpressions={maxChannelImpressions}
-            />
-          ))}
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center">
+              <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
+                <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10M12 20V4M6 20v-6" /></svg>
+              </div>
+              <p className="text-[13px] text-[#94a3b8]">No channel data available</p>
+            </div>
+          </div>
         </div>
         <div className="flex items-center gap-4 pt-2 border-t border-white/[0.06]">
           <div className="flex items-center gap-1.5">
@@ -414,9 +410,15 @@ export function PerformanceView() {
           <h2 className="text-[15px] font-semibold text-[#f0eef6]">A/B Test Results</h2>
         </div>
         <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
-          {mockABTests.map((test) => (
-            <ABTestCard key={test.id} test={test} />
-          ))}
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">🧪</span>
+              </div>
+              <p className="text-[15px] text-[#f0eef6] font-medium">No A/B tests running</p>
+              <p className="text-[13px] text-[#94a3b8] mt-1">Set up tests to compare campaign variants</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -433,13 +435,15 @@ export function PerformanceView() {
           </span>
         </div>
         <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
-          {mockAISuggestions.map((suggestion) => (
-            <SuggestionItem
-              key={suggestion.id}
-              suggestion={suggestion}
-              onApply={() => handleApplySuggestion(suggestion)}
-            />
-          ))}
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">💡</span>
+              </div>
+              <p className="text-[15px] text-[#f0eef6] font-medium">No suggestions yet</p>
+              <p className="text-[13px] text-[#94a3b8] mt-1">AI suggestions will appear as campaigns run</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

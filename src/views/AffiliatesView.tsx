@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { toast } from 'sonner'
 import {
-  mockAffiliates,
   type Affiliate,
 } from '@/lib/business'
 
@@ -32,7 +31,7 @@ function formatDate(dateStr: string) {
 export function AffiliatesView() {
   const navigate = useAppStore((s) => s.navigate)
 
-  const [affiliates, setAffiliates] = useState<Affiliate[]>(mockAffiliates)
+  const [affiliates, setAffiliates] = useState<Affiliate[]>([])
   const [newName, setNewName] = useState('')
   const [newEmail, setNewEmail] = useState('')
   const [newRole, setNewRole] = useState('')

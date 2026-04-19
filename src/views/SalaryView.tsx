@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { toast } from 'sonner'
 import {
-  mockTeamMembers,
   calculatePayrollSummary,
   formatCurrency,
   type TeamMember,
@@ -20,7 +19,7 @@ export function SalaryView() {
   const navigate = useAppStore((s) => s.navigate)
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [members, setMembers] = useState<TeamMember[]>(mockTeamMembers)
+  const [members, setMembers] = useState<TeamMember[]>([])
 
   const summary = useMemo(() => calculatePayrollSummary(members), [members])
 
@@ -99,7 +98,18 @@ export function SalaryView() {
           Team Members — {MONTHS[selectedMonth]} {new Date().getFullYear()}
         </h2>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
-          {members.map((member) => {
+          {members.length === 0 ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl">👥</span>
+                </div>
+                <p className="text-[15px] text-[#f0eef6] font-medium">No team members</p>
+                <p className="text-[13px] text-[#94a3b8] mt-1">Add team members to manage their salaries</p>
+              </div>
+            </div>
+          ) : (
+          members.map((member) => {
             const totalCommission = member.commissions.reduce((s, c) => s + c.amount, 0)
             const totalIncentive = member.incentives.reduce((s, i) => s + i.amount, 0)
             const total = memberTotal(member)
@@ -258,7 +268,8 @@ export function SalaryView() {
                 )}
               </div>
             )
-          })}
+          })
+          )}
         </div>
       </div>
 

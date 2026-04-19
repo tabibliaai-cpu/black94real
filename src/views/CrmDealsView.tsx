@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAppStore } from '@/stores/app'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
-import { mockDeals, getStageColor, formatCurrency } from '@/lib/crm'
+import { getStageColor, formatCurrency } from '@/lib/crm'
 import type { Deal } from '@/lib/crm'
 
 const STAGES = ['New', 'Contacted', 'Proposal', 'Negotiation', 'Won', 'Lost'] as const
@@ -17,7 +17,7 @@ function daysSince(dateStr: string): number {
 
 export function CrmDealsView() {
   const navigate = useAppStore((s) => s.navigate)
-  const [deals, setDeals] = useState<Deal[]>(mockDeals)
+  const [deals, setDeals] = useState<Deal[]>([])
 
   const moveDeal = (dealId: string, newStage: string) => {
     setDeals(prev => prev.map(d => {

@@ -2,13 +2,7 @@
 
 import { useAppStore } from '@/stores/app'
 import { cn } from '@/lib/utils'
-import {
-  mockAnalytics,
-  monthlyRevenueData,
-  mockLeads,
-  formatCurrency,
-  formatNumber,
-} from '@/lib/crm'
+import { formatCurrency, type Lead } from '@/lib/crm'
 
 const QUICK_ACTIONS = [
   { label: 'Manage Ads', view: 'ads-manager' as const, icon: '📢', color: 'from-[#8b5cf6]/10 to-transparent' },
@@ -17,19 +11,15 @@ const QUICK_ACTIONS = [
   { label: 'Create Campaign', view: 'create-ad' as const, icon: '🚀', color: 'from-purple-500/10 to-transparent' },
 ]
 
-const AI_INSIGHTS = [
-  'Your conversion rate improved 12% this week. Consider increasing ad spend on the 25-34 age group.',
-  'Lead quality from referral sources is 2.3x higher than ads. Consider a referral rewards program.',
-  'Revenue from enterprise deals grew 28% month-over-month. Prioritize closing the pending proposals.',
-]
+const AI_INSIGHTS: string[] = []
 
 export function BusinessDashboardView() {
   const navigate = useAppStore((s) => s.navigate)
   const user = useAppStore((s) => s.user)
   const username = user?.displayName || user?.username || 'User'
 
-  const recentLeads = mockLeads.slice(0, 3)
-  const maxRevenue = Math.max(...monthlyRevenueData.map(d => d.revenue))
+  const recentLeads: Lead[] = []
+  const maxRevenue = 0
 
   return (
     <div className="px-4 pt-2 pb-24 space-y-5">
@@ -61,10 +51,10 @@ export function BusinessDashboardView() {
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: 'Total Revenue', value: formatCurrency(mockAnalytics.totalRevenue), icon: '💵', gradient: 'from-[#8b5cf6]/10 to-transparent' },
-          { label: 'Active Leads', value: String(mockAnalytics.totalLeads), icon: '🎯', gradient: 'from-blue-500/10 to-transparent' },
-          { label: 'Conversion Rate', value: `${mockAnalytics.conversionRate}%`, icon: '📈', gradient: 'from-[#ffd700]/10 to-transparent' },
-          { label: 'Satisfaction', value: '4.7/5', icon: '⭐', gradient: 'from-orange-500/10 to-transparent' },
+          { label: 'Total Revenue', value: '—', icon: '💵', gradient: 'from-[#8b5cf6]/10 to-transparent' },
+          { label: 'Active Leads', value: '0', icon: '🎯', gradient: 'from-blue-500/10 to-transparent' },
+          { label: 'Conversion Rate', value: '0%', icon: '📈', gradient: 'from-[#ffd700]/10 to-transparent' },
+          { label: 'Satisfaction', value: '—', icon: '⭐', gradient: 'from-orange-500/10 to-transparent' },
         ].map((stat) => (
           <div key={stat.label} className={cn('rounded-xl bg-gradient-to-br p-4 border border-white/[0.06]', stat.gradient)}>
             <div className="flex items-center gap-1.5 mb-2">
@@ -80,19 +70,14 @@ export function BusinessDashboardView() {
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-[#f0eef6]">Revenue Trend</h3>
-          <span className="text-[11px] text-[#8b5cf6] font-semibold">+27.8% ↑</span>
         </div>
-        <div className="flex items-end gap-2 h-32">
-          {monthlyRevenueData.map((d) => (
-            <div key={d.month} className="flex-1 flex flex-col items-center gap-1.5">
-              <span className="text-[10px] text-[#94a3b8]">{formatCurrency(d.revenue)}</span>
-              <div
-                className="w-full rounded-t-md bg-gradient-to-t from-[#8b5cf6]/30 to-[#8b5cf6] transition-all duration-500"
-                style={{ height: `${(d.revenue / maxRevenue) * 100}%` }}
-              />
-              <span className="text-[11px] text-[#94a3b8]">{d.month}</span>
+        <div className="flex items-center justify-center h-32">
+          <div className="text-center">
+            <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
+              <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10M12 20V4M6 20v-6" /></svg>
             </div>
-          ))}
+            <p className="text-[13px] text-[#94a3b8]">No data available</p>
+          </div>
         </div>
       </div>
 
@@ -123,25 +108,34 @@ export function BusinessDashboardView() {
           <button onClick={() => navigate('crm-leads')} className="text-[12px] text-[#8b5cf6] font-semibold">View all</button>
         </div>
         <div className="space-y-3">
-          {recentLeads.map((lead) => (
-            <div key={lead.id} className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[13px] text-[#8b5cf6] font-bold shrink-0">
-                {lead.name[0]}
+          {recentLeads.length === 0 ? (
+            <div className="text-center py-6">
+              <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
+                <span className="text-xl">👥</span>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[14px] font-semibold text-[#f0eef6] truncate">{lead.name}</p>
-                <p className="text-[12px] text-[#94a3b8]">{lead.status} • {lead.createdAt}</p>
-              </div>
-              <div className={cn(
-                'text-[12px] font-bold px-2 py-0.5 rounded-full shrink-0',
-                lead.aiScore > 80 ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' :
-                lead.aiScore >= 50 ? 'bg-[#ffd700]/15 text-[#ffd700]' :
-                'bg-red-500/15 text-red-400'
-              )}>
-                {lead.aiScore}
-              </div>
+              <p className="text-[13px] text-[#94a3b8]">No leads yet</p>
             </div>
-          ))}
+          ) : (
+            recentLeads.map((lead) => (
+              <div key={lead.id} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[13px] text-[#8b5cf6] font-bold shrink-0">
+                  {lead.name[0]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[14px] font-semibold text-[#f0eef6] truncate">{lead.name}</p>
+                  <p className="text-[12px] text-[#94a3b8]">{lead.status} • {lead.createdAt}</p>
+                </div>
+                <div className={cn(
+                  'text-[12px] font-bold px-2 py-0.5 rounded-full shrink-0',
+                  lead.aiScore > 80 ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' :
+                  lead.aiScore >= 50 ? 'bg-[#ffd700]/15 text-[#ffd700]' :
+                  'bg-red-500/15 text-red-400'
+                )}>
+                  {lead.aiScore}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -152,12 +146,18 @@ export function BusinessDashboardView() {
           <h3 className="text-sm font-semibold text-purple-300">AI Insights</h3>
         </div>
         <div className="space-y-3">
-          {AI_INSIGHTS.map((insight, i) => (
-            <div key={i} className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
-              <p className="text-[13px] text-[#c0c0c0] leading-relaxed">{insight}</p>
+          {AI_INSIGHTS.length === 0 ? (
+            <div className="text-center py-4">
+              <p className="text-[13px] text-[#94a3b8]">No insights yet — connect your data to get started</p>
             </div>
-          ))}
+          ) : (
+            AI_INSIGHTS.map((insight, i) => (
+              <div key={i} className="flex items-start gap-2.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
+                <p className="text-[13px] text-[#c0c0c0] leading-relaxed">{insight}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

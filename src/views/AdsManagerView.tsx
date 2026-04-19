@@ -5,9 +5,6 @@ import { useAppStore } from '@/stores/app'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
-  mockAdCampaigns,
-  dailyImpressionsData,
-  recentActivity,
   getAdStatusColor,
   formatCurrency,
   formatNumber,
@@ -15,19 +12,19 @@ import {
 } from '@/lib/crm'
 
 function loadCampaigns(): AdCampaign[] {
-  if (typeof window === 'undefined') return mockAdCampaigns
+  if (typeof window === 'undefined') return []
   const stored = localStorage.getItem('black94_ads')
   if (stored) {
     try { return JSON.parse(stored) } catch { /* fall through */ }
   }
-  return mockAdCampaigns
+  return []
 }
 
 export function AdsManagerView() {
   const navigate = useAppStore((s) => s.navigate)
   const [campaigns, setCampaigns] = useState<AdCampaign[]>(loadCampaigns)
 
-  const allCampaigns = [...campaigns, ...mockAdCampaigns.filter(m => !campaigns.find(c => c.id === m.id))]
+  const allCampaigns = campaigns
   const totalImpressions = allCampaigns.reduce((s, c) => s + c.impressions, 0)
   const totalClicks = allCampaigns.reduce((s, c) => s + c.clicks, 0)
   const totalSpend = allCampaigns.reduce((s, c) => s + c.spend, 0)
@@ -45,7 +42,7 @@ export function AdsManagerView() {
     }))
   }
 
-  const maxImpressions = Math.max(...dailyImpressionsData.map(d => d.impressions))
+  const maxImpressions = 0
 
   return (
     <div className="px-4 pt-2 pb-24 space-y-5">
@@ -87,17 +84,13 @@ export function AdsManagerView() {
       {/* Performance Chart */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Impressions — Last 7 Days</h3>
-        <div className="flex items-end gap-2 h-32">
-          {dailyImpressionsData.map((d) => (
-            <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5">
-              <span className="text-[10px] text-[#94a3b8]">{formatNumber(d.impressions)}</span>
-              <div
-                className="w-full rounded-t-md bg-gradient-to-t from-[#8b5cf6]/40 to-[#8b5cf6] transition-all duration-500"
-                style={{ height: `${(d.impressions / maxImpressions) * 100}%` }}
-              />
-              <span className="text-[11px] text-[#94a3b8]">{d.day}</span>
+        <div className="flex items-center justify-center h-32">
+          <div className="text-center">
+            <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
+              <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
             </div>
-          ))}
+            <p className="text-[13px] text-[#94a3b8]">No data available</p>
+          </div>
         </div>
       </div>
 
@@ -105,82 +98,84 @@ export function AdsManagerView() {
       <div>
         <h3 className="text-sm font-semibold text-[#f0eef6] mb-3">Campaigns</h3>
         <div className="space-y-3">
-          {allCampaigns.map((campaign) => {
-            const ctr = campaign.impressions > 0 ? ((campaign.clicks / campaign.impressions) * 100).toFixed(2) : '0'
-            return (
-              <div key={campaign.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h4 className="text-[15px] font-semibold text-[#f0eef6]">{campaign.name}</h4>
-                    <p className="text-[12px] text-[#94a3b8] mt-0.5 truncate max-w-[200px]">{campaign.headline}</p>
-                  </div>
-                  <span className={cn('text-[11px] font-semibold px-2 py-0.5 rounded-full shrink-0', getAdStatusColor(campaign.status))}>
-                    {campaign.status}
-                  </span>
-                </div>
-                <div className="grid grid-cols-4 gap-2 mb-3">
-                  <div>
-                    <p className="text-[11px] text-[#94a3b8]">Impressions</p>
-                    <p className="text-[13px] font-semibold text-[#f0eef6]">{formatNumber(campaign.impressions)}</p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-[#94a3b8]">Clicks</p>
-                    <p className="text-[13px] font-semibold text-[#f0eef6]">{formatNumber(campaign.clicks)}</p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-[#94a3b8]">CTR</p>
-                    <p className="text-[13px] font-semibold text-[#ffd700]">{ctr}%</p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-[#94a3b8]">Spend</p>
-                    <p className="text-[13px] font-semibold text-[#f0eef6]">{formatCurrency(campaign.spend)}</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  {campaign.status !== 'Ended' && (
-                    <button
-                      onClick={() => toggleStatus(campaign.id)}
-                      className={cn(
-                        'px-3 py-1 rounded-full text-[12px] font-semibold transition-colors',
-                        campaign.status === 'Active'
-                          ? 'bg-yellow-500/15 text-yellow-400 hover:bg-yellow-500/25'
-                          : 'bg-[#8b5cf6]/15 text-[#8b5cf6] hover:bg-[#8b5cf6]/25'
-                      )}
-                    >
-                      {campaign.status === 'Active' ? 'Pause' : 'Resume'}
-                    </button>
-                  )}
-                  <button
-                    onClick={() => toast.info('Edit feature coming soon')}
-                    className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1] transition-colors"
-                  >
-                    Edit
-                  </button>
-                </div>
+          {allCampaigns.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl">📢</span>
               </div>
-            )
-          })}
+              <p className="text-[15px] text-[#f0eef6] font-medium">No campaigns yet</p>
+              <p className="text-[13px] text-[#94a3b8] mt-1">Create your first ad campaign to get started</p>
+            </div>
+          ) : (
+            allCampaigns.map((campaign) => {
+              const ctr = campaign.impressions > 0 ? ((campaign.clicks / campaign.impressions) * 100).toFixed(2) : '0'
+              return (
+                <div key={campaign.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h4 className="text-[15px] font-semibold text-[#f0eef6]">{campaign.name}</h4>
+                      <p className="text-[12px] text-[#94a3b8] mt-0.5 truncate max-w-[200px]">{campaign.headline}</p>
+                    </div>
+                    <span className={cn('text-[11px] font-semibold px-2 py-0.5 rounded-full shrink-0', getAdStatusColor(campaign.status))}>
+                      {campaign.status}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2 mb-3">
+                    <div>
+                      <p className="text-[11px] text-[#94a3b8]">Impressions</p>
+                      <p className="text-[13px] font-semibold text-[#f0eef6]">{formatNumber(campaign.impressions)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-[#94a3b8]">Clicks</p>
+                      <p className="text-[13px] font-semibold text-[#f0eef6]">{formatNumber(campaign.clicks)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-[#94a3b8]">CTR</p>
+                      <p className="text-[13px] font-semibold text-[#ffd700]">{ctr}%</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-[#94a3b8]">Spend</p>
+                      <p className="text-[13px] font-semibold text-[#f0eef6]">{formatCurrency(campaign.spend)}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    {campaign.status !== 'Ended' && (
+                      <button
+                        onClick={() => toggleStatus(campaign.id)}
+                        className={cn(
+                          'px-3 py-1 rounded-full text-[12px] font-semibold transition-colors',
+                          campaign.status === 'Active'
+                            ? 'bg-yellow-500/15 text-yellow-400 hover:bg-yellow-500/25'
+                            : 'bg-[#8b5cf6]/15 text-[#8b5cf6] hover:bg-[#8b5cf6]/25'
+                        )}
+                      >
+                        {campaign.status === 'Active' ? 'Pause' : 'Resume'}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => toast.info('Edit feature coming soon')}
+                      className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1] transition-colors"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              )
+            })
+          )}
         </div>
       </div>
 
       {/* Recent Activity */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#f0eef6] mb-3">Recent Activity</h3>
-        <div className="space-y-3">
-          {recentActivity.map((activity) => (
-            <div key={activity.id} className="flex items-start gap-3">
-              <div className={cn(
-                'w-2 h-2 rounded-full mt-1.5 shrink-0',
-                activity.type === 'success' ? 'bg-[#8b5cf6]' :
-                activity.type === 'warning' ? 'bg-yellow-400' :
-                activity.type === 'info' ? 'bg-blue-400' : 'bg-[#94a3b8]'
-              )} />
-              <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-[#f0eef6]">{activity.text}</p>
-                <p className="text-[11px] text-[#94a3b8]">{activity.time}</p>
-              </div>
+        <div className="flex items-center justify-center py-6">
+          <div className="text-center">
+            <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
+              <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
             </div>
-          ))}
+            <p className="text-[13px] text-[#94a3b8]">No activity yet</p>
+          </div>
         </div>
       </div>
     </div>
