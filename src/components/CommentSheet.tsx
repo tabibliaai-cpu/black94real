@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { addPostComment, fetchPostComments } from '@/lib/social'
 import { toast } from 'sonner'
@@ -51,6 +51,30 @@ function timeAgo(dateStr?: string): string {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
+/**
+ * Enrich comments from Firestore: if a comment's authorId matches the current
+ * user, fill in missing isVerified/badge/profileImage from the live user profile.
+ * This ensures older comments that were stored before these fields existed
+ * still display the correct badge.
+ */
+function enrichComments(
+  comments: CommentData[],
+  currentUser: { id?: string; isVerified?: boolean; badge?: string; profileImage?: string } | null,
+): CommentData[] {
+  if (!currentUser?.id) return comments
+  return comments.map((c) => {
+    if (c.authorId === currentUser.id) {
+      return {
+        ...c,
+        authorIsVerified: c.authorIsVerified ?? currentUser.isVerified ?? false,
+        authorBadge: c.authorBadge || currentUser.badge || '',
+        authorProfileImage: c.authorProfileImage || currentUser.profileImage || '',
+      }
+    }
+    return c
+  })
+}
+
 export function CommentSheet({
   open,
   onClose,
@@ -75,6 +99,12 @@ export function CommentSheet({
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const currentUser = useAppStore((s) => s.user)
+
+  // Derive enriched comments — always patch current user's live profile data
+  const enrichedComments = useMemo(
+    () => enrichComments(comments, currentUser),
+    [comments, currentUser],
+  )
 
   // Fetch comments from Firestore when sheet opens
   useEffect(() => {
@@ -171,7 +201,7 @@ export function CommentSheet({
       setSending(false)
       inputRef.current?.focus()
     }
-  }, [newComment, sending, postId, userId, userDisplayName, userUsername, userProfileImage, onCommentSent])
+  }, [newComment, sending, postId, userId, userDisplayName, userUsername, userProfileImage, onCommentSent, currentUser])
 
   const handleLikeComment = useCallback((commentId: string) => {
     setLikeMap((prev) => ({ ...prev, [commentId]: !prev[commentId] }))
@@ -180,6 +210,11 @@ export function CommentSheet({
       [commentId]: (prev[commentId] || 0) + (likeMap[commentId] ? -1 : 1),
     }))
   }, [likeMap])
+
+  // Helper: should we show a verified badge for this comment?
+  const showBadge = useCallback((c: CommentData) => {
+    return c.authorIsVerified || !!c.authorBadge
+  }, [])
 
   if (!open) return null
 
@@ -217,7 +252,7 @@ export function CommentSheet({
           <div className="flex items-center gap-2 mb-1.5">
             <PAvatar src={postAuthorProfileImage} name={postAuthor} size={24} verified={postAuthorIsVerified} badge={postAuthorBadge} />
             <span className="text-[13px] font-semibold text-[#f0eef6]">{postAuthor}</span>
-            {(postAuthorIsVerified || postAuthorBadge) && <VerifiedBadge size={12} />}
+            {(postAuthorIsVerified || postAuthorBadge) && <VerifiedBadge size={12} badge={postAuthorBadge} />}
           </div>
           {postCaption && (
             <p className="text-[14px] text-[#94a3b8] line-clamp-2 leading-relaxed">{postCaption}</p>
@@ -226,7 +261,7 @@ export function CommentSheet({
 
         {/* Comments list */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-2 no-scrollbar">
-          {comments.length === 0 ? (
+          {enrichedComments.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <svg className="w-10 h-10 text-[#64748b] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
@@ -235,7 +270,7 @@ export function CommentSheet({
               <p className="text-[13px] text-[#64748b] mt-1">Be the first to share your thoughts</p>
             </div>
           ) : (
-            comments.map((comment) => (
+            enrichedComments.map((comment) => (
               <div key={comment.id} className="flex gap-3 py-3 animate-fade-in">
                 {/* Avatar */}
                 <div className="shrink-0">
@@ -254,7 +289,7 @@ export function CommentSheet({
                     <span className="text-[14px] font-bold text-[#f0eef6] truncate">
                       {comment.authorDisplayName || comment.authorUsername}
                     </span>
-                    {(comment.authorIsVerified || comment.authorBadge) && <VerifiedBadge size={13} />}
+                    {showBadge(comment) && <VerifiedBadge size={13} badge={comment.authorBadge} />}
                     <span className="text-[13px] text-[#64748b] shrink-0">@{comment.authorUsername}</span>
                     <span className="text-[13px] text-[#64748b] shrink-0">· {timeAgo(comment.createdAt)}</span>
                   </div>
