@@ -460,6 +460,8 @@ export function ChatListView() {
                         src={chat.otherUser?.profileImage}
                         name={chat.otherUser?.displayName}
                         size={48}
+                        verified={(chat.otherUser as any)?.isVerified}
+                        badge={(chat.otherUser as any)?.badge}
                       />
                       {chat.unreadCount > 0 && (
                         <div className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#8b5cf6] flex items-center justify-center">
@@ -524,7 +526,7 @@ export function ChatRoomView() {
 
   // Resolve other user's ID and profile from the chat document
   const [otherId, setOtherId] = useState<string | null>(null)
-  const [otherUser, setOtherUser] = useState<{ displayName: string; profileImage: string; username: string } | null>(null)
+  const [otherUser, setOtherUser] = useState<{ displayName: string; profileImage: string; username: string; isVerified: boolean; badge: string } | null>(null)
   const [chatLoading, setChatLoading] = useState(false)
 
   useEffect(() => {
@@ -542,6 +544,8 @@ export function ChatRoomView() {
               displayName: otherProfile.displayName,
               profileImage: otherProfile.profileImage,
               username: otherProfile.username,
+              isVerified: otherProfile.isVerified,
+              badge: otherProfile.badge,
             })
           }
         } catch (e) {
@@ -736,7 +740,7 @@ export function ChatRoomView() {
           </div>
         ) : otherUser ? (
           <>
-            <PAvatar src={otherUser.profileImage} name={otherUser.displayName} size={36} />
+            <PAvatar src={otherUser.profileImage} name={otherUser.displayName} size={36} verified={otherUser.isVerified} badge={otherUser.badge} />
             <div className="flex-1 min-w-0">
               <p className="font-bold text-[15px] text-[#f0eef6] truncate">{otherUser.displayName}</p>
               <p className="text-[12px] text-[#94a3b8] truncate">@{otherUser.username}</p>
