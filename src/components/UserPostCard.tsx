@@ -206,7 +206,7 @@ export function UserPostCard({
 
   return (
     <>
-      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-4 py-2 rounded-none">
+      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-4 py-3 rounded-none">
         {/* Double-tap heart overlay */}
         {showHeart && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -222,7 +222,7 @@ export function UserPostCard({
 
         {/* Repost indicator */}
         {isReposted && (
-          <div className="flex items-center gap-1.5 ml-8 mb-0.5">
+          <div className="flex items-center gap-1.5 ml-10 mb-0.5">
             <svg className="w-[14px] h-[14px] text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M17 1l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
@@ -233,7 +233,7 @@ export function UserPostCard({
           </div>
         )}
 
-        <div className="flex gap-2.5">
+        <div className="flex gap-3">
           {/* Avatar */}
           <div className="shrink-0" onClick={() => onProfileTap?.(post.authorId)}>
             <PAvatar
@@ -281,7 +281,7 @@ export function UserPostCard({
             {mediaUrls.length > 0 && (
               <div
                 className={cn(
-                  'mt-3.5 rounded-2xl overflow-hidden border border-white/[0.06] max-h-[510px]',
+                  'mt-3 rounded-2xl overflow-hidden border border-white/[0.06] max-h-[510px]',
                   mediaUrls.length === 1 ? '' : 'grid grid-cols-2 gap-0.5'
                 )}
               >
