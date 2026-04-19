@@ -1049,7 +1049,7 @@ function ChatListView() {
                 className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04] transition-colors cursor-pointer group"
               >
                 <div className="relative shrink-0">
-                  <PAvatar name={chat.name} size={50} />
+                  <PAvatar name={chat.name} size={50} src={chat.otherUser?.profileImage} verified={chat.verified} />
                   {chat.online && (
                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#10b981] border-2 border-black" />
                   )}
@@ -1124,6 +1124,8 @@ function ChatListView() {
                   src={chat.otherUser?.profileImage}
                   name={chat.otherUser?.displayName}
                   size={50}
+                  verified={(chat.otherUser as any)?.isVerified}
+                  badge={(chat.otherUser as any)?.badge}
                 />
               </div>
               <div className="flex-1 min-w-0">

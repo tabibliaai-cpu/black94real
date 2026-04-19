@@ -336,6 +336,7 @@ export function Sidebar() {
             name={user?.displayName || user?.username}
             size={36}
             verified={user?.isVerified}
+            badge={user?.badge}
           />
 
           {isExpanded && (

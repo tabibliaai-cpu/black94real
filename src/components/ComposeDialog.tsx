@@ -210,7 +210,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
             name={user?.displayName}
             size={38}
             verified={user?.isVerified}
-            badge={user?.subscription}
+            badge={user?.badge}
           />
           <div className="flex-1 min-w-0">
             <textarea

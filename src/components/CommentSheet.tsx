@@ -4,6 +4,8 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { addPostComment, fetchPostComments } from '@/lib/social'
 import { toast } from 'sonner'
+import { PAvatar } from './PAvatar'
+import { useAppStore } from '@/stores/app'
 
 interface CommentData {
   id: string
@@ -11,6 +13,8 @@ interface CommentData {
   authorUsername: string
   authorDisplayName: string
   authorProfileImage: string
+  authorIsVerified?: boolean
+  authorBadge?: string
   content: string
   createdAt: string
 }
@@ -64,6 +68,7 @@ export function CommentSheet({
   const [likeCountMap, setLikeCountMap] = useState<Record<string, number>>({})
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const currentUser = useAppStore((s) => s.user)
 
   // Fetch comments from Firestore when sheet opens
   useEffect(() => {
@@ -120,6 +125,8 @@ export function CommentSheet({
       authorUsername: userUsername || 'you',
       authorDisplayName: userDisplayName || 'You',
       authorProfileImage: userProfileImage || '',
+      authorIsVerified: currentUser?.isVerified ?? false,
+      authorBadge: currentUser?.badge ?? '',
       content,
       createdAt: new Date().toISOString(),
     }
@@ -131,6 +138,8 @@ export function CommentSheet({
           username: userUsername || 'you',
           displayName: userDisplayName || 'You',
           profileImage: userProfileImage || '',
+          isVerified: currentUser?.isVerified,
+          badge: currentUser?.badge,
         })
         // Replace optimistic comment with real one from Firestore
         setComments((prev) => prev.map((c) => (c.id === tempId ? {
@@ -139,6 +148,8 @@ export function CommentSheet({
           authorUsername: real.authorUsername,
           authorDisplayName: real.authorDisplayName,
           authorProfileImage: real.authorProfileImage,
+          authorIsVerified: real.authorIsVerified,
+          authorBadge: real.authorBadge,
           content: real.content,
           createdAt: real.createdAt,
         } : c)))
@@ -223,13 +234,13 @@ export function CommentSheet({
               <div key={comment.id} className="flex gap-3 py-3 animate-fade-in">
                 {/* Avatar */}
                 <div className="shrink-0">
-                  {comment.authorProfileImage ? (
-                    <img src={comment.authorProfileImage} alt="" className="w-8 h-8 rounded-full object-cover" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6]/30 to-[#8b5cf6]/10 flex items-center justify-center text-[12px] text-[#8b5cf6] font-bold border border-[#8b5cf6]/20">
-                      {(comment.authorDisplayName || comment.authorUsername).charAt(0).toUpperCase()}
-                    </div>
-                  )}
+                  <PAvatar
+                    src={comment.authorProfileImage}
+                    name={comment.authorDisplayName || comment.authorUsername}
+                    size={32}
+                    verified={comment.authorIsVerified}
+                    badge={comment.authorBadge}
+                  />
                 </div>
 
                 {/* Content */}
@@ -290,13 +301,13 @@ export function CommentSheet({
           <div className="flex items-end gap-3">
             {/* User avatar */}
             <div className="shrink-0 mb-0.5">
-              {userProfileImage ? (
-                <img src={userProfileImage} alt="" className="w-8 h-8 rounded-full object-cover" />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-[10px] text-black font-bold">
-                  {(userDisplayName || 'Y').charAt(0).toUpperCase()}
-                </div>
-              )}
+              <PAvatar
+                src={userProfileImage}
+                name={userDisplayName || 'You'}
+                size={32}
+                verified={currentUser?.isVerified}
+                badge={currentUser?.badge}
+              />
             </div>
 
             {/* Input */}

@@ -26,6 +26,8 @@ export interface CommentData {
   authorUsername: string;
   authorDisplayName: string;
   authorProfileImage: string;
+  authorIsVerified: boolean;
+  authorBadge: string;
   content: string;
   createdAt: string;
 }
@@ -142,7 +144,7 @@ export async function addPostComment(
   postId: string,
   userId: string,
   content: string,
-  authorData: { username: string; displayName: string; profileImage: string },
+  authorData: { username: string; displayName: string; profileImage: string; isVerified?: boolean; badge?: string },
 ): Promise<CommentData> {
   try {
     console.log(`[social] addPostComment: postId=${postId}, userId=${userId}`);
@@ -152,6 +154,8 @@ export async function addPostComment(
       authorUsername: authorData.username,
       authorDisplayName: authorData.displayName,
       authorProfileImage: authorData.profileImage,
+      authorIsVerified: authorData.isVerified ?? false,
+      authorBadge: authorData.badge ?? '',
       content,
       createdAt: serverTimestamp(),
     });
@@ -176,6 +180,8 @@ export async function addPostComment(
       authorUsername: authorData.username,
       authorDisplayName: authorData.displayName,
       authorProfileImage: authorData.profileImage,
+      authorIsVerified: authorData.isVerified ?? false,
+      authorBadge: authorData.badge ?? '',
       content,
       createdAt: tsToISO(d.createdAt),
     };
@@ -207,6 +213,8 @@ export async function fetchPostComments(postId: string): Promise<CommentData[]> 
           authorUsername: d.authorUsername ?? '',
           authorDisplayName: d.authorDisplayName ?? '',
           authorProfileImage: d.authorProfileImage ?? '',
+          authorIsVerified: d.authorIsVerified ?? false,
+          authorBadge: d.authorBadge ?? '',
           content: d.content ?? '',
           createdAt: tsToISO(d.createdAt),
         };

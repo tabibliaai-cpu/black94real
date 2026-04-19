@@ -46,7 +46,7 @@ export function SettingsView() {
 
       {/* ─── Profile Avatar ─── */}
       <div className="flex items-center gap-4">
-        <PAvatar src={user?.profileImage} name={user?.displayName} size={80} verified={user?.isVerified} />
+        <PAvatar src={user?.profileImage} name={user?.displayName} size={80} verified={user?.isVerified} badge={user?.badge} />
         <div>
           <p className="font-bold text-[15px] text-[#f0eef6]">{user?.displayName}</p>
           <p className="text-[14px] text-[#94a3b8]">@{user?.username}</p>

@@ -176,6 +176,8 @@ export function ChatSettingsSheet({
                 src={user.profileImage}
                 name={user.displayName}
                 size={52}
+                verified={user.isVerified}
+                badge={user.badge}
               />
               <div className="min-w-0">
                 <p className="text-[15px] font-bold text-[#f0eef6] truncate">

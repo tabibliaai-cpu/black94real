@@ -214,6 +214,7 @@ export function ShareProfileView() {
               name={user.displayName || user.username}
               size={80}
               verified={user.isVerified}
+              badge={user.badge}
             />
             <h2 className="text-lg font-bold text-[#f0eef6] mt-3">
               {user.displayName || user.username}

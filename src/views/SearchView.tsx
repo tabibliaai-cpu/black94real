@@ -129,7 +129,7 @@ export function SearchView() {
                     onClick={() => navigate('user-profile', { userId: u.uid })}
                     className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04] transition-colors rounded-xl"
                   >
-                    <PAvatar src={u.profileImage} name={u.displayName} size={44} verified={u.isVerified} />
+                    <PAvatar src={u.profileImage} name={u.displayName} size={44} verified={u.isVerified} badge={u.badge} />
                     <div className="text-left min-w-0">
                       <div className="flex items-center gap-1">
                         <span className="font-bold text-[15px] text-[#f0eef6] truncate">{u.displayName}</span>
