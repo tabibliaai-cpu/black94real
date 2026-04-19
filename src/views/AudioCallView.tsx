@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
+import { PAvatar } from '@/components/PAvatar'
 
 /* ── Audio Call View ──────────────────────────────────────────────── */
 
@@ -100,13 +101,17 @@ export function AudioCallView() {
           )}
 
           {/* Main avatar */}
-          <div className={cn(
-            'w-28 h-28 rounded-full flex items-center justify-center text-3xl font-bold text-black transition-all duration-500',
-            callState === 'ringing' && 'animate-pulse-scale',
-            'bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]'
-          )}>
-            {initial}
-          </div>
+          <PAvatar
+            src={(viewParams as any)?.chatPartnerProfileImage}
+            name={chatName}
+            size={112}
+            verified={(viewParams as any)?.chatPartnerVerified}
+            badge={(viewParams as any)?.chatPartnerBadge}
+            className={cn(
+              'transition-all duration-500',
+              callState === 'ringing' && 'animate-pulse-scale'
+            )}
+          />
         </div>
 
         {/* Name */}

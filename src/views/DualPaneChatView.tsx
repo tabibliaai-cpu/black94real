@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useDualPaneChat, type ChatMsg, type MessageReaction } from '@/stores/dualPaneChat'
 import { useAppStore } from '@/stores/app'
+import { PAvatar } from '@/components/PAvatar'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -414,9 +415,7 @@ function PrivateChatPanel() {
       <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-black font-bold text-sm">
-              {chatPartner.initial}
-            </div>
+            <PAvatar name={chatPartner.name} size={36} verified={chatPartner.verified} />
             {chatPartner.online && (
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#10b981] border-2 border-black" />
             )}
@@ -424,7 +423,7 @@ function PrivateChatPanel() {
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-[14px] font-bold text-white">{chatPartner.name}</span>
-              <VerifiedBadge size={14} />
+              {chatPartner.verified && <VerifiedBadge size={14} />}
             </div>
             <span className="text-[11px] text-[#8b5cf6]">{chatPartner.online ? 'Online' : 'Offline'}</span>
           </div>

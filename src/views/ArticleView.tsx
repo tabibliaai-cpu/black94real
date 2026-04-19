@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { toast } from 'sonner'
 import { getArticle, calculateReadTime } from '@/lib/articles'
+import { PAvatar } from '@/components/PAvatar'
 
 export function ArticleView() {
   const navigate = useAppStore((s) => s.navigate)
@@ -202,21 +203,18 @@ export function ArticleView() {
 
           {/* Author Bar */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7ab856] flex items-center justify-center flex-shrink-0">
-              <span className="text-[14px] font-bold text-black">
-                {(article.author?.displayName ?? article.author?.username ?? 'A').charAt(0).toUpperCase()}
-              </span>
-            </div>
+            <PAvatar
+              src={(article.author as any)?.profileImage}
+              name={article.author?.displayName ?? article.author?.username ?? 'A'}
+              size={44}
+              verified={article.author?.isVerified}
+              badge={(article.author as any)?.badge}
+            />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[14px] font-semibold text-[#f0eef6] truncate">
                   {article.author?.displayName ?? 'Anonymous'}
                 </span>
-                {article.author?.isVerified && (
-                  <svg className="w-[16px] h-[16px] text-[#8b5cf6] flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                )}
               </div>
               <div className="flex items-center gap-1.5 text-[13px] text-[#94a3b8]">
                 <span>@{article.author?.username ?? 'anonymous'}</span>

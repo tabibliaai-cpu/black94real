@@ -69,7 +69,7 @@ export function PAvatar({ src, name, size = 40, className, verified, badge }: PA
   const initials = getInitials(name)
 
   // Determine badge type: explicit badge prop takes priority, fall back to verified
-  const badgeType = badge === 'gold' ? 'gold' : badge === 'pro' ? 'pro' : verified ? 'default' : null
+  const badgeType = badge === 'gold' ? 'gold' : badge === 'pro' || badge === 'blue' ? 'pro' : verified ? 'default' : null
 
   return (
     <div className="relative inline-flex shrink-0">

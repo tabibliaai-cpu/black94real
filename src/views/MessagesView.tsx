@@ -724,9 +724,7 @@ function ChatRoomView() {
             </svg>
           </button>
           <div className="relative">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center text-black font-bold text-sm">
-              {chatPartner.initial}
-            </div>
+            <PAvatar name={chatPartner.name} size={36} verified={chatPartner.verified} />
             {chatPartner.online && (
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#10b981] border-2 border-black" />
             )}

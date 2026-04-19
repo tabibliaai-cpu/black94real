@@ -95,7 +95,7 @@ export function NotificationsView() {
               }`}
             >
               <div className="relative shrink-0 mt-0.5">
-                <PAvatar src={notif.actorProfileImage} name={notif.actorName} size={36} />
+                <PAvatar src={notif.actorProfileImage} name={notif.actorName} size={36} verified={(notif as any).actorIsVerified} badge={(notif as any).actorBadge} />
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#09080f] flex items-center justify-center">
                   {notifIcon(notif.type)}
                 </div>
