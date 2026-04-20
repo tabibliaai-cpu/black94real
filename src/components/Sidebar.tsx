@@ -275,7 +275,7 @@ export function Sidebar() {
             const IconComponent = item.icon
             const isActive = currentView === item.view
 
-            // Special: Profile item shows user avatar + verified badge
+            // Special: Profile item shows user avatar (no badge — it's just a nav label)
             if (item.id === 'profile') {
               return (
                 <li key={item.id} role="none">
@@ -302,10 +302,7 @@ export function Sidebar() {
                       badge={user?.badge}
                     />
                     {isExpanded && (
-                      <span className="truncate select-none inline-flex items-center gap-1.5">
-                        Profile
-                        {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={15} badge={user?.badge} />}
-                      </span>
+                      <span className="truncate select-none">Profile</span>
                     )}
                   </button>
                 </li>
