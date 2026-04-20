@@ -249,11 +249,9 @@ export function UserPostCard({
         {/* Repost indicator */}
         {isReposted && (
           <div className="flex items-center gap-1.5 ml-10 mb-0.5">
-            <svg className="w-[14px] h-[14px] text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <polyline points="17 1 21 5 17 9" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
-              <polyline points="7 23 3 19 7 15" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg className="w-[14px] h-[14px] text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
             </svg>
             <span className="text-[12px] font-bold text-[#00ba7c]">You reposted</span>
           </div>
@@ -378,11 +376,11 @@ export function UserPostCard({
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={1.8}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <polyline points="17 1 21 5 17 9" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
-                    <polyline points="7 23 3 19 7 15" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="23 4 23 10 17 10"/>
+                    <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
                   </svg>
                 </div>
                 {repostCount > 0 && (
@@ -423,9 +421,8 @@ export function UserPostCard({
               <button className="flex items-center gap-1 group">
                 <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
                   <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 20V10"/>
-                    <path d="M12 20V4"/>
-                    <path d="M6 20v-6"/>
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
                   </svg>
                 </div>
                 <span className="text-[13px] text-[#94a3b8]">{formatCount(viewCount)}</span>

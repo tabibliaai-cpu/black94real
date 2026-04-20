@@ -118,6 +118,8 @@ export function CommentSheet({
   const [sending, setSending] = useState(false)
   const [likeMap, setLikeMap] = useState<Record<string, boolean>>({})
   const [likeCountMap, setLikeCountMap] = useState<Record<string, number>>({})
+  const [repostMap, setRepostMap] = useState<Record<string, boolean>>({})
+  const [bookmarkMap, setBookmarkMap] = useState<Record<string, boolean>>({})
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const currentUser = useAppStore((s) => s.user)
@@ -245,6 +247,14 @@ export function CommentSheet({
     }))
   }, [likeMap])
 
+  const handleRepostComment = useCallback((commentId: string) => {
+    setRepostMap((prev) => ({ ...prev, [commentId]: !prev[commentId] }))
+  }, [])
+
+  const handleBookmarkComment = useCallback((commentId: string) => {
+    setBookmarkMap((prev) => ({ ...prev, [commentId]: !prev[commentId] }))
+  }, [])
+
   // Post reaction handlers
   const handleLike = useCallback(() => {
     const newVal = !isLiked
@@ -345,11 +355,9 @@ export function CommentSheet({
           {/* Repost */}
           <button className="flex items-center gap-1 group" onClick={handleRepost}>
             <div className="p-2 rounded-full group-hover:bg-[#00ba7c]/10 transition-colors">
-              <svg className={cn('w-[16px] h-[16px] transition-colors', isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8] group-hover:text-[#00ba7c]', repostAnim && 'animate-like-bounce')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                <polyline points="17 1 21 5 17 9" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
-                <polyline points="7 23 3 19 7 15" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg className={cn('w-[16px] h-[16px] transition-colors', isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8] group-hover:text-[#00ba7c]', repostAnim && 'animate-like-bounce')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
               </svg>
             </div>
             {repostCount > 0 && <span className={cn('text-[12px]', isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8]')}>{fmtCount(repostCount)}</span>}
@@ -375,7 +383,8 @@ export function CommentSheet({
           <button className="flex items-center gap-1 group">
             <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
               <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
             </div>
             {viewCount > 0 && <span className="text-[12px] text-[#94a3b8]">{fmtCount(viewCount)}</span>}
@@ -437,8 +446,38 @@ export function CommentSheet({
                     {comment.content}
                   </p>
 
-                  {/* Comment actions */}
-                  <div className="flex items-center gap-6 mt-1.5 -ml-2">
+                  {/* Comment actions — same reaction buttons as feed */}
+                  <div className="flex items-center gap-5 mt-1.5 -ml-2">
+                    {/* Reply */}
+                    <button className="flex items-center gap-1 group">
+                      <div className="p-1.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+                        <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                        </svg>
+                      </div>
+                    </button>
+
+                    {/* Repost */}
+                    <button
+                      onClick={() => handleRepostComment(comment.id)}
+                      className="flex items-center gap-1 group"
+                    >
+                      <div className="p-1.5 rounded-full group-hover:bg-[#00ba7c]/10 transition-colors">
+                        {repostMap[comment.id] ? (
+                          <svg className="w-[14px] h-[14px] text-[#00ba7c] animate-like-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+                          </svg>
+                        ) : (
+                          <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Like */}
                     <button
                       onClick={() => handleLikeComment(comment.id)}
                       className="flex items-center gap-1 group"
@@ -455,11 +494,32 @@ export function CommentSheet({
                         )}
                       </div>
                     </button>
+
+                    {/* Views */}
                     <button className="flex items-center gap-1 group">
                       <div className="p-1.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                        <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                          <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
                         </svg>
+                      </div>
+                    </button>
+
+                    {/* Bookmark */}
+                    <button
+                      onClick={() => handleBookmarkComment(comment.id)}
+                      className="flex items-center gap-1 group"
+                    >
+                      <div className="p-1.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+                        {bookmarkMap[comment.id] ? (
+                          <svg className="w-[14px] h-[14px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+                          </svg>
+                        ) : (
+                          <svg className="w-[14px] h-[14px] text-[#64748b] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+                          </svg>
+                        )}
                       </div>
                     </button>
                   </div>
