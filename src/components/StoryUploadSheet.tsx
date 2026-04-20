@@ -188,7 +188,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose() }}>
       <SheetContent
         side="bottom"
-        className="bg-[#110f1a] border-t border-white/[0.06] rounded-t-2xl max-h-[92vh] overflow-y-auto"
+        className="bg-[#000000] border-t border-white/[0.06] rounded-t-2xl max-h-[92vh] overflow-y-auto"
       >
         <SheetHeader className="px-4 pt-2 pb-1">
           <SheetTitle className="text-[18px] font-bold text-[#e7e9ea] text-left">

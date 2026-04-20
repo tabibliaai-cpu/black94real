@@ -83,7 +83,7 @@ function StatusBadge({ status }: { status: CampaignPerformance['status'] }) {
 function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
   const utilization = Math.round((campaign.budgetUsed / campaign.budget) * 100)
   return (
-    <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
+    <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-3">
       <div className="flex items-start justify-between">
         <div className="min-w-0">
           <p className="text-[15px] font-semibold text-[#e7e9ea] truncate">{campaign.name}</p>
@@ -191,7 +191,7 @@ function ABTestCard({ test }: { test: ABTest }) {
   const clickRateB = test.variantB.impressions > 0 ? ((test.variantB.clicks / test.variantB.impressions) * 100) : 0
 
   return (
-    <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
+    <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-[14px] font-semibold text-[#e7e9ea]">{test.name}</p>
         {test.winner && (
@@ -345,7 +345,7 @@ export function PerformanceView() {
       </div>
 
       {/* ── Overall Score ───────────────────────────────── */}
-      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-5 flex flex-col items-center">
+      <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-5 flex flex-col items-center">
         <p className="text-[13px] text-[#94a3b8] font-medium uppercase tracking-wider mb-4">
           Overall Performance
         </p>
@@ -372,7 +372,7 @@ export function PerformanceView() {
       </div>
 
       {/* ── Channel Performance ─────────────────────────── */}
-      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-4">
+      <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-4">
         <div className="flex items-center gap-2">
           <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 20V10M12 20V4M6 20v-6" />

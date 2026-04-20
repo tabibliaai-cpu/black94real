@@ -82,7 +82,7 @@ export function AdsManagerView() {
       </div>
 
       {/* Performance Chart */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Impressions — Last 7 Days</h3>
         <div className="flex items-center justify-center h-32">
           <div className="text-center">
@@ -110,7 +110,7 @@ export function AdsManagerView() {
             allCampaigns.map((campaign) => {
               const ctr = campaign.impressions > 0 ? ((campaign.clicks / campaign.impressions) * 100).toFixed(2) : '0'
               return (
-                <div key={campaign.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+                <div key={campaign.id} className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <h4 className="text-[15px] font-semibold text-[#e7e9ea]">{campaign.name}</h4>
@@ -167,7 +167,7 @@ export function AdsManagerView() {
       </div>
 
       {/* Recent Activity */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#e7e9ea] mb-3">Recent Activity</h3>
         <div className="flex items-center justify-center py-6">
           <div className="text-center">

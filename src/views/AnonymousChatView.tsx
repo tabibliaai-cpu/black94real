@@ -591,7 +591,7 @@ function AnonChatRoom() {
 
         {/* ─── Upload options (above input) ─── */}
         {showUploadMenu && (
-          <div className="bg-[#16181c] border-t border-white/[0.06] px-4 py-3 animate-slide-up">
+          <div className="bg-[#000000] border-t border-white/[0.06] px-4 py-3 animate-slide-up">
             <div className="flex items-center gap-1">
               <button onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center gap-1.5 w-14 py-2 rounded-xl hover:bg-white/[0.06] transition-colors">
                 <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -692,7 +692,7 @@ function AnonChatRoom() {
       {showReport && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setShowReport(false)}>
           <div
-            className="w-full max-w-lg bg-[#16181c] border-t border-white/[0.08] rounded-t-2xl p-5 animate-slide-up"
+            className="w-full max-w-lg bg-[#000000] border-t border-white/[0.08] rounded-t-2xl p-5 animate-slide-up"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-10 h-1 rounded-full bg-white/10 mx-auto mb-5" />

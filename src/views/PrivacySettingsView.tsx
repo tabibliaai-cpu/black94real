@@ -193,7 +193,7 @@ export function PrivacySettingsView() {
       {/* ── Content ────────────────────────────────────────────────────── */}
       <div className="px-4 pt-4 pb-32 space-y-6">
         {/* Name Visibility */}
-        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
               <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -225,7 +225,7 @@ export function PrivacySettingsView() {
         </section>
 
         {/* DM Permission */}
-        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
               <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -255,7 +255,7 @@ export function PrivacySettingsView() {
         </section>
 
         {/* Search Visibility */}
-        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
               <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -288,7 +288,7 @@ export function PrivacySettingsView() {
 
         {/* Paid Chat */}
         {isCreatorOrPersonal && (
-          <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+          <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
                 <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -335,7 +335,7 @@ export function PrivacySettingsView() {
         )}
 
         {/* ── Nuclear Block (Danger Zone) ──────────────────────────────── */}
-        <section className="bg-[#110f1a] rounded-2xl p-4 space-y-3 border border-red-500/20">
+        <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-red-500/20">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-red-500/10 flex items-center justify-center">
               <svg className="w-[18px] h-[18px] text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -375,7 +375,7 @@ export function PrivacySettingsView() {
             className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
           />
-          <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
+          <div className="relative bg-[#000000] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
                 <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

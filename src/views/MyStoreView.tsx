@@ -63,7 +63,7 @@ export function MyStoreView() {
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 px-4 mt-3">
-        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
+        <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3.5 text-center">
           <div className="w-9 h-9 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center mx-auto mb-2">
             <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -74,7 +74,7 @@ export function MyStoreView() {
           <p className="text-[20px] font-bold text-[#e7e9ea]">{products.length}</p>
           <p className="text-[11px] text-[#94a3b8]">Products</p>
         </div>
-        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
+        <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3.5 text-center">
           <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center mx-auto mb-2">
             <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
@@ -84,7 +84,7 @@ export function MyStoreView() {
           <p className="text-[20px] font-bold text-[#e7e9ea]">{activeOrders}</p>
           <p className="text-[11px] text-[#94a3b8]">Active</p>
         </div>
-        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
+        <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3.5 text-center">
           <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center mx-auto mb-2">
             <svg className="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="12" y1="1" x2="12" y2="23" />
@@ -131,7 +131,7 @@ export function MyStoreView() {
               </div>
             ) : (
               products.map((product) => (
-                <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+                <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
                   <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                     {product.images ? (
                       <img src={product.images.split(',')[0]} alt="" className="w-full h-full object-cover" />
@@ -182,7 +182,7 @@ export function MyStoreView() {
                   <button
                     key={order.id}
                     onClick={() => navigate('business-orders')}
-                    className="w-full text-left p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]"
+                    className="w-full text-left p-3 rounded-xl bg-[#000000] border border-white/[0.06]"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</span>

@@ -84,7 +84,7 @@ export function CrmDealsView() {
               {/* Cards */}
               <div className="space-y-2">
                 {stageDeals.map((deal) => (
-                  <div key={deal.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-3">
+                  <div key={deal.id} className="rounded-xl bg-[#000000] border border-white/[0.06] p-3">
                     <h4 className="text-[14px] font-semibold text-[#e7e9ea] leading-snug">{deal.name}</h4>
                     <p className="text-[16px] font-bold text-[#8b5cf6] mt-1">{formatCurrency(deal.value)}</p>
                     <p className="text-[12px] text-[#94a3b8] mt-1.5">{deal.contactName}</p>

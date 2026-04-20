@@ -74,7 +74,7 @@ export function CartView() {
         {items.map((item) => (
           <div
             key={item.productId + item.variant}
-            className="flex gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06] group"
+            className="flex gap-3 p-3 rounded-xl bg-[#000000] border border-white/[0.06] group"
           >
             {/* Image */}
             <div
@@ -161,7 +161,7 @@ export function CartView() {
       )}
 
       {/* Order Summary */}
-      <div className="mx-4 mt-5 p-4 rounded-xl bg-[#110f1a] border border-white/[0.06] space-y-3">
+      <div className="mx-4 mt-5 p-4 rounded-xl bg-[#000000] border border-white/[0.06] space-y-3">
         <h3 className="text-[14px] font-bold text-[#e7e9ea]">Order Summary</h3>
         <div className="space-y-2">
           <div className="flex justify-between">

@@ -210,7 +210,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
           <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-3">Recent Orders</h3>
           <div className="space-y-2">
             {recentOrders.map((order) => (
-              <div key={order.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+              <div key={order.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
                 <div className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center justify-center text-[18px]">
                   🛍️
                 </div>
@@ -238,7 +238,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
             {products.sort((a, b) => b.soldCount - a.soldCount).slice(0, 3).map((p) => {
               const images = p.images ? p.images.split(',').map((s) => s.trim()).filter(Boolean) : []
               return (
-                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
                   <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
                     {images[0] ? (
                       <img src={images[0]} alt="" className="w-full h-full object-cover" />
@@ -330,7 +330,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
           const images = product.images ? product.images.split(',').map((s) => s.trim()).filter(Boolean) : []
           const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
           return (
-            <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <div key={product.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
               <button
                 onClick={() => navigate('product-detail', { id: product.id })}
                 className="w-16 h-16 rounded-xl overflow-hidden bg-[#14112a] flex-shrink-0"
@@ -417,7 +417,7 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
     const isEditing = editingId === product.id
 
     return (
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#14112a] flex-shrink-0">
           {images[0] ? (
             <img src={images[0]} alt="" className="w-full h-full object-cover" />
@@ -473,15 +473,15 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
     <div className="px-4 pb-6 space-y-5">
       {/* Summary Cards */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
+        <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3 text-center">
           <p className="text-[20px] font-bold text-[#e7e9ea]">{inStock.length}</p>
           <p className="text-[11px] text-[#94a3b8]">In Stock</p>
         </div>
-        <div className="bg-[#110f1a] border border-amber-500/20 rounded-xl p-3 text-center">
+        <div className="bg-[#000000] border border-amber-500/20 rounded-xl p-3 text-center">
           <p className="text-[20px] font-bold text-amber-400">{lowStock.length}</p>
           <p className="text-[11px] text-[#94a3b8]">Low Stock</p>
         </div>
-        <div className="bg-[#110f1a] border border-red-500/20 rounded-xl p-3 text-center">
+        <div className="bg-[#000000] border border-red-500/20 rounded-xl p-3 text-center">
           <p className="text-[20px] font-bold text-red-400">{outOfStock.length}</p>
           <p className="text-[11px] text-[#94a3b8]">Out of Stock</p>
         </div>
@@ -596,7 +596,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
           const isExpanded = expandedOrder === order.id
 
           return (
-            <div key={order.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden">
+            <div key={order.id} className="rounded-xl bg-[#000000] border border-white/[0.06] overflow-hidden">
               <button
                 onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
                 className="w-full p-4 text-left"
@@ -735,7 +735,7 @@ function SettingsSection() {
         <h3 className="text-[15px] font-bold text-[#e7e9ea]">Store Information</h3>
 
         {/* Cover Preview */}
-        <div className="relative h-28 rounded-xl overflow-hidden bg-[#18152b]">
+        <div className="relative h-28 rounded-xl overflow-hidden bg-[#000000]">
           {settings.storeCover ? (
             <img src={settings.storeCover} alt="" className="w-full h-full object-cover" />
           ) : (
@@ -782,7 +782,7 @@ function SettingsSection() {
         <h3 className="text-[15px] font-bold text-[#e7e9ea]">Shipping Settings</h3>
 
         {/* Enable Shipping Toggle */}
-        <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+        <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#000000] border border-white/[0.06]">
           <div>
             <p className="text-[14px] text-[#e7e9ea]">Enable Shipping</p>
             <p className="text-[12px] text-[#94a3b8]">Enable delivery for physical products</p>
@@ -825,7 +825,7 @@ function SettingsSection() {
                   'flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer',
                   settings.defaultShippingPartner === partner.name
                     ? 'bg-[#8b5cf6]/10 border-[#8b5cf6]/30'
-                    : 'bg-[#110f1a] border-white/[0.06] hover:border-white/[0.12]'
+                    : 'bg-[#000000] border-white/[0.06] hover:border-white/[0.12]'
                 )}
                 onClick={() => updateSetting('defaultShippingPartner', partner.name)}
               >

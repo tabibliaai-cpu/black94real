@@ -227,7 +227,7 @@ export function CommentSheet({
       />
 
       {/* Sheet */}
-      <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] flex flex-col bg-[#110f1a] border-t border-white/[0.08] rounded-t-2xl animate-comment-slide-up safe-area-bottom">
+      <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] flex flex-col bg-[#000000] border-t border-white/[0.08] rounded-t-2xl animate-comment-slide-up safe-area-bottom">
         {/* Handle bar */}
         <div className="flex justify-center pt-2.5 pb-1 shrink-0">
           <div className="w-9 h-1 rounded-full bg-white/[0.2]" />
@@ -338,7 +338,7 @@ export function CommentSheet({
         </div>
 
         {/* Input bar */}
-        <div className="shrink-0 px-4 py-3 border-t border-white/[0.06] bg-[#110f1a]">
+        <div className="shrink-0 px-4 py-3 border-t border-white/[0.06] bg-[#000000]">
           <div className="flex items-end gap-3">
             {/* User avatar */}
             <div className="shrink-0 mb-0.5">

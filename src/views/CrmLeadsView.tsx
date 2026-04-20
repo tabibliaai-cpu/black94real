@@ -83,7 +83,7 @@ export function CrmLeadsView() {
       {/* Leads List */}
       <div className="space-y-3">
         {filteredLeads.map((lead) => (
-          <div key={lead.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+          <div key={lead.id} className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
             <div className="flex items-start gap-3">
               {/* Avatar */}
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[14px] text-[#8b5cf6] font-bold shrink-0">

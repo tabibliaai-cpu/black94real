@@ -92,7 +92,7 @@ function ReactionPicker({
       ref={pickerRef}
       className={cn(
         'absolute z-50 flex items-center gap-0.5 px-1.5 py-1.5 rounded-full',
-        'bg-[#1a1a2e] border border-white/[0.12] shadow-xl shadow-black/50',
+        'bg-[#000000] border border-white/[0.12] shadow-xl shadow-black/50',
         'animate-reaction-picker-in'
       )}
       style={{
@@ -245,7 +245,7 @@ function MessageBubble({
       {/* Quick action buttons — hover (desktop) */}
       <div className={cn(
         'absolute top-0 flex items-center gap-0.5 px-1 py-0.5 rounded-full',
-        'bg-[#1a1a2e]/95 border border-white/[0.08] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none group-hover:pointer-events-auto',
+        'bg-[#000000]/95 border border-white/[0.08] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none group-hover:pointer-events-auto',
         isMine ? '-left-[76px]' : '-right-[76px]'
       )}>
         <button
@@ -355,7 +355,7 @@ function ChatItemMenu({
         </svg>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-1 w-52 z-50 bg-[#1a1a2e] border border-white/[0.1] rounded-xl shadow-xl shadow-black/50 overflow-hidden animate-fade-in">
+        <div className="absolute right-0 top-full mt-1 w-52 z-50 bg-[#000000] border border-white/[0.1] rounded-xl shadow-xl shadow-black/50 overflow-hidden animate-fade-in">
           <button
             onClick={(e) => { e.stopPropagation(); setOpen(false); onSettings() }}
             className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
@@ -403,7 +403,7 @@ function ChatSettingsSheet({
       <div className="absolute inset-0 bg-[#000000]/60 backdrop-blur-sm" />
       {/* Sheet */}
       <div
-        className="relative w-full max-w-lg bg-[#110f1a] rounded-t-2xl border-t border-white/[0.08] animate-slide-up-sheet max-h-[85vh] overflow-y-auto no-scrollbar"
+        className="relative w-full max-w-lg bg-[#000000] rounded-t-2xl border-t border-white/[0.08] animate-slide-up-sheet max-h-[85vh] overflow-y-auto no-scrollbar"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}
@@ -762,7 +762,7 @@ function ChatRoomView() {
               </svg>
             </button>
             {headerMenuOpen && (
-              <div className="absolute right-0 top-full mt-1 w-52 z-50 bg-[#1a1a2e] border border-white/[0.1] rounded-xl shadow-xl shadow-black/50 overflow-hidden animate-fade-in">
+              <div className="absolute right-0 top-full mt-1 w-52 z-50 bg-[#000000] border border-white/[0.1] rounded-xl shadow-xl shadow-black/50 overflow-hidden animate-fade-in">
                 <button
                   onClick={() => { setHeaderMenuOpen(false); setSettingsOpen(true) }}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"

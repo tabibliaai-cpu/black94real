@@ -77,7 +77,7 @@ export function StorefrontView() {
       {/* Business Info */}
       <div className="px-4 -mt-10 relative z-10">
         <div className="flex items-end gap-3">
-          <div className="w-20 h-20 rounded-2xl bg-[#110f1a] border-4 border-black overflow-hidden flex-shrink-0">
+          <div className="w-20 h-20 rounded-2xl bg-[#000000] border-4 border-black overflow-hidden flex-shrink-0">
             {businessImage ? (
               <img src={businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
@@ -99,15 +99,15 @@ export function StorefrontView() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mt-4">
-          <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
+          <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3 text-center">
             <p className="text-[18px] font-bold text-[#e7e9ea]">{products.length}</p>
             <p className="text-[11px] text-[#94a3b8]">Products</p>
           </div>
-          <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
+          <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3 text-center">
             <p className="text-[18px] font-bold text-[#8b5cf6]">{totalSold}</p>
             <p className="text-[11px] text-[#94a3b8]">Sales</p>
           </div>
-          <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
+          <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3 text-center">
             <p className="text-[18px] font-bold text-amber-400">{avgRating}★</p>
             <p className="text-[11px] text-[#94a3b8]">Rating</p>
           </div>

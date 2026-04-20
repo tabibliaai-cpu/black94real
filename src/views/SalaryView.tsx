@@ -118,7 +118,7 @@ export function SalaryView() {
             return (
               <div
                 key={member.id}
-                className="rounded-2xl bg-[#110f1a] border border-white/[0.08] overflow-hidden"
+                className="rounded-2xl bg-[#000000] border border-white/[0.08] overflow-hidden"
               >
                 {/* Member Card Header */}
                 <button
@@ -274,7 +274,7 @@ export function SalaryView() {
       </div>
 
       {/* ── Payroll Summary ─────────────────────────────── */}
-      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
+      <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-3">
         <div className="flex items-center gap-2 mb-1">
           <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="18" rx="2" />

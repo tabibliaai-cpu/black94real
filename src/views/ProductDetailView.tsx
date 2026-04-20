@@ -144,7 +144,7 @@ export function ProductDetailView() {
     <div className="pb-32">
       {/* Image Carousel */}
       <div className="relative">
-        <div className="aspect-square bg-[#110f1a] overflow-hidden">
+        <div className="aspect-square bg-[#000000] overflow-hidden">
           <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
         </div>
 
@@ -218,7 +218,7 @@ export function ProductDetailView() {
           onClick={() => navigate('storefront', { id: product.businessId })}
           className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-4 hover:bg-white/[0.06] transition-colors"
         >
-          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#18152b] flex-shrink-0">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-[#000000] flex-shrink-0">
             {product.businessImage ? (
               <img src={product.businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
@@ -337,11 +337,11 @@ export function ProductDetailView() {
               {reviews.map((review) => (
                 <div key={review.id} className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                   <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-[#18152b]">
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-[#000000]">
                       {review.buyerImage ? (
                         <img src={review.buyerImage} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-[#18152b] flex items-center justify-center text-[10px] font-bold text-[#e7e9ea]">
+                        <div className="w-full h-full bg-[#000000] flex items-center justify-center text-[10px] font-bold text-[#e7e9ea]">
                           {review.buyerName[0]?.toUpperCase()}
                         </div>
                       )}

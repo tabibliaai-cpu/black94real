@@ -282,7 +282,7 @@ export function AddProductView() {
 
           {/* Toggles */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
               <div>
                 <p className="text-[14px] text-[#e7e9ea]">Digital Product</p>
                 <p className="text-[12px] text-[#94a3b8]">No shipping required</p>
@@ -294,7 +294,7 @@ export function AddProductView() {
                 <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${form.isDigital ? 'translate-x-[22px]' : 'translate-x-0.5'}`} />
               </button>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-[#000000] border border-white/[0.06]">
               <div>
                 <p className="text-[14px] text-[#e7e9ea]">Featured Product</p>
                 <p className="text-[12px] text-[#94a3b8]">Show in featured section</p>

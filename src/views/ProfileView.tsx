@@ -211,7 +211,7 @@ export function ProfileView() {
   return (
     <div>
       {/* Cover */}
-      <div className="h-32 bg-[#18152b] relative overflow-hidden">
+      <div className="h-32 bg-[#000000] relative overflow-hidden">
         {coverImage ? (
           <img src={coverImage} alt="" className="w-full h-full object-cover" />
         ) : (

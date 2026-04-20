@@ -207,7 +207,7 @@ export function ShareProfileView() {
       {/* ── Content ────────────────────────────────────────────────────── */}
       <div className="px-4 pt-6 pb-32 flex flex-col items-center">
         {/* Profile Card */}
-        <div className="bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 w-full max-w-sm mb-6">
+        <div className="bg-[#000000] border border-white/[0.08] rounded-2xl p-6 w-full max-w-sm mb-6">
           <div className="flex flex-col items-center text-center">
             <PAvatar
               src={user.profileImage}
@@ -248,7 +248,7 @@ export function ShareProfileView() {
         )}
 
         {/* Shareable Link */}
-        <div className="w-full max-w-sm bg-[#110f1a] border border-white/[0.08] rounded-2xl p-4 mb-4">
+        <div className="w-full max-w-sm bg-[#000000] border border-white/[0.08] rounded-2xl p-4 mb-4">
           <p className="text-[13px] text-[#94a3b8] mb-2">Shareable link</p>
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-white/[0.04] rounded-lg px-3 py-2.5 overflow-hidden">

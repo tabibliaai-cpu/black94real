@@ -67,7 +67,7 @@ export function BusinessDashboardView() {
       </div>
 
       {/* Revenue Chart */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-[#e7e9ea]">Revenue Trend</h3>
         </div>
@@ -102,7 +102,7 @@ export function BusinessDashboardView() {
       </div>
 
       {/* Recent Leads */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-[#e7e9ea]">Recent Leads</h3>
           <button onClick={() => navigate('crm-leads')} className="text-[12px] text-[#8b5cf6] font-semibold">View all</button>

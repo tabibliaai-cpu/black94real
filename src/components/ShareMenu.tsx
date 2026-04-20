@@ -167,7 +167,7 @@ export function ShareMenu({
       ref={menuRef}
       className={cn(
         'fixed z-[90] w-[280px] rounded-2xl overflow-hidden animate-share-menu-in',
-        'bg-[#16181c] border border-white/[0.08]',
+        'bg-[#000000] border border-white/[0.08]',
         'shadow-xl shadow-black/60'
       )}
       style={{

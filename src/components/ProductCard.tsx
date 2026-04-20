@@ -57,7 +57,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
   return (
     <div
       onClick={() => navigate('product-detail', { id: product.id })}
-      className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1 cursor-pointer group active:scale-[0.98]"
+      className="rounded-xl bg-[#000000] border border-white/[0.06] overflow-hidden transition-all duration-300 hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1 cursor-pointer group active:scale-[0.98]"
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-[#14112a]">
@@ -107,11 +107,11 @@ export function ProductCard({ product }: { product: ShopProduct }) {
           }}
           className="flex items-center gap-1.5 mb-2 group/biz"
         >
-          <div className="w-4 h-4 rounded-full overflow-hidden bg-[#18152b] flex-shrink-0">
+          <div className="w-4 h-4 rounded-full overflow-hidden bg-[#000000] flex-shrink-0">
             {product.businessImage ? (
               <img src={product.businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-[#18152b]" />
+              <div className="w-full h-full bg-[#000000]" />
             )}
           </div>
           <span className="text-[11px] text-[#94a3b8] group-hover/biz:text-[#8b5cf6] transition-colors truncate">

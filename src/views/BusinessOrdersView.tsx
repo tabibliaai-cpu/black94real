@@ -125,7 +125,7 @@ export function BusinessOrdersView() {
             const isExpanded = expandedOrder === order.id
 
             return (
-              <div key={order.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden">
+              <div key={order.id} className="rounded-xl bg-[#000000] border border-white/[0.06] overflow-hidden">
                 {/* Order Header */}
                 <button
                   onClick={() => setExpandedOrder(isExpanded ? null : order.id)}

@@ -157,7 +157,7 @@ export function WriteArticleView() {
               className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#110f1a]">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#000000]">
               <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center group-hover:bg-[#8b5cf6]/10 transition-colors">
                 <svg className="w-6 h-6 text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
@@ -202,7 +202,7 @@ export function WriteArticleView() {
         </div>
 
         {/* ─── Fact Check Section (collapsible) ─── */}
-        <div className="mt-8 bg-[#110f1a] rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div className="mt-8 bg-[#000000] rounded-2xl border border-white/[0.06] overflow-hidden">
           <button
             onClick={() => setFactCheckEnabled((v) => !v)}
             className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
@@ -241,9 +241,9 @@ export function WriteArticleView() {
                     onChange={(e) => setFactCheckStatus(e.target.value as FactCheckStatus)}
                     className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors cursor-pointer"
                   >
-                    <option value="Pending Review" className="bg-[#18152b] text-[#e7e9ea]">Pending Review</option>
-                    <option value="Verified" className="bg-[#18152b] text-[#e7e9ea]">Verified</option>
-                    <option value="Not Verified" className="bg-[#18152b] text-[#e7e9ea]">Not Verified</option>
+                    <option value="Pending Review" className="bg-[#000000] text-[#e7e9ea]">Pending Review</option>
+                    <option value="Verified" className="bg-[#000000] text-[#e7e9ea]">Verified</option>
+                    <option value="Not Verified" className="bg-[#000000] text-[#e7e9ea]">Not Verified</option>
                   </select>
                   <svg className="w-4 h-4 text-[#94a3b8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />

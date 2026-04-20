@@ -108,7 +108,7 @@ export function AffiliatesView() {
       </div>
 
       {/* ── Plan Info Card ──────────────────────────────── */}
-      <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4">
+      <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center">
             <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -143,7 +143,7 @@ export function AffiliatesView() {
             {activeAffiliates.map((affiliate) => (
               <div
                 key={affiliate.id}
-                className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4"
+                className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4"
               >
                 <div className="flex items-start gap-3">
                   <div className="w-11 h-11 rounded-full bg-[#8b5cf6]/15 flex items-center justify-center shrink-0">
@@ -230,7 +230,7 @@ export function AffiliatesView() {
       {/* ── Add Affiliate Section ───────────────────────── */}
       <div className="space-y-3">
         <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Add New Affiliate</h2>
-        <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
+        <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-3">
           <div className="space-y-1.5">
             <label className="text-[13px] text-[#94a3b8]">Full Name</label>
             <input
@@ -284,7 +284,7 @@ export function AffiliatesView() {
 
       {/* ── Purchase Section ────────────────────────────── */}
       {allFreeUsed && (
-        <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-4">
+        <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#ffd700]/10 flex items-center justify-center">
               <svg className="w-5 h-5 text-[#ffd700]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

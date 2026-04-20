@@ -107,7 +107,7 @@ export function CreateAdView() {
             value={form.name}
             onChange={e => update('name', e.target.value)}
             placeholder="e.g., Summer Sale Campaign"
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -123,7 +123,7 @@ export function CreateAdView() {
             onChange={e => update('headline', e.target.value.slice(0, 50))}
             placeholder="Grab attention in 50 chars"
             maxLength={50}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -139,7 +139,7 @@ export function CreateAdView() {
             placeholder="Describe your ad in detail..."
             maxLength={150}
             rows={3}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
 
@@ -149,9 +149,9 @@ export function CreateAdView() {
           <select
             value={form.ctaText}
             onChange={e => update('ctaText', e.target.value)}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
           >
-            {CTA_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-[#110f1a] text-[#e7e9ea]">{opt}</option>)}
+            {CTA_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-[#000000] text-[#e7e9ea]">{opt}</option>)}
           </select>
         </div>
 
@@ -163,7 +163,7 @@ export function CreateAdView() {
             value={form.ctaUrl}
             onChange={e => update('ctaUrl', e.target.value)}
             placeholder="https://your-landing-page.com"
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -190,7 +190,7 @@ export function CreateAdView() {
             type="number"
             value={form.budget}
             onChange={e => update('budget', parseInt(e.target.value) || 0)}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
           <div className="flex gap-2">
             {BUDGET_PRESETS.map(amount => (
@@ -216,9 +216,9 @@ export function CreateAdView() {
           <select
             value={form.duration}
             onChange={e => update('duration', parseInt(e.target.value))}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
+            className="w-full bg-[#000000] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
           >
-            {DURATION_OPTIONS.map(d => <option key={d.value} value={d.value} className="bg-[#110f1a] text-[#e7e9ea]">{d.label}</option>)}
+            {DURATION_OPTIONS.map(d => <option key={d.value} value={d.value} className="bg-[#000000] text-[#e7e9ea]">{d.label}</option>)}
           </select>
         </div>
 
@@ -292,7 +292,7 @@ export function CreateAdView() {
       </div>
 
       {/* Preview Card */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] overflow-hidden">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] overflow-hidden">
         <div className="px-4 py-2 border-b border-white/[0.06]">
           <p className="text-[11px] text-[#94a3b8] font-semibold uppercase tracking-wide">Ad Preview</p>
         </div>

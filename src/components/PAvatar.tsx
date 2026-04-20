@@ -63,7 +63,7 @@ export function PAvatar({ src, name, size = 40, className, verified, badge }: PA
     <div className="relative inline-flex shrink-0">
       {src ? (
         <div
-          className={cn('rounded-full overflow-hidden bg-[#18152b]', className)}
+          className={cn('rounded-full overflow-hidden bg-[#000000]', className)}
           style={{ width: size, height: size }}
         >
           <Image

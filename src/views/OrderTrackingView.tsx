@@ -42,7 +42,7 @@ function OrderTimeline({ order }: { order: ShopOrder }) {
   const isRefunded = order.status === 'refunded'
 
   return (
-    <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+    <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
       <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-5">Order Status</h3>
 
       {/* Current status badge */}
@@ -190,7 +190,7 @@ export function OrderTrackingView() {
         <OrderTimeline order={order} />
 
         {/* Order Info */}
-        <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+        <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-[14px] font-bold text-[#e7e9ea]">Order #{order.id.slice(-8).toUpperCase()}</h3>
             <span className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</span>
@@ -235,7 +235,7 @@ export function OrderTrackingView() {
 
         {/* Shipping Address */}
         {shippingAddress && (
-          <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+          <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
             <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-2">Delivery Address</h3>
             <p className="text-[13px] text-[#e7e9ea]">{shippingAddress.name}</p>
             <p className="text-[13px] text-[#94a3b8]">{shippingAddress.line1}</p>
@@ -247,7 +247,7 @@ export function OrderTrackingView() {
 
         {/* Tracking */}
         {order.trackingNumber && (
-          <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+          <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
             <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-2">Tracking</h3>
             <p className="text-[13px] text-[#94a3b8]">Partner: {order.trackingPartner || 'N/A'}</p>
             <p className="text-[13px] text-[#8b5cf6] font-mono">{order.trackingNumber}</p>

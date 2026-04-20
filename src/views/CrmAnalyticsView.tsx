@@ -37,9 +37,9 @@ export function CrmAnalyticsView() {
         <select
           value={dateRange}
           onChange={e => setDateRange(e.target.value)}
-          className="bg-[#110f1a] border border-white/[0.08] rounded-full px-3 py-1.5 text-[12px] text-[#e7e9ea] outline-none appearance-none cursor-pointer"
+          className="bg-[#000000] border border-white/[0.08] rounded-full px-3 py-1.5 text-[12px] text-[#e7e9ea] outline-none appearance-none cursor-pointer"
         >
-          {DATE_RANGES.map(r => <option key={r} value={r} className="bg-[#110f1a] text-[#e7e9ea]">{r}</option>)}
+          {DATE_RANGES.map(r => <option key={r} value={r} className="bg-[#000000] text-[#e7e9ea]">{r}</option>)}
         </select>
       </div>
 
@@ -62,7 +62,7 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* Revenue Chart */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Monthly Revenue</h3>
         <div className="flex items-center justify-center h-36">
           <div className="text-center">
@@ -75,7 +75,7 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* Lead Sources */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Lead Sources</h3>
         <div className="flex items-center justify-center py-6">
           <div className="text-center">
@@ -88,7 +88,7 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* Top Products */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Top Products / Services</h3>
         <div className="flex items-center justify-center py-6">
           <div className="text-center">
@@ -101,7 +101,7 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* Customer Acquisition Trend */}
-      <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Customer Acquisition</h3>
         <div className="flex items-center justify-center h-28">
           <div className="text-center">

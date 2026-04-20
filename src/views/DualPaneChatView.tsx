@@ -70,7 +70,7 @@ function ReactionPicker({
       ref={pickerRef}
       className={cn(
         'absolute z-50 flex items-center gap-0.5 px-1.5 py-1.5 rounded-full',
-        'bg-[#1a1a2e] border border-white/[0.12] shadow-xl shadow-black/50',
+        'bg-[#000000] border border-white/[0.12] shadow-xl shadow-black/50',
         'animate-reaction-picker-in'
       )}
       style={{
@@ -244,7 +244,7 @@ function MessageBubble({
       {/* Quick action buttons — appear on hover (desktop) */}
       <div className={cn(
         'absolute top-0 flex items-center gap-0.5 px-1 py-0.5 rounded-full',
-        'bg-[#1a1a2e]/95 border border-white/[0.08] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none group-hover:pointer-events-auto',
+        'bg-[#000000]/95 border border-white/[0.08] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none group-hover:pointer-events-auto',
         isMine ? '-left-[76px]' : '-right-[76px]'
       )}>
         <button

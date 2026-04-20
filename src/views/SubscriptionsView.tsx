@@ -99,7 +99,7 @@ function CurrentPlanBanner() {
   return (
     <div
       className={cn(
-        'rounded-2xl border border-white/[0.08] bg-[#110f1a] p-5',
+        'rounded-2xl border border-white/[0.08] bg-[#000000] p-5',
         glowMap[plan.id]
       )}
     >
@@ -173,7 +173,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
   return (
     <div
       className={cn(
-        'flex-shrink-0 w-[280px] rounded-2xl border bg-[#110f1a] p-5 transition-all duration-300 hover:scale-[1.02] hover:border-opacity-60',
+        'flex-shrink-0 w-[280px] rounded-2xl border bg-[#000000] p-5 transition-all duration-300 hover:scale-[1.02] hover:border-opacity-60',
         borderColor[plan.id],
         glowClass[plan.id],
         plan.popular && 'relative'
@@ -248,7 +248,7 @@ function FeatureComparisonTable() {
   const currentSub = user?.subscription || 'free'
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#110f1a] overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#000000] overflow-hidden">
       <div className="px-5 py-4 border-b border-white/[0.06]">
         <h3 className="text-[17px] font-bold text-[#e7e9ea]">Feature Comparison</h3>
         <p className="text-[13px] text-[#94a3b8] mt-0.5">See what's included in each plan</p>
@@ -347,7 +347,7 @@ function BillingHistory() {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#110f1a] overflow-hidden">
+    <div className="rounded-2xl border border-white/[0.08] bg-[#000000] overflow-hidden">
       <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2">
         <ReceiptIcon className="w-5 h-5 text-[#94a3b8]" />
         <div>

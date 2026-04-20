@@ -196,7 +196,7 @@ export function CheckoutView() {
                   className={`w-full p-4 rounded-xl border transition-all text-left ${
                     isSelected
                       ? 'border-[#8b5cf6] bg-[#8b5cf6]/5'
-                      : 'border-white/[0.06] bg-[#110f1a] hover:border-white/[0.12]'
+                      : 'border-white/[0.06] bg-[#000000] hover:border-white/[0.12]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -230,7 +230,7 @@ export function CheckoutView() {
             <h2 className="text-[16px] font-bold text-[#e7e9ea] mb-4">Order Confirmation</h2>
 
             {/* Address Summary */}
-            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping To</h3>
                 <button onClick={() => setStep(0)} className="text-[12px] text-[#8b5cf6]">Edit</button>
@@ -243,7 +243,7 @@ export function CheckoutView() {
             </div>
 
             {/* Shipping Summary */}
-            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping</h3>
                 <button onClick={() => setStep(1)} className="text-[12px] text-[#8b5cf6]">Edit</button>
@@ -253,7 +253,7 @@ export function CheckoutView() {
             </div>
 
             {/* Items */}
-            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
+            <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
               <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider mb-3">Items ({items.length})</h3>
               <div className="space-y-3">
                 {items.map((item) => (
@@ -272,7 +272,7 @@ export function CheckoutView() {
             </div>
 
             {/* Totals */}
-            <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06] space-y-2">
+            <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06] space-y-2">
               <div className="flex justify-between">
                 <span className="text-[13px] text-[#94a3b8]">Subtotal</span>
                 <span className="text-[13px] text-[#e7e9ea]">₹{subtotal.toLocaleString()}</span>

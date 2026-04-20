@@ -493,7 +493,7 @@ export function UserPostCard({
       {showMoreMenu && (
         <div className="fixed inset-0 z-50" onClick={(e) => { e.stopPropagation(); setShowMoreMenu(false) }}>
           <div
-            className="absolute animate-share-menu-in rounded-2xl bg-[#16181c] border border-white/[0.08] shadow-2xl py-2 min-w-[180px] overflow-hidden"
+            className="absolute animate-share-menu-in rounded-2xl bg-[#000000] border border-white/[0.08] shadow-2xl py-2 min-w-[180px] overflow-hidden"
             style={{ top: moreBtnRef.current?.getBoundingClientRect().bottom ? moreBtnRef.current.getBoundingClientRect().bottom + 4 : 100, right: moreBtnRef.current ? window.innerWidth - moreBtnRef.current.getBoundingClientRect().right : 16 }}
             onClick={(e) => e.stopPropagation()}
           >

@@ -148,7 +148,7 @@ export function ChatSettingsSheet({
         />
 
         {/* Sheet */}
-        <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] flex flex-col bg-[#110f1a] border-t border-white/[0.08] rounded-t-2xl animate-comment-slide-up safe-area-bottom">
+        <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] flex flex-col bg-[#000000] border-t border-white/[0.08] rounded-t-2xl animate-comment-slide-up safe-area-bottom">
           {/* Handle bar */}
           <div className="flex justify-center pt-2.5 pb-1 shrink-0">
             <div className="w-9 h-1 rounded-full bg-white/[0.2]" />
@@ -273,7 +273,7 @@ export function ChatSettingsSheet({
             className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
           />
-          <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
+          <div className="relative bg-[#000000] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center">
                 <svg className="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -330,7 +330,7 @@ export function ChatSettingsSheet({
             className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => setShowClearDialog(false)}
           />
-          <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
+          <div className="relative bg-[#000000] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
             <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Clear Chat</h3>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
               Are you sure you want to clear all messages with{' '}
@@ -361,7 +361,7 @@ export function ChatSettingsSheet({
             className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => setShowReportDialog(false)}
           />
-          <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
+          <div className="relative bg-[#000000] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
             <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Report @{user.username}</h3>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
               Report this user for violating community guidelines? Our team will review this report and take appropriate action.
