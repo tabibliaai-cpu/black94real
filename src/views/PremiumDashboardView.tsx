@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { upgradeToBusinessTrial, getBusinessTrial, type BusinessTrial } from '@/lib/business'
+import { VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -128,7 +129,7 @@ export function PremiumDashboardView() {
             {user?.displayName?.[0]?.toUpperCase() || 'U'}
           </div>
           <div>
-            <p className="text-[17px] font-bold text-[#e7e9ea]">{user?.displayName || 'User'}</p>
+            <p className="text-[17px] font-bold text-[#e7e9ea] inline-flex items-center gap-1.5">{user?.displayName || 'User'}{(user?.isVerified || !!user?.badge) && <VerifiedBadge size={16} badge={user?.badge} />}</p>
             <div className="flex items-center gap-2 mt-0.5">
               <span className={cn(
                 'text-[12px] font-semibold px-2 py-0.5 rounded-full',

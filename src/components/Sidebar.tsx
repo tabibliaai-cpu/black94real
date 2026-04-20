@@ -275,6 +275,43 @@ export function Sidebar() {
             const IconComponent = item.icon
             const isActive = currentView === item.view
 
+            // Special: Profile item shows user avatar + verified badge
+            if (item.id === 'profile') {
+              return (
+                <li key={item.id} role="none">
+                  <button
+                    type="button"
+                    role="menuitem"
+                    aria-label="Profile"
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={() => handleNavigate(item.view)}
+                    className={cn(
+                      'group relative flex items-center gap-3 rounded-xl px-4 py-3 text-[15px] transition-all duration-200 ease-in-out outline-none w-full',
+                      'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
+                      isActive
+                        ? 'font-bold text-[#e7e9ea] bg-white/[0.08]'
+                        : 'text-gray-300 hover:text-[#e7e9ea] hover:bg-white/[0.06]',
+                      !isExpanded && 'justify-center'
+                    )}
+                  >
+                    <PAvatar
+                      src={user?.profileImage}
+                      name={user?.displayName || user?.username}
+                      size={isExpanded ? 26 : 28}
+                      verified={user?.isVerified}
+                      badge={user?.badge}
+                    />
+                    {isExpanded && (
+                      <span className="truncate select-none inline-flex items-center gap-1.5">
+                        Profile
+                        {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={15} badge={user?.badge} />}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              )
+            }
+
             return (
               <li key={item.id} role="none">
                 <SidebarItem
@@ -341,9 +378,9 @@ export function Sidebar() {
 
           {isExpanded && (
             <div className="flex min-w-0 flex-1 flex-col items-start">
-              <span className="truncate text-sm font-bold text-white leading-tight flex items-center gap-1">
+              <span className="truncate text-sm font-bold text-white leading-tight inline-flex items-center gap-1.5">
                 {user?.displayName || 'User'}
-                {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={13} badge={user?.badge} />}
+                {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={16} badge={user?.badge} />}
               </span>
               <span className="truncate text-sm text-gray-500 leading-tight">
                 @{user?.username || 'user'}

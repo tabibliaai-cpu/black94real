@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import type { ShopProduct, ShopOrder, OrderItem } from '@/lib/shop'
 import { fetchBusinessProducts, fetchBusinessOrders, deleteProduct, updateProduct, updateOrderStatus } from '@/lib/shop'
+import { VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ── Types ────────────────────────────────────────────────────────────────── */
@@ -1021,7 +1022,7 @@ export function StoreDashboardView() {
             )}
           </div>
           <div>
-            <p className="text-[13px] font-bold text-[#e7e9ea]">{user?.displayName || 'My Store'}</p>
+            <p className="text-[13px] font-bold text-[#e7e9ea] inline-flex items-center gap-1">{user?.displayName || 'My Store'}{(user?.isVerified || !!user?.badge) && <VerifiedBadge size={12} badge={user?.badge} />}</p>
             <p className="text-[11px] text-[#94a3b8]">{products.length} products • {orders.length} orders</p>
           </div>
         </div>
