@@ -1,20 +1,24 @@
 'use client'
 
-import { useCallback, type ChangeEvent, type KeyboardEvent, type RefObject } from 'react'
+import { useCallback, useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent, type RefObject } from 'react'
 import { cn } from '@/lib/utils'
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   XChatInputBar — Pixel-perfect X (2026) Messages DM input bar
+/* ═══════════════════════════════════════════════════════════════════════════════
+   XChatInputBar — Pixel-perfect X (2026) Messages / DM Input Bar
 
-   Design spec:
-   - Background: #000000, thin top border #333333
-   - Input pill: bg-[#2A2A2A], rounded-full, px-5 py-3
-   - Left inside pill: Emoji + GIF buttons (24px, gray)
-   - Input: transparent, text-[17px], white, placeholder gray-500
-   - Right inside pill: Paperclip/attach icon
-   - Far right (outside pill): Send arrow — gray when empty, #1d9bf0 when typing
-   - Height: ~56px, safe-area bottom padding
-   ═══════════════════════════════════════════════════════════════════════════ */
+   Design spec (match X app exactly):
+   ┌─────────────────────────────────────────────────────────────────────────┐
+   │  Border-top: 0.5px #2f3336                                            │
+   │  Background: #000000                                                   │
+   │                                                                        │
+   │   ┌─────────────────────────────────────────────────┐  ┌───┐           │
+   │   │ 😊  GIF  [ Start a message             ] 📎  │  │ ➤ │           │
+   │   └─────────────────────────────────────────────────┘  └───┘           │
+   │   pill: bg-[#202327], rounded-full                                     │
+   │   send: outside pill, #1d9bf0 when active, #2f3336 when idle           │
+   │   height: ~56px, safe-area inset bottom                                │
+   └─────────────────────────────────────────────────────────────────────────┘
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
 export interface XChatInputBarProps {
   /** Current text value */
@@ -35,13 +39,13 @@ export interface XChatInputBarProps {
   multiline?: boolean
   /** Show GIF button (default: true) */
   showGif?: boolean
-  /** Emoji button click handler (default: no-op) */
+  /** Emoji button click handler */
   onEmojiClick?: () => void
   /** Emoji button active state */
   emojiActive?: boolean
-  /** GIF button click handler (default: no-op) */
+  /** GIF button click handler */
   onGifClick?: () => void
-  /** Attach / paperclip click handler (default: no-op) */
+  /** Attach / paperclip click handler */
   onAttachClick?: () => void
 }
 
@@ -61,16 +65,27 @@ export function XChatInputBar({
   onAttachClick,
 }: XChatInputBarProps) {
   const hasText = value.trim().length > 0
-  const isSendEnabled = hasText || !!canSend
+  const isActive = hasText || !!canSend
+  const localRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null)
+  const activeRef = (inputRef as RefObject<HTMLInputElement | HTMLTextAreaElement>) || localRef
+
+  /* Auto-resize textarea */
+  useEffect(() => {
+    if (multiline && activeRef.current && 'style' in activeRef.current) {
+      const el = activeRef.current
+      el.style.height = 'auto'
+      el.style.height = Math.min(el.scrollHeight, 140) + 'px'
+    }
+  }, [value, multiline, activeRef])
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
-        if (isSendEnabled) onSend()
+        if (isActive) onSend()
       }
     },
-    [isSendEnabled, onSend],
+    [isActive, onSend],
   )
 
   const handleChange = useCallback(
@@ -80,24 +95,50 @@ export function XChatInputBar({
     [onChange],
   )
 
-  const sharedInputClass =
-    'flex-1 bg-transparent text-[17px] text-white placeholder-[#71767b] outline-none min-w-0 leading-snug'
+  /* ─── Shared input classes ─── */
+  const inputClass =
+    'flex-1 bg-transparent text-[15px] leading-[20px] text-white placeholder-[#71767b] outline-none min-w-0'
 
   return (
-    <div className="shrink-0 bg-[#000000] border-t border-[#333333] safe-area-bottom">
-      <div className="flex items-center gap-3 px-4 py-3">
-        {/* ── Input Pill ── */}
-        <div className="flex-1 flex items-center gap-2 bg-[#2A2A2A] rounded-[24px] px-4 py-2.5 transition-colors duration-150 focus-within:bg-[#333333]">
-          {/* Emoji button */}
+    <div
+      className={cn(
+        'shrink-0 bg-black',
+        /* Thin top border — exactly like X */
+        'border-t border-[#2f3336]',
+        /* Safe area for notched phones / keyboards */
+        'pb-[env(safe-area-inset-bottom,0px)]',
+      )}
+    >
+      <div className="flex items-center gap-2 px-3 pt-2.5 pb-2.5">
+
+        {/* ══════════ Input Pill ══════════ */}
+        <div
+          className={cn(
+            'flex-1 flex items-center gap-0.5',
+            'bg-[#202327]',
+            'rounded-full',
+            'pl-1.5 pr-2 py-1',
+            /* Subtle focus glow */
+            'transition-shadow duration-200',
+            'focus-within:shadow-[0_0_0_1px_rgba(29,155,240,0.35)]',
+          )}
+        >
+          {/* ── Emoji button ── */}
           <button
             type="button"
             onClick={onEmojiClick}
+            tabIndex={-1}
             className={cn(
-              'shrink-0 w-[28px] h-[28px] flex items-center justify-center rounded-full transition-colors duration-150',
-              emojiActive ? 'text-[#1d9bf0]' : 'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.08]',
+              'shrink-0 flex items-center justify-center',
+              'w-[34px] h-[34px] rounded-full',
+              'transition-colors duration-150',
+              emojiActive
+                ? 'text-[#1d9bf0]'
+                : 'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.07]',
             )}
+            aria-label="Emoji"
           >
-            <svg className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <path d="M8 14s1.5 2 4 2 4-2 4-2" />
               <line x1="9" y1="9" x2="9.01" y2="9" />
@@ -105,73 +146,106 @@ export function XChatInputBar({
             </svg>
           </button>
 
-          {/* GIF button */}
+          {/* ── GIF button ── */}
           {showGif && (
             <button
               type="button"
               onClick={onGifClick}
-              className="shrink-0 text-[#71767b] hover:text-[#e7e9ea] transition-colors duration-150"
+              tabIndex={-1}
+              className={cn(
+                'shrink-0 flex items-center justify-center',
+                'w-[34px] h-[34px] rounded-full',
+                'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.07]',
+                'transition-colors duration-150',
+              )}
+              aria-label="GIF"
             >
-              <svg className="w-[24px] h-[24px]" viewBox="0 0 24 24" fill="none">
-                <rect x="1" y="4" width="22" height="16" rx="3" stroke="currentColor" strokeWidth="1.8" />
-                <text x="5.5" y="15.5" fill="currentColor" fontSize="8.5" fontWeight="800" fontFamily="system-ui, sans-serif" letterSpacing="-0.5">GIF</text>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" strokeWidth={1.7} />
+                <text
+                  x="6"
+                  y="15.5"
+                  fill="currentColor"
+                  fontSize="8"
+                  fontWeight="800"
+                  fontFamily="'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif"
+                  letterSpacing="0"
+                >
+                  GIF
+                </text>
               </svg>
             </button>
           )}
 
-          {/* Text Input */}
+          {/* ── Text Input ── */}
           {multiline ? (
             <textarea
-              ref={inputRef as RefObject<HTMLTextAreaElement>}
+              ref={activeRef as RefObject<HTMLTextAreaElement>}
               value={value}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
               disabled={disabled}
               rows={1}
-              className={cn(sharedInputClass, 'resize-none max-h-[120px] py-0.5')}
-              style={{ minHeight: '24px' }}
+              className={cn(inputClass, 'resize-none max-h-[140px] py-[6px]')}
+              style={{ minHeight: '22px' }}
             />
           ) : (
             <input
-              ref={inputRef as RefObject<HTMLInputElement>}
+              ref={activeRef as RefObject<HTMLInputElement>}
               type="text"
               value={value}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
               disabled={disabled}
-              className={sharedInputClass}
+              className={cn(inputClass, 'py-[6px]')}
             />
           )}
 
-          {/* Paperclip / Attach button */}
+          {/* ── Attach / Paperclip button ── */}
           {onAttachClick && (
             <button
               type="button"
               onClick={onAttachClick}
-              className="shrink-0 w-[28px] h-[28px] flex items-center justify-center rounded-full text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.08] transition-colors duration-150"
+              tabIndex={-1}
+              className={cn(
+                'shrink-0 flex items-center justify-center',
+                'w-[34px] h-[34px] rounded-full',
+                'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.07]',
+                'transition-colors duration-150',
+              )}
+              aria-label="Attach"
             >
-              <svg className="w-[20px] h-[20px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
               </svg>
             </button>
           )}
         </div>
 
-        {/* ── Send Button (outside pill) ── */}
+        {/* ══════════ Send Button (outside pill, X-style arrow) ══════════ */}
         <button
           type="button"
-          onClick={isSendEnabled ? onSend : undefined}
-          disabled={!isSendEnabled || disabled}
+          onClick={isActive ? onSend : undefined}
+          disabled={!isActive || disabled}
           className={cn(
-            'shrink-0 w-[34px] h-[34px] flex items-center justify-center rounded-full transition-all duration-200',
-            isSendEnabled && !disabled
-              ? 'text-[#1d9bf0] hover:bg-[#1d9bf0]/10 active:scale-90'
-              : 'text-[#333333] pointer-events-none',
+            'shrink-0 flex items-center justify-center',
+            'w-[36px] h-[36px] rounded-full',
+            'transition-all duration-200 ease-in-out',
+            isActive && !disabled
+              ? 'text-[#1d9bf0] hover:bg-[#1d9bf0]/10 active:scale-[0.88]'
+              : 'text-[#2f3336] cursor-default',
           )}
+          aria-label="Send"
         >
-          <svg className="w-[20px] h-[20px]" viewBox="0 0 24 24" fill="currentColor">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="transition-transform duration-200"
+          >
             <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
           </svg>
         </button>
