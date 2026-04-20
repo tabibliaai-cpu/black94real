@@ -284,7 +284,7 @@ export function FeedView() {
   return (
     <div>
       {/* Tabs */}
-      <div className="sticky top-[56px] z-20 bg-[#09080f]/90 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-[56px] z-20 bg-[#000000] border-b border-white/[0.06]">
         <div className="flex">
           {TABS.map((tab) => (
             <button

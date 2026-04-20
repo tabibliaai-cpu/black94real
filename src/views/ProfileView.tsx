@@ -299,7 +299,7 @@ export function ProfileView() {
       </div>
 
       {/* Tabs */}
-      <div className="sticky top-[53px] z-20 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-[53px] z-20 bg-[#000000] border-b border-white/[0.06]">
         <div className="flex">
           {(showStoreTab ? ['posts', 'store', 'likes'] : ['posts', 'replies', 'likes'] as const).map((tab) => (
             <button
