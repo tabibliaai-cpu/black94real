@@ -239,15 +239,12 @@ export default function Black94App() {
   const setBusyRef = useRef(setBusy)
   setBusyRef.current = setBusy
 
-  /* ── Restore view from URL on mount (before auth resolves) ───────────── */
+  /* ── Restore view + cached user instantly on mount ───────────────────── */
   useEffect(() => {
     if (typeof window === 'undefined') return
+    // Restore view from URL hash/pathname FIRST (before any render)
     useAppStore.getState().restoreViewFromHash()
-  }, [])
-
-  /* ── Restore cached user instantly on mount ──────────────────────────── */
-  useEffect(() => {
-    if (typeof window === 'undefined') return
+    // Then restore cached user for instant app display
     try {
       const cached = localStorage.getItem(USER_CACHE_KEY)
       if (cached) {
@@ -275,11 +272,15 @@ export default function Black94App() {
     return () => clearTimeout(timer)
   }, [])
 
-  /* ── Popstate listener for browser back/forward ─────────────────────── */
+  /* ── Hashchange + popstate listener for browser back/forward ────────── */
   useEffect(() => {
-    const onPopState = () => useAppStore.getState().restoreViewFromHash()
-    window.addEventListener('popstate', onPopState)
-    return () => window.removeEventListener('popstate', onPopState)
+    const onUrlChange = () => useAppStore.getState().restoreViewFromHash()
+    window.addEventListener('hashchange', onUrlChange)
+    window.addEventListener('popstate', onUrlChange)
+    return () => {
+      window.removeEventListener('hashchange', onUrlChange)
+      window.removeEventListener('popstate', onUrlChange)
+    }
   }, [])
 
   /* ── Auth listener — DO NOT MODIFY core logic ─────────────────────────── */
@@ -298,8 +299,6 @@ export default function Black94App() {
         setTokenRef.current(fbUser.uid)
         setScreenRef.current('app')
         setBusyRef.current(false)
-        // Restore view from URL hash/pathname (in case cache was missing)
-        useAppStore.getState().restoreViewFromHash()
         // Cache user for instant restore on next refresh
         if (typeof window !== 'undefined') {
           try { localStorage.setItem(USER_CACHE_KEY, JSON.stringify(storeUser)) } catch {}

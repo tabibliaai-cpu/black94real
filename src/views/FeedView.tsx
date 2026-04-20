@@ -65,6 +65,9 @@ export function FeedView() {
   const sentinelRef = useRef<HTMLDivElement>(null)
   const postsLoadedRef = useRef(false)
   const rankedPostIdsRef = useRef<string[]>([])
+  const userIdRef = useRef(user?.id)
+  // Track if the initial load already happened to prevent double-load when user refreshes
+  const initialLoadDoneRef = useRef(false)
 
   // ── Start engagement engine on mount ──
   useEngagementEngine(!!user)
@@ -178,10 +181,20 @@ export function FeedView() {
     }
   }, [enrichWithInteractions, activeTab])
 
-  // Initial load + refresh trending labels periodically
+  // Initial load — only once, skip if already loaded (prevents double-load on user refresh)
   useEffect(() => {
+    if (initialLoadDoneRef.current) return
+    initialLoadDoneRef.current = true
     loadPosts(true)
   }, [loadPosts])
+
+  // Re-enrich existing posts when user changes (from cache to Firebase) without re-fetching
+  useEffect(() => {
+    if (!user || posts.length === 0 || userIdRef.current === user.id) return
+    userIdRef.current = user.id
+    // Re-check interactions with fresh user ID, don't re-fetch posts
+    enrichWithInteractions(posts).then(enriched => setPosts(enriched)).catch(() => {})
+  }, [user?.id])
 
   // Refresh trending labels every 3 minutes
   useEffect(() => {
