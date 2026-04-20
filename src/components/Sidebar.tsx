@@ -265,6 +265,36 @@ export function Sidebar() {
         )}
       </div>
 
+      {/* ── User profile card (top) ── */}
+      {isExpanded && (
+        <div className="shrink-0 px-3 pb-1">
+          <button
+            type="button"
+            onClick={() => handleNavigate('profile')}
+            className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-white/[0.04] transition-colors"
+          >
+            <PAvatar
+              src={user?.profileImage}
+              name={user?.displayName || user?.username}
+              size={40}
+              verified={user?.isVerified}
+              badge={user?.badge}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[15px] font-bold text-white truncate">
+                  {user?.displayName || 'User'}
+                </span>
+                {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={16} badge={user?.badge} />}
+              </div>
+              <span className="text-[13px] text-gray-500 truncate">
+                @{user?.username || 'user'}
+              </span>
+            </div>
+          </button>
+        </div>
+      )}
+
       {/* ── Middle: Navigation ── */}
       <nav
         role="menu"
@@ -275,7 +305,7 @@ export function Sidebar() {
             const IconComponent = item.icon
             const isActive = currentView === item.view
 
-            // Special: Profile item shows user avatar (no badge — it's just a nav label)
+            // Profile item uses standard icon (same as other nav items)
             if (item.id === 'profile') {
               return (
                 <li key={item.id} role="none">
@@ -294,13 +324,10 @@ export function Sidebar() {
                       !isExpanded && 'justify-center'
                     )}
                   >
-                    <PAvatar
-                      src={user?.profileImage}
-                      name={user?.displayName || user?.username}
-                      size={isExpanded ? 26 : 28}
-                      verified={user?.isVerified}
-                      badge={user?.badge}
-                    />
+                    <IconComponent className={cn(
+                      'h-[26px] w-[26px] shrink-0',
+                      isActive ? 'text-[#e7e9ea]' : 'text-gray-300'
+                    )} />
                     {isExpanded && (
                       <span className="truncate select-none">Profile</span>
                     )}
