@@ -382,6 +382,23 @@ export default function Black94App() {
       {/* ─── Views ─── */}
       <main><ViewRouter /></main>
 
+      {/* ─── FAB — compose button ─── */}
+      {isHomeFeed && (
+        <button
+          onClick={() => setComposeOpen(true)}
+          className={cn(
+            'fixed bottom-[62px] right-4 z-30 w-14 h-14 rounded-full bg-[#8b5cf6] flex items-center justify-center shadow-lg transition-all duration-300',
+            'hover:bg-[#7c3aed] active:scale-90',
+            fabVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-75 pointer-events-none'
+          )}
+          aria-label="Create new post"
+        >
+          <svg className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </button>
+      )}
+
       {/* ─── Compose Dialog ─── */}
       <ComposeDialog open={composeOpen} onClose={() => setComposeOpen(false)} />
 
