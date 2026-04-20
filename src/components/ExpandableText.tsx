@@ -101,7 +101,7 @@ export function ExpandableText({
           )}
           style={{ color: linkColor, fontSize: 'inherit', lineHeight: 'inherit' }}
         >
-          {expanded ? 'See less' : '\u2026 See more'}
+          {expanded ? 'See less' : 'See more'}
         </button>
       )}
     </div>
