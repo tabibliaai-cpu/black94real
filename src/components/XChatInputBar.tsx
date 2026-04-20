@@ -97,7 +97,7 @@ export function XChatInputBar({
 
   /* ─── Shared input classes ─── */
   const inputClass =
-    'flex-1 bg-transparent text-[15px] leading-[20px] text-white placeholder-[#71767b] outline-none min-w-0'
+    'flex-1 bg-transparent text-[15px] leading-[20px] text-white placeholder-[#71767b] outline-none min-w-0 focus-visible:ring-0 focus-visible:outline-none ring-0'
 
   return (
     <div
