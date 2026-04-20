@@ -14,12 +14,11 @@ import { toast } from 'sonner'
 
 /* ─── Lazy-loaded views for performance (code splitting) ──────────────────── */
 const FeedView = lazy(() => import('@/views/FeedView').then(m => ({ default: m.FeedView })))
-const ExploreView = lazy(() => import('@/views/ExploreView').then(m => ({ default: m.ExploreView })))
 const ChatListView = lazy(() => import('@/views/ChatListView').then(m => ({ default: m.ChatListView })))
 const ChatRoomView = lazy(() => import('@/views/ChatListView').then(m => ({ default: m.ChatRoomView })))
-const ProfileView = lazy(() => import('@/views/ProfileView').then(m => ({ default: m.ProfileView })))
 const NotificationsView = lazy(() => import('@/views/NotificationsView').then(m => ({ default: m.NotificationsView })))
 const SearchView = lazy(() => import('@/views/SearchView').then(m => ({ default: m.SearchView })))
+const ExploreView = lazy(() => import('@/views/ExploreView').then(m => ({ default: m.ExploreView })))
 const SettingsView = lazy(() => import('@/views/SettingsView').then(m => ({ default: m.SettingsView })))
 const StoriesView = lazy(() => import('@/views/StoriesView').then(m => ({ default: m.StoriesView })))
 const AnonymousChatView = lazy(() => import('@/views/AnonymousChatView').then(m => ({ default: m.AnonymousChatView })))
@@ -51,6 +50,9 @@ const AddProductView = lazy(() => import('@/views/AddProductView').then(m => ({ 
 const OrderTrackingView = lazy(() => import('@/views/OrderTrackingView').then(m => ({ default: m.OrderTrackingView })))
 const BusinessOrdersView = lazy(() => import('@/views/BusinessOrdersView').then(m => ({ default: m.BusinessOrdersView })))
 const StoreDashboardView = lazy(() => import('@/views/StoreDashboardView').then(m => ({ default: m.StoreDashboardView })))
+
+/* ─── User data cache key ───────────────────────────────────────────────── */
+const USER_CACHE_KEY = 'black94_user_cache'
 
 /* ─── View loading fallback ───────────────────────────────────────────────────── */
 function ViewLoader() {
@@ -236,7 +238,44 @@ export default function Black94App() {
   const setBusyRef = useRef(setBusy)
   setBusyRef.current = setBusy
 
-  /* ── Auth listener — DO NOT MODIFY ─────────────────────────────────────── */
+  /* ── Restore cached user instantly on mount ──────────────────────────── */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const cached = localStorage.getItem(USER_CACHE_KEY)
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        if (parsed?.id) {
+          console.log('[Auth] Restoring from cache:', parsed.username)
+          useAppStore.getState().setUser(parsed)
+          useAppStore.getState().setToken(parsed.id)
+          useAppStore.getState().restoreViewFromHash()
+          setScreenRef.current('app')
+        }
+      }
+    } catch {}
+  }, [])
+
+  /* ── Prefetch common views after mount ────────────────────────────────── */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const timer = setTimeout(() => {
+      import('@/views/FeedView').catch(() => {})
+      import('@/views/ChatListView').catch(() => {})
+      import('@/views/NotificationsView').catch(() => {})
+      import('@/views/SearchView').catch(() => {})
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  /* ── Hashchange listener for browser back/forward ────────────────────── */
+  useEffect(() => {
+    const onHashChange = () => useAppStore.getState().restoreViewFromHash()
+    window.addEventListener("hashchange", onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  /* ── Auth listener — DO NOT MODIFY core logic ─────────────────────────── */
   useEffect(() => {
     let dead = false
     let unsub: (() => void) | null = null
@@ -252,9 +291,11 @@ export default function Black94App() {
         setTokenRef.current(fbUser.uid)
         setScreenRef.current('app')
         setBusyRef.current(false)
+        // Cache user for instant restore on next refresh
+        if (typeof window !== 'undefined') {
+          try { localStorage.setItem(USER_CACHE_KEY, JSON.stringify(storeUser)) } catch {}
+        }
         console.log('[Auth] Logged in:', storeUser.username)
-        // Restore previous view from URL hash
-        useAppStore.getState().restoreViewFromHash()
       } catch (err) {
         console.error('[Auth] createUserFromGoogle failed:', err)
         setBusyRef.current(false)
@@ -267,7 +308,11 @@ export default function Black94App() {
       unsub = onAuthStateChanged(auth, (fbUser) => {
         if (dead) return
         if (fbUser) handleUser(fbUser)
-        else { console.log('[Auth] No user — showing login'); setScreenRef.current('login') }
+        else {
+          console.log('[Auth] No user — showing login')
+          try { localStorage.removeItem(USER_CACHE_KEY) } catch {}
+          setScreenRef.current('login')
+        }
       })
     })
 
@@ -306,6 +351,7 @@ export default function Black94App() {
     try {
       await signOutUser()
       logout()
+      try { localStorage.removeItem(USER_CACHE_KEY) } catch {}
       setScreen('login')
       toast.success('Signed out')
     } catch {

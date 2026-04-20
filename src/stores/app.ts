@@ -234,14 +234,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       window.history.replaceState(null, '', '#' + hash)
     }
   },
-  // Restore view from hash on init
+  // Restore view from hash on init — supports ALL navigable views
   restoreViewFromHash: () => {
     if (typeof window === 'undefined') return
     const hash = window.location.hash.replace('#', '')
     if (!hash) return
     const [view, query] = hash.split('?')
-    const validViews: string[] = ['feed','explore','chat','profile','notifications','search','settings','stories','anonymous-chat','dual-pane-chat','business-dashboard','premium-dashboard','edit-profile','subscriptions','ads-manager','crm-leads','store-dashboard','my-store']
-    if (validViews.includes(view)) {
+ const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','anonymous-chat','anonymous-room','dual-pane-chat','business-dashboard','premium-dashboard','subscriptions','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call','landing','login','signup','e2ee-chat','threads','thread-detail','reels']
+    if (allViews.includes(view)) {
       const params: Record<string, string> = {}
       if (query) new URLSearchParams(query).forEach((v, k) => { params[k] = v })
       set({ currentView: view as AppView, viewParams: params })
