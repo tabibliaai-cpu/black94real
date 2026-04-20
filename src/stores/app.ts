@@ -231,16 +231,19 @@ export const useAppStore = create<AppState>((set, get) => ({
     // Persist to URL hash for refresh persistence
     if (typeof window !== 'undefined') {
       const hash = params ? `${view}?${new URLSearchParams(params).toString()}` : view
-      window.history.replaceState(null, '', '#' + hash)
+      window.history.pushState({ view, params }, '', '#' + hash)
     }
   },
-  // Restore view from hash on init — supports ALL navigable views
+  // Restore view from URL (hash or pathname) on init — supports ALL navigable views
   restoreViewFromHash: () => {
     if (typeof window === 'undefined') return
+    // Check hash first, then pathname (for direct URL access like /chat)
     const hash = window.location.hash.replace('#', '')
-    if (!hash) return
-    const [view, query] = hash.split('?')
- const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','anonymous-chat','anonymous-room','dual-pane-chat','business-dashboard','premium-dashboard','subscriptions','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call','landing','login','signup','e2ee-chat','threads','thread-detail','reels']
+    const pathname = window.location.pathname.replace(/^\/index\.html$/, '').replace(/^\//, '')
+    const route = hash || (pathname && pathname !== '' ? pathname : '')
+    if (!route) return
+    const [view, query] = route.split('?')
+    const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','anonymous-chat','anonymous-room','dual-pane-chat','business-dashboard','premium-dashboard','subscriptions','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call','landing','login','signup','e2ee-chat','threads','thread-detail','reels']
     if (allViews.includes(view)) {
       const params: Record<string, string> = {}
       if (query) new URLSearchParams(query).forEach((v, k) => { params[k] = v })

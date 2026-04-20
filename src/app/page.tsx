@@ -239,6 +239,12 @@ export default function Black94App() {
   const setBusyRef = useRef(setBusy)
   setBusyRef.current = setBusy
 
+  /* ── Restore view from URL on mount (before auth resolves) ───────────── */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    useAppStore.getState().restoreViewFromHash()
+  }, [])
+
   /* ── Restore cached user instantly on mount ──────────────────────────── */
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -250,14 +256,13 @@ export default function Black94App() {
           console.log('[Auth] Restoring from cache:', parsed.username)
           useAppStore.getState().setUser(parsed)
           useAppStore.getState().setToken(parsed.id)
-          useAppStore.getState().restoreViewFromHash()
           setScreenRef.current('app')
         }
       }
     } catch {}
   }, [])
 
-  /* ── Prefetch common views after mount ────────────────────────────────── */
+  /* ── Prefetch common views shortly after mount ──────────────────────── */
   useEffect(() => {
     if (typeof window === 'undefined') return
     const timer = setTimeout(() => {
@@ -265,15 +270,16 @@ export default function Black94App() {
       import('@/views/ChatListView').catch(() => {})
       import('@/views/NotificationsView').catch(() => {})
       import('@/views/SearchView').catch(() => {})
-    }, 2000)
+      import('@/views/ExploreView').catch(() => {})
+    }, 800)
     return () => clearTimeout(timer)
   }, [])
 
-  /* ── Hashchange listener for browser back/forward ────────────────────── */
+  /* ── Popstate listener for browser back/forward ─────────────────────── */
   useEffect(() => {
-    const onHashChange = () => useAppStore.getState().restoreViewFromHash()
-    window.addEventListener("hashchange", onHashChange)
-    return () => window.removeEventListener('hashchange', onHashChange)
+    const onPopState = () => useAppStore.getState().restoreViewFromHash()
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
   }, [])
 
   /* ── Auth listener — DO NOT MODIFY core logic ─────────────────────────── */
@@ -292,6 +298,8 @@ export default function Black94App() {
         setTokenRef.current(fbUser.uid)
         setScreenRef.current('app')
         setBusyRef.current(false)
+        // Restore view from URL hash/pathname (in case cache was missing)
+        useAppStore.getState().restoreViewFromHash()
         // Cache user for instant restore on next refresh
         if (typeof window !== 'undefined') {
           try { localStorage.setItem(USER_CACHE_KEY, JSON.stringify(storeUser)) } catch {}

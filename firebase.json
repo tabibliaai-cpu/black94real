@@ -5,6 +5,8 @@
   "hosting": {
     "site": "black94",
     "public": "out",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/.*",
