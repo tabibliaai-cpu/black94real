@@ -712,7 +712,7 @@ export function ChatRoomView() {
   }, [imagePreview, handleSendImage, handleSendText])
 
   return (
-    <div className="flex flex-col h-[calc(100vh-106px)]">
+    <div className="flex flex-col h-[100dvh] bg-black">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/[0.06] bg-[#000000]/90 backdrop-blur-xl shrink-0">
         <button
