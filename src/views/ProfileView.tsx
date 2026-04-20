@@ -228,12 +228,12 @@ export function ProfileView() {
             size={80}
             verified={isVerified}
             badge={badge}
-            className="ring-4 ring-[#09080f]"
+            className="ring-4 ring-[#000000]"
           />
           {isOwnProfile ? (
             <button
               onClick={() => navigate('edit-profile')}
-              className="px-5 py-1.5 rounded-full border border-[#64748b] text-[15px] font-bold text-[#f0eef6] hover:bg-white/[0.06] transition-colors"
+              className="px-5 py-1.5 rounded-full border border-[#64748b] text-[15px] font-bold text-[#e7e9ea] hover:bg-white/[0.06] transition-colors"
             >
               Edit profile
             </button>
@@ -244,8 +244,8 @@ export function ProfileView() {
                 className={cn(
                   'px-6 py-2 rounded-full text-[15px] font-bold transition-colors',
                   isFollowing
-                    ? 'border border-[#64748b] text-[#f0eef6] hover:border-red-500 hover:text-red-500 hover:bg-red-500/10'
-                    : 'bg-[#f0eef6] text-black hover:bg-gray-200'
+                    ? 'border border-[#64748b] text-[#e7e9ea] hover:border-red-500 hover:text-red-500 hover:bg-red-500/10'
+                    : 'bg-[#e7e9ea] text-black hover:bg-gray-200'
                 )}
               >
                 {isFollowing ? 'Following' : 'Follow'}
@@ -269,7 +269,7 @@ export function ProfileView() {
         </div>
 
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-[#f0eef6]">{displayName}</h2>
+          <h2 className="text-xl font-bold text-[#e7e9ea]">{displayName}</h2>
           {(isVerified || isBusinessAccount) && <VerifiedBadge size={20} badge={isBusinessAccount ? 'gold' : badge} />}
         </div>
         <p className="text-[15px] text-[#94a3b8]">@{username}</p>
@@ -283,15 +283,15 @@ export function ProfileView() {
         )}
 
         {bio && (
-          <p className="text-[15px] text-[#f0eef6] mt-2 leading-relaxed">{bio}</p>
+          <p className="text-[15px] text-[#e7e9ea] mt-2 leading-relaxed">{bio}</p>
         )}
 
         <div className="flex items-center gap-5 mt-4 text-[14px]">
-          <span className="text-[#f0eef6]">
+          <span className="text-[#e7e9ea]">
             <span className="font-bold">{followingCount}</span>{' '}
             <span className="text-[#94a3b8]">Following</span>
           </span>
-          <span className="text-[#f0eef6]">
+          <span className="text-[#e7e9ea]">
             <span className="font-bold">{followerCount}</span>{' '}
             <span className="text-[#94a3b8]">Followers</span>
           </span>
@@ -307,7 +307,7 @@ export function ProfileView() {
               onClick={() => setActiveTab(tab)}
               className={cn(
                 'flex-1 py-3.5 text-[15px] font-medium relative transition-colors capitalize',
-                activeTab === tab ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
+                activeTab === tab ? 'text-[#e7e9ea] font-bold' : 'text-[#94a3b8]'
               )}
             >
               {tab}

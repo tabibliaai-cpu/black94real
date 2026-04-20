@@ -87,7 +87,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
 
         {/* Sold count */}
         {product.soldCount > 0 && (
-          <div className="absolute bottom-2 left-2 bg-[#09080f]/70 backdrop-blur-sm text-[10px] text-[#f0eef6] px-2 py-0.5 rounded-full">
+          <div className="absolute bottom-2 left-2 bg-[#000000]/70 backdrop-blur-sm text-[10px] text-[#e7e9ea] px-2 py-0.5 rounded-full">
             {product.soldCount} sold
           </div>
         )}
@@ -95,7 +95,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
 
       {/* Info */}
       <div className="p-3">
-        <p className="text-[13px] font-semibold text-[#f0eef6] line-clamp-2 leading-tight mb-1.5 min-h-[2.5em]">
+        <p className="text-[13px] font-semibold text-[#e7e9ea] line-clamp-2 leading-tight mb-1.5 min-h-[2.5em]">
           {product.name}
         </p>
 
@@ -121,7 +121,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
 
         {/* Price */}
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-[16px] font-bold text-[#f0eef6]">
+          <span className="text-[16px] font-bold text-[#e7e9ea]">
             ₹{product.price.toLocaleString()}
           </span>
           {hasDiscount && (

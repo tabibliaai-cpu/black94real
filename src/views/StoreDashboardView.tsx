@@ -53,17 +53,17 @@ const STATUS_COLORS: Record<string, string> = {
 
 function DashHeader({ title, onBack }: { title: string; onBack: () => void }) {
   return (
-    <div className="sticky top-0 z-40 bg-[#09080f]/95 backdrop-blur-xl border-b border-white/[0.08]">
+    <div className="sticky top-0 z-40 bg-[#000000]/95 backdrop-blur-xl border-b border-white/[0.08]">
       <div className="flex items-center gap-3 px-4 h-[53px]">
         <button
           onClick={onBack}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors -ml-1"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
-        <h1 className="text-[17px] font-bold text-[#f0eef6]">{title}</h1>
+        <h1 className="text-[17px] font-bold text-[#e7e9ea]">{title}</h1>
       </div>
     </div>
   )
@@ -133,7 +133,7 @@ function SectionTabs({ active, onChange }: { active: DashTab; onChange: (tab: Da
               'flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold whitespace-nowrap transition-all flex-shrink-0',
               active === tab.key
                 ? 'bg-[#8b5cf6] text-black shadow-md shadow-[#8b5cf6]/20'
-                : 'text-[#94a3b8] hover:text-[#f0eef6]'
+                : 'text-[#94a3b8] hover:text-[#e7e9ea]'
             )}
           >
             {tab.icon(active === tab.key)}
@@ -184,7 +184,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
             )}
           >
             <span className="text-lg">{s.icon}</span>
-            <p className="text-[20px] font-bold text-[#f0eef6] mt-1">{s.value}</p>
+            <p className="text-[20px] font-bold text-[#e7e9ea] mt-1">{s.value}</p>
             <p className="text-[11px] text-[#94a3b8]">{s.label}</p>
           </div>
         ))}
@@ -192,7 +192,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
 
       {/* Quick Actions */}
       <div>
-        <h3 className="text-[15px] font-bold text-[#f0eef6] mb-3">Quick Actions</h3>
+        <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-3">Quick Actions</h3>
         <div className="grid grid-cols-3 gap-3">
           {[
             { label: 'Add Product', view: 'add-product' as const, icon: '➕', color: 'bg-[#8b5cf6]/10 border-[#8b5cf6]/20 text-[#8b5cf6]' },
@@ -207,7 +207,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
       {/* Recent Orders */}
       {recentOrders.length > 0 && (
         <div>
-          <h3 className="text-[15px] font-bold text-[#f0eef6] mb-3">Recent Orders</h3>
+          <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-3">Recent Orders</h3>
           <div className="space-y-2">
             {recentOrders.map((order) => (
               <div key={order.id} className="flex items-center gap-3 p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
@@ -215,7 +215,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
                   🛍️
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#f0eef6] truncate">{order.buyerName}</p>
+                  <p className="text-[13px] font-medium text-[#e7e9ea] truncate">{order.buyerName}</p>
                   <p className="text-[11px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">
@@ -233,7 +233,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
       {/* Top Products */}
       {products.length > 0 && (
         <div>
-          <h3 className="text-[15px] font-bold text-[#f0eef6] mb-3">Top Products</h3>
+          <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-3">Top Products</h3>
           <div className="space-y-2">
             {products.sort((a, b) => b.soldCount - a.soldCount).slice(0, 3).map((p) => {
               const images = p.images ? p.images.split(',').map((s) => s.trim()).filter(Boolean) : []
@@ -247,10 +247,10 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{p.name}</p>
+                    <p className="text-[13px] font-medium text-[#e7e9ea] line-clamp-1">{p.name}</p>
                     <p className="text-[11px] text-[#94a3b8]">{p.soldCount} sold • ₹{p.price.toLocaleString()}</p>
                   </div>
-                  <span className="text-[14px] font-bold text-[#f0eef6]">₹{(p.soldCount * p.price).toLocaleString()}</span>
+                  <span className="text-[14px] font-bold text-[#e7e9ea]">₹{(p.soldCount * p.price).toLocaleString()}</span>
                 </div>
               )
             })}
@@ -295,7 +295,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-[15px] font-bold text-[#f0eef6]">Your Products</h3>
+          <h3 className="text-[15px] font-bold text-[#e7e9ea]">Your Products</h3>
           <p className="text-[12px] text-[#94a3b8]">{products.length} products listed</p>
         </div>
         <button
@@ -343,7 +343,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
               </button>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-[14px] font-semibold text-[#f0eef6] line-clamp-1 flex-1">{product.name}</p>
+                  <p className="text-[14px] font-semibold text-[#e7e9ea] line-clamp-1 flex-1">{product.name}</p>
                   {product.isFeatured && (
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 flex-shrink-0">Featured</span>
                   )}
@@ -426,7 +426,7 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{product.name}</p>
+          <p className="text-[13px] font-medium text-[#e7e9ea] line-clamp-1">{product.name}</p>
           <p className="text-[11px] text-[#94a3b8]">SKU: {product.sku || 'N/A'} • {product.category}</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -436,7 +436,7 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
                 type="number"
                 value={stockInput}
                 onChange={(e) => setStockInput(e.target.value)}
-                className="w-16 bg-transparent border border-[#8b5cf6]/40 rounded-lg px-2 py-1.5 text-[13px] text-[#f0eef6] text-center outline-none focus:border-[#8b5cf6]"
+                className="w-16 bg-transparent border border-[#8b5cf6]/40 rounded-lg px-2 py-1.5 text-[13px] text-[#e7e9ea] text-center outline-none focus:border-[#8b5cf6]"
                 autoFocus
                 min={0}
               />
@@ -474,7 +474,7 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
       {/* Summary Cards */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
-          <p className="text-[20px] font-bold text-[#f0eef6]">{inStock.length}</p>
+          <p className="text-[20px] font-bold text-[#e7e9ea]">{inStock.length}</p>
           <p className="text-[11px] text-[#94a3b8]">In Stock</p>
         </div>
         <div className="bg-[#110f1a] border border-amber-500/20 rounded-xl p-3 text-center">
@@ -612,7 +612,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                     <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <p className="text-[13px] text-[#f0eef6] font-medium">{order.buyerName}</p>
+                <p className="text-[13px] text-[#e7e9ea] font-medium">{order.buyerName}</p>
                 <div className="flex items-center justify-between mt-1">
                   <p className="text-[12px] text-[#94a3b8]">{items.map((i) => i.productName).join(', ')}</p>
                   <p className="text-[15px] font-bold text-[#8b5cf6]">₹{order.total.toLocaleString()}</p>
@@ -629,10 +629,10 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                           <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[12px] text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                          <p className="text-[12px] text-[#e7e9ea] line-clamp-1">{item.productName}</p>
                           <p className="text-[11px] text-[#94a3b8]">x{item.quantity}</p>
                         </div>
-                        <span className="text-[12px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                        <span className="text-[12px] font-semibold text-[#e7e9ea]">₹{(item.price * item.quantity).toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
@@ -663,15 +663,15 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-white/[0.03] rounded-lg p-2 text-center">
                       <p className="text-[10px] text-[#94a3b8]">Subtotal</p>
-                      <p className="text-[12px] font-semibold text-[#f0eef6]">₹{order.subtotal.toLocaleString()}</p>
+                      <p className="text-[12px] font-semibold text-[#e7e9ea]">₹{order.subtotal.toLocaleString()}</p>
                     </div>
                     <div className="bg-white/[0.03] rounded-lg p-2 text-center">
                       <p className="text-[10px] text-[#94a3b8]">Shipping</p>
-                      <p className="text-[12px] font-semibold text-[#f0eef6]">₹{order.shipping.toLocaleString()}</p>
+                      <p className="text-[12px] font-semibold text-[#e7e9ea]">₹{order.shipping.toLocaleString()}</p>
                     </div>
                     <div className="bg-white/[0.03] rounded-lg p-2 text-center">
                       <p className="text-[10px] text-[#94a3b8]">Date</p>
-                      <p className="text-[12px] font-semibold text-[#f0eef6]">{new Date(order.createdAt).toLocaleDateString()}</p>
+                      <p className="text-[12px] font-semibold text-[#e7e9ea]">{new Date(order.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>
@@ -732,7 +732,7 @@ function SettingsSection() {
     <div className="px-4 pb-6 space-y-6">
       {/* Store Info */}
       <div className="space-y-4">
-        <h3 className="text-[15px] font-bold text-[#f0eef6]">Store Information</h3>
+        <h3 className="text-[15px] font-bold text-[#e7e9ea]">Store Information</h3>
 
         {/* Cover Preview */}
         <div className="relative h-28 rounded-xl overflow-hidden bg-[#18152b]">
@@ -747,7 +747,7 @@ function SettingsSection() {
               </svg>
             </div>
           )}
-          <button className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-[#09080f]/60 backdrop-blur-sm text-[12px] font-medium text-white hover:bg-[#09080f]/80 transition-colors">
+          <button className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-[#000000]/60 backdrop-blur-sm text-[12px] font-medium text-white hover:bg-[#000000]/80 transition-colors">
             Change Cover
           </button>
         </div>
@@ -760,7 +760,7 @@ function SettingsSection() {
             value={settings.storeName}
             onChange={(e) => updateSetting('storeName', e.target.value)}
             placeholder="Your store name"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -772,19 +772,19 @@ function SettingsSection() {
             onChange={(e) => updateSetting('storeDescription', e.target.value)}
             placeholder="Tell customers about your store..."
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
       </div>
 
       {/* Shipping Settings */}
       <div className="space-y-4">
-        <h3 className="text-[15px] font-bold text-[#f0eef6]">Shipping Settings</h3>
+        <h3 className="text-[15px] font-bold text-[#e7e9ea]">Shipping Settings</h3>
 
         {/* Enable Shipping Toggle */}
         <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#110f1a] border border-white/[0.06]">
           <div>
-            <p className="text-[14px] text-[#f0eef6]">Enable Shipping</p>
+            <p className="text-[14px] text-[#e7e9ea]">Enable Shipping</p>
             <p className="text-[12px] text-[#94a3b8]">Enable delivery for physical products</p>
           </div>
           <button
@@ -809,7 +809,7 @@ function SettingsSection() {
             value={settings.freeShippingAbove}
             onChange={(e) => updateSetting('freeShippingAbove', e.target.value)}
             placeholder="500"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
           <p className="text-[11px] text-[#64748b]">Orders above this amount get free shipping</p>
         </div>
@@ -840,7 +840,7 @@ function SettingsSection() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#f0eef6]">{partner.name}</p>
+                  <p className="text-[13px] font-medium text-[#e7e9ea]">{partner.name}</p>
                   <p className="text-[11px] text-[#94a3b8]">{partner.rate}</p>
                 </div>
                 <div className="flex gap-1.5">
@@ -859,7 +859,7 @@ function SettingsSection() {
 
       {/* Tax & Returns */}
       <div className="space-y-4">
-        <h3 className="text-[15px] font-bold text-[#f0eef6]">Tax & Returns</h3>
+        <h3 className="text-[15px] font-bold text-[#e7e9ea]">Tax & Returns</h3>
 
         {/* Tax Rate */}
         <div className="space-y-1.5">
@@ -869,7 +869,7 @@ function SettingsSection() {
             value={settings.taxRate}
             onChange={(e) => updateSetting('taxRate', e.target.value)}
             placeholder="18"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -902,7 +902,7 @@ function SettingsSection() {
             onChange={(e) => updateSetting('returnPolicy', e.target.value)}
             placeholder="Describe your return policy..."
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
       </div>
@@ -995,7 +995,7 @@ export function StoreDashboardView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#09080f]">
+      <div className="min-h-screen bg-[#000000]">
         <DashHeader title="Store Dashboard" onBack={handleBack} />
         <div className="flex items-center justify-center py-32">
           <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
@@ -1005,12 +1005,12 @@ export function StoreDashboardView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09080f]">
+    <div className="min-h-screen bg-[#000000]">
       <DashHeader title="Store Dashboard" onBack={handleBack} />
 
       {/* Store Banner */}
       <div className="relative h-20 bg-gradient-to-r from-[#8b5cf6]/20 via-[#110f1a] to-[#8b5cf6]/10">
-        <div className="absolute inset-0 bg-[#09080f]/40" />
+        <div className="absolute inset-0 bg-[#000000]/40" />
         <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black to-transparent" />
         <div className="absolute left-4 bottom-3 flex items-center gap-2 z-10">
           <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center flex-shrink-0">
@@ -1021,7 +1021,7 @@ export function StoreDashboardView() {
             )}
           </div>
           <div>
-            <p className="text-[13px] font-bold text-[#f0eef6]">{user?.displayName || 'My Store'}</p>
+            <p className="text-[13px] font-bold text-[#e7e9ea]">{user?.displayName || 'My Store'}</p>
             <p className="text-[11px] text-[#94a3b8]">{products.length} products • {orders.length} orders</p>
           </div>
         </div>

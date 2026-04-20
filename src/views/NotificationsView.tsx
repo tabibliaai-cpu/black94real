@@ -59,7 +59,7 @@ export function NotificationsView() {
   return (
     <div>
       <div className="px-4 pt-3 pb-2">
-        <h2 className="text-xl font-bold text-[#f0eef6]">Notifications</h2>
+        <h2 className="text-xl font-bold text-[#e7e9ea]">Notifications</h2>
       </div>
 
       {loading ? (
@@ -81,7 +81,7 @@ export function NotificationsView() {
               <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9zM13.73 21a2 2 0 01-3.46 0" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-[#f0eef6] mb-1">Nothing to see here — yet</h3>
+          <h3 className="text-lg font-bold text-[#e7e9ea] mb-1">Nothing to see here — yet</h3>
           <p className="text-[15px] text-[#94a3b8]">Likes, reposts, and follows will show up here.</p>
         </div>
       ) : (
@@ -96,12 +96,12 @@ export function NotificationsView() {
             >
               <div className="relative shrink-0 mt-0.5">
                 <PAvatar src={notif.actorProfileImage} name={notif.actorName} size={36} verified={(notif as any).actorIsVerified} badge={(notif as any).actorBadge} />
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#09080f] flex items-center justify-center">
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#000000] flex items-center justify-center">
                   {notifIcon(notif.type)}
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[15px] text-[#f0eef6] leading-relaxed">
+                <p className="text-[15px] text-[#e7e9ea] leading-relaxed">
                   <span className="font-bold">{notif.actorName}</span>{' '}
                   {notif.message || notif.type}
                   {!notif.read && <span className="inline-block w-2 h-2 rounded-full bg-[#8b5cf6] ml-1" />}

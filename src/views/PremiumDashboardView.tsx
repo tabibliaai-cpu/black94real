@@ -32,7 +32,7 @@ function MenuRow({
         <span className={cn('w-8 h-8 rounded-lg flex items-center justify-center', danger ? 'bg-red-500/10' : 'bg-white/[0.06]')}>
           {icon}
         </span>
-        <span className={cn('text-[15px]', danger ? 'text-red-400' : 'text-[#f0eef6]')}>{label}</span>
+        <span className={cn('text-[15px]', danger ? 'text-red-400' : 'text-[#e7e9ea]')}>{label}</span>
       </div>
       <div className="flex items-center gap-2">
         {badge && (
@@ -116,9 +116,9 @@ export function PremiumDashboardView() {
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('feed')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Dashboard</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Dashboard</h1>
       </div>
 
       {/* ─── Account Status Card ─── */}
@@ -128,7 +128,7 @@ export function PremiumDashboardView() {
             {user?.displayName?.[0]?.toUpperCase() || 'U'}
           </div>
           <div>
-            <p className="text-[17px] font-bold text-[#f0eef6]">{user?.displayName || 'User'}</p>
+            <p className="text-[17px] font-bold text-[#e7e9ea]">{user?.displayName || 'User'}</p>
             <div className="flex items-center gap-2 mt-0.5">
               <span className={cn(
                 'text-[12px] font-semibold px-2 py-0.5 rounded-full',
@@ -169,7 +169,7 @@ export function PremiumDashboardView() {
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-2">
                     <svg className={cn('w-4 h-4', trial.isActive ? (trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#8b5cf6]') : 'text-red-400')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <p className="text-[13px] font-semibold text-[#f0eef6]">Free Trial</p>
+                    <p className="text-[13px] font-semibold text-[#e7e9ea]">Free Trial</p>
                   </div>
                   <span className={cn(
                     'text-[11px] font-bold px-2 py-0.5 rounded-full',
@@ -212,7 +212,7 @@ export function PremiumDashboardView() {
           <div className="mx-4 mb-2 p-4 rounded-xl bg-gradient-to-br from-[#8b5cf6]/10 via-transparent to-amber-500/5 border border-[#8b5cf6]/20">
             <div className="flex items-center gap-2 mb-2">
               <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-              <p className="text-[15px] font-bold text-[#f0eef6]">Upgrade to Business</p>
+              <p className="text-[15px] font-bold text-[#e7e9ea]">Upgrade to Business</p>
             </div>
             <p className="text-[13px] text-[#94a3b8] mb-3">Enable your store, sell products, manage orders & shipping partners. Start with a <span className="text-[#8b5cf6] font-semibold">30-day free trial</span>.</p>
             <button
@@ -379,18 +379,18 @@ export function PremiumDashboardView() {
         >
           <div className="flex items-center gap-3">
             <span className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/[0.06]">
-              <svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
               </svg>
             </span>
-            <span className="text-[15px] text-[#f0eef6]">Dark mode</span>
+            <span className="text-[15px] text-[#e7e9ea]">Dark mode</span>
           </div>
           <div className={cn('w-11 h-6 rounded-full transition-colors relative', isDark ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]')}>
             <div className={cn('w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform', isDark ? 'translate-x-[22px]' : 'translate-x-0.5')} />
           </div>
         </button>
         <MenuRow
-          icon={<svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
+          icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>}
           label="Edit Profile"
           onClick={() => navigate('edit-profile')}
         />

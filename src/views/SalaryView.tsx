@@ -67,11 +67,11 @@ export function SalaryView() {
           onClick={() => navigate('business-dashboard')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.06] transition-colors"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Salary Management</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Salary Management</h1>
       </div>
 
       {/* ── Month Selector ──────────────────────────────── */}
@@ -84,7 +84,7 @@ export function SalaryView() {
               'shrink-0 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200',
               selectedMonth === idx
                 ? 'bg-[#8b5cf6] text-black'
-                : 'bg-white/[0.04] text-[#94a3b8] hover:bg-white/[0.08] hover:text-[#f0eef6]'
+                : 'bg-white/[0.04] text-[#94a3b8] hover:bg-white/[0.08] hover:text-[#e7e9ea]'
             )}
           >
             {month}
@@ -94,7 +94,7 @@ export function SalaryView() {
 
       {/* ── Team Members ────────────────────────────────── */}
       <div className="space-y-3">
-        <h2 className="text-[15px] font-semibold text-[#f0eef6]">
+        <h2 className="text-[15px] font-semibold text-[#e7e9ea]">
           Team Members — {MONTHS[selectedMonth]} {new Date().getFullYear()}
         </h2>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
@@ -104,7 +104,7 @@ export function SalaryView() {
                 <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl">👥</span>
                 </div>
-                <p className="text-[15px] text-[#f0eef6] font-medium">No team members</p>
+                <p className="text-[15px] text-[#e7e9ea] font-medium">No team members</p>
                 <p className="text-[13px] text-[#94a3b8] mt-1">Add team members to manage their salaries</p>
               </div>
             </div>
@@ -134,7 +134,7 @@ export function SalaryView() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <p className="text-[15px] font-semibold text-[#f0eef6] truncate">
+                          <p className="text-[15px] font-semibold text-[#e7e9ea] truncate">
                             {member.name}
                           </p>
                           <span
@@ -167,19 +167,19 @@ export function SalaryView() {
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-3">
                         <div className="flex items-center justify-between">
                           <span className="text-[12px] text-[#94a3b8]">Base Salary</span>
-                          <span className="text-[13px] text-[#f0eef6] font-medium">
+                          <span className="text-[13px] text-[#e7e9ea] font-medium">
                             {formatCurrency(member.baseSalary)}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-[12px] text-[#94a3b8]">Commission</span>
-                          <span className="text-[13px] text-[#f0eef6] font-medium">
+                          <span className="text-[13px] text-[#e7e9ea] font-medium">
                             {formatCurrency(totalCommission)}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-[12px] text-[#94a3b8]">Incentives</span>
-                          <span className="text-[13px] text-[#f0eef6] font-medium">
+                          <span className="text-[13px] text-[#e7e9ea] font-medium">
                             {formatCurrency(totalIncentive)}
                           </span>
                         </div>
@@ -209,7 +209,7 @@ export function SalaryView() {
                             className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-white/[0.02]"
                           >
                             <div className="flex-1 min-w-0">
-                              <p className="text-[13px] text-[#f0eef6] truncate">{comm.sale}</p>
+                              <p className="text-[13px] text-[#e7e9ea] truncate">{comm.sale}</p>
                             </div>
                             <div className="flex items-center gap-3 shrink-0 ml-3">
                               <span className="text-[12px] text-[#94a3b8]">{comm.percentage}%</span>
@@ -234,7 +234,7 @@ export function SalaryView() {
                             className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-white/[0.02]"
                           >
                             <div className="flex-1 min-w-0">
-                              <p className="text-[13px] text-[#f0eef6]">{inc.type}</p>
+                              <p className="text-[13px] text-[#e7e9ea]">{inc.type}</p>
                               <p className="text-[11px] text-[#64748b]">{inc.reason}</p>
                             </div>
                             <span className="text-[13px] text-[#ffd700] font-medium shrink-0 ml-3">
@@ -281,29 +281,29 @@ export function SalaryView() {
             <path d="M2 9h20" />
             <path d="M2 15h20" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#f0eef6]">Payroll Summary</h2>
+          <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Payroll Summary</h2>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between py-1.5">
             <span className="text-[14px] text-[#94a3b8]">Total Team Salary</span>
-            <span className="text-[15px] text-[#f0eef6] font-medium">
+            <span className="text-[15px] text-[#e7e9ea] font-medium">
               {formatCurrency(summary.totalSalary)}
             </span>
           </div>
           <div className="flex items-center justify-between py-1.5">
             <span className="text-[14px] text-[#94a3b8]">Total Commissions</span>
-            <span className="text-[15px] text-[#f0eef6] font-medium">
+            <span className="text-[15px] text-[#e7e9ea] font-medium">
               {formatCurrency(summary.totalCommissions)}
             </span>
           </div>
           <div className="flex items-center justify-between py-1.5">
             <span className="text-[14px] text-[#94a3b8]">Total Incentives</span>
-            <span className="text-[15px] text-[#f0eef6] font-medium">
+            <span className="text-[15px] text-[#e7e9ea] font-medium">
               {formatCurrency(summary.totalIncentives)}
             </span>
           </div>
           <div className="flex items-center justify-between py-2.5 border-t border-white/[0.06]">
-            <span className="text-[15px] font-bold text-[#f0eef6]">Grand Total</span>
+            <span className="text-[15px] font-bold text-[#e7e9ea]">Grand Total</span>
             <span className="text-[18px] font-bold text-[#8b5cf6]">
               {formatCurrency(summary.grandTotal)}
             </span>

@@ -52,7 +52,7 @@ function QRCodePlaceholder({ seed }: { seed: string }) {
       {cells.flat().map((filled, i) => (
         <div
           key={i}
-          className={cn('w-[5px] h-[5px]', filled ? 'bg-[#09080f]' : 'bg-transparent')}
+          className={cn('w-[5px] h-[5px]', filled ? 'bg-[#000000]' : 'bg-transparent')}
           style={{ width: 5, height: 5 }}
         />
       ))}
@@ -179,9 +179,9 @@ export function ShareProfileView() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-[#09080f]">
+    <div className="min-h-screen bg-[#000000]">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-0 z-30 bg-[#000000]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => navigate('profile')}
@@ -189,7 +189,7 @@ export function ShareProfileView() {
             aria-label="Go back"
           >
             <svg
-              className="w-5 h-5 text-[#f0eef6]"
+              className="w-5 h-5 text-[#e7e9ea]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -200,7 +200,7 @@ export function ShareProfileView() {
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-lg font-bold text-[#f0eef6]">Share Profile</h1>
+          <h1 className="text-lg font-bold text-[#e7e9ea]">Share Profile</h1>
         </div>
       </div>
 
@@ -216,12 +216,12 @@ export function ShareProfileView() {
               verified={user.isVerified}
               badge={user.badge}
             />
-            <h2 className="text-lg font-bold text-[#f0eef6] mt-3">
+            <h2 className="text-lg font-bold text-[#e7e9ea] mt-3">
               {user.displayName || user.username}
             </h2>
             <p className="text-[14px] text-[#94a3b8] mt-0.5">@{user.username}</p>
             {user.bio && (
-              <p className="text-[14px] text-[#f0eef6]/80 mt-2 leading-relaxed line-clamp-3">
+              <p className="text-[14px] text-[#e7e9ea]/80 mt-2 leading-relaxed line-clamp-3">
                 {user.bio}
               </p>
             )}
@@ -252,7 +252,7 @@ export function ShareProfileView() {
           <p className="text-[13px] text-[#94a3b8] mb-2">Shareable link</p>
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-white/[0.04] rounded-lg px-3 py-2.5 overflow-hidden">
-              <p className="text-[13px] text-[#f0eef6] truncate font-mono">
+              <p className="text-[13px] text-[#e7e9ea] truncate font-mono">
                 {shareUrl || 'Generating...'}
               </p>
             </div>
@@ -285,7 +285,7 @@ export function ShareProfileView() {
               <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse" />
               <span className="text-[14px] text-[#94a3b8]">
                 Link expires in{' '}
-                <span className="text-[#f0eef6] font-semibold font-mono">
+                <span className="text-[#e7e9ea] font-semibold font-mono">
                   {formatCountdown(remaining)}
                 </span>
               </span>

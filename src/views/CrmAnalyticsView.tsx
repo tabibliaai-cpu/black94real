@@ -30,16 +30,16 @@ export function CrmAnalyticsView() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('business-dashboard')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </button>
-          <h1 className="text-xl font-bold text-[#f0eef6]">Analytics</h1>
+          <h1 className="text-xl font-bold text-[#e7e9ea]">Analytics</h1>
         </div>
         <select
           value={dateRange}
           onChange={e => setDateRange(e.target.value)}
-          className="bg-[#110f1a] border border-white/[0.08] rounded-full px-3 py-1.5 text-[12px] text-[#f0eef6] outline-none appearance-none cursor-pointer"
+          className="bg-[#110f1a] border border-white/[0.08] rounded-full px-3 py-1.5 text-[12px] text-[#e7e9ea] outline-none appearance-none cursor-pointer"
         >
-          {DATE_RANGES.map(r => <option key={r} value={r} className="bg-[#110f1a] text-[#f0eef6]">{r}</option>)}
+          {DATE_RANGES.map(r => <option key={r} value={r} className="bg-[#110f1a] text-[#e7e9ea]">{r}</option>)}
         </select>
       </div>
 
@@ -55,7 +55,7 @@ export function CrmAnalyticsView() {
         ].map((kpi) => (
           <div key={kpi.label} className={cn('rounded-xl bg-gradient-to-br p-4 border border-white/[0.06]', kpi.gradient)}>
             <p className="text-[12px] text-[#94a3b8] font-medium">{kpi.label}</p>
-            <p className="text-xl font-bold text-[#f0eef6] mt-1">{kpi.value}</p>
+            <p className="text-xl font-bold text-[#e7e9ea] mt-1">{kpi.value}</p>
             {kpi.change && <p className="text-[11px] text-[#8b5cf6] mt-0.5">{kpi.change} ↑</p>}
           </div>
         ))}
@@ -63,7 +63,7 @@ export function CrmAnalyticsView() {
 
       {/* Revenue Chart */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Monthly Revenue</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Monthly Revenue</h3>
         <div className="flex items-center justify-center h-36">
           <div className="text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
@@ -76,7 +76,7 @@ export function CrmAnalyticsView() {
 
       {/* Lead Sources */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Lead Sources</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Lead Sources</h3>
         <div className="flex items-center justify-center py-6">
           <div className="text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
@@ -89,7 +89,7 @@ export function CrmAnalyticsView() {
 
       {/* Top Products */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Top Products / Services</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Top Products / Services</h3>
         <div className="flex items-center justify-center py-6">
           <div className="text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
@@ -102,7 +102,7 @@ export function CrmAnalyticsView() {
 
       {/* Customer Acquisition Trend */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Customer Acquisition</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Customer Acquisition</h3>
         <div className="flex items-center justify-center h-28">
           <div className="text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">

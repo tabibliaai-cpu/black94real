@@ -40,9 +40,9 @@ export function CrmLeadsView() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('business-dashboard')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </button>
-          <h1 className="text-xl font-bold text-[#f0eef6]">Leads</h1>
+          <h1 className="text-xl font-bold text-[#e7e9ea]">Leads</h1>
         </div>
         <div className="flex items-center gap-2">
           <button className="p-2 rounded-full hover:bg-white/[0.06] transition-colors">
@@ -69,7 +69,7 @@ export function CrmLeadsView() {
               'px-3 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors',
               activeTab === tab
                 ? 'bg-[#8b5cf6] text-black'
-                : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
+                : 'bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1]'
             )}
           >
             {tab}
@@ -92,7 +92,7 @@ export function CrmLeadsView() {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h4 className="text-[15px] font-semibold text-[#f0eef6] truncate">{lead.name}</h4>
+                  <h4 className="text-[15px] font-semibold text-[#e7e9ea] truncate">{lead.name}</h4>
                   <span className={cn('text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0', getLeadScoreBg(lead.aiScore))}>
                     {lead.aiScore}
                   </span>
@@ -117,7 +117,7 @@ export function CrmLeadsView() {
               <span className="text-[11px] text-[#64748b]">Last activity: {lead.updatedAt}</span>
               <button
                 onClick={() => toast.info('Lead detail view coming soon')}
-                className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1] transition-colors"
+                className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1] transition-colors"
               >
                 View
               </button>

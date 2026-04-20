@@ -86,7 +86,7 @@ function toStoreUser(fb: FirebaseUser, db: Awaited<ReturnType<typeof createUserF
 
 function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }) {
   return (
-    <div className="min-h-screen bg-[#09080f] flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-[#000000] flex flex-col items-center justify-center relative overflow-hidden">
       <div className="relative z-10 flex flex-col items-center px-6 max-w-[420px] w-full animate-fade-in">
         <div className="mb-8 flex flex-col items-center">
           <img src="/logo.png" alt="Black94" className="w-20 h-20 object-contain mb-5" />
@@ -129,7 +129,7 @@ function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen bg-[#09080f] flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-[#000000] flex flex-col items-center justify-center">
       <img src="/logo.png" alt="Black94" className="w-14 h-14 object-contain animate-pulse" />
     </div>
   )
@@ -361,7 +361,7 @@ export default function Black94App() {
   const headerTitle = viewTitles[currentView]
 
   return (
-    <div className="min-h-screen bg-[#09080f]">
+    <div className="min-h-screen bg-[#000000]">
       {/* ─── Sidebar ─── */}
       <Sidebar />
       {/* ─── Header ─── */}

@@ -88,7 +88,7 @@ export function PAvatar({ src, name, size = 40, className, verified, badge }: PA
       )}
       {badgeType && (
         <div
-          className="absolute -bottom-0.5 -right-0.5 rounded-full bg-[#09080f] flex items-center justify-center"
+          className="absolute -bottom-0.5 -right-0.5 rounded-full bg-[#000000] flex items-center justify-center"
           style={{ width: size * 0.35, height: size * 0.35 }}
         >
           <BadgeIcon badge={badgeType} size={size * 0.28} />

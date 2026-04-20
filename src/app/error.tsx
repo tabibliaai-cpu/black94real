@@ -16,7 +16,7 @@ export default function Error({
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#09080f',
+      background: '#000000',
       color: '#fff',
       display: 'flex',
       alignItems: 'center',

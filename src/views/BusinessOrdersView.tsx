@@ -100,7 +100,7 @@ export function BusinessOrdersView() {
             className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all ${
               activeFilter === f
                 ? 'bg-[#8b5cf6] text-black'
-                : 'bg-white/[0.06] text-[#94a3b8] hover:text-[#f0eef6]'
+                : 'bg-white/[0.06] text-[#94a3b8] hover:text-[#e7e9ea]'
             }`}
           >
             {f}
@@ -142,7 +142,7 @@ export function BusinessOrdersView() {
                       <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  <p className="text-[13px] text-[#f0eef6] font-medium">{order.buyerName}</p>
+                  <p className="text-[13px] text-[#e7e9ea] font-medium">{order.buyerName}</p>
                   <div className="flex items-center justify-between mt-1">
                     <p className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</p>
                     <p className="text-[15px] font-bold text-[#8b5cf6]">₹{order.total.toLocaleString()}</p>
@@ -162,10 +162,10 @@ export function BusinessOrdersView() {
                               <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-[12px] text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                              <p className="text-[12px] text-[#e7e9ea] line-clamp-1">{item.productName}</p>
                               <p className="text-[11px] text-[#94a3b8]">x{item.quantity}</p>
                             </div>
-                            <span className="text-[12px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                            <span className="text-[12px] font-semibold text-[#e7e9ea]">₹{(item.price * item.quantity).toLocaleString()}</span>
                           </div>
                         ))}
                       </div>
@@ -201,7 +201,7 @@ export function BusinessOrdersView() {
                           value={trackingInput[order.id] || ''}
                           onChange={(e) => setTrackingInput((prev) => ({ ...prev, [order.id]: e.target.value }))}
                           placeholder={order.trackingNumber || 'Enter tracking number'}
-                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[13px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[13px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                         />
                         <button
                           onClick={() => {

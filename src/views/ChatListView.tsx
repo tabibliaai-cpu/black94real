@@ -170,7 +170,7 @@ function ChatAdsPanel() {
   return (
     <div className="flex flex-col h-[calc(100vh-140px)]">
       {/* Ads Stats Bar */}
-      <div className="shrink-0 px-5 py-3 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
+      <div className="shrink-0 px-5 py-3 flex items-center justify-between border-b border-white/[0.06] bg-[#000000]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20">
             <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -363,12 +363,12 @@ export function ChatListView() {
   return (
     <div className="flex flex-col h-[calc(100vh-90px)]">
       {/* ─── Tab Switcher ─── */}
-      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl">
+      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#000000]/80 backdrop-blur-xl">
         <button
           onClick={() => setActiveTab('chat')}
           className={cn(
             'flex-1 py-3 text-[15px] font-medium relative transition-colors',
-            activeTab === 'chat' ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
+            activeTab === 'chat' ? 'text-[#e7e9ea] font-bold' : 'text-[#94a3b8]'
           )}
         >
           <div className="flex items-center justify-center gap-2">
@@ -385,7 +385,7 @@ export function ChatListView() {
           onClick={() => setActiveTab('ads')}
           className={cn(
             'flex-1 py-3 text-[15px] font-medium relative transition-colors',
-            activeTab === 'ads' ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
+            activeTab === 'ads' ? 'text-[#e7e9ea] font-bold' : 'text-[#94a3b8]'
           )}
         >
           <div className="flex items-center justify-center gap-2">
@@ -432,7 +432,7 @@ export function ChatListView() {
                     <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-[#f0eef6] mb-1">No messages yet</h3>
+                <h3 className="text-lg font-bold text-[#e7e9ea] mb-1">No messages yet</h3>
                 <p className="text-[15px] text-[#94a3b8]">Start a conversation to see messages here.</p>
               </div>
             ) : (
@@ -459,7 +459,7 @@ export function ChatListView() {
                     </div>
                     <div className="flex-1 min-w-0 border-b border-white/[0.06] pb-3">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-[15px] text-[#f0eef6] truncate">
+                        <span className="font-bold text-[15px] text-[#e7e9ea] truncate">
                           {chat.otherUser?.displayName || 'User'}
                         </span>
                         <span className="text-[13px] text-[#94a3b8] shrink-0 ml-2">
@@ -467,7 +467,7 @@ export function ChatListView() {
                         </span>
                       </div>
                       <div className="flex items-center justify-between mt-0.5">
-                        <p className={cn('text-[14px] truncate', chat.unreadCount > 0 ? 'text-[#f0eef6] font-semibold' : 'text-[#94a3b8]')}>
+                        <p className={cn('text-[14px] truncate', chat.unreadCount > 0 ? 'text-[#e7e9ea] font-semibold' : 'text-[#94a3b8]')}>
                           {chat.lastMessage?.content || 'No messages yet'}
                         </p>
                       </div>
@@ -712,12 +712,12 @@ export function ChatRoomView() {
   return (
     <div className="flex flex-col h-[calc(100vh-90px)]">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/[0.06] bg-[#09080f]/90 backdrop-blur-xl shrink-0">
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/[0.06] bg-[#000000]/90 backdrop-blur-xl shrink-0">
         <button
           onClick={() => navigate('chat')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
@@ -730,13 +730,13 @@ export function ChatRoomView() {
           <>
             <PAvatar src={otherUser.profileImage} name={otherUser.displayName} size={36} verified={otherUser.isVerified} badge={otherUser.badge} />
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-[15px] text-[#f0eef6] truncate">{otherUser.displayName}</p>
+              <p className="font-bold text-[15px] text-[#e7e9ea] truncate">{otherUser.displayName}</p>
               <p className="text-[12px] text-[#94a3b8] truncate">@{otherUser.username}</p>
             </div>
           </>
         ) : (
           <div className="flex-1">
-            <p className="font-bold text-[15px] text-[#f0eef6]">Chat</p>
+            <p className="font-bold text-[15px] text-[#e7e9ea]">Chat</p>
           </div>
         )}
         <button
@@ -744,7 +744,7 @@ export function ChatRoomView() {
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           aria-label="Audio call"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
           </svg>
         </button>
@@ -753,7 +753,7 @@ export function ChatRoomView() {
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           aria-label="Video call"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <polygon points="23 7 16 12 23 17 23 7" />
             <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
           </svg>
@@ -778,7 +778,7 @@ export function ChatRoomView() {
                 <div
                   className={cn(
                     'max-w-[75%] px-4 py-3 rounded-2xl text-[15px] leading-relaxed',
-                    isMine ? 'bg-[#8b5cf6] text-white rounded-br-md' : 'bg-white/[0.06] text-[#f0eef6] rounded-bl-md'
+                    isMine ? 'bg-[#8b5cf6] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
                   )}
                 >
                   {msg.messageType === 'image' && msg.mediaUrl ? (
@@ -820,10 +820,10 @@ export function ChatRoomView() {
 
       {/* Image preview bar */}
       {imagePreview && (
-        <div className="shrink-0 px-5 py-2.5 border-t border-white/[0.06] bg-[#09080f] flex items-center gap-3">
+        <div className="shrink-0 px-5 py-2.5 border-t border-white/[0.06] bg-[#000000] flex items-center gap-3">
           <img src={imagePreview} alt="Preview" className="w-14 h-14 rounded-xl object-cover border border-white/[0.08]" />
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] text-[#f0eef6] truncate">Photo ready to send</p>
+            <p className="text-[13px] text-[#e7e9ea] truncate">Photo ready to send</p>
             <button onClick={() => { setImagePreview(null); if (imageInputRef.current) imageInputRef.current.value = '' }} className="text-[12px] text-red-400 hover:text-red-300 transition-colors mt-0.5">Remove</button>
           </div>
           <button
@@ -837,7 +837,7 @@ export function ChatRoomView() {
       )}
 
       {/* Input bar */}
-      <div className="shrink-0 border-t border-white/[0.06] bg-[#09080f] px-4 py-3 safe-area-bottom">
+      <div className="shrink-0 border-t border-white/[0.06] bg-[#000000] px-4 py-3 safe-area-bottom">
         <div className="flex items-end gap-2">
           {/* Emoji button */}
           <button
@@ -889,7 +889,7 @@ export function ChatRoomView() {
               }}
               placeholder="Start a message"
               rows={1}
-              className="w-full bg-transparent text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none resize-none max-h-[120px] leading-snug"
+              className="w-full bg-transparent text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none resize-none max-h-[120px] leading-snug"
               style={{ minHeight: '36px' }}
             />
           </div>

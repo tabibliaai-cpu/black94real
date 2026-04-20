@@ -108,7 +108,7 @@ function CurrentPlanBanner() {
           {plan.id === 'gold' && <CrownIcon className="w-5 h-5 text-[#ffd700]" />}
           {plan.id === 'pro' && <StarIcon className="w-5 h-5 text-[#1d9bf0]" />}
           {plan.id === 'free' && <LightningIcon className="w-5 h-5 text-[#94a3b8]" />}
-          <span className="text-[15px] font-semibold text-[#f0eef6]">Current Plan</span>
+          <span className="text-[15px] font-semibold text-[#e7e9ea]">Current Plan</span>
         </div>
         <span
           className={cn(
@@ -126,7 +126,7 @@ function CurrentPlanBanner() {
 
       <button
         onClick={() => toast.info('Subscription management coming soon!')}
-        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#f0eef6] hover:bg-white/[0.1] transition-all duration-200 active:scale-[0.97]"
+        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#e7e9ea] hover:bg-white/[0.1] transition-all duration-200 active:scale-[0.97]"
       >
         <ManageIcon className="w-4 h-4" />
         Manage Subscription
@@ -193,13 +193,13 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       </div>
 
       {/* Plan name & price */}
-      <h3 className="text-[17px] font-bold text-[#f0eef6] mb-1">{plan.name}</h3>
+      <h3 className="text-[17px] font-bold text-[#e7e9ea] mb-1">{plan.name}</h3>
       <div className="flex items-baseline gap-1 mb-1">
         {plan.price === 0 ? (
-          <span className="text-[28px] font-bold text-[#f0eef6]">Free</span>
+          <span className="text-[28px] font-bold text-[#e7e9ea]">Free</span>
         ) : (
           <>
-            <span className="text-[28px] font-bold text-[#f0eef6]">{plan.currency}{plan.price.toLocaleString()}</span>
+            <span className="text-[28px] font-bold text-[#e7e9ea]">{plan.currency}{plan.price.toLocaleString()}</span>
             <span className="text-[13px] text-[#94a3b8]">/{plan.billingCycle}</span>
           </>
         )}
@@ -250,7 +250,7 @@ function FeatureComparisonTable() {
   return (
     <div className="rounded-2xl border border-white/[0.08] bg-[#110f1a] overflow-hidden">
       <div className="px-5 py-4 border-b border-white/[0.06]">
-        <h3 className="text-[17px] font-bold text-[#f0eef6]">Feature Comparison</h3>
+        <h3 className="text-[17px] font-bold text-[#e7e9ea]">Feature Comparison</h3>
         <p className="text-[13px] text-[#94a3b8] mt-0.5">See what's included in each plan</p>
       </div>
 
@@ -351,7 +351,7 @@ function BillingHistory() {
       <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2">
         <ReceiptIcon className="w-5 h-5 text-[#94a3b8]" />
         <div>
-          <h3 className="text-[17px] font-bold text-[#f0eef6]">Billing History</h3>
+          <h3 className="text-[17px] font-bold text-[#e7e9ea]">Billing History</h3>
           <p className="text-[13px] text-[#94a3b8] mt-0.5">Your recent invoices</p>
         </div>
       </div>
@@ -362,7 +362,7 @@ function BillingHistory() {
             <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
               <span className="text-2xl">🧾</span>
             </div>
-            <p className="text-[15px] text-[#f0eef6] font-medium">No billing history</p>
+            <p className="text-[15px] text-[#e7e9ea] font-medium">No billing history</p>
             <p className="text-[13px] text-[#94a3b8] mt-1">Invoices will appear here after your first payment</p>
           </div>
         </div>
@@ -387,7 +387,7 @@ export function SubscriptionsView() {
 
       {/* B. Pricing Cards */}
       <div>
-        <h3 className="text-[17px] font-bold text-[#f0eef6] mb-4">Choose your plan</h3>
+        <h3 className="text-[17px] font-bold text-[#e7e9ea] mb-4">Choose your plan</h3>
         <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory custom-scrollbar">
           {PLANS.map((plan) => (
             <div key={plan.id} className="snap-start">

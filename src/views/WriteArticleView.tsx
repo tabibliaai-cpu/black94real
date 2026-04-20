@@ -107,9 +107,9 @@ export function WriteArticleView() {
   }, [navigate, previousView])
 
   return (
-    <div className="min-h-screen bg-[#09080f]">
+    <div className="min-h-screen bg-[#000000]">
       {/* ─── Sticky Header ─── */}
-      <header className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="sticky top-0 z-30 bg-[#000000]/80 backdrop-blur-md border-b border-white/[0.06]">
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-3">
             <button
@@ -117,12 +117,12 @@ export function WriteArticleView() {
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Go back"
             >
-              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-[17px] font-bold text-[#f0eef6]">
+            <h1 className="text-[17px] font-bold text-[#e7e9ea]">
               {existingArticle ? 'Edit Article' : 'Write Article'}
             </h1>
           </div>
@@ -177,7 +177,7 @@ export function WriteArticleView() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Article Title..."
-          className="w-full bg-transparent text-[28px] sm:text-[36px] font-bold text-[#f0eef6] placeholder-[#64748b] outline-none leading-tight mb-6 tracking-tight"
+          className="w-full bg-transparent text-[28px] sm:text-[36px] font-bold text-[#e7e9ea] placeholder-[#64748b] outline-none leading-tight mb-6 tracking-tight"
         />
 
         {/* Content Textarea */}
@@ -212,7 +212,7 @@ export function WriteArticleView() {
                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
                 <path d="M22 4L12 14.01l-3-3" />
               </svg>
-              <span className="text-[15px] font-semibold text-[#f0eef6]">Fact Check</span>
+              <span className="text-[15px] font-semibold text-[#e7e9ea]">Fact Check</span>
             </div>
             {/* Toggle switch */}
             <div
@@ -239,11 +239,11 @@ export function WriteArticleView() {
                   <select
                     value={factCheckStatus}
                     onChange={(e) => setFactCheckStatus(e.target.value as FactCheckStatus)}
-                    className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors cursor-pointer"
+                    className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors cursor-pointer"
                   >
-                    <option value="Pending Review" className="bg-[#18152b] text-[#f0eef6]">Pending Review</option>
-                    <option value="Verified" className="bg-[#18152b] text-[#f0eef6]">Verified</option>
-                    <option value="Not Verified" className="bg-[#18152b] text-[#f0eef6]">Not Verified</option>
+                    <option value="Pending Review" className="bg-[#18152b] text-[#e7e9ea]">Pending Review</option>
+                    <option value="Verified" className="bg-[#18152b] text-[#e7e9ea]">Verified</option>
+                    <option value="Not Verified" className="bg-[#18152b] text-[#e7e9ea]">Not Verified</option>
                   </select>
                   <svg className="w-4 h-4 text-[#94a3b8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -259,7 +259,7 @@ export function WriteArticleView() {
                   value={factCheckUrl}
                   onChange={(e) => setFactCheckUrl(e.target.value)}
                   placeholder="https://example.com/source"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                 />
               </div>
             </div>
@@ -268,7 +268,7 @@ export function WriteArticleView() {
       </div>
 
       {/* ─── Sticky Bottom Actions ─── */}
-      <div className="fixed bottom-0 inset-x-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-t border-white/[0.06]">
+      <div className="fixed bottom-0 inset-x-0 z-30 bg-[#000000]/80 backdrop-blur-md border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto flex items-center gap-3 px-4 py-3">
           <button
             onClick={handleSaveDraft}

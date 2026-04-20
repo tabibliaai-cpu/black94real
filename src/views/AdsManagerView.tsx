@@ -49,9 +49,9 @@ export function AdsManagerView() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <button onClick={() => navigate('business-dashboard')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Ad Manager</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Ad Manager</h1>
         <button
           onClick={() => navigate('create-ad')}
           className="px-3 py-1.5 rounded-full bg-[#8b5cf6] text-black text-[13px] font-bold hover:bg-[#7c3aed] transition-colors"
@@ -73,7 +73,7 @@ export function AdsManagerView() {
               <span className="text-sm">{stat.icon}</span>
               <span className="text-[12px] text-[#94a3b8] font-medium">{stat.label}</span>
             </div>
-            <p className="text-xl font-bold text-[#f0eef6]">{stat.value}</p>
+            <p className="text-xl font-bold text-[#e7e9ea]">{stat.value}</p>
             {(stat.trend || stat.sub) && (
               <p className="text-[12px] text-[#8b5cf6] mt-1">{stat.trend || stat.sub}</p>
             )}
@@ -83,7 +83,7 @@ export function AdsManagerView() {
 
       {/* Performance Chart */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-4">Impressions — Last 7 Days</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-4">Impressions — Last 7 Days</h3>
         <div className="flex items-center justify-center h-32">
           <div className="text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">
@@ -96,14 +96,14 @@ export function AdsManagerView() {
 
       {/* Active Campaigns */}
       <div>
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-3">Campaigns</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-3">Campaigns</h3>
         <div className="space-y-3">
           {allCampaigns.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl">📢</span>
               </div>
-              <p className="text-[15px] text-[#f0eef6] font-medium">No campaigns yet</p>
+              <p className="text-[15px] text-[#e7e9ea] font-medium">No campaigns yet</p>
               <p className="text-[13px] text-[#94a3b8] mt-1">Create your first ad campaign to get started</p>
             </div>
           ) : (
@@ -113,7 +113,7 @@ export function AdsManagerView() {
                 <div key={campaign.id} className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h4 className="text-[15px] font-semibold text-[#f0eef6]">{campaign.name}</h4>
+                      <h4 className="text-[15px] font-semibold text-[#e7e9ea]">{campaign.name}</h4>
                       <p className="text-[12px] text-[#94a3b8] mt-0.5 truncate max-w-[200px]">{campaign.headline}</p>
                     </div>
                     <span className={cn('text-[11px] font-semibold px-2 py-0.5 rounded-full shrink-0', getAdStatusColor(campaign.status))}>
@@ -123,11 +123,11 @@ export function AdsManagerView() {
                   <div className="grid grid-cols-4 gap-2 mb-3">
                     <div>
                       <p className="text-[11px] text-[#94a3b8]">Impressions</p>
-                      <p className="text-[13px] font-semibold text-[#f0eef6]">{formatNumber(campaign.impressions)}</p>
+                      <p className="text-[13px] font-semibold text-[#e7e9ea]">{formatNumber(campaign.impressions)}</p>
                     </div>
                     <div>
                       <p className="text-[11px] text-[#94a3b8]">Clicks</p>
-                      <p className="text-[13px] font-semibold text-[#f0eef6]">{formatNumber(campaign.clicks)}</p>
+                      <p className="text-[13px] font-semibold text-[#e7e9ea]">{formatNumber(campaign.clicks)}</p>
                     </div>
                     <div>
                       <p className="text-[11px] text-[#94a3b8]">CTR</p>
@@ -135,7 +135,7 @@ export function AdsManagerView() {
                     </div>
                     <div>
                       <p className="text-[11px] text-[#94a3b8]">Spend</p>
-                      <p className="text-[13px] font-semibold text-[#f0eef6]">{formatCurrency(campaign.spend)}</p>
+                      <p className="text-[13px] font-semibold text-[#e7e9ea]">{formatCurrency(campaign.spend)}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -154,7 +154,7 @@ export function AdsManagerView() {
                     )}
                     <button
                       onClick={() => toast.info('Edit feature coming soon')}
-                      className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1] transition-colors"
+                      className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1] transition-colors"
                     >
                       Edit
                     </button>
@@ -168,7 +168,7 @@ export function AdsManagerView() {
 
       {/* Recent Activity */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-3">Recent Activity</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-3">Recent Activity</h3>
         <div className="flex items-center justify-center py-6">
           <div className="text-center">
             <div className="w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-2">

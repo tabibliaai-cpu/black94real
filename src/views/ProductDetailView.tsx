@@ -156,7 +156,7 @@ export function ProductDetailView() {
 
         <button
           onClick={() => navigate('store')}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#09080f]/50 backdrop-blur-sm flex items-center justify-center"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#000000]/50 backdrop-blur-sm flex items-center justify-center"
         >
           <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
             <path d="M6 18L18 6M6 6l12 12" />
@@ -196,7 +196,7 @@ export function ProductDetailView() {
       <div className="px-4">
         {/* Price Row */}
         <div className="flex items-baseline gap-3 mb-1">
-          <span className="text-[26px] font-bold text-[#f0eef6]">₹{product.price.toLocaleString()}</span>
+          <span className="text-[26px] font-bold text-[#e7e9ea]">₹{product.price.toLocaleString()}</span>
           {hasDiscount && (
             <span className="text-[16px] text-[#94a3b8] line-through">₹{product.compareAtPrice!.toLocaleString()}</span>
           )}
@@ -211,7 +211,7 @@ export function ProductDetailView() {
         </div>
 
         {/* Name */}
-        <h1 className="text-[18px] font-bold text-[#f0eef6] leading-tight mb-4">{product.name}</h1>
+        <h1 className="text-[18px] font-bold text-[#e7e9ea] leading-tight mb-4">{product.name}</h1>
 
         {/* Business Card */}
         <button
@@ -228,7 +228,7 @@ export function ProductDetailView() {
             )}
           </div>
           <div className="flex-1 text-left">
-            <p className="text-[14px] font-semibold text-[#f0eef6]">{product.businessName}</p>
+            <p className="text-[14px] font-semibold text-[#e7e9ea]">{product.businessName}</p>
             <p className="text-[12px] text-[#94a3b8]">Visit Store →</p>
           </div>
           <svg className="w-5 h-5 text-[#94a3b8] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -238,7 +238,7 @@ export function ProductDetailView() {
 
         {/* Description */}
         <div className="mb-4">
-          <h3 className="text-[14px] font-semibold text-[#f0eef6] mb-2">Description</h3>
+          <h3 className="text-[14px] font-semibold text-[#e7e9ea] mb-2">Description</h3>
           <p className="text-[14px] text-[#94a3b8] leading-relaxed">{product.description}</p>
         </div>
 
@@ -253,7 +253,7 @@ export function ProductDetailView() {
         {/* Variants */}
         {variants.length > 0 && variants.map((variant) => (
           <div key={variant.name} className="mb-4">
-            <h3 className="text-[14px] font-semibold text-[#f0eef6] mb-2">
+            <h3 className="text-[14px] font-semibold text-[#e7e9ea] mb-2">
               {variant.name}: <span className="text-[#8b5cf6]">{selectedVariant[variant.name] || 'Select'}</span>
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -276,7 +276,7 @@ export function ProductDetailView() {
 
         {/* Quantity */}
         <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-4">
-          <span className="text-[14px] font-semibold text-[#f0eef6]">Quantity</span>
+          <span className="text-[14px] font-semibold text-[#e7e9ea]">Quantity</span>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -286,7 +286,7 @@ export function ProductDetailView() {
                 <path d="M5 12h14" />
               </svg>
             </button>
-            <span className="text-[16px] font-bold text-[#f0eef6] w-8 text-center">{quantity}</span>
+            <span className="text-[16px] font-bold text-[#e7e9ea] w-8 text-center">{quantity}</span>
             <button
               onClick={() => setQuantity((q) => Math.min(product.stock > 0 ? product.stock : 99, q + 1))}
               className="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1] transition-colors"
@@ -307,12 +307,12 @@ export function ProductDetailView() {
         {/* Reviews Section */}
         {reviews.length > 0 && (
           <div className="border-t border-white/[0.06] pt-5 mb-4">
-            <h3 className="text-[15px] font-bold text-[#f0eef6] mb-4">Reviews ({reviews.length})</h3>
+            <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-4">Reviews ({reviews.length})</h3>
 
             {/* Star Breakdown */}
             <div className="flex gap-6 mb-5">
               <div className="text-center">
-                <p className="text-[36px] font-bold text-[#f0eef6]">{product.rating.toFixed(1)}</p>
+                <p className="text-[36px] font-bold text-[#e7e9ea]">{product.rating.toFixed(1)}</p>
                 <StarDisplay rating={product.rating} size={14} />
                 <p className="text-[11px] text-[#94a3b8] mt-1">{product.reviewCount} reviews</p>
               </div>
@@ -341,13 +341,13 @@ export function ProductDetailView() {
                       {review.buyerImage ? (
                         <img src={review.buyerImage} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-[#18152b] flex items-center justify-center text-[10px] font-bold text-[#f0eef6]">
+                        <div className="w-full h-full bg-[#18152b] flex items-center justify-center text-[10px] font-bold text-[#e7e9ea]">
                           {review.buyerName[0]?.toUpperCase()}
                         </div>
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-[13px] font-semibold text-[#f0eef6]">{review.buyerName}</p>
+                      <p className="text-[13px] font-semibold text-[#e7e9ea]">{review.buyerName}</p>
                       <p className="text-[11px] text-[#94a3b8]">{new Date(review.createdAt).toLocaleDateString()}</p>
                     </div>
                     <StarDisplay rating={review.rating} size={12} />
@@ -361,7 +361,7 @@ export function ProductDetailView() {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-[#09080f]/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-[#000000]/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <div className="flex gap-3">
           <button
             onClick={handleAddToCart}

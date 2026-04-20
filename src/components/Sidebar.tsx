@@ -225,7 +225,7 @@ export function Sidebar() {
       role="navigation"
       aria-label="Main navigation"
       className={cn(
-        'flex h-full flex-col bg-[#09080f]',
+        'flex h-full flex-col bg-[#000000]',
         // Smooth width transition
         'transition-[width] duration-[250ms] ease-in-out',
         // Desktop
@@ -363,7 +363,7 @@ export function Sidebar() {
           role="dialog"
           aria-hidden="true"
           className={cn(
-            'fixed inset-0 z-40 bg-[#09080f]/50 backdrop-blur-sm transition-opacity duration-300',
+            'fixed inset-0 z-40 bg-[#000000]/50 backdrop-blur-sm transition-opacity duration-300',
             showDrawer
               ? 'opacity-100 pointer-events-auto'
               : 'opacity-0 pointer-events-none'

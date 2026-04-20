@@ -166,7 +166,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-[#09080f]/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#000000]/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
@@ -178,7 +178,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
             onClick={onClose}
             className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
             </svg>
           </button>
@@ -229,7 +229,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                 }, 0)
               }}
               placeholder="What is happening?!"
-              className="w-full bg-transparent text-[#f0eef6] text-[17px] placeholder-[#64748b] resize-none outline-none min-h-[110px] leading-relaxed"
+              className="w-full bg-transparent text-[#e7e9ea] text-[17px] placeholder-[#64748b] resize-none outline-none min-h-[110px] leading-relaxed"
               autoFocus
             />
 
@@ -253,15 +253,15 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                   />
                   {/* Filter badge */}
                   {selectedFilter.id !== 'normal' && (
-                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#09080f]/70 backdrop-blur-sm">
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#000000]/70 backdrop-blur-sm">
                       <span className="text-[11px] text-white font-medium">{selectedFilter.name}</span>
                     </div>
                   )}
                   <button
                     onClick={removeImage}
-                    className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[#09080f] border border-white/[0.15] flex items-center justify-center hover:bg-red-500/20 transition-colors"
+                    className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[#000000] border border-white/[0.15] flex items-center justify-center hover:bg-red-500/20 transition-colors"
                   >
-                    <svg className="w-4 h-4 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                    <svg className="w-4 h-4 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                       <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
                     </svg>
                   </button>

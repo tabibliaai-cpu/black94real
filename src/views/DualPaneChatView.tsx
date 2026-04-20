@@ -118,7 +118,7 @@ function ReactionsBar({
             'inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-full text-[13px] transition-all duration-200 border animate-scale-in',
             r.reacted
               ? isMine
-                ? 'bg-[#09080f]/20 border-black/30 text-black'
+                ? 'bg-[#000000]/20 border-black/30 text-black'
                 : 'bg-[#8b5cf6]/15 border-[#8b5cf6]/25 text-[#8b5cf6]'
               : 'bg-white/[0.04] border-white/[0.06] text-[#94a3b8] hover:border-white/[0.12]'
           )}
@@ -203,14 +203,14 @@ function MessageBubble({
         'max-w-[82%] animate-fade-in',
         isMine
           ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black rounded-2xl rounded-br-sm'
-          : 'bg-white/[0.06] text-[#f0eef6] rounded-2xl rounded-bl-sm border border-white/[0.06]'
+          : 'bg-white/[0.06] text-[#e7e9ea] rounded-2xl rounded-bl-sm border border-white/[0.06]'
       )}>
         {/* Inline reply preview */}
         {msg.replyTo && (
           <div className={cn(
             'mx-2 mt-2 mb-1 px-2.5 py-1.5 rounded-lg border-l-[3px]',
             isMine
-              ? 'bg-[#09080f]/10 border-l-black/40'
+              ? 'bg-[#000000]/10 border-l-black/40'
               : 'bg-white/[0.04] border-l-[#8b5cf6]/50'
           )}>
             <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#8b5cf6]')}>
@@ -290,7 +290,7 @@ function ReplyBar() {
   if (!replyTo) return null
 
   return (
-    <div className="shrink-0 px-3 pt-2 bg-[#09080f]/80 backdrop-blur-xl animate-reply-slide-in">
+    <div className="shrink-0 px-3 pt-2 bg-[#000000]/80 backdrop-blur-xl animate-reply-slide-in">
       <div className="flex items-center gap-2.5 px-3 py-2 rounded-t-xl bg-white/[0.04] border-x border-t border-white/[0.06]">
         {/* Left accent bar */}
         <div className="w-[3px] h-8 rounded-full bg-[#8b5cf6] shrink-0" />
@@ -401,7 +401,7 @@ function PrivateChatPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* ─── Chat Header ─── */}
-      <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
+      <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#000000]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="relative">
             <PAvatar name={chatPartner.name} size={36} verified={chatPartner.verified} />
@@ -461,7 +461,7 @@ function PrivateChatPanel() {
       <ReplyBar />
 
       {/* ─── Input Bar ─── */}
-      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl safe-area-bottom">
+      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-[#000000]/80 backdrop-blur-xl safe-area-bottom">
         <div className="flex items-end gap-2.5">
           {/* Emoji / React */}
           <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
@@ -478,7 +478,7 @@ function PrivateChatPanel() {
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
               placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'End-to-end encrypted message...'}
-              className="w-full bg-transparent text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none"
+              className="w-full bg-transparent text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none"
             />
           </div>
           {/* Attachment */}
@@ -637,7 +637,7 @@ function ChatAdsPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* ─── Ads Stats Bar ─── */}
-      <div className="shrink-0 px-4 py-3 flex items-center justify-between border-b border-white/[0.06] bg-[#09080f]/60 backdrop-blur-xl">
+      <div className="shrink-0 px-4 py-3 flex items-center justify-between border-b border-white/[0.06] bg-[#000000]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f59e0b]/10 border border-[#f59e0b]/20">
             <svg className="w-3.5 h-3.5 text-[#f59e0b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -712,12 +712,12 @@ export function DualPaneChatView() {
   return (
     <div className="h-[calc(100vh-90px)] flex flex-col animate-fade-in">
       {/* ─── Tab Switcher (always visible) ─── */}
-      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#09080f]/80 backdrop-blur-xl">
+      <div className="shrink-0 flex border-b border-white/[0.06] bg-[#000000]/80 backdrop-blur-xl">
         <button
           onClick={() => setActiveTab('chat')}
           className={cn(
             'flex-1 py-3 text-[15px] font-medium relative transition-colors',
-            activeTab === 'chat' ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
+            activeTab === 'chat' ? 'text-[#e7e9ea] font-bold' : 'text-[#94a3b8]'
           )}
         >
           <div className="flex items-center justify-center gap-2">
@@ -734,7 +734,7 @@ export function DualPaneChatView() {
           onClick={() => setActiveTab('ads')}
           className={cn(
             'flex-1 py-3 text-[15px] font-medium relative transition-colors',
-            activeTab === 'ads' ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
+            activeTab === 'ads' ? 'text-[#e7e9ea] font-bold' : 'text-[#94a3b8]'
           )}
         >
           <div className="flex items-center justify-center gap-2">

@@ -105,20 +105,20 @@ export function ArticleView() {
   // ── Article not found ──
   if (!article) {
     return (
-      <div className="min-h-screen bg-[#09080f]">
-        <header className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <div className="min-h-screen bg-[#000000]">
+        <header className="sticky top-0 z-30 bg-[#000000]/80 backdrop-blur-md border-b border-white/[0.06]">
           <div className="flex items-center gap-3 px-4 h-14">
             <button
               onClick={handleBack}
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Go back"
             >
-              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-[17px] font-bold text-[#f0eef6]">Article</h1>
+            <h1 className="text-[17px] font-bold text-[#e7e9ea]">Article</h1>
           </div>
         </header>
         <div className="flex flex-col items-center justify-center py-32 px-4">
@@ -128,7 +128,7 @@ export function ArticleView() {
               <path d="M21 21l-4.35-4.35" />
             </svg>
           </div>
-          <p className="text-[17px] font-semibold text-[#f0eef6] mb-1">Article not found</p>
+          <p className="text-[17px] font-semibold text-[#e7e9ea] mb-1">Article not found</p>
           <p className="text-[14px] text-[#94a3b8]">This article may have been removed or doesn&apos;t exist.</p>
         </div>
       </div>
@@ -136,9 +136,9 @@ export function ArticleView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09080f]">
+    <div className="min-h-screen bg-[#000000]">
       {/* ─── Sticky Header ─── */}
-      <header className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="sticky top-0 z-30 bg-[#000000]/80 backdrop-blur-md border-b border-white/[0.06]">
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-3">
             <button
@@ -146,12 +146,12 @@ export function ArticleView() {
               className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/[0.06] transition-colors"
               aria-label="Go back"
             >
-              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-[17px] font-bold text-[#f0eef6]">Article</h1>
+            <h1 className="text-[17px] font-bold text-[#e7e9ea]">Article</h1>
           </div>
           <div className="flex items-center gap-1">
             <button
@@ -197,7 +197,7 @@ export function ArticleView() {
         {/* Article Body */}
         <div className="px-5 pt-6">
           {/* Title */}
-          <h1 className="text-[28px] sm:text-[36px] font-bold text-[#f0eef6] leading-tight tracking-tight mb-5">
+          <h1 className="text-[28px] sm:text-[36px] font-bold text-[#e7e9ea] leading-tight tracking-tight mb-5">
             {article.title}
           </h1>
 
@@ -212,7 +212,7 @@ export function ArticleView() {
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-[14px] font-semibold text-[#f0eef6] truncate">
+                <span className="text-[14px] font-semibold text-[#e7e9ea] truncate">
                   {article.author?.displayName ?? 'Anonymous'}
                 </span>
               </div>
@@ -273,7 +273,7 @@ export function ArticleView() {
       </article>
 
       {/* ─── Sticky Engagement Bar ─── */}
-      <div className="fixed bottom-0 inset-x-0 z-30 bg-[#09080f]/80 backdrop-blur-md border-t border-white/[0.06]">
+      <div className="fixed bottom-0 inset-x-0 z-30 bg-[#000000]/80 backdrop-blur-md border-t border-white/[0.06]">
         <div className="max-w-2xl mx-auto flex items-center justify-around px-4 py-2">
           {/* Like */}
           <button

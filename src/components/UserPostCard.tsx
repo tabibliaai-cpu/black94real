@@ -277,7 +277,7 @@ export function UserPostCard({
             <div className="flex items-center gap-1 leading-none" style={{ minHeight: 0 }}>
               <button
                 onClick={(e) => { e.stopPropagation(); onProfileTap?.(post.authorId) }}
-                className="font-bold text-[15px] text-[#f0eef6] hover:underline truncate leading-tight"
+                className="font-bold text-[15px] text-[#e7e9ea] hover:underline truncate leading-tight"
                 style={{ minHeight: 0, minWidth: 0 }}
               >
                 {post.authorDisplayName || post.authorUsername || 'User'}
@@ -315,7 +315,7 @@ export function UserPostCard({
                 id={post.id}
                 text={post.caption}
                 maxLines={4}
-                className="text-[15px] text-[#f0eef6]"
+                className="text-[15px] text-[#e7e9ea]"
                 style={{ marginTop: '2px', lineHeight: '20px' }}
                 renderContent={highlightContent}
               />
@@ -478,7 +478,7 @@ export function UserPostCard({
                   onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
                 >
                   <div className="p-2.5 rounded-full group-hover:bg-white/[0.06] transition-colors">
-                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#f0eef6]" viewBox="0 0 24 24" fill="currentColor">
+                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
                       <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
                     </svg>
                   </div>

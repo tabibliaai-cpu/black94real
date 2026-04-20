@@ -191,7 +191,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
         className="bg-[#110f1a] border-t border-white/[0.06] rounded-t-2xl max-h-[92vh] overflow-y-auto"
       >
         <SheetHeader className="px-4 pt-2 pb-1">
-          <SheetTitle className="text-[18px] font-bold text-[#f0eef6] text-left">
+          <SheetTitle className="text-[18px] font-bold text-[#e7e9ea] text-left">
             Create Story
           </SheetTitle>
         </SheetHeader>
@@ -224,7 +224,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                 </svg>
               </div>
               <div className="text-center px-4">
-                <p className="text-[15px] text-[#f0eef6] font-medium">Tap to select a photo</p>
+                <p className="text-[15px] text-[#e7e9ea] font-medium">Tap to select a photo</p>
                 <p className="text-[13px] text-[#94a3b8] mt-1">or drag and drop an image</p>
               </div>
               <input
@@ -251,7 +251,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                     setSelectedFile(null)
                     setPreviewUrl(null)
                   }}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#09080f]/60 backdrop-blur-sm flex items-center justify-center hover:bg-[#09080f]/80 transition-colors"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center hover:bg-[#000000]/80 transition-colors"
                 >
                   <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                     <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
@@ -259,7 +259,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                 </button>
                 {/* Current filter badge */}
                 {selectedFilter.id !== 'normal' && (
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#09080f]/60 backdrop-blur-sm">
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#000000]/60 backdrop-blur-sm">
                     <span className="text-[12px] text-white font-medium">{selectedFilter.name}</span>
                   </div>
                 )}
@@ -267,7 +267,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
 
               {/* ── Filter selector ── */}
               <div className="space-y-2">
-                <h4 className="text-[14px] font-semibold text-[#f0eef6]">Filters</h4>
+                <h4 className="text-[14px] font-semibold text-[#e7e9ea]">Filters</h4>
                 <div
                   ref={filtersScrollRef}
                   className="flex gap-3 overflow-x-auto no-scrollbar pb-1"
@@ -311,7 +311,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                   placeholder="Add a caption..."
                   maxLength={200}
                   rows={2}
-                  className="w-full rounded-xl bg-white/[0.06] border border-white/[0.08] px-4 py-3 text-[15px] text-[#f0eef6] placeholder-[#64748b] resize-none focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30 transition-colors"
+                  className="w-full rounded-xl bg-white/[0.06] border border-white/[0.08] px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] resize-none focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30 transition-colors"
                 />
                 <p className="text-[12px] text-[#94a3b8] mt-1 text-right">
                   {caption.length}/200

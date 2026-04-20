@@ -13,7 +13,7 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     view: 'feed',
     label: 'Home',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#f0eef6]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
+      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
         <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" strokeLinecap="round" strokeLinejoin="round" />
         {active && <path d="M9 21V12h6v9" strokeLinecap="round" strokeLinejoin="round" />}
       </svg>
@@ -23,7 +23,7 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     view: 'search',
     label: 'Search',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#f0eef6]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
+      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
         <circle cx="11" cy="11" r="7" />
         <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
       </svg>
@@ -33,7 +33,7 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     view: 'chat',
     label: 'Chat',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#f0eef6]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
+      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
         <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
@@ -42,7 +42,7 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     view: 'notifications',
     label: 'Alerts',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#f0eef6]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
+      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
         <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M13.73 21a2 2 0 01-3.46 0" strokeLinecap="round" strokeLinejoin="round" />
       </svg>

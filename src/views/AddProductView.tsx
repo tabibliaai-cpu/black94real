@@ -131,7 +131,7 @@ export function AddProductView() {
   return (
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       <div className="px-4 pt-2">
-        <h2 className="text-[18px] font-bold text-[#f0eef6] mb-1">
+        <h2 className="text-[18px] font-bold text-[#e7e9ea] mb-1">
           {isEditing ? 'Edit Product' : 'Add New Product'}
         </h2>
         <p className="text-[13px] text-[#94a3b8] mb-5">
@@ -147,7 +147,7 @@ export function AddProductView() {
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="e.g. Wireless Headphones Pro"
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
 
@@ -159,7 +159,7 @@ export function AddProductView() {
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="Describe your product..."
               rows={4}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
             />
           </div>
 
@@ -172,7 +172,7 @@ export function AddProductView() {
                 value={form.price}
                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                 placeholder="0"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
             <div className="space-y-1.5">
@@ -182,7 +182,7 @@ export function AddProductView() {
                 value={form.compareAtPrice}
                 onChange={(e) => setForm((f) => ({ ...f, compareAtPrice: e.target.value }))}
                 placeholder="Original price"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
           </div>
@@ -215,7 +215,7 @@ export function AddProductView() {
               value={form.tags}
               onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
               placeholder="e.g. wireless, audio, premium"
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
 
@@ -227,7 +227,7 @@ export function AddProductView() {
               onChange={(e) => setForm((f) => ({ ...f, images: e.target.value }))}
               placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
               rows={2}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
             />
             {form.images && (
               <div className="flex gap-2 overflow-x-auto pt-1">
@@ -253,7 +253,7 @@ export function AddProductView() {
                 value={form.stock}
                 onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                 placeholder="0"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
             <div className="space-y-1.5">
@@ -263,7 +263,7 @@ export function AddProductView() {
                 value={form.sku}
                 onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))}
                 placeholder="PROD-001"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
               />
             </div>
           </div>
@@ -276,7 +276,7 @@ export function AddProductView() {
               onChange={(e) => setForm((f) => ({ ...f, variants: e.target.value }))}
               placeholder='[{"name":"Size","values":["S","M","L"]}]'
               rows={3}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none font-mono"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none font-mono"
             />
           </div>
 
@@ -284,7 +284,7 @@ export function AddProductView() {
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <div>
-                <p className="text-[14px] text-[#f0eef6]">Digital Product</p>
+                <p className="text-[14px] text-[#e7e9ea]">Digital Product</p>
                 <p className="text-[12px] text-[#94a3b8]">No shipping required</p>
               </div>
               <button
@@ -296,7 +296,7 @@ export function AddProductView() {
             </div>
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#110f1a] border border-white/[0.06]">
               <div>
-                <p className="text-[14px] text-[#f0eef6]">Featured Product</p>
+                <p className="text-[14px] text-[#e7e9ea]">Featured Product</p>
                 <p className="text-[12px] text-[#94a3b8]">Show in featured section</p>
               </div>
               <button
@@ -311,7 +311,7 @@ export function AddProductView() {
       </div>
 
       {/* Save Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#09080f]/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#000000]/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <button
           onClick={handleSave}
           disabled={saving}

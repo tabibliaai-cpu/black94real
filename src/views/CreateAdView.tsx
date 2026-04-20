@@ -92,9 +92,9 @@ export function CreateAdView() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('ads-manager')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Create Ad</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Create Ad</h1>
       </div>
 
       {/* Form */}
@@ -107,7 +107,7 @@ export function CreateAdView() {
             value={form.name}
             onChange={e => update('name', e.target.value)}
             placeholder="e.g., Summer Sale Campaign"
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -123,7 +123,7 @@ export function CreateAdView() {
             onChange={e => update('headline', e.target.value.slice(0, 50))}
             placeholder="Grab attention in 50 chars"
             maxLength={50}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -139,7 +139,7 @@ export function CreateAdView() {
             placeholder="Describe your ad in detail..."
             maxLength={150}
             rows={3}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors resize-none"
           />
         </div>
 
@@ -149,9 +149,9 @@ export function CreateAdView() {
           <select
             value={form.ctaText}
             onChange={e => update('ctaText', e.target.value)}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
           >
-            {CTA_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-[#110f1a] text-[#f0eef6]">{opt}</option>)}
+            {CTA_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-[#110f1a] text-[#e7e9ea]">{opt}</option>)}
           </select>
         </div>
 
@@ -163,7 +163,7 @@ export function CreateAdView() {
             value={form.ctaUrl}
             onChange={e => update('ctaUrl', e.target.value)}
             placeholder="https://your-landing-page.com"
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
 
@@ -190,7 +190,7 @@ export function CreateAdView() {
             type="number"
             value={form.budget}
             onChange={e => update('budget', parseInt(e.target.value) || 0)}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
           <div className="flex gap-2">
             {BUDGET_PRESETS.map(amount => (
@@ -201,7 +201,7 @@ export function CreateAdView() {
                   'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                   form.budget === amount
                     ? 'bg-[#8b5cf6] text-black'
-                    : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
+                    : 'bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1]'
                 )}
               >
                 ₹{amount.toLocaleString('en-IN')}
@@ -216,9 +216,9 @@ export function CreateAdView() {
           <select
             value={form.duration}
             onChange={e => update('duration', parseInt(e.target.value))}
-            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
+            className="w-full bg-[#110f1a] border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors appearance-none"
           >
-            {DURATION_OPTIONS.map(d => <option key={d.value} value={d.value} className="bg-[#110f1a] text-[#f0eef6]">{d.label}</option>)}
+            {DURATION_OPTIONS.map(d => <option key={d.value} value={d.value} className="bg-[#110f1a] text-[#e7e9ea]">{d.label}</option>)}
           </select>
         </div>
 
@@ -238,7 +238,7 @@ export function CreateAdView() {
                     'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                     form.targetAge === age
                       ? 'bg-[#8b5cf6] text-black'
-                      : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
+                      : 'bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1]'
                   )}
                 >
                   {age}
@@ -259,7 +259,7 @@ export function CreateAdView() {
                     'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                     form.targetLocation === loc
                       ? 'bg-[#8b5cf6] text-black'
-                      : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
+                      : 'bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1]'
                   )}
                 >
                   {loc}
@@ -280,7 +280,7 @@ export function CreateAdView() {
                     'px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors',
                     form.interests.includes(interest)
                       ? 'bg-[#8b5cf6] text-black'
-                      : 'bg-white/[0.06] text-[#f0eef6] hover:bg-white/[0.1]'
+                      : 'bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1]'
                   )}
                 >
                   {interest}
@@ -303,7 +303,7 @@ export function CreateAdView() {
               <span className="text-[#64748b] text-[13px]">Ad Image Preview</span>
             </div>
             <div className="p-3">
-              <h4 className="text-[15px] font-bold text-[#f0eef6]">{form.headline || 'Your headline here'}</h4>
+              <h4 className="text-[15px] font-bold text-[#e7e9ea]">{form.headline || 'Your headline here'}</h4>
               <p className="text-[13px] text-[#94a3b8] mt-1 line-clamp-2">{form.description || 'Your description will appear here...'}</p>
               <div className="flex items-center gap-2 mt-3">
                 <span className="text-[11px] text-[#64748b]">Sponsored</span>

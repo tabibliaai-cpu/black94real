@@ -165,9 +165,9 @@ export function PrivacySettingsView() {
   }, [user])
 
   return (
-    <div className="min-h-screen bg-[#09080f]">
+    <div className="min-h-screen bg-[#000000]">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-30 bg-[#09080f]/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-0 z-30 bg-[#000000]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => navigate('settings')}
@@ -175,7 +175,7 @@ export function PrivacySettingsView() {
             aria-label="Go back"
           >
             <svg
-              className="w-5 h-5 text-[#f0eef6]"
+              className="w-5 h-5 text-[#e7e9ea]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -186,7 +186,7 @@ export function PrivacySettingsView() {
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-lg font-bold text-[#f0eef6]">Privacy &amp; Security</h1>
+          <h1 className="text-lg font-bold text-[#e7e9ea]">Privacy &amp; Security</h1>
         </div>
       </div>
 
@@ -202,7 +202,7 @@ export function PrivacySettingsView() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#f0eef6]">Name Visibility</h3>
+              <h3 className="text-[15px] font-bold text-[#e7e9ea]">Name Visibility</h3>
               <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {nameVisibility === 'public'
                   ? 'Anyone can see your display name on your profile.'
@@ -233,7 +233,7 @@ export function PrivacySettingsView() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#f0eef6]">Direct Messages</h3>
+              <h3 className="text-[15px] font-bold text-[#e7e9ea]">Direct Messages</h3>
               <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {dmPermission === 'all' && 'Anyone can send you messages.'}
                 {dmPermission === 'followers' && 'Only your followers can message you.'}
@@ -264,7 +264,7 @@ export function PrivacySettingsView() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#f0eef6]">Search Visibility</h3>
+              <h3 className="text-[15px] font-bold text-[#e7e9ea]">Search Visibility</h3>
               <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {searchVisibility === 'public'
                   ? 'Your profile appears in search results and suggestions.'
@@ -297,7 +297,7 @@ export function PrivacySettingsView() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-[15px] font-bold text-[#f0eef6]">Paid Chat</h3>
+                <h3 className="text-[15px] font-bold text-[#e7e9ea]">Paid Chat</h3>
                 <p className="text-[13px] text-[#94a3b8] mt-0.5">
                   {paidChatEnabled
                     ? 'Users must pay to start a conversation with you.'
@@ -319,7 +319,7 @@ export function PrivacySettingsView() {
                     value={paidChatPrice}
                     onChange={(e) => setPaidChatPrice(e.target.value)}
                     onBlur={handlePaidChatPrice}
-                    className="w-28 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[15px] text-[#f0eef6] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                    className="w-28 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                   />
                   <button
                     onClick={handlePaidChatPrice}
@@ -372,7 +372,7 @@ export function PrivacySettingsView() {
       {showNuclearDialog && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
           <div
-            className="absolute inset-0 bg-[#09080f]/70 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
           />
           <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
@@ -384,7 +384,7 @@ export function PrivacySettingsView() {
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-[#f0eef6]">Nuclear Block</h3>
+              <h3 className="text-lg font-bold text-[#e7e9ea]">Nuclear Block</h3>
             </div>
 
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-4">
@@ -399,7 +399,7 @@ export function PrivacySettingsView() {
                 onChange={(e) => setNuclearConfirmed(e.target.checked)}
                 className="mt-0.5 accent-red-500"
               />
-              <span className="text-[13px] text-[#94a3b8] group-hover:text-[#f0eef6] transition-colors">
+              <span className="text-[13px] text-[#94a3b8] group-hover:text-[#e7e9ea] transition-colors">
                 I understand this action is permanent and cannot be undone.
               </span>
             </label>
@@ -407,7 +407,7 @@ export function PrivacySettingsView() {
             <div className="flex gap-3">
               <button
                 onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
-                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#f0eef6] hover:bg-white/[0.04] transition-colors"
+                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#e7e9ea] hover:bg-white/[0.04] transition-colors"
               >
                 Cancel
               </button>

@@ -139,7 +139,7 @@ export function CheckoutView() {
                   </svg>
                 ) : i + 1}
               </div>
-              <span className={`text-[13px] font-medium hidden sm:inline ${i <= step ? 'text-[#f0eef6]' : 'text-[#94a3b8]'}`}>
+              <span className={`text-[13px] font-medium hidden sm:inline ${i <= step ? 'text-[#e7e9ea]' : 'text-[#94a3b8]'}`}>
                 {s}
               </span>
               {i < STEPS.length - 1 && (
@@ -155,7 +155,7 @@ export function CheckoutView() {
         {/* Step 0: Address */}
         {step === 0 && (
           <div className="space-y-3">
-            <h2 className="text-[16px] font-bold text-[#f0eef6] mb-4">Shipping Address</h2>
+            <h2 className="text-[16px] font-bold text-[#e7e9ea] mb-4">Shipping Address</h2>
             {[
               { key: 'name' as const, label: 'Full Name', placeholder: 'John Doe', type: 'text' },
               { key: 'phone' as const, label: 'Phone Number', placeholder: '10-digit number', type: 'tel' },
@@ -172,7 +172,7 @@ export function CheckoutView() {
                   value={address[field.key]}
                   onChange={(e) => setAddress((prev) => ({ ...prev, [field.key]: e.target.value }))}
                   placeholder={field.placeholder}
-                  className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                  className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                 />
               </div>
             ))}
@@ -182,7 +182,7 @@ export function CheckoutView() {
         {/* Step 1: Shipping */}
         {step === 1 && (
           <div className="space-y-3">
-            <h2 className="text-[16px] font-bold text-[#f0eef6] mb-4">Shipping Method</h2>
+            <h2 className="text-[16px] font-bold text-[#e7e9ea] mb-4">Shipping Method</h2>
             {partners.map((partner) => {
               const cost = calculateShipping(partner, 0.5, address.pincode)
               const isSelected = selectedPartner?.id === partner.id
@@ -207,7 +207,7 @@ export function CheckoutView() {
                         {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]" />}
                       </div>
                       <div>
-                        <p className="text-[14px] font-semibold text-[#f0eef6]">{partner.name}</p>
+                        <p className="text-[14px] font-semibold text-[#e7e9ea]">{partner.name}</p>
                         <p className="text-[12px] text-[#94a3b8]">
                           {partner.estimatedDays} days
                           {partner.supportsCOD && ' • COD available'}
@@ -227,7 +227,7 @@ export function CheckoutView() {
         {/* Step 2: Confirm */}
         {step === 2 && (
           <div className="space-y-4">
-            <h2 className="text-[16px] font-bold text-[#f0eef6] mb-4">Order Confirmation</h2>
+            <h2 className="text-[16px] font-bold text-[#e7e9ea] mb-4">Order Confirmation</h2>
 
             {/* Address Summary */}
             <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
@@ -235,7 +235,7 @@ export function CheckoutView() {
                 <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping To</h3>
                 <button onClick={() => setStep(0)} className="text-[12px] text-[#8b5cf6]">Edit</button>
               </div>
-              <p className="text-[14px] text-[#f0eef6] font-medium">{address.name}</p>
+              <p className="text-[14px] text-[#e7e9ea] font-medium">{address.name}</p>
               <p className="text-[13px] text-[#94a3b8]">{address.line1}</p>
               {address.line2 && <p className="text-[13px] text-[#94a3b8]">{address.line2}</p>}
               <p className="text-[13px] text-[#94a3b8]">{address.city}, {address.state} - {address.pincode}</p>
@@ -248,7 +248,7 @@ export function CheckoutView() {
                 <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping</h3>
                 <button onClick={() => setStep(1)} className="text-[12px] text-[#8b5cf6]">Edit</button>
               </div>
-              <p className="text-[14px] text-[#f0eef6] font-medium">{selectedPartner?.name}</p>
+              <p className="text-[14px] text-[#e7e9ea] font-medium">{selectedPartner?.name}</p>
               <p className="text-[13px] text-[#94a3b8]">Estimated: {selectedPartner?.estimatedDays} days</p>
             </div>
 
@@ -262,10 +262,10 @@ export function CheckoutView() {
                       <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                      <p className="text-[13px] font-medium text-[#e7e9ea] line-clamp-1">{item.productName}</p>
                       <p className="text-[12px] text-[#94a3b8]">Qty: {item.quantity}{item.variant ? ` • ${item.variant}` : ''}</p>
                     </div>
-                    <span className="text-[13px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                    <span className="text-[13px] font-semibold text-[#e7e9ea]">₹{(item.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -275,18 +275,18 @@ export function CheckoutView() {
             <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06] space-y-2">
               <div className="flex justify-between">
                 <span className="text-[13px] text-[#94a3b8]">Subtotal</span>
-                <span className="text-[13px] text-[#f0eef6]">₹{subtotal.toLocaleString()}</span>
+                <span className="text-[13px] text-[#e7e9ea]">₹{subtotal.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[13px] text-[#94a3b8]">Shipping</span>
-                <span className="text-[13px] text-[#f0eef6]">{shippingCost === 0 ? 'FREE' : `₹${shippingCost}`}</span>
+                <span className="text-[13px] text-[#e7e9ea]">{shippingCost === 0 ? 'FREE' : `₹${shippingCost}`}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[13px] text-[#94a3b8]">Tax (5%)</span>
-                <span className="text-[13px] text-[#f0eef6]">₹{tax.toLocaleString()}</span>
+                <span className="text-[13px] text-[#e7e9ea]">₹{tax.toLocaleString()}</span>
               </div>
               <div className="border-t border-white/[0.06] pt-2 flex justify-between">
-                <span className="text-[16px] font-bold text-[#f0eef6]">Total</span>
+                <span className="text-[16px] font-bold text-[#e7e9ea]">Total</span>
                 <span className="text-[20px] font-bold text-[#8b5cf6]">₹{total.toLocaleString()}</span>
               </div>
             </div>
@@ -295,12 +295,12 @@ export function CheckoutView() {
       </div>
 
       {/* Action Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#09080f]/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#000000]/95 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <div className="flex gap-3">
           {step > 0 && (
             <button
               onClick={() => setStep(step - 1)}
-              className="px-6 py-3.5 rounded-full border border-white/[0.12] text-[#f0eef6] font-bold text-[15px] hover:bg-white/[0.06] transition-colors"
+              className="px-6 py-3.5 rounded-full border border-white/[0.12] text-[#e7e9ea] font-bold text-[15px] hover:bg-white/[0.06] transition-colors"
             >
               Back
             </button>

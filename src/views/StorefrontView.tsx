@@ -63,10 +63,10 @@ export function StorefrontView() {
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       {/* Cover */}
       <div className="relative h-32 bg-gradient-to-br from-[#8b5cf6]/30 via-[#110f1a] to-[#1a1a2e]">
-        <div className="absolute inset-0 bg-[#09080f]/30" />
+        <div className="absolute inset-0 bg-[#000000]/30" />
         <button
           onClick={() => navigate('store')}
-          className="absolute top-3 left-3 z-10 w-9 h-9 rounded-full bg-[#09080f]/50 backdrop-blur-sm flex items-center justify-center"
+          className="absolute top-3 left-3 z-10 w-9 h-9 rounded-full bg-[#000000]/50 backdrop-blur-sm flex items-center justify-center"
         >
           <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -88,7 +88,7 @@ export function StorefrontView() {
           </div>
           <div className="pb-1">
             <div className="flex items-center gap-1.5">
-              <h1 className="text-[18px] font-bold text-[#f0eef6]">{businessName}</h1>
+              <h1 className="text-[18px] font-bold text-[#e7e9ea]">{businessName}</h1>
               <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
@@ -100,7 +100,7 @@ export function StorefrontView() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mt-4">
           <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
-            <p className="text-[18px] font-bold text-[#f0eef6]">{products.length}</p>
+            <p className="text-[18px] font-bold text-[#e7e9ea]">{products.length}</p>
             <p className="text-[11px] text-[#94a3b8]">Products</p>
           </div>
           <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3 text-center">
@@ -116,7 +116,7 @@ export function StorefrontView() {
 
       {/* Products Grid */}
       <div className="mt-6 px-4">
-        <h2 className="text-[15px] font-bold text-[#f0eef6] mb-3">All Products</h2>
+        <h2 className="text-[15px] font-bold text-[#e7e9ea] mb-3">All Products</h2>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-16">

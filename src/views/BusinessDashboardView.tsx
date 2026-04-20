@@ -26,9 +26,9 @@ export function BusinessDashboardView() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('feed')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Business Dashboard</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Business Dashboard</h1>
       </div>
 
       {/* Greeting */}
@@ -38,7 +38,7 @@ export function BusinessDashboardView() {
             {username[0]?.toUpperCase()}
           </div>
           <div>
-            <p className="text-[17px] font-bold text-[#f0eef6]">Welcome back, {username}!</p>
+            <p className="text-[17px] font-bold text-[#e7e9ea]">Welcome back, {username}!</p>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-[12px] font-semibold px-2 py-0.5 rounded-full bg-[#ffd700]/15 text-[#ffd700]">
                 {user?.accountType === 'business' ? 'Business Account' : 'Pro Account'}
@@ -61,7 +61,7 @@ export function BusinessDashboardView() {
               <span className="text-sm">{stat.icon}</span>
               <span className="text-[12px] text-[#94a3b8] font-medium">{stat.label}</span>
             </div>
-            <p className="text-xl font-bold text-[#f0eef6]">{stat.value}</p>
+            <p className="text-xl font-bold text-[#e7e9ea]">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -69,7 +69,7 @@ export function BusinessDashboardView() {
       {/* Revenue Chart */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-[#f0eef6]">Revenue Trend</h3>
+          <h3 className="text-sm font-semibold text-[#e7e9ea]">Revenue Trend</h3>
         </div>
         <div className="flex items-center justify-center h-32">
           <div className="text-center">
@@ -83,7 +83,7 @@ export function BusinessDashboardView() {
 
       {/* Quick Actions */}
       <div>
-        <h3 className="text-sm font-semibold text-[#f0eef6] mb-3">Quick Actions</h3>
+        <h3 className="text-sm font-semibold text-[#e7e9ea] mb-3">Quick Actions</h3>
         <div className="grid grid-cols-2 gap-3">
           {QUICK_ACTIONS.map((action) => (
             <button
@@ -95,7 +95,7 @@ export function BusinessDashboardView() {
               )}
             >
               <span className="text-2xl">{action.icon}</span>
-              <p className="text-[14px] font-semibold text-[#f0eef6] mt-2">{action.label}</p>
+              <p className="text-[14px] font-semibold text-[#e7e9ea] mt-2">{action.label}</p>
             </button>
           ))}
         </div>
@@ -104,7 +104,7 @@ export function BusinessDashboardView() {
       {/* Recent Leads */}
       <div className="rounded-xl bg-[#110f1a] border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-[#f0eef6]">Recent Leads</h3>
+          <h3 className="text-sm font-semibold text-[#e7e9ea]">Recent Leads</h3>
           <button onClick={() => navigate('crm-leads')} className="text-[12px] text-[#8b5cf6] font-semibold">View all</button>
         </div>
         <div className="space-y-3">
@@ -122,7 +122,7 @@ export function BusinessDashboardView() {
                   {lead.name[0]}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-semibold text-[#f0eef6] truncate">{lead.name}</p>
+                  <p className="text-[14px] font-semibold text-[#e7e9ea] truncate">{lead.name}</p>
                   <p className="text-[12px] text-[#94a3b8]">{lead.status} • {lead.createdAt}</p>
                 </div>
                 <div className={cn(

@@ -100,11 +100,11 @@ export function AffiliatesView() {
           onClick={() => navigate('business-dashboard')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.06] transition-colors"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Affiliate Badges</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Affiliate Badges</h1>
       </div>
 
       {/* ── Plan Info Card ──────────────────────────────── */}
@@ -118,7 +118,7 @@ export function AffiliatesView() {
             </svg>
           </div>
           <div>
-            <p className="text-[15px] font-semibold text-[#f0eef6]">Business Plan</p>
+            <p className="text-[15px] font-semibold text-[#e7e9ea]">Business Plan</p>
             <p className="text-[13px] text-[#94a3b8]">2 free badges included</p>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function AffiliatesView() {
       {/* ── Active Affiliates ───────────────────────────── */}
       {activeAffiliates.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-[15px] font-semibold text-[#f0eef6]">Active Affiliates</h2>
+          <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Active Affiliates</h2>
           <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
             {activeAffiliates.map((affiliate) => (
               <div
@@ -153,7 +153,7 @@ export function AffiliatesView() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-[15px] font-semibold text-[#f0eef6] truncate">
+                      <p className="text-[15px] font-semibold text-[#e7e9ea] truncate">
                         {affiliate.name}
                       </p>
                     </div>
@@ -172,7 +172,7 @@ export function AffiliatesView() {
                           type="text"
                           value={editRole}
                           onChange={(e) => setEditRole(e.target.value)}
-                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-1.5 text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-1.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
                           placeholder="Role/Title"
                         />
                         <button
@@ -207,7 +207,7 @@ export function AffiliatesView() {
                             setEditingId(affiliate.id)
                             setEditRole(affiliate.role)
                           }}
-                          className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-[#f0eef6] text-[13px] font-medium hover:bg-white/[0.1] transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-[#e7e9ea] text-[13px] font-medium hover:bg-white/[0.1] transition-colors"
                         >
                           Edit
                         </button>
@@ -229,7 +229,7 @@ export function AffiliatesView() {
 
       {/* ── Add Affiliate Section ───────────────────────── */}
       <div className="space-y-3">
-        <h2 className="text-[15px] font-semibold text-[#f0eef6]">Add New Affiliate</h2>
+        <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Add New Affiliate</h2>
         <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
           <div className="space-y-1.5">
             <label className="text-[13px] text-[#94a3b8]">Full Name</label>
@@ -238,7 +238,7 @@ export function AffiliatesView() {
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Enter full name"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
           <div className="space-y-1.5">
@@ -248,7 +248,7 @@ export function AffiliatesView() {
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               placeholder="Enter email address"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
           <div className="space-y-1.5">
@@ -258,7 +258,7 @@ export function AffiliatesView() {
               value={newRole}
               onChange={(e) => setNewRole(e.target.value)}
               placeholder="e.g. Sales Lead, Account Executive"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
             />
           </div>
           {!allFreeUsed ? (
@@ -293,7 +293,7 @@ export function AffiliatesView() {
               </svg>
             </div>
             <div>
-              <p className="text-[15px] font-semibold text-[#f0eef6]">Need more badges?</p>
+              <p className="text-[15px] font-semibold text-[#e7e9ea]">Need more badges?</p>
               <p className="text-[13px] text-[#94a3b8]">
                 ₹{BADGE_COST} per additional badge
               </p>
@@ -306,18 +306,18 @@ export function AffiliatesView() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setPurchaseQty((q) => Math.max(1, q - 1))}
-                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#f0eef6] hover:bg-white/[0.06] transition-colors"
+                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#e7e9ea] hover:bg-white/[0.06] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                   <path d="M5 12h14" />
                 </svg>
               </button>
-              <span className="text-[18px] font-bold text-[#f0eef6] w-8 text-center">
+              <span className="text-[18px] font-bold text-[#e7e9ea] w-8 text-center">
                 {purchaseQty}
               </span>
               <button
                 onClick={() => setPurchaseQty((q) => Math.min(10, q + 1))}
-                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#f0eef6] hover:bg-white/[0.06] transition-colors"
+                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#e7e9ea] hover:bg-white/[0.06] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                   <path d="M12 5v14M5 12h14" />

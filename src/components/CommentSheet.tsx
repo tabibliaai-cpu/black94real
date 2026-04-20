@@ -222,7 +222,7 @@ export function CommentSheet({
     <div className="fixed inset-0 z-[100]">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-[#09080f]/60 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-[#000000]/60 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
@@ -239,11 +239,11 @@ export function CommentSheet({
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           >
-            <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
             </svg>
           </button>
-          <h3 className="text-[15px] font-bold text-[#f0eef6]">Post</h3>
+          <h3 className="text-[15px] font-bold text-[#e7e9ea]">Post</h3>
           <div className="w-8" />
         </div>
 
@@ -251,7 +251,7 @@ export function CommentSheet({
         <div className="px-4 py-3 border-b border-white/[0.06] shrink-0">
           <div className="flex items-center gap-2 mb-1.5">
             <PAvatar src={postAuthorProfileImage} name={postAuthor} size={24} verified={postAuthorIsVerified} badge={postAuthorBadge} />
-            <span className="text-[13px] font-semibold text-[#f0eef6]">{postAuthor}</span>
+            <span className="text-[13px] font-semibold text-[#e7e9ea]">{postAuthor}</span>
             {(postAuthorIsVerified || postAuthorBadge) && <VerifiedBadge size={12} badge={postAuthorBadge} />}
           </div>
           {postCaption && (
@@ -286,14 +286,14 @@ export function CommentSheet({
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[14px] font-bold text-[#f0eef6] truncate">
+                    <span className="text-[14px] font-bold text-[#e7e9ea] truncate">
                       {comment.authorDisplayName || comment.authorUsername}
                     </span>
                     {showBadge(comment) && <VerifiedBadge size={13} badge={comment.authorBadge} />}
                     <span className="text-[13px] text-[#64748b] shrink-0">@{comment.authorUsername}</span>
                     <span className="text-[13px] text-[#64748b] shrink-0">· {timeAgo(comment.createdAt)}</span>
                   </div>
-                  <p className="text-[15px] text-[#f0eef6] mt-0.5 whitespace-pre-wrap break-words leading-[20px]">
+                  <p className="text-[15px] text-[#e7e9ea] mt-0.5 whitespace-pre-wrap break-words leading-[20px]">
                     {comment.content}
                   </p>
 
@@ -360,7 +360,7 @@ export function CommentSheet({
                 onChange={(e) => setNewComment(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
                 placeholder="Post your reply..."
-                className="w-full bg-transparent text-[14px] text-[#f0eef6] placeholder-[#64748b] outline-none"
+                className="w-full bg-transparent text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none"
               />
             </div>
 

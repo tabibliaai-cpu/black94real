@@ -37,10 +37,10 @@ export function SidebarItem({
 
       className={cn(
         'group relative flex items-center gap-3 rounded-xl px-4 py-3 text-[15px] transition-all duration-200 ease-in-out outline-none',
-        'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09080f]',
+        'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
         active
-          ? 'font-bold text-[#f0eef6]'
-          : 'text-gray-300 hover:text-[#f0eef6]',
+          ? 'font-bold text-[#e7e9ea]'
+          : 'text-gray-300 hover:text-[#e7e9ea]',
         active
           ? 'bg-white/[0.08]'
           : 'hover:bg-white/[0.06]',
@@ -51,7 +51,7 @@ export function SidebarItem({
       <span
         className={cn(
           'shrink-0 transition-colors duration-200',
-          active ? 'text-[#8b5cf6]' : 'text-gray-400 group-hover:text-[#f0eef6]',
+          active ? 'text-[#8b5cf6]' : 'text-gray-400 group-hover:text-[#e7e9ea]',
           'h-[26px] w-[26px]'
         )}
       >
@@ -72,7 +72,7 @@ export function SidebarItem({
 
       {/* Badge dot for collapsed */}
       {showBadge && collapsed && (
-        <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-[#8b5cf6] ring-2 ring-[#09080f]" />
+        <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-[#8b5cf6] ring-2 ring-[#000000]" />
       )}
     </button>
   )
@@ -85,7 +85,7 @@ export function SidebarItem({
         <TooltipContent
           side="right"
           sideOffset={12}
-          className="rounded-lg border border-white/10 bg-[#1a1823] px-3 py-1.5 text-sm font-medium text-[#f0eef6] shadow-lg"
+          className="rounded-lg border border-white/10 bg-[#1a1823] px-3 py-1.5 text-sm font-medium text-[#e7e9ea] shadow-lg"
         >
           {label}
         </TooltipContent>

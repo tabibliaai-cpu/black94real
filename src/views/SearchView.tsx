@@ -61,7 +61,7 @@ export function SearchView() {
   return (
     <div className="px-4 pt-2">
       {/* Search bar */}
-      <div className="sticky top-0 z-10 bg-[#09080f] pt-2 pb-3 -mx-4 px-4">
+      <div className="sticky top-0 z-10 bg-[#000000] pt-2 pb-3 -mx-4 px-4">
         <div className="flex items-center gap-3 bg-white/[0.06] rounded-full px-4 py-2.5 border border-white/[0.08] focus-within:border-[#8b5cf6]/50 focus-within:bg-white/[0.08] transition-all">
           <svg className="w-5 h-5 text-[#94a3b8] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <circle cx="11" cy="11" r="7" />
@@ -72,7 +72,7 @@ export function SearchView() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search"
-            className="flex-1 bg-transparent text-[15px] text-[#f0eef6] placeholder-[#64748b] outline-none"
+            className="flex-1 bg-transparent text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none"
           />
           <button
             onClick={() => handleSearch(query)}
@@ -97,7 +97,7 @@ export function SearchView() {
                 key={t}
                 onClick={() => setTab(t)}
                 className={`flex-1 py-3 text-[15px] font-medium relative capitalize transition-colors ${
-                  tab === t ? 'text-[#f0eef6] font-bold' : 'text-[#94a3b8]'
+                  tab === t ? 'text-[#e7e9ea] font-bold' : 'text-[#94a3b8]'
                 }`}
               >
                 {t}
@@ -124,7 +124,7 @@ export function SearchView() {
                     <PAvatar src={u.profileImage} name={u.displayName} size={44} verified={u.isVerified} badge={u.badge} />
                     <div className="text-left min-w-0">
                       <div className="flex items-center gap-1">
-                        <span className="font-bold text-[15px] text-[#f0eef6] truncate">{u.displayName}</span>
+                        <span className="font-bold text-[15px] text-[#e7e9ea] truncate">{u.displayName}</span>
                         {u.isVerified && <VerifiedBadge size={16} badge={u.badge} />}
                       </div>
                       <span className="text-[14px] text-[#94a3b8] truncate">@{u.username}</span>
@@ -141,7 +141,7 @@ export function SearchView() {
               ) : (
                 posts.map((p) => (
                   <div key={p.id} className="px-4 py-3 border-b border-white/[0.06]">
-                    <p className="text-[15px] text-[#f0eef6] leading-relaxed">{p.caption}</p>
+                    <p className="text-[15px] text-[#e7e9ea] leading-relaxed">{p.caption}</p>
                     <p className="text-[13px] text-[#94a3b8] mt-1">by @{p.authorUsername}</p>
                   </div>
                 ))
@@ -158,7 +158,7 @@ export function SearchView() {
               <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
             </svg>
           </div>
-          <h3 className="text-[15px] font-bold text-[#f0eef6] mb-1">Search for people and posts</h3>
+          <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-1">Search for people and posts</h3>
           <p className="text-[14px] text-[#94a3b8]">Find users, posts, and topics across Black94.</p>
         </div>
       )}

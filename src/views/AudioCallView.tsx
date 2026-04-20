@@ -60,7 +60,7 @@ export function AudioCallView() {
   const initial = chatName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#09080f] flex flex-col animate-fade-in">
+    <div className="fixed inset-0 z-50 bg-[#000000] flex flex-col animate-fade-in">
       {/* ─── Gradient background ─── */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a0a] via-black to-black pointer-events-none" />
 

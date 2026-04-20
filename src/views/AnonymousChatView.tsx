@@ -101,7 +101,7 @@ function LobbyScreen() {
           className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.06] active:bg-white/[0.1] transition-colors"
           style={{ minHeight: 0, minWidth: 0 }}
         >
-          <svg className="w-[22px] h-[22px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-[22px] h-[22px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>

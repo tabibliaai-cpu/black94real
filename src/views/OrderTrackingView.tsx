@@ -43,12 +43,12 @@ function OrderTimeline({ order }: { order: ShopOrder }) {
 
   return (
     <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
-      <h3 className="text-[14px] font-bold text-[#f0eef6] mb-5">Order Status</h3>
+      <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-5">Order Status</h3>
 
       {/* Current status badge */}
       <div className="flex items-center gap-2 mb-5">
         <div className={`w-3 h-3 rounded-full ${STATUS_COLORS[order.status] || 'bg-gray-500'}`} />
-        <span className={`text-[15px] font-bold ${STATUS_TEXT_COLORS[order.status] || 'text-[#f0eef6]'}`}>
+        <span className={`text-[15px] font-bold ${STATUS_TEXT_COLORS[order.status] || 'text-[#e7e9ea]'}`}>
           {STATUS_LABELS[order.status] || order.status}
         </span>
       </div>
@@ -72,13 +72,13 @@ function OrderTimeline({ order }: { order: ShopOrder }) {
                 isCompleted
                   ? 'bg-[#8b5cf6] border-[#8b5cf6]'
                   : isCurrent
-                    ? 'border-[#8b5cf6] bg-[#09080f]'
-                    : 'border-[#64748b] bg-[#09080f]'
+                    ? 'border-[#8b5cf6] bg-[#000000]'
+                    : 'border-[#64748b] bg-[#000000]'
               }`} />
 
               {/* Label */}
               <div>
-                <p className={`text-[13px] font-medium ${isCompleted ? 'text-[#f0eef6]' : 'text-[#64748b]'}`}>
+                <p className={`text-[13px] font-medium ${isCompleted ? 'text-[#e7e9ea]' : 'text-[#64748b]'}`}>
                   {STATUS_LABELS[step]}
                 </p>
                 {isCurrent && (
@@ -143,7 +143,7 @@ export function OrderTrackingView() {
             <line x1="1" y1="10" x2="23" y2="10" />
           </svg>
         </div>
-        <h2 className="text-[18px] font-bold text-[#f0eef6] mb-2">No orders yet</h2>
+        <h2 className="text-[18px] font-bold text-[#e7e9ea] mb-2">No orders yet</h2>
         <p className="text-[14px] text-[#94a3b8] mb-6">Your order history will appear here</p>
         <button
           onClick={() => useAppStore.getState().navigate('store')}
@@ -192,7 +192,7 @@ export function OrderTrackingView() {
         {/* Order Info */}
         <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[14px] font-bold text-[#f0eef6]">Order #{order.id.slice(-8).toUpperCase()}</h3>
+            <h3 className="text-[14px] font-bold text-[#e7e9ea]">Order #{order.id.slice(-8).toUpperCase()}</h3>
             <span className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</span>
           </div>
 
@@ -204,10 +204,10 @@ export function OrderTrackingView() {
                   <img src={item.image || '/placeholder-product.png'} alt="" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#f0eef6] line-clamp-1">{item.productName}</p>
+                  <p className="text-[13px] font-medium text-[#e7e9ea] line-clamp-1">{item.productName}</p>
                   <p className="text-[12px] text-[#94a3b8]">Qty: {item.quantity}{item.variant ? ` • ${item.variant}` : ''}</p>
                 </div>
-                <span className="text-[13px] font-semibold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                <span className="text-[13px] font-semibold text-[#e7e9ea]">₹{(item.price * item.quantity).toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -216,18 +216,18 @@ export function OrderTrackingView() {
           <div className="border-t border-white/[0.06] pt-3 space-y-1.5">
             <div className="flex justify-between text-[13px]">
               <span className="text-[#94a3b8]">Subtotal</span>
-              <span className="text-[#f0eef6]">₹{order.subtotal.toLocaleString()}</span>
+              <span className="text-[#e7e9ea]">₹{order.subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-[13px]">
               <span className="text-[#94a3b8]">Shipping</span>
-              <span className="text-[#f0eef6]">{order.shipping === 0 ? 'FREE' : `₹${order.shipping.toLocaleString()}`}</span>
+              <span className="text-[#e7e9ea]">{order.shipping === 0 ? 'FREE' : `₹${order.shipping.toLocaleString()}`}</span>
             </div>
             <div className="flex justify-between text-[13px]">
               <span className="text-[#94a3b8]">Tax</span>
-              <span className="text-[#f0eef6]">₹{order.tax.toLocaleString()}</span>
+              <span className="text-[#e7e9ea]">₹{order.tax.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-[15px] font-bold pt-1">
-              <span className="text-[#f0eef6]">Total</span>
+              <span className="text-[#e7e9ea]">Total</span>
               <span className="text-[#8b5cf6]">₹{order.total.toLocaleString()}</span>
             </div>
           </div>
@@ -236,8 +236,8 @@ export function OrderTrackingView() {
         {/* Shipping Address */}
         {shippingAddress && (
           <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
-            <h3 className="text-[14px] font-bold text-[#f0eef6] mb-2">Delivery Address</h3>
-            <p className="text-[13px] text-[#f0eef6]">{shippingAddress.name}</p>
+            <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-2">Delivery Address</h3>
+            <p className="text-[13px] text-[#e7e9ea]">{shippingAddress.name}</p>
             <p className="text-[13px] text-[#94a3b8]">{shippingAddress.line1}</p>
             {shippingAddress.line2 && <p className="text-[13px] text-[#94a3b8]">{shippingAddress.line2}</p>}
             <p className="text-[13px] text-[#94a3b8]">{shippingAddress.city}, {shippingAddress.state} - {shippingAddress.pincode}</p>
@@ -248,7 +248,7 @@ export function OrderTrackingView() {
         {/* Tracking */}
         {order.trackingNumber && (
           <div className="p-4 rounded-xl bg-[#110f1a] border border-white/[0.06]">
-            <h3 className="text-[14px] font-bold text-[#f0eef6] mb-2">Tracking</h3>
+            <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-2">Tracking</h3>
             <p className="text-[13px] text-[#94a3b8]">Partner: {order.trackingPartner || 'N/A'}</p>
             <p className="text-[13px] text-[#8b5cf6] font-mono">{order.trackingNumber}</p>
           </div>

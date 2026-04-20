@@ -86,7 +86,7 @@ function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
     <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
       <div className="flex items-start justify-between">
         <div className="min-w-0">
-          <p className="text-[15px] font-semibold text-[#f0eef6] truncate">{campaign.name}</p>
+          <p className="text-[15px] font-semibold text-[#e7e9ea] truncate">{campaign.name}</p>
           <div className="flex items-center gap-2 mt-1">
             <StatusBadge status={campaign.status} />
           </div>
@@ -105,7 +105,7 @@ function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="text-[12px] text-[#94a3b8]">Budget Used</span>
-          <span className="text-[12px] text-[#f0eef6] font-medium">
+          <span className="text-[12px] text-[#e7e9ea] font-medium">
             {formatCurrency(campaign.budgetUsed)} / {formatCurrency(campaign.budget)}
           </span>
         </div>
@@ -133,7 +133,7 @@ function MetricRow({ label, value, highlight }: { label: string; value: string; 
       <p
         className={cn(
           'text-[14px] font-medium',
-          highlight ? 'text-[#8b5cf6]' : 'text-[#f0eef6]'
+          highlight ? 'text-[#8b5cf6]' : 'text-[#e7e9ea]'
         )}
       >
         {value}
@@ -150,7 +150,7 @@ function ChannelBar({ channel, maxImpressions }: { channel: ChannelPerformance; 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <p className="text-[14px] font-medium text-[#f0eef6]">{channel.channel}</p>
+        <p className="text-[14px] font-medium text-[#e7e9ea]">{channel.channel}</p>
         <p className="text-[12px] text-[#8b5cf6] font-medium">{channel.ctr}% CTR</p>
       </div>
       {/* Impressions bar */}
@@ -193,7 +193,7 @@ function ABTestCard({ test }: { test: ABTest }) {
   return (
     <div className="rounded-2xl bg-[#110f1a] border border-white/[0.08] p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-[14px] font-semibold text-[#f0eef6]">{test.name}</p>
+        <p className="text-[14px] font-semibold text-[#e7e9ea]">{test.name}</p>
         {test.winner && (
           <span className="text-[12px] font-medium text-[#8b5cf6]">
             Variant {test.winner} winning
@@ -212,7 +212,7 @@ function ABTestCard({ test }: { test: ABTest }) {
           )}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[13px] font-semibold text-[#f0eef6]">Variant A</span>
+            <span className="text-[13px] font-semibold text-[#e7e9ea]">Variant A</span>
             {test.winner === 'A' && (
               <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
@@ -221,11 +221,11 @@ function ABTestCard({ test }: { test: ABTest }) {
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Impressions</p>
-            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantA.impressions)}</p>
+            <p className="text-[13px] text-[#e7e9ea]">{formatNumber(test.variantA.impressions)}</p>
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Clicks</p>
-            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantA.clicks)} <span className="text-[#64748b]">({clickRateA.toFixed(1)}%)</span></p>
+            <p className="text-[13px] text-[#e7e9ea]">{formatNumber(test.variantA.clicks)} <span className="text-[#64748b]">({clickRateA.toFixed(1)}%)</span></p>
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Conversions</p>
@@ -243,7 +243,7 @@ function ABTestCard({ test }: { test: ABTest }) {
           )}
         >
           <div className="flex items-center justify-between">
-            <span className="text-[13px] font-semibold text-[#f0eef6]">Variant B</span>
+            <span className="text-[13px] font-semibold text-[#e7e9ea]">Variant B</span>
             {test.winner === 'B' && (
               <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
@@ -252,11 +252,11 @@ function ABTestCard({ test }: { test: ABTest }) {
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Impressions</p>
-            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantB.impressions)}</p>
+            <p className="text-[13px] text-[#e7e9ea]">{formatNumber(test.variantB.impressions)}</p>
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Clicks</p>
-            <p className="text-[13px] text-[#f0eef6]">{formatNumber(test.variantB.clicks)} <span className="text-[#64748b]">({clickRateB.toFixed(1)}%)</span></p>
+            <p className="text-[13px] text-[#e7e9ea]">{formatNumber(test.variantB.clicks)} <span className="text-[#64748b]">({clickRateB.toFixed(1)}%)</span></p>
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Conversions</p>
@@ -292,7 +292,7 @@ function SuggestionItem({ suggestion, onApply }: { suggestion: AISuggestion; onA
             {label}
           </span>
         </div>
-        <p className="text-[13px] text-[#f0eef6] leading-relaxed">{suggestion.text}</p>
+        <p className="text-[13px] text-[#e7e9ea] leading-relaxed">{suggestion.text}</p>
         <button
           onClick={onApply}
           className="mt-2 px-3 py-1 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] text-[12px] font-semibold hover:bg-[#8b5cf6]/20 transition-colors"
@@ -328,11 +328,11 @@ export function PerformanceView() {
           onClick={() => navigate('business-dashboard')}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.06] transition-colors"
         >
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6] flex-1">Performance</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea] flex-1">Performance</h1>
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08]">
           <svg className="w-3.5 h-3.5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -357,14 +357,14 @@ export function PerformanceView() {
 
       {/* ── Campaign Performance ────────────────────────── */}
       <div className="space-y-3">
-        <h2 className="text-[15px] font-semibold text-[#f0eef6]">Campaign Performance</h2>
+        <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Campaign Performance</h2>
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl">📊</span>
               </div>
-              <p className="text-[15px] text-[#f0eef6] font-medium">No campaign data</p>
+              <p className="text-[15px] text-[#e7e9ea] font-medium">No campaign data</p>
               <p className="text-[13px] text-[#94a3b8] mt-1">Campaign performance will appear here</p>
             </div>
           </div>
@@ -377,7 +377,7 @@ export function PerformanceView() {
           <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 20V10M12 20V4M6 20v-6" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#f0eef6]">Channel Performance</h2>
+          <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Channel Performance</h2>
         </div>
         <div className="space-y-4">
           <div className="flex items-center justify-center py-8">
@@ -407,7 +407,7 @@ export function PerformanceView() {
           <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 3H5a2 2 0 00-2 2v3M21 8V5a2 2 0 00-2-2h-3M3 16v3a2 2 0 002 2h3M16 21h3a2 2 0 002-2v-3" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#f0eef6]">A/B Test Results</h2>
+          <h2 className="text-[15px] font-semibold text-[#e7e9ea]">A/B Test Results</h2>
         </div>
         <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
           <div className="flex items-center justify-center py-12">
@@ -415,7 +415,7 @@ export function PerformanceView() {
               <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl">🧪</span>
               </div>
-              <p className="text-[15px] text-[#f0eef6] font-medium">No A/B tests running</p>
+              <p className="text-[15px] text-[#e7e9ea] font-medium">No A/B tests running</p>
               <p className="text-[13px] text-[#94a3b8] mt-1">Set up tests to compare campaign variants</p>
             </div>
           </div>
@@ -429,7 +429,7 @@ export function PerformanceView() {
             <path d="M12 2a7 7 0 017 7c0 3-2 5-4 6.5V18H9v-2.5C7 14 5 12 5 9a7 7 0 017-7z" />
             <path d="M9 18h6M10 22h4" />
           </svg>
-          <h2 className="text-[15px] font-semibold text-[#f0eef6]">AI Optimization</h2>
+          <h2 className="text-[15px] font-semibold text-[#e7e9ea]">AI Optimization</h2>
           <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/10 text-[#8b5cf6] text-[11px] font-medium">
             Smart
           </span>
@@ -440,7 +440,7 @@ export function PerformanceView() {
               <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl">💡</span>
               </div>
-              <p className="text-[15px] text-[#f0eef6] font-medium">No suggestions yet</p>
+              <p className="text-[15px] text-[#e7e9ea] font-medium">No suggestions yet</p>
               <p className="text-[13px] text-[#94a3b8] mt-1">AI suggestions will appear as campaigns run</p>
             </div>
           </div>

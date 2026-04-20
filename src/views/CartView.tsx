@@ -38,7 +38,7 @@ export function CartView() {
             <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
           </svg>
         </div>
-        <h2 className="text-[18px] font-bold text-[#f0eef6] mb-2">Your cart is empty</h2>
+        <h2 className="text-[18px] font-bold text-[#e7e9ea] mb-2">Your cart is empty</h2>
         <p className="text-[14px] text-[#94a3b8] mb-6 text-center">Discover amazing products in our store</p>
         <button
           onClick={() => navigate('store')}
@@ -55,7 +55,7 @@ export function CartView() {
       {/* Header area */}
       <div className="px-4 pt-2 pb-3 flex items-center justify-between">
         <div>
-          <h2 className="text-[18px] font-bold text-[#f0eef6]">Shopping Cart</h2>
+          <h2 className="text-[18px] font-bold text-[#e7e9ea]">Shopping Cart</h2>
           <p className="text-[13px] text-[#94a3b8]">{items.length} item{items.length !== 1 ? 's' : ''}</p>
         </div>
         <button
@@ -87,7 +87,7 @@ export function CartView() {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <h3
-                className="text-[14px] font-semibold text-[#f0eef6] line-clamp-1 cursor-pointer hover:text-[#8b5cf6] transition-colors"
+                className="text-[14px] font-semibold text-[#e7e9ea] line-clamp-1 cursor-pointer hover:text-[#8b5cf6] transition-colors"
                 onClick={() => navigate('product-detail', { id: item.productId })}
               >
                 {item.productName}
@@ -98,7 +98,7 @@ export function CartView() {
 
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[16px] font-bold text-[#f0eef6]">₹{(item.price * item.quantity).toLocaleString()}</span>
+                  <span className="text-[16px] font-bold text-[#e7e9ea]">₹{(item.price * item.quantity).toLocaleString()}</span>
                   {item.compareAtPrice && (
                     <span className="text-[11px] text-[#94a3b8] line-through">₹{(item.compareAtPrice * item.quantity).toLocaleString()}</span>
                   )}
@@ -113,7 +113,7 @@ export function CartView() {
                       <path d="M5 12h14" />
                     </svg>
                   </button>
-                  <span className="text-[14px] font-bold text-[#f0eef6] w-6 text-center">{item.quantity}</span>
+                  <span className="text-[14px] font-bold text-[#e7e9ea] w-6 text-center">{item.quantity}</span>
                   <button
                     onClick={() => handleQuantityChange(item.productId, 1)}
                     className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1] transition-colors"
@@ -162,33 +162,33 @@ export function CartView() {
 
       {/* Order Summary */}
       <div className="mx-4 mt-5 p-4 rounded-xl bg-[#110f1a] border border-white/[0.06] space-y-3">
-        <h3 className="text-[14px] font-bold text-[#f0eef6]">Order Summary</h3>
+        <h3 className="text-[14px] font-bold text-[#e7e9ea]">Order Summary</h3>
         <div className="space-y-2">
           <div className="flex justify-between">
             <span className="text-[13px] text-[#94a3b8]">Subtotal</span>
-            <span className="text-[13px] text-[#f0eef6]">₹{subtotal.toLocaleString()}</span>
+            <span className="text-[13px] text-[#e7e9ea]">₹{subtotal.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-[13px] text-[#94a3b8]">Shipping</span>
-            <span className={cn('text-[13px]', shipping === 0 ? 'text-[#8b5cf6]' : 'text-[#f0eef6]')}>
+            <span className={cn('text-[13px]', shipping === 0 ? 'text-[#8b5cf6]' : 'text-[#e7e9ea]')}>
               {shipping === 0 ? 'FREE' : `₹${shipping}`}
             </span>
           </div>
           <div className="border-t border-white/[0.06] pt-2 flex justify-between">
-            <span className="text-[15px] font-bold text-[#f0eef6]">Total</span>
+            <span className="text-[15px] font-bold text-[#e7e9ea]">Total</span>
             <span className="text-[18px] font-bold text-[#8b5cf6]">₹{total.toLocaleString()}</span>
           </div>
         </div>
       </div>
 
       {/* Checkout Button */}
-      <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-[#09080f]/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
+      <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-[#000000]/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <button
           onClick={() => navigate('checkout')}
           className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 hover:shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
         >
           <span>Checkout</span>
-          <span className="text-[13px] bg-[#09080f]/20 px-2 py-0.5 rounded-full">₹{total.toLocaleString()}</span>
+          <span className="text-[13px] bg-[#000000]/20 px-2 py-0.5 rounded-full">₹{total.toLocaleString()}</span>
         </button>
       </div>
     </div>

@@ -35,7 +35,7 @@ interface ChatSettingsSheetProps {
 function MenuRow({
   icon,
   label,
-  labelColor = 'text-[#f0eef6]',
+  labelColor = 'text-[#e7e9ea]',
   trailing,
   onClick,
   disabled = false,
@@ -143,7 +143,7 @@ export function ChatSettingsSheet({
       <div className="fixed inset-0 z-[100]">
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-[#09080f]/60 backdrop-blur-sm animate-fade-in"
+          className="absolute inset-0 bg-[#000000]/60 backdrop-blur-sm animate-fade-in"
           onClick={onClose}
         />
 
@@ -160,11 +160,11 @@ export function ChatSettingsSheet({
               onClick={onClose}
               className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
             >
-              <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/>
               </svg>
             </button>
-            <h3 className="text-[15px] font-bold text-[#f0eef6]">Chat Settings</h3>
+            <h3 className="text-[15px] font-bold text-[#e7e9ea]">Chat Settings</h3>
             <div className="w-8" />
           </div>
 
@@ -180,7 +180,7 @@ export function ChatSettingsSheet({
                 badge={user.badge}
               />
               <div className="min-w-0">
-                <p className="text-[15px] font-bold text-[#f0eef6] truncate">
+                <p className="text-[15px] font-bold text-[#e7e9ea] truncate">
                   {user.displayName}
                 </p>
                 <p className="text-[13px] text-[#94a3b8] truncate">
@@ -241,7 +241,7 @@ export function ChatSettingsSheet({
             {/* Clear Chat */}
             <MenuRow
               icon={
-                <svg className="w-[18px] h-[18px] text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="3 6 5 6 21 6" />
                   <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
                 </svg>
@@ -270,7 +270,7 @@ export function ChatSettingsSheet({
       {showNuclearDialog && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center px-6">
           <div
-            className="absolute inset-0 bg-[#09080f]/70 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
           />
           <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
@@ -282,11 +282,11 @@ export function ChatSettingsSheet({
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-[#f0eef6]">Nuclear Block</h3>
+              <h3 className="text-lg font-bold text-[#e7e9ea]">Nuclear Block</h3>
             </div>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-4">
               This will <span className="text-red-400 font-semibold">permanently delete all chat data</span> with{' '}
-              <span className="text-[#f0eef6] font-medium">@{user.username}</span>. This cannot be undone.
+              <span className="text-[#e7e9ea] font-medium">@{user.username}</span>. This cannot be undone.
             </p>
             <label className="flex items-start gap-2.5 mb-5 cursor-pointer group">
               <input
@@ -295,14 +295,14 @@ export function ChatSettingsSheet({
                 onChange={(e) => setNuclearConfirmed(e.target.checked)}
                 className="mt-0.5 accent-red-500"
               />
-              <span className="text-[13px] text-[#94a3b8] group-hover:text-[#f0eef6] transition-colors">
+              <span className="text-[13px] text-[#94a3b8] group-hover:text-[#e7e9ea] transition-colors">
                 I understand this action is permanent and cannot be undone.
               </span>
             </label>
             <div className="flex gap-3">
               <button
                 onClick={() => { setShowNuclearDialog(false); setNuclearConfirmed(false) }}
-                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#f0eef6] hover:bg-white/[0.04] transition-colors"
+                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#e7e9ea] hover:bg-white/[0.04] transition-colors"
               >
                 Cancel
               </button>
@@ -327,25 +327,25 @@ export function ChatSettingsSheet({
       {showClearDialog && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center px-6">
           <div
-            className="absolute inset-0 bg-[#09080f]/70 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => setShowClearDialog(false)}
           />
           <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
-            <h3 className="text-lg font-bold text-[#f0eef6] mb-2">Clear Chat</h3>
+            <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Clear Chat</h3>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
               Are you sure you want to clear all messages with{' '}
-              <span className="text-[#f0eef6] font-medium">@{user.username}</span>? This will remove messages from your view.
+              <span className="text-[#e7e9ea] font-medium">@{user.username}</span>? This will remove messages from your view.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowClearDialog(false)}
-                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#f0eef6] hover:bg-white/[0.04] transition-colors"
+                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#e7e9ea] hover:bg-white/[0.04] transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleClearChat}
-                className="flex-1 py-2.5 rounded-full bg-[#f0eef6] text-black text-[14px] font-bold hover:bg-gray-200 transition-colors"
+                className="flex-1 py-2.5 rounded-full bg-[#e7e9ea] text-black text-[14px] font-bold hover:bg-gray-200 transition-colors"
               >
                 Clear
               </button>
@@ -358,18 +358,18 @@ export function ChatSettingsSheet({
       {showReportDialog && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center px-6">
           <div
-            className="absolute inset-0 bg-[#09080f]/70 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
             onClick={() => setShowReportDialog(false)}
           />
           <div className="relative bg-[#110f1a] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
-            <h3 className="text-lg font-bold text-[#f0eef6] mb-2">Report @{user.username}</h3>
+            <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Report @{user.username}</h3>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
               Report this user for violating community guidelines? Our team will review this report and take appropriate action.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowReportDialog(false)}
-                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#f0eef6] hover:bg-white/[0.04] transition-colors"
+                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#e7e9ea] hover:bg-white/[0.04] transition-colors"
               >
                 Cancel
               </button>

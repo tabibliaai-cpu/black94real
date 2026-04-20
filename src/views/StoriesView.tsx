@@ -39,7 +39,7 @@ function StoryRing({ viewed, children, size = 64 }: { viewed: boolean; children:
           : 'bg-gradient-to-tr from-[#8b5cf6] via-[#2a7fff] to-[#f91880]'
       )}
     >
-      <div className="rounded-full bg-[#09080f] p-[2px]">
+      <div className="rounded-full bg-[#000000] p-[2px]">
         <div className="rounded-full overflow-hidden" style={{ width: size - 10, height: size - 10 }}>
           {children}
         </div>
@@ -183,7 +183,7 @@ function StoryViewer({
   if (!story) return null
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#09080f] flex flex-col animate-fade-in">
+    <div className="fixed inset-0 z-50 bg-[#000000] flex flex-col animate-fade-in">
       {/* ─── Progress bars ─── */}
       <div className="absolute top-0 inset-x-0 z-20 flex gap-1 px-2 pt-2 safe-area-top">
         {group.stories.map((_, i) => (
@@ -202,7 +202,7 @@ function StoryViewer({
       {/* ─── Close button ─── */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-3 z-20 w-9 h-9 rounded-full bg-[#09080f]/40 backdrop-blur-sm flex items-center justify-center hover:bg-[#09080f]/60 transition-colors"
+        className="absolute top-4 right-3 z-20 w-9 h-9 rounded-full bg-[#000000]/40 backdrop-blur-sm flex items-center justify-center hover:bg-[#000000]/60 transition-colors"
       >
         <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
           <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
@@ -243,7 +243,7 @@ function StoryViewer({
       </div>
 
       {/* ─── 15% — User info + Reactions ─── */}
-      <div className="flex-[15] min-h-0 bg-[#09080f] flex flex-col justify-between px-4 pt-2 pb-3 safe-area-bottom">
+      <div className="flex-[15] min-h-0 bg-[#000000] flex flex-col justify-between px-4 pt-2 pb-3 safe-area-bottom">
         {/* User info */}
         <div className="flex items-center gap-2.5">
           <PAvatar src={group.profileImage} name={group.displayName} size={36} verified={group.verified} badge={(group as any).badge} />
@@ -393,7 +393,7 @@ export function StoriesView() {
     <div className="min-h-screen pb-4">
       {/* Header area */}
       <div className="px-4 pt-3 pb-2">
-        <h2 className="text-xl font-bold text-[#f0eef6]">Stories</h2>
+        <h2 className="text-xl font-bold text-[#e7e9ea]">Stories</h2>
         <p className="text-[13px] text-[#94a3b8] mt-0.5">Tap to view updates from people you follow</p>
       </div>
 
@@ -451,7 +451,7 @@ export function StoriesView() {
                 )}
               </StoryRing>
               <div className="flex items-center gap-0.5">
-                <span className="text-[11px] text-[#f0eef6] max-w-[64px] truncate">{g.displayName.split(' ')[0]}</span>
+                <span className="text-[11px] text-[#e7e9ea] max-w-[64px] truncate">{g.displayName.split(' ')[0]}</span>
                 {g.verified && <VerifiedBadge size={12} badge={(g as any).badge} />}
               </div>
             </button>
@@ -478,7 +478,7 @@ export function StoriesView() {
               <circle cx="12" cy="13" r="4" />
             </svg>
           </div>
-          <h3 className="text-[16px] font-semibold text-[#f0eef6] mb-1">No stories yet</h3>
+          <h3 className="text-[16px] font-semibold text-[#e7e9ea] mb-1">No stories yet</h3>
           <p className="text-[14px] text-[#94a3b8] text-center">Be the first to share a story! Tap the button above to get started.</p>
         </div>
       )}
@@ -503,7 +503,7 @@ export function StoriesView() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                 {/* Story count badge */}
                 {g.stories.length > 1 && (
-                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#09080f]/60 backdrop-blur-sm flex items-center justify-center">
+                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center">
                     <span className="text-[11px] text-white font-bold">{g.stories.length}</span>
                   </div>
                 )}

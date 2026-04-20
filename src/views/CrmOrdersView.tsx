@@ -27,15 +27,15 @@ export function CrmOrdersView() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('business-dashboard')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
-          <svg className="w-5 h-5 text-[#f0eef6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-bold text-[#f0eef6]">Orders</h1>
+        <h1 className="text-xl font-bold text-[#e7e9ea]">Orders</h1>
       </div>
 
       {/* Stats Row */}
       <div className="grid grid-cols-4 gap-2">
         {[
-          { label: 'Total', value: totalOrders, color: 'text-[#f0eef6]' },
+          { label: 'Total', value: totalOrders, color: 'text-[#e7e9ea]' },
           { label: 'Pending', value: pending, color: 'text-yellow-400' },
           { label: 'Shipped', value: shipped, color: 'text-purple-400' },
           { label: 'Delivered', value: delivered, color: 'text-[#8b5cf6]' },
@@ -54,7 +54,7 @@ export function CrmOrdersView() {
             <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
               <span className="text-2xl">📦</span>
             </div>
-            <p className="text-[15px] text-[#f0eef6] font-medium">No orders yet</p>
+            <p className="text-[15px] text-[#e7e9ea] font-medium">No orders yet</p>
             <p className="text-[13px] text-[#94a3b8] mt-1">Orders will appear here once customers make purchases</p>
           </div>
         ) : (
@@ -69,7 +69,7 @@ export function CrmOrdersView() {
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-[14px] font-semibold text-[#f0eef6] truncate">{order.customerName}</h4>
+                  <h4 className="text-[14px] font-semibold text-[#e7e9ea] truncate">{order.customerName}</h4>
                   <p className="text-[13px] text-[#94a3b8] truncate">{order.product}</p>
                 </div>
                 <div className="text-right shrink-0">

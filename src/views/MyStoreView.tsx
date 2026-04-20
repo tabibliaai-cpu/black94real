@@ -71,7 +71,7 @@ export function MyStoreView() {
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
           </div>
-          <p className="text-[20px] font-bold text-[#f0eef6]">{products.length}</p>
+          <p className="text-[20px] font-bold text-[#e7e9ea]">{products.length}</p>
           <p className="text-[11px] text-[#94a3b8]">Products</p>
         </div>
         <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
@@ -81,7 +81,7 @@ export function MyStoreView() {
               <line x1="1" y1="10" x2="23" y2="10" />
             </svg>
           </div>
-          <p className="text-[20px] font-bold text-[#f0eef6]">{activeOrders}</p>
+          <p className="text-[20px] font-bold text-[#e7e9ea]">{activeOrders}</p>
           <p className="text-[11px] text-[#94a3b8]">Active</p>
         </div>
         <div className="bg-[#110f1a] border border-white/[0.06] rounded-xl p-3.5 text-center">
@@ -91,7 +91,7 @@ export function MyStoreView() {
               <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
             </svg>
           </div>
-          <p className="text-[20px] font-bold text-[#f0eef6]">₹{(totalRevenue / 1000).toFixed(1)}k</p>
+          <p className="text-[20px] font-bold text-[#e7e9ea]">₹{(totalRevenue / 1000).toFixed(1)}k</p>
           <p className="text-[11px] text-[#94a3b8]">Revenue</p>
         </div>
       </div>
@@ -103,7 +103,7 @@ export function MyStoreView() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2 rounded-full text-[13px] font-semibold capitalize transition-all ${
-              activeTab === tab ? 'bg-[#8b5cf6] text-black shadow-md' : 'text-[#94a3b8] hover:text-[#f0eef6]'
+              activeTab === tab ? 'bg-[#8b5cf6] text-black shadow-md' : 'text-[#94a3b8] hover:text-[#e7e9ea]'
             }`}
           >
             {tab} ({tab === 'products' ? products.length : orders.length})
@@ -140,7 +140,7 @@ export function MyStoreView() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] font-semibold text-[#f0eef6] line-clamp-1">{product.name}</p>
+                    <p className="text-[14px] font-semibold text-[#e7e9ea] line-clamp-1">{product.name}</p>
                     <p className="text-[13px] font-semibold text-[#8b5cf6]">₹{product.price.toLocaleString()}</p>
                     <p className="text-[11px] text-[#94a3b8]">{product.stock} in stock • {product.soldCount} sold</p>
                   </div>
@@ -190,7 +190,7 @@ export function MyStoreView() {
                         {order.status}
                       </span>
                     </div>
-                    <p className="text-[13px] text-[#f0eef6] line-clamp-1">{order.buyerName}</p>
+                    <p className="text-[13px] text-[#e7e9ea] line-clamp-1">{order.buyerName}</p>
                     <p className="text-[12px] text-[#94a3b8]">{items.map((i) => i.productName).join(', ')}</p>
                     <p className="text-[14px] font-bold text-[#8b5cf6] mt-1">₹{order.total.toLocaleString()}</p>
                   </button>
