@@ -5,9 +5,13 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { fetchFeedPosts } from '@/lib/db'
 import { checkPostInteractions, togglePostLike, togglePostRepost, togglePostBookmark } from '@/lib/social'
+import { deletePost } from '@/lib/db'
+import { useEngagementEngine, fetchRankedFeedPosts } from '@/lib/useEngagementEngine'
+import { getPostScore } from '@/lib/engagement-engine'
 import { UserPostCard } from '@/components/UserPostCard'
 import { toast } from 'sonner'
 import type { DocumentSnapshot, DocumentData } from 'firebase/firestore'
+import type { TrendingLabel } from '@/lib/engagement-engine'
 
 /* ── Skeleton loader ─────────────────────────────────────────────────── */
 
@@ -53,10 +57,36 @@ export function FeedView() {
   const [allLoaded, setAllLoaded] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
+  // Engagement engine: trending labels per post
+  const [trendingMap, setTrendingMap] = useState<Map<string, TrendingLabel>>(new Map())
+
   const lastDocRef = useRef<DocumentSnapshot<DocumentData> | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const postsLoadedRef = useRef(false)
+  const rankedPostIdsRef = useRef<string[]>([])
+
+  // ── Start engagement engine on mount ──
+  useEngagementEngine(!!user)
+
+  // Fetch trending labels for posts
+  const fetchTrendingLabels = useCallback(async (postsList: any[]) => {
+    const realPosts = postsList.filter((p: any) => !p.id?.startsWith('mock-'))
+    if (realPosts.length === 0) return
+    try {
+      const results = await Promise.all(
+        realPosts.map(async (p: any) => {
+          const score = await getPostScore(p.id)
+          return { id: p.id, label: score.trendingLabel }
+        })
+      )
+      const map = new Map<string, TrendingLabel>()
+      results.forEach(({ id, label }) => { if (label) map.set(id, label) })
+      setTrendingMap(map)
+    } catch (err) {
+      console.error('Failed to fetch trending labels:', err)
+    }
+  }, [])
 
   // Check interactions for a batch of posts and return enriched posts
   const enrichWithInteractions = useCallback(async (postsList: any[]) => {
@@ -82,29 +112,61 @@ export function FeedView() {
     if (reset) {
       lastDocRef.current = null
       setAllLoaded(false)
+      rankedPostIdsRef.current = []
     }
 
     try {
       if (reset) setLoading(true)
       else setLoadingMore(true)
 
-      const result = await fetchFeedPosts(10, lastDocRef.current ?? undefined)
-
-      if (result.posts.length === 0) {
-        if (reset) setPosts([])
-        setAllLoaded(true)
-      } else {
-        lastDocRef.current = result.lastDoc
-        if (reset) {
-          // Enrich with interaction status BEFORE rendering — no flash
-          const enriched = await enrichWithInteractions(result.posts)
-          setPosts(enriched)
-          postsLoadedRef.current = true
-        } else {
-          // For infinite scroll, also check interactions on new batch
-          const enriched = await enrichWithInteractions(result.posts)
-          setPosts((prev) => [...prev, ...enriched])
+      // For "For you" tab: try ranked feed first, fall back to chronological
+      let fetchedPosts: any[] = []
+      if (reset && activeTab === 'For you') {
+        try {
+          const ranked = await fetchRankedFeedPosts(20)
+          if (ranked.length > 0) {
+            rankedPostIdsRef.current = ranked.map((r) => r.postId)
+            // Fetch full post docs in order of ranking
+            const { fetchFeedPosts: fetchAll } = await import('@/lib/db')
+            const allResult = await fetchAll(50)
+            const postMap = new Map(allResult.posts.map((p: any) => [p.id, p]))
+            fetchedPosts = ranked
+              .map((r) => postMap.get(r.postId))
+              .filter(Boolean)
+            // Fetch trending labels for ranked posts
+            const tMap = new Map<string, TrendingLabel>()
+            ranked.forEach((r) => { if (r.trendingLabel) tMap.set(r.postId, r.trendingLabel) })
+            setTrendingMap(tMap)
+          }
+        } catch (err) {
+          console.error('[Feed] Ranked fetch failed, falling back:', err)
         }
+      }
+
+      // Fallback: chronological fetch
+      if (fetchedPosts.length === 0) {
+        const result = await fetchFeedPosts(10, lastDocRef.current ?? undefined)
+        if (result.posts.length === 0) {
+          if (reset) setPosts([])
+          setAllLoaded(true)
+          if (reset) setLoading(false)
+          setLoadingMore(false)
+          setRefreshing(false)
+          return
+        }
+        lastDocRef.current = result.lastDoc
+        fetchedPosts = result.posts
+      }
+
+      if (reset) {
+        // Enrich with interaction status BEFORE rendering — no flash
+        const enriched = await enrichWithInteractions(fetchedPosts)
+        setPosts(enriched)
+        postsLoadedRef.current = true
+      } else {
+        // For infinite scroll, also check interactions on new batch
+        const enriched = await enrichWithInteractions(fetchedPosts)
+        setPosts((prev) => [...prev, ...enriched])
       }
     } catch (err) {
       console.error('Failed to fetch posts:', err)
@@ -114,12 +176,21 @@ export function FeedView() {
       setLoadingMore(false)
       setRefreshing(false)
     }
-  }, [enrichWithInteractions])
+  }, [enrichWithInteractions, activeTab])
 
-  // Initial load
+  // Initial load + refresh trending labels periodically
   useEffect(() => {
     loadPosts(true)
   }, [loadPosts])
+
+  // Refresh trending labels every 3 minutes
+  useEffect(() => {
+    if (posts.length === 0) return
+    const timer = setInterval(() => {
+      fetchTrendingLabels(posts)
+    }, 180_000)
+    return () => clearInterval(timer)
+  }, [posts, fetchTrendingLabels])
 
   // Pull-to-refresh
   const handleRefresh = useCallback(() => {
@@ -198,6 +269,18 @@ export function FeedView() {
     }
   }, [user])
 
+  const handleDelete = useCallback(async (postId: string) => {
+    if (!user) return
+    try {
+      await deletePost(postId)
+      setPosts((prev) => prev.filter((p: any) => p.id !== postId))
+      toast.success('Post deleted')
+    } catch (err) {
+      console.error('Delete failed:', err)
+      toast.error(err instanceof Error ? err.message : 'Delete failed')
+    }
+  }, [user])
+
   return (
     <div>
       {/* Tabs */}
@@ -254,6 +337,7 @@ export function FeedView() {
               onLike={handleLike}
               onRepost={handleRepost}
               onBookmark={handleBookmark}
+              onDelete={handleDelete}
               onProfileTap={(uid: string) => {
                 if (uid !== 'mock') navigate('user-profile', { userId: uid })
               }}
@@ -261,6 +345,7 @@ export function FeedView() {
               userDisplayName={user?.displayName || undefined}
               userUsername={user?.username || undefined}
               userProfileImage={user?.profileImage || undefined}
+              trendingLabel={trendingMap.get(post.id)}
             />
           ))}
 

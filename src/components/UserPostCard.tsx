@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { PAvatar, VerifiedBadge } from './PAvatar'
+import type { TrendingLabel } from '@/lib/engagement-engine'
 import { ExpandableText } from './ExpandableText'
 import { CommentSheet } from './CommentSheet'
 import { ShareMenu, RepostToast } from './ShareMenu'
@@ -41,6 +42,8 @@ interface UserPostCardProps {
   onBookmark?: (postId: string) => void
   onComment?: (postId: string) => void
   onProfileTap?: (userId: string) => void
+  onDelete?: (postId: string) => void
+  trendingLabel?: TrendingLabel
   userId?: string
   userDisplayName?: string
   userUsername?: string
@@ -90,6 +93,8 @@ export function UserPostCard({
   onBookmark,
   onComment,
   onProfileTap,
+  onDelete,
+  trendingLabel,
   userId,
   userDisplayName,
   userUsername,
@@ -121,11 +126,14 @@ export function UserPostCard({
   /* ── UI state ── */
   const [commentSheetOpen, setCommentSheetOpen] = useState(false)
   const [shareMenuOpen, setShareMenuOpen] = useState(false)
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [toast, setToast] = useState<{ show: boolean; message: string }>({ show: false, message: '' })
+  const [deleting, setDeleting] = useState(false)
 
   const lastTapRef = useRef(0)
   const likeTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
   const shareBtnRef = useRef<HTMLButtonElement>(null)
+  const moreBtnRef = useRef<HTMLButtonElement>(null)
 
   const mediaUrls: string[] = useMemo(() => {
     if (!post.mediaUrls) return []
@@ -204,9 +212,27 @@ export function UserPostCard({
     setCommentCount((c) => c + 1)
   }, [])
 
+  const handleDelete = useCallback(async () => {
+    if (!onDelete || deleting) return
+    setDeleting(true)
+    setShowMoreMenu(false)
+    try {
+      onDelete(post.id)
+    } catch (err) {
+      console.error('Delete failed:', err)
+    } finally {
+      setDeleting(false)
+    }
+  }, [onDelete, deleting, post.id])
+
+  const isOwnPost = userId === post.authorId
+
   return (
     <>
-      <article className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer px-4 py-2.5 rounded-none">
+      <article
+        className="relative border-b border-white/[0.06] hover:bg-white/[0.03] transition-colors cursor-pointer rounded-none"
+        style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '4px', paddingBottom: '12px' }}
+      >
         {/* Double-tap heart overlay */}
         {showHeart && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -233,13 +259,13 @@ export function UserPostCard({
           </div>
         )}
 
-        <div className="flex gap-3">
+        <div className="flex" style={{ gap: '12px' }}>
           {/* Avatar */}
           <div className="shrink-0" onClick={() => onProfileTap?.(post.authorId)}>
             <PAvatar
               src={post.authorProfileImage}
               name={post.authorDisplayName}
-              size={42}
+              size={48}
               verified={post.authorIsVerified}
               badge={post.authorBadge}
             />
@@ -248,10 +274,11 @@ export function UserPostCard({
           {/* Content */}
           <div className="flex-1 min-w-0" onClick={handleDoubleTap}>
             {/* Header row */}
-            <div className="flex items-center gap-1 flex-wrap leading-none">
+            <div className="flex items-center gap-1 leading-none" style={{ minHeight: 0 }}>
               <button
                 onClick={(e) => { e.stopPropagation(); onProfileTap?.(post.authorId) }}
                 className="font-bold text-[15px] text-[#f0eef6] hover:underline truncate leading-tight"
+                style={{ minHeight: 0, minWidth: 0 }}
               >
                 {post.authorDisplayName || post.authorUsername || 'User'}
               </button>
@@ -261,6 +288,25 @@ export function UserPostCard({
               <span className="text-[#94a3b8] text-[15px]">@{post.authorUsername || 'user'}</span>
               <span className="text-[#94a3b8]">·</span>
               <span className="text-[#94a3b8] text-[15px] shrink-0">{timeAgo(post.createdAt)}</span>
+              {trendingLabel && (
+                <span className={cn(
+                  'inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full shrink-0',
+                  trendingLabel === 'viral' && 'bg-[#f4212e]/10 text-[#f4212e]',
+                  trendingLabel === 'trending' && 'bg-[#8b5cf6]/10 text-[#8b5cf6]',
+                  trendingLabel === 'rising' && 'bg-[#00ba7c]/10 text-[#00ba7c]',
+                )}>
+                  {trendingLabel === 'viral' && (
+                    <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="currentColor"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
+                  )}
+                  {trendingLabel === 'trending' && (
+                    <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  )}
+                  {trendingLabel === 'rising' && (
+                    <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" strokeLinecap="round" strokeLinejoin="round"/><polyline points="17 6 23 6 23 12" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  )}
+                  {trendingLabel.charAt(0).toUpperCase() + trendingLabel.slice(1)}
+                </span>
+              )}
             </div>
 
             {/* Caption — ExpandableText with line-clamp and Zustand state */}
@@ -269,7 +315,8 @@ export function UserPostCard({
                 id={post.id}
                 text={post.caption}
                 maxLines={4}
-                className="text-[15px] leading-[20px] text-[#f0eef6] mt-0.5"
+                className="text-[15px] text-[#f0eef6]"
+                style={{ marginTop: '2px', lineHeight: '20px' }}
                 renderContent={highlightContent}
               />
             )}
@@ -278,9 +325,10 @@ export function UserPostCard({
             {mediaUrls.length > 0 && (
               <div
                 className={cn(
-                  'mt-3 rounded-2xl overflow-hidden border border-white/[0.06] max-h-[510px]',
+                  'rounded-2xl overflow-hidden border border-white/[0.06] max-h-[510px]',
                   mediaUrls.length === 1 ? '' : 'grid grid-cols-2 gap-0.5'
                 )}
+                style={{ marginTop: '12px' }}
               >
                 {mediaUrls.slice(0, 4).map((url, i) => (
                   <img
@@ -298,7 +346,7 @@ export function UserPostCard({
             )}
 
             {/* Action bar */}
-            <div className="flex items-center justify-between mt-3 max-w-[440px] -ml-2">
+            <div className="flex items-center justify-between max-w-[440px] -ml-2" style={{ marginTop: '12px' }}>
               {/* Reply / Comment */}
               <button
                 className="flex items-center gap-1 group"
@@ -422,11 +470,53 @@ export function UserPostCard({
                     </svg>
                   </div>
                 </button>
+
+                {/* More */}
+                <button
+                  ref={moreBtnRef}
+                  className="group"
+                  onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
+                >
+                  <div className="p-2.5 rounded-full group-hover:bg-white/[0.06] transition-colors">
+                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#f0eef6]" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+                    </svg>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </article>
+
+      {/* More menu (delete, etc.) */}
+      {showMoreMenu && (
+        <div className="fixed inset-0 z-50" onClick={(e) => { e.stopPropagation(); setShowMoreMenu(false) }}>
+          <div
+            className="absolute animate-share-menu-in rounded-2xl bg-[#16181c] border border-white/[0.08] shadow-2xl py-2 min-w-[180px] overflow-hidden"
+            style={{ top: moreBtnRef.current?.getBoundingClientRect().bottom ? moreBtnRef.current.getBoundingClientRect().bottom + 4 : 100, right: moreBtnRef.current ? window.innerWidth - moreBtnRef.current.getBoundingClientRect().right : 16 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {isOwnPost && onDelete && (
+              <button
+                onClick={(e) => { e.stopPropagation(); handleDelete() }}
+                className="w-full flex items-center gap-3 px-4 py-3 text-[14px] text-[#f4212e] hover:bg-white/[0.04] transition-colors"
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <div className="w-[18px] h-[18px] border-2 border-[#f4212e]/30 border-t-[#f4212e] rounded-full animate-spin" />
+                ) : (
+                  <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                  </svg>
+                )}
+                {deleting ? 'Deleting...' : 'Delete post'}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Comment Sheet */}
       <CommentSheet

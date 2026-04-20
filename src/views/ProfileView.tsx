@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { getUser, toggleFollow, getFollowerCount, getFollowingCount, checkIsFollowing } from '@/lib/db'
 import { fetchUserPostsNoIndex, checkPostInteractions, togglePostLike, togglePostRepost, togglePostBookmark } from '@/lib/social'
+import { deletePost } from '@/lib/db'
 import { fetchBusinessProducts } from '@/lib/shop'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { UserPostCard } from '@/components/UserPostCard'
@@ -158,6 +159,18 @@ export function ProfileView() {
     }
   }, [user])
 
+  const handleDelete = useCallback(async (postId: string) => {
+    if (!user) return
+    try {
+      await deletePost(postId)
+      setPosts((prev) => prev.filter((p: any) => p.id !== postId))
+      toast.success('Post deleted')
+    } catch (err) {
+      console.error('Delete failed:', err)
+      toast.error('Delete failed')
+    }
+  }, [user])
+
   // Use profile data directly (never bleed logged-in user's data into other user's profile)
   const displayName = profile?.displayName || (isOwnProfile ? user?.displayName : null) || 'User'
   const username = profile?.username || (isOwnProfile ? user?.username : null) || 'user'
@@ -257,13 +270,7 @@ export function ProfileView() {
 
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-bold text-[#f0eef6]">{displayName}</h2>
-          {isVerified && <VerifiedBadge size={20} badge={badge} />}
-          {isBusinessAccount && (
-            <span className="flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#8b5cf6]/15 text-[#8b5cf6]">
-              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
-              Business
-            </span>
-          )}
+          {(isVerified || isBusinessAccount) && <VerifiedBadge size={20} badge={isBusinessAccount ? 'gold' : badge} />}
         </div>
         <p className="text-[15px] text-[#94a3b8]">@{username}</p>
         {isBusinessAccount && trial && trial.isActive && (
@@ -374,6 +381,7 @@ export function ProfileView() {
             onLike={handleLike}
             onRepost={handleRepost}
             onBookmark={handleBookmark}
+            onDelete={handleDelete}
             onProfileTap={(uid: string) => navigate('user-profile', { userId: uid })}
             userId={user?.id}
             userDisplayName={user?.displayName || undefined}

@@ -319,7 +319,7 @@ export default function Black94App() {
   if (screen === 'login') return <LoginScreen onSignIn={handleSignIn} busy={busy} />
 
   // Hide chrome for full-screen views
-  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'write-article', 'checkout', 'store-dashboard', 'audio-call'].includes(currentView)
+  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'anonymous-chat', 'write-article', 'checkout', 'store-dashboard', 'audio-call'].includes(currentView)
   const isHomeFeed = currentView === 'feed'
 
   // Title for header

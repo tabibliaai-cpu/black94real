@@ -23,6 +23,7 @@ export interface ExpandableTextProps {
   text: string
   maxLines?: number
   className?: string
+  style?: React.CSSProperties
   linkColor?: string
   renderContent?: (text: string) => ReactNode
 }
@@ -32,6 +33,7 @@ export function ExpandableText({
   text,
   maxLines = 4,
   className,
+  style,
   linkColor = '#8b5cf6',
   renderContent,
 }: ExpandableTextProps) {
@@ -58,14 +60,14 @@ export function ExpandableText({
   /* ── Short text → just render it (only after measurement confirms it fits) ── */
   if (needsTruncation === false && !expanded) {
     return (
-      <div className={className}>
+      <div className={className} style={style}>
         {renderContent ? renderContent(text) : text}
       </div>
     )
   }
 
   return (
-    <div className={cn('relative', className)}>
+    <div className={cn('relative', className)} style={style}>
       <div
         ref={textRef}
         className="whitespace-pre-wrap break-words"

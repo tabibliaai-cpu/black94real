@@ -498,6 +498,12 @@ export async function fetchUserPosts(uid: string, limitCount: number): Promise<P
   return snap.docs.map(docToPost);
 }
 
+export async function deletePost(postId: string): Promise<void> {
+  const postRef = doc(db, 'posts', postId);
+  // Delete the post document
+  await deleteDoc(postRef);
+}
+
 // ── Follow Functions ────────────────────────────────────────────────────────
 
 export async function toggleFollow(followerId: string, followingId: string): Promise<boolean> {

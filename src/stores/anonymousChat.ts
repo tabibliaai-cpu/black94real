@@ -7,7 +7,7 @@ export interface AnonMessage {
   content: string
   isMine: boolean
   timestamp: number
-  type: 'text' | 'reaction' | 'system'
+  type: 'text' | 'reaction' | 'system' | 'image'
 }
 
 export interface AnonRoom {

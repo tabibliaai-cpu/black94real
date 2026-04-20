@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
-    "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
-    "build:firebase": "rm -rf out && mv src/app/api src/app/_api_disabled && next build && mv src/app/_api_disabled src/app/api",
+    "build": "next build",
+    "build:firebase": "rm -rf out && (mv src/app/api src/app/_api_disabled 2>/dev/null || true) && next build && (mv src/app/_api_disabled src/app/api 2>/dev/null || true)",
     "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
     "deploy": "npm run build:firebase && firebase deploy --only hosting",
     "lint": "eslint .",
