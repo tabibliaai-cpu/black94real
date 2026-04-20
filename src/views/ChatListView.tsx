@@ -501,6 +501,7 @@ export function ChatRoomView() {
   const chatId = viewParams?.chatId
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   // Firestore Timestamp → ISO string helper
   const tsToISO = (value: unknown): string => {
