@@ -34,6 +34,17 @@ interface CommentSheetProps {
   userUsername?: string
   userProfileImage?: string
   onCommentSent?: () => void
+  // Reaction bar props
+  likeCount?: number
+  commentCount?: number
+  repostCount?: number
+  viewCount?: number
+  isLiked?: boolean
+  isReposted?: boolean
+  isBookmarked?: boolean
+  onLike?: () => void
+  onRepost?: () => void
+  onBookmark?: () => void
 }
 
 function timeAgo(dateStr?: string): string {
@@ -90,6 +101,17 @@ export function CommentSheet({
   userUsername,
   userProfileImage,
   onCommentSent,
+  // Reaction bar
+  likeCount: initialLikeCount,
+  commentCount: initialCommentCount,
+  repostCount: initialRepostCount,
+  viewCount = 0,
+  isLiked: initialIsLiked,
+  isReposted: initialIsReposted,
+  isBookmarked: initialIsBookmarked,
+  onLike,
+  onRepost,
+  onBookmark,
 }: CommentSheetProps) {
   const [comments, setComments] = useState<CommentData[]>(initialComments)
   const [newComment, setNewComment] = useState('')
@@ -99,6 +121,18 @@ export function CommentSheet({
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const currentUser = useAppStore((s) => s.user)
+
+  // Reaction bar local state
+  const [isLiked, setIsLiked] = useState(initialIsLiked ?? false)
+  const [likeCount, setLikeCount] = useState(initialLikeCount ?? 0)
+  const [isReposted, setIsReposted] = useState(initialIsReposted ?? false)
+  const [repostCount, setRepostCount] = useState(initialRepostCount ?? 0)
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked ?? false)
+  const [commentCount] = useState(initialCommentCount ?? 0)
+  const [likeAnim, setLikeAnim] = useState(false)
+  const [repostAnim, setRepostAnim] = useState(false)
+  const [bookmarkAnim, setBookmarkAnim] = useState(false)
+  const [toast, setToast] = useState<{ show: boolean; message: string }>({ show: false, message: '' })
 
   // Derive enriched comments — always patch current user's live profile data
   const enrichedComments = useMemo(
@@ -211,6 +245,43 @@ export function CommentSheet({
     }))
   }, [likeMap])
 
+  // Post reaction handlers
+  const handleLike = useCallback(() => {
+    const newVal = !isLiked
+    setIsLiked(newVal)
+    setLikeCount((c) => c + (newVal ? 1 : -1))
+    setLikeAnim(true)
+    setTimeout(() => setLikeAnim(false), 400)
+    onLike?.()
+  }, [isLiked, onLike])
+
+  const handleRepost = useCallback(() => {
+    const newVal = !isReposted
+    setIsReposted(newVal)
+    setRepostCount((c) => c + (newVal ? 1 : -1))
+    setRepostAnim(true)
+    setTimeout(() => setRepostAnim(false), 400)
+    setToast({ show: true, message: newVal ? 'Reposted' : 'Removed Repost' })
+    setTimeout(() => setToast({ show: false, message: '' }), 2000)
+    onRepost?.()
+  }, [isReposted, onRepost])
+
+  const handleBookmark = useCallback(() => {
+    const newVal = !isBookmarked
+    setIsBookmarked(newVal)
+    setBookmarkAnim(true)
+    setTimeout(() => setBookmarkAnim(false), 300)
+    setToast({ show: true, message: newVal ? 'Added to Bookmarks' : 'Removed from Bookmarks' })
+    setTimeout(() => setToast({ show: false, message: '' }), 2000)
+    onBookmark?.()
+  }, [isBookmarked, onBookmark])
+
+  function fmtCount(n: number): string {
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
+    return String(n)
+  }
+
   // Helper: should we show a verified badge for this comment?
   const showBadge = useCallback((c: CommentData) => {
     return c.authorIsVerified || !!c.authorBadge
@@ -257,6 +328,75 @@ export function CommentSheet({
           {postCaption && (
             <p className="text-[14px] text-[#94a3b8] line-clamp-2 leading-relaxed">{postCaption}</p>
           )}
+        </div>
+
+        {/* Action bar — same reaction buttons as post card */}
+        <div className="flex items-center justify-between px-2 py-1.5 border-b border-white/[0.06] shrink-0">
+          {/* Reply */}
+          <button className="flex items-center gap-1 group">
+            <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+              <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            {commentCount > 0 && <span className="text-[12px] text-[#94a3b8]">{fmtCount(commentCount)}</span>}
+          </button>
+
+          {/* Repost */}
+          <button className="flex items-center gap-1 group" onClick={handleRepost}>
+            <div className="p-2 rounded-full group-hover:bg-[#00ba7c]/10 transition-colors">
+              <svg className={cn('w-[16px] h-[16px] transition-colors', isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8] group-hover:text-[#00ba7c]', repostAnim && 'animate-like-bounce')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <polyline points="17 1 21 5 17 9" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
+                <polyline points="7 23 3 19 7 15" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            {repostCount > 0 && <span className={cn('text-[12px]', isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8]')}>{fmtCount(repostCount)}</span>}
+          </button>
+
+          {/* Like */}
+          <button className="flex items-center gap-1 group" onClick={handleLike}>
+            <div className="p-2 rounded-full group-hover:bg-[#f91880]/10 transition-colors">
+              {isLiked ? (
+                <svg className={cn('w-[16px] h-[16px] text-[#f91880]', likeAnim && 'animate-like-bounce')} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+              ) : (
+                <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#f91880]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+              )}
+            </div>
+            {likeCount > 0 && <span className={cn('text-[12px]', isLiked ? 'text-[#f91880]' : 'text-[#94a3b8]')}>{fmtCount(likeCount)}</span>}
+          </button>
+
+          {/* Views */}
+          <button className="flex items-center gap-1 group">
+            <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+              <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+              </svg>
+            </div>
+            {viewCount > 0 && <span className="text-[12px] text-[#94a3b8]">{fmtCount(viewCount)}</span>}
+          </button>
+
+          {/* Bookmark + Share */}
+          <div className="flex items-center">
+            <button className="group" onClick={handleBookmark}>
+              <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+                {isBookmarked ? (
+                  <svg className={cn('w-[16px] h-[16px] text-[#8b5cf6]', bookmarkAnim && 'animate-bookmark-pop')} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.5}>
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+                  </svg>
+                )}
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Comments list */}

@@ -250,9 +250,9 @@ export function UserPostCard({
         {isReposted && (
           <div className="flex items-center gap-1.5 ml-10 mb-0.5">
             <svg className="w-[14px] h-[14px] text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path d="M17 1l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/>
+              <polyline points="17 1 21 5 17 9" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M7 23l-4-4 4-4" strokeLinecap="round" strokeLinejoin="round"/>
+              <polyline points="7 23 3 19 7 15" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <span className="text-[12px] font-bold text-[#00ba7c]">You reposted</span>
@@ -379,9 +379,9 @@ export function UserPostCard({
                     stroke="currentColor"
                     strokeWidth={1.8}
                   >
-                    <path d="M17 1l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="17 1 21 5 17 9" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M7 23l-4-4 4-4" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="7 23 3 19 7 15" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
@@ -422,9 +422,10 @@ export function UserPostCard({
               {/* Views */}
               <button className="flex items-center gap-1 group">
                 <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="12" r="3"/>
+                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 20V10"/>
+                    <path d="M12 20V4"/>
+                    <path d="M6 20v-6"/>
                   </svg>
                 </div>
                 <span className="text-[13px] text-[#94a3b8]">{formatCount(viewCount)}</span>
@@ -534,6 +535,16 @@ export function UserPostCard({
         userUsername={userUsername}
         userProfileImage={userProfileImage}
         onCommentSent={handleCommentSent}
+        likeCount={likeCount}
+        commentCount={commentCount}
+        repostCount={repostCount}
+        viewCount={viewCount}
+        isLiked={isLiked}
+        isReposted={isReposted}
+        isBookmarked={isBookmarked}
+        onLike={() => handleLike()}
+        onRepost={() => handleRepost()}
+        onBookmark={() => handleBookmark()}
       />
 
       {/* Share Menu */}
