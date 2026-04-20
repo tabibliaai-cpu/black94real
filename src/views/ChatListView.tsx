@@ -12,6 +12,7 @@ import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, 
 import { db } from '@/lib/firebase'
 import Picker from '@emoji-mart/react'
 import emojiData from '@emoji-mart/data'
+import { XChatInputBar } from '@/components/XChatInputBar'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -836,81 +837,29 @@ export function ChatRoomView() {
         </div>
       )}
 
-      {/* Input bar */}
-      <div className="shrink-0 border-t border-white/[0.06] bg-[#000000] px-4 py-3 safe-area-bottom">
-        <div className="flex items-end gap-2">
-          {/* Emoji button */}
-          <button
-            onClick={() => setShowEmoji(!showEmoji)}
-            className={cn(
-              'w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-colors mb-0.5',
-              showEmoji ? 'bg-[#8b5cf6]/20' : 'hover:bg-white/[0.08]'
-            )}
-          >
-            <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-
-          {/* Image upload button */}
-          <button
-            onClick={() => imageInputRef.current?.click()}
-            className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 hover:bg-white/[0.08] transition-colors mb-0.5"
-          >
-            <svg className="w-5 h-5 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-              <rect x="3" y="3" width="18" height="18" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <path d="M21 15l-5-5L5 21" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <input
-            ref={imageInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageSelect}
-          />
-
-          {/* Text input */}
-          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-colors px-4 py-2">
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
-              }}
-              onPaste={(e) => {
-                // Ensure full paste content is captured
-                setTimeout(() => {
-                  const el = e.target as HTMLTextAreaElement
-                  if (el) setText(el.value)
-                }, 0)
-              }}
-              placeholder="Start a message"
-              rows={1}
-              className="w-full bg-transparent text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none resize-none max-h-[120px] leading-snug"
-              style={{ minHeight: '36px' }}
-            />
-          </div>
-
-          {/* Send button */}
-          <button
-            onClick={handleSend}
-            disabled={(!text.trim() && !imagePreview) || sending || !otherId || chatLoading}
-            className={cn(
-              'w-10 h-10 rounded-full flex items-center justify-center transition-colors shrink-0 mb-0.5',
-              (text.trim() || imagePreview) && !sending && otherId
-                ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed]'
-                : 'bg-white/[0.06] text-[#64748b]'
-            )}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+      {/* Input bar (X-style) */}
+      <XChatInputBar
+        value={text}
+        onChange={setText}
+        onSend={handleSend}
+        inputRef={inputRef as React.RefObject<HTMLTextAreaElement>}
+        placeholder="Start a message"
+        multiline
+        canSend={!!imagePreview}
+        disabled={sending || !otherId || chatLoading}
+        onEmojiClick={() => setShowEmoji(!showEmoji)}
+        emojiActive={showEmoji}
+        showGif={false}
+        onAttachClick={() => imageInputRef.current?.click()}
+      />
+      {/* Hidden file input for image upload */}
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageSelect}
+      />
     </div>
   )
 }

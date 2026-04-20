@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { useAnonChat, type AnonMessage } from '@/stores/anonymousChat'
 import { useAppStore } from '@/stores/app'
+import { XChatInputBar } from '@/components/XChatInputBar'
 
 /* ── ICEBREAKERS ───────────────────────────────────────────────────── */
 const ICEBREAKERS = [
@@ -673,74 +674,18 @@ function AnonChatRoom() {
         {/* ═══════════════════════════════════════════════════════════════
            STICKY INPUT BAR — always at absolute bottom
            ═══════════════════════════════════════════════════════════════ */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <div className="flex items-center gap-2 px-3 pt-2.5" style={{ paddingBottom: 'max(10px, env(safe-area-inset-bottom, 0px))' }}>
-          {/* Attachment toggle */}
-          <button
-            onClick={() => { setShowUploadMenu(!showUploadMenu); setShowReactions(false) }}
-            className={cn(
-              'w-9 h-9 rounded-full flex items-center justify-center transition-colors shrink-0',
-              showUploadMenu ? 'text-[#8b5cf6]' : 'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.06]'
-            )}
-            style={{ minHeight: 0, minWidth: 0 }}
-          >
-            <svg className="w-[20px] h-[20px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="16"/>
-              <line x1="8" y1="12" x2="16" y2="12"/>
-            </svg>
-          </button>
-
-          {/* Emoji toggle */}
-          <button
-            onClick={() => { setShowReactions(!showReactions); setShowUploadMenu(false) }}
-            className={cn(
-              'w-9 h-9 rounded-full flex items-center justify-center transition-colors shrink-0',
-              showReactions ? 'text-[#8b5cf6]' : 'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.06]'
-            )}
-            style={{ minHeight: 0, minWidth: 0 }}
-          >
-            <svg className="w-[20px] h-[20px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
-            </svg>
-          </button>
-
-          {/* Pill input with send button inside */}
-          <div className={cn(
-            'flex-1 flex items-center rounded-[24px] transition-all duration-200',
-            'bg-white/[0.06]',
-            isConnected && 'focus-within:bg-white/[0.08]'
-          )}>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={isConnected ? "Send a message..." : ""}
-              disabled={!isConnected}
-              className="flex-1 bg-transparent px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder:text-[#64748b] outline-none disabled:opacity-30 disabled:cursor-not-allowed"
-            />
-            <button
-              onClick={handleSend}
-              disabled={!input.trim() || !isConnected}
-              className={cn(
-                'w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 shrink-0 mr-1.5',
-                input.trim() && isConnected
-                  ? 'bg-[#8b5cf6] text-black active:scale-90'
-                  : 'text-[#3a3a3a] pointer-events-none'
-              )}
-            >
-              <svg className="w-[16px] h-[16px]" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-        </div>
+        <XChatInputBar
+          value={input}
+          onChange={setInput}
+          onSend={handleSend}
+          inputRef={inputRef as React.RefObject<HTMLInputElement>}
+          placeholder={isConnected ? "Send a message..." : ""}
+          disabled={!isConnected}
+          showGif={false}
+          onEmojiClick={() => { setShowReactions(!showReactions); setShowUploadMenu(false) }}
+          emojiActive={showReactions}
+          onAttachClick={() => { setShowUploadMenu(!showUploadMenu); setShowReactions(false) }}
+        />
       </div>
 
       {/* ─── Report Dialog ─── */}

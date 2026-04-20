@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { useDualPaneChat, type ChatMsg, type MessageReaction } from '@/stores/dualPaneChat'
 import { useAppStore } from '@/stores/app'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
+import { XChatInputBar } from '@/components/XChatInputBar'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -460,51 +461,14 @@ function PrivateChatPanel() {
       {/* ─── Reply Context Bar ─── */}
       <ReplyBar />
 
-      {/* ─── Input Bar ─── */}
-      <div className="shrink-0 px-3 py-2.5 border-t border-white/[0.06] bg-[#000000]/80 backdrop-blur-xl safe-area-bottom">
-        <div className="flex items-end gap-2.5">
-          {/* Emoji / React */}
-          <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
-            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
-            </svg>
-          </button>
-          {/* Text input */}
-          <div className="flex-1 bg-white/[0.06] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-all px-4 py-2.5">
-            <input
-              ref={inputRef}
-              type="text"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'End-to-end encrypted message...'}
-              className="w-full bg-transparent text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none"
-            />
-          </div>
-          {/* Attachment */}
-          <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
-            <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
-            </svg>
-          </button>
-          {/* Send */}
-          <button
-            onClick={handleSend}
-            disabled={!text.trim()}
-            className={cn(
-              'w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-200',
-              text.trim()
-                ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black shadow-md hover:scale-[1.05] active:scale-90'
-                : 'bg-white/[0.06] text-[#64748b]'
-            )}
-          >
-            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+      {/* ─── Input Bar (X-style) ─── */}
+      <XChatInputBar
+        value={text}
+        onChange={setText}
+        onSend={handleSend}
+        inputRef={inputRef as React.RefObject<HTMLInputElement>}
+        placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'Start a message'}
+      />
     </div>
   )
 }
