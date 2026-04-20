@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ── Types ────────────────────────────────────────────────────────────── */
@@ -180,8 +180,9 @@ export function ChatSettingsSheet({
                 badge={user.badge}
               />
               <div className="min-w-0">
-                <p className="text-[15px] font-bold text-[#e7e9ea] truncate">
+                <p className="text-[15px] font-bold text-[#e7e9ea] truncate flex items-center gap-1">
                   {user.displayName}
+                  {(user.isVerified || !!user.badge) && <VerifiedBadge size={14} badge={user.badge} />}
                 </p>
                 <p className="text-[13px] text-[#94a3b8] truncate">
                   @{user.username}

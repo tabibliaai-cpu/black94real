@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { toast } from 'sonner'
 import { getArticle, calculateReadTime } from '@/lib/articles'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 
 export function ArticleView() {
   const navigate = useAppStore((s) => s.navigate)
@@ -211,10 +211,11 @@ export function ArticleView() {
               badge={(article.author as any)?.badge}
             />
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <span className="text-[14px] font-semibold text-[#e7e9ea] truncate">
                   {article.author?.displayName ?? 'Anonymous'}
                 </span>
+                {(article.author?.isVerified || !!(article.author as any)?.badge) && <VerifiedBadge size={14} badge={(article.author as any)?.badge} />}
               </div>
               <div className="flex items-center gap-1.5 text-[13px] text-[#94a3b8]">
                 <span>@{article.author?.username ?? 'anonymous'}</span>

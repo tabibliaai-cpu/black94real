@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
 import { updateUser } from '@/lib/db'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -48,7 +48,10 @@ export function SettingsView() {
       <div className="flex items-center gap-4">
         <PAvatar src={user?.profileImage} name={user?.displayName} size={80} verified={user?.isVerified} badge={user?.badge} />
         <div>
-          <p className="font-bold text-[15px] text-[#e7e9ea]">{user?.displayName}</p>
+          <p className="font-bold text-[15px] text-[#e7e9ea] flex items-center gap-1">
+            {user?.displayName}
+            {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={14} badge={user?.badge} />}
+          </p>
           <p className="text-[14px] text-[#94a3b8]">@{user?.username}</p>
           <button className="mt-2 text-[14px] text-[#8b5cf6] font-semibold hover:text-[#7c3aed] transition-colors">
             Change photo

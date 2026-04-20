@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAppStore } from '@/stores/app'
 import { fetchNotifications, markNotificationRead } from '@/lib/db'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import type { Black94Notification } from '@/lib/db'
 
 function notifIcon(type: string) {
@@ -102,7 +102,7 @@ export function NotificationsView() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[15px] text-[#e7e9ea] leading-relaxed">
-                  <span className="font-bold">{notif.actorName}</span>{' '}
+                  <span className="font-bold inline-flex items-center gap-1">{notif.actorName}{((notif as any).actorIsVerified || !!(notif as any).actorBadge) && <VerifiedBadge size={13} badge={(notif as any).actorBadge} />}</span>{' '}
                   {notif.message || notif.type}
                   {!notif.read && <span className="inline-block w-2 h-2 rounded-full bg-[#8b5cf6] ml-1" />}
                 </p>

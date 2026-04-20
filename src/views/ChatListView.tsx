@@ -460,9 +460,12 @@ export function ChatListView() {
                     </div>
                     <div className="flex-1 min-w-0 border-b border-white/[0.06] pb-3">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-[15px] text-[#e7e9ea] truncate">
-                          {chat.otherUser?.displayName || 'User'}
-                        </span>
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          {(chat.otherUser as any)?.isVerified && <VerifiedBadge size={13} badge={(chat.otherUser as any)?.badge} />}
+                          <span className="font-bold text-[15px] text-[#e7e9ea] truncate">
+                            {chat.otherUser?.displayName || 'User'}
+                          </span>
+                        </div>
                         <span className="text-[13px] text-[#94a3b8] shrink-0 ml-2">
                           {timeAgo(chat.lastMessage?.createdAt)}
                         </span>
@@ -745,7 +748,10 @@ export function ChatRoomView() {
           <>
             <PAvatar src={otherUser.profileImage} name={otherUser.displayName} size={36} verified={otherUser.isVerified} badge={otherUser.badge} />
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-[15px] text-[#e7e9ea] truncate">{otherUser.displayName}</p>
+              <p className="font-bold text-[15px] text-[#e7e9ea] truncate flex items-center gap-1">
+                {otherUser.displayName}
+                {(otherUser.isVerified || !!otherUser.badge) && <VerifiedBadge size={14} badge={otherUser.badge} />}
+              </p>
               <p className="text-[12px] text-[#94a3b8] truncate">@{otherUser.username}</p>
             </div>
           </>

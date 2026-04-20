@@ -10,7 +10,7 @@ import {
   formatCountdown,
   generateQRPlaceholder,
 } from '@/lib/privacy'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ── QR Code placeholder (CSS grid of squares) ────────────────────────── */
@@ -216,8 +216,9 @@ export function ShareProfileView() {
               verified={user.isVerified}
               badge={user.badge}
             />
-            <h2 className="text-lg font-bold text-[#e7e9ea] mt-3">
+            <h2 className="text-lg font-bold text-[#e7e9ea] mt-3 flex items-center gap-1.5 justify-center">
               {user.displayName || user.username}
+              {(user.isVerified || !!user.badge) && <VerifiedBadge size={16} badge={user.badge} />}
             </h2>
             <p className="text-[14px] text-[#94a3b8] mt-0.5">@{user.username}</p>
             {user.bio && (

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, type ReactNode } from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { useAppStore, type AppView } from '@/stores/app'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { SidebarItem } from '@/components/SidebarItem'
 
 // ─── Inline SVG Icons ────────────────────────────────────────────────────────
@@ -341,8 +341,9 @@ export function Sidebar() {
 
           {isExpanded && (
             <div className="flex min-w-0 flex-1 flex-col items-start">
-              <span className="truncate text-sm font-bold text-white leading-tight">
+              <span className="truncate text-sm font-bold text-white leading-tight flex items-center gap-1">
                 {user?.displayName || 'User'}
+                {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={13} badge={user?.badge} />}
               </span>
               <span className="truncate text-sm text-gray-500 leading-tight">
                 @{user?.username || 'user'}

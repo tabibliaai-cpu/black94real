@@ -248,7 +248,7 @@ function StoryViewer({
         <div className="flex items-center gap-2.5">
           <PAvatar src={group.profileImage} name={group.displayName} size={36} verified={group.verified} badge={(group as any).badge} />
           <div className="flex-1 min-w-0">
-            <span className="text-[14px] font-bold text-white truncate">{group.displayName}</span>
+            <span className="text-[14px] font-bold text-white truncate inline-flex items-center gap-1">{group.displayName}{(group.verified || !!(group as any).badge) && <VerifiedBadge size={12} badge={(group as any).badge} />}</span>
             <br />
             <span className="text-[12px] text-[#94a3b8]">@{group.username}</span>
           </div>
@@ -511,7 +511,7 @@ export function StoriesView() {
                   <div className="flex items-center gap-2">
                     <PAvatar src={g.profileImage} name={g.displayName} size={28} verified={g.verified} badge={(g as any).badge} />
                     <div className="text-left min-w-0">
-                      <p className="text-[13px] font-semibold text-white truncate">{g.displayName}</p>
+                      <p className="text-[13px] font-semibold text-white truncate inline-flex items-center gap-1">{g.displayName}{(g.verified || !!(g as any).badge) && <VerifiedBadge size={11} badge={(g as any).badge} />}</p>
                       <p className="text-[11px] text-[#94a3b8] truncate">
                         @{g.username} · {g.stories.length} {g.stories.length === 1 ? 'story' : 'stories'}
                       </p>

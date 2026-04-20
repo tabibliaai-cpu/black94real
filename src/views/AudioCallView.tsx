@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { PAvatar } from '@/components/PAvatar'
+import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 
 /* ── Audio Call View ──────────────────────────────────────────────── */
 
@@ -115,7 +115,10 @@ export function AudioCallView() {
         </div>
 
         {/* Name */}
-        <h1 className="text-2xl font-bold text-white mb-1">{chatName}</h1>
+        <h1 className="text-2xl font-bold text-white mb-1 flex items-center gap-1.5 justify-center">
+          {chatName}
+          {(viewParams as any)?.chatPartnerVerified && <VerifiedBadge size={18} badge={(viewParams as any)?.chatPartnerBadge} />}
+        </h1>
 
         {/* Status */}
         <div className="flex items-center gap-2 mb-2">

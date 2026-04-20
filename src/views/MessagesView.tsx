@@ -1087,9 +1087,12 @@ function ChatListView() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[15px] text-[#e7e9ea] truncate">
-                    {chat.otherUser?.displayName || 'User'}
-                  </span>
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    {(chat.otherUser as any)?.isVerified && <VerifiedBadge size={13} badge={(chat.otherUser as any)?.badge} />}
+                    <span className="font-bold text-[15px] text-[#e7e9ea] truncate">
+                      {chat.otherUser?.displayName || 'User'}
+                    </span>
+                  </div>
                   <span className="text-[12px] text-[#64748b] shrink-0 ml-2">
                     {timeAgo(chat.updatedAt)}
                   </span>
