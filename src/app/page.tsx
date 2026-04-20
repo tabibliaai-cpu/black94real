@@ -19,6 +19,7 @@ const ChatRoomView = lazy(() => import('@/views/ChatListView').then(m => ({ defa
 const NotificationsView = lazy(() => import('@/views/NotificationsView').then(m => ({ default: m.NotificationsView })))
 const SearchView = lazy(() => import('@/views/SearchView').then(m => ({ default: m.SearchView })))
 const ExploreView = lazy(() => import('@/views/ExploreView').then(m => ({ default: m.ExploreView })))
+const ProfileView = lazy(() => import('@/views/ProfileView').then(m => ({ default: m.ProfileView })))
 const SettingsView = lazy(() => import('@/views/SettingsView').then(m => ({ default: m.SettingsView })))
 const StoriesView = lazy(() => import('@/views/StoriesView').then(m => ({ default: m.StoriesView })))
 const AnonymousChatView = lazy(() => import('@/views/AnonymousChatView').then(m => ({ default: m.AnonymousChatView })))
