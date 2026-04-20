@@ -654,7 +654,7 @@ function ChatRoomView() {
 
   if (isBlocked) {
     return (
-      <div className="flex flex-col h-[calc(100vh-90px)] animate-fade-in">
+      <div className="flex flex-col h-[calc(100vh-106px)] animate-fade-in">
         {/* Header */}
         <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#000000]/60 backdrop-blur-xl">
           <div className="flex items-center gap-3">
@@ -703,7 +703,7 @@ function ChatRoomView() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-90px)] animate-fade-in">
+    <div className="flex flex-col h-[calc(100vh-106px)] animate-fade-in">
       {/* ─── Chat Header ─── */}
       <div className="shrink-0 h-[56px] px-4 flex items-center justify-between border-b border-white/[0.06] bg-[#000000]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
@@ -949,7 +949,7 @@ function ChatListView() {
   )
 
   return (
-    <div className="flex flex-col h-[calc(100vh-90px)] animate-fade-in">
+    <div className="flex flex-col h-[calc(100vh-106px)] animate-fade-in">
       {/* ─── Header ─── */}
       <div className="shrink-0 px-4 pt-3 pb-2 flex items-center justify-between">
         <h2 className="text-xl font-bold text-[#e7e9ea]">Messages</h2>

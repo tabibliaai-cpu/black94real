@@ -667,14 +667,14 @@ export function DualPaneChatView() {
 
   if (!initialized) {
     return (
-      <div className="h-[calc(100vh-90px)] flex items-center justify-center">
+      <div className="h-[calc(100vh-106px)] flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="h-[calc(100vh-90px)] flex flex-col animate-fade-in">
+    <div className="h-[calc(100vh-106px)] flex flex-col animate-fade-in">
       {/* ─── Tab Switcher (always visible) ─── */}
       <div className="shrink-0 flex border-b border-white/[0.06] bg-[#000000]/80 backdrop-blur-xl">
         <button
