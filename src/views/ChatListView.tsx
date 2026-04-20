@@ -712,7 +712,20 @@ export function ChatRoomView() {
   }, [imagePreview, handleSendImage, handleSendText])
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-black">
+    <div
+      className="flex flex-col bg-black animate-fade-in"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 40,
+        height: '100dvh',
+        width: '100vw',
+        overflow: 'hidden',
+      }}
+    >
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/[0.06] bg-[#000000]/90 backdrop-blur-xl shrink-0">
         <button
