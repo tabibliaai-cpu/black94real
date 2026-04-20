@@ -421,8 +421,8 @@ export function UserPostCard({
               <button className="flex items-center gap-1 group">
                 <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
                   <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    <polyline points="17 6 23 6 23 12"/>
                   </svg>
                 </div>
                 <span className="text-[13px] text-[#94a3b8]">{formatCount(viewCount)}</span>
