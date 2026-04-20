@@ -382,6 +382,7 @@ export async function upgradeToBusinessTrial(uid: string): Promise<void> {
   await updateDoc(userRef, {
     role: 'business',
     badge: 'gold',
+    isVerified: true,
     updatedAt: serverTimestamp(),
   })
 

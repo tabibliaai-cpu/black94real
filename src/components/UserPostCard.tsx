@@ -282,7 +282,7 @@ export function UserPostCard({
               >
                 {post.authorDisplayName || post.authorUsername || 'User'}
               </button>
-              {(post.authorIsVerified || post.authorBadge === 'gold') && (
+              {(post.authorIsVerified || !!post.authorBadge) && (
                 <VerifiedBadge size={18} badge={post.authorBadge} />
               )}
               <span className="text-[#94a3b8] text-[15px]">@{post.authorUsername || 'user'}</span>

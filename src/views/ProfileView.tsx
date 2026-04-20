@@ -270,7 +270,7 @@ export function ProfileView() {
 
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-bold text-[#e7e9ea]">{displayName}</h2>
-          {(isVerified || isBusinessAccount) && <VerifiedBadge size={20} badge={isBusinessAccount ? 'gold' : badge} />}
+          {(isVerified || !!badge) && <VerifiedBadge size={20} badge={badge} />}
         </div>
         <p className="text-[15px] text-[#94a3b8]">@{username}</p>
         {isBusinessAccount && trial && trial.isActive && (

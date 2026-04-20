@@ -91,6 +91,25 @@ export function FeedView() {
     }
   }, [])
 
+  /**
+   * Enrich posts that belong to the current user with their live profile data.
+   * This ensures posts created BEFORE the user upgraded/trialed still show the
+   * correct verified badge.
+   */
+  const enrichWithLiveProfile = useCallback((postsList: any[]) => {
+    if (!user) return postsList
+    const isVerified = user.isVerified
+    const badge = user.badge
+    // If user has no badge/verified, nothing to enrich
+    if (!isVerified && !badge) return postsList
+    return postsList.map((p: any) => {
+      if (p.authorId === user.id) {
+        return { ...p, authorIsVerified: p.authorIsVerified ?? isVerified, authorBadge: p.authorBadge || badge }
+      }
+      return p
+    })
+  }, [user])
+
   // Check interactions for a batch of posts and return enriched posts
   const enrichWithInteractions = useCallback(async (postsList: any[]) => {
     if (!user) return postsList
@@ -162,13 +181,15 @@ export function FeedView() {
       }
 
       if (reset) {
-        // Enrich with interaction status BEFORE rendering — no flash
-        const enriched = await enrichWithInteractions(fetchedPosts)
+        // Enrich with live profile data THEN interaction status BEFORE rendering — no flash
+        const profileEnriched = enrichWithLiveProfile(fetchedPosts)
+        const enriched = await enrichWithInteractions(profileEnriched)
         setPosts(enriched)
         postsLoadedRef.current = true
       } else {
         // For infinite scroll, also check interactions on new batch
-        const enriched = await enrichWithInteractions(fetchedPosts)
+        const profileEnriched = enrichWithLiveProfile(fetchedPosts)
+        const enriched = await enrichWithInteractions(profileEnriched)
         setPosts((prev) => [...prev, ...enriched])
       }
     } catch (err) {
@@ -179,7 +200,7 @@ export function FeedView() {
       setLoadingMore(false)
       setRefreshing(false)
     }
-  }, [enrichWithInteractions, activeTab])
+  }, [enrichWithInteractions, enrichWithLiveProfile, activeTab])
 
   // Initial load — only once, skip if already loaded (prevents double-load on user refresh)
   useEffect(() => {

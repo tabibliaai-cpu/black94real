@@ -125,7 +125,7 @@ export function SearchView() {
                     <div className="text-left min-w-0">
                       <div className="flex items-center gap-1">
                         <span className="font-bold text-[15px] text-[#e7e9ea] truncate">{u.displayName}</span>
-                        {u.isVerified && <VerifiedBadge size={16} badge={u.badge} />}
+                        {(u.isVerified || !!u.badge) && <VerifiedBadge size={16} badge={u.badge} />}
                       </div>
                       <span className="text-[14px] text-[#94a3b8] truncate">@{u.username}</span>
                       {u.bio && <p className="text-[13px] text-[#94a3b8] truncate mt-0.5">{u.bio}</p>}
