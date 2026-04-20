@@ -6,7 +6,7 @@ Before making ANY changes to this project, read `/home/z/my-project/PROJECT_MEMO
 ## Project Location
 - **Root**: `/home/z/my-project`
 - **Firebase Project**: `black94`
-- **GitHub Remote**: `https://github.com/black94real/black94real.git`
+- **GitHub Remote**: `https://github.com/tabibliaai-cpu/black94real.git`
 
 ## Absolute Rules — NEVER VIOLATE
 
@@ -50,7 +50,7 @@ These files are permanently locked. Do not read them with intent to modify:
 cd /home/z/my-project
 git config --global user.email "black94real@gmail.com"
 git config --global user.name "black94real"
-git remote set-url origin https://github.com/black94real/black94real.git
+git remote set-url origin https://github.com/tabibliaai-cpu/black94real.git
 git add -A
 git commit -m "descriptive message"
 git push origin main --force

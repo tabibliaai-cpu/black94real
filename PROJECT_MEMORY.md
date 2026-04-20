@@ -5,7 +5,7 @@
 - **Description**: A next-generation social media platform combining social networking, business tools, AI-powered CRM, content creation, and monetization features.
 - **Firebase Project ID**: `black94`
 - **Deployed URL**: https://black94.web.app
-- **GitHub Repo**: https://github.com/black94real/black94real
+- **GitHub Repo**: https://github.com/tabibliaai-cpu/black94real
 - **Project Directory**: `/home/z/my-project`
 
 ## Tech Stack
