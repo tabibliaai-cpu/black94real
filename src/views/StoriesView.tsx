@@ -25,22 +25,52 @@ interface DisplayGroup {
   stories: StoryItem[]
 }
 
-const STORY_DURATION = 6000 // 6 seconds per story
+const STORY_DURATION = 6000
 
-/* ── Story Ring Component ────────────────────────────────────────────── */
+/* ── Time formatter (X-style relative time) ──────────────────────────── */
 
-function StoryRing({ viewed, children, size = 64 }: { viewed: boolean; children: React.ReactNode; size?: number }) {
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'now'
+  if (mins < 60) return `${mins}m`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h`
+  return `${Math.floor(hrs / 24)}d`
+}
+
+/* ── Story Ring — thin gradient ring for unseen, gray for seen ───────── */
+
+function StoryRing({
+  viewed,
+  children,
+  size = 52,
+}: {
+  viewed: boolean
+  children: React.ReactNode
+  size?: number
+}) {
   return (
     <div
-      className={cn(
-        'rounded-full p-[2.5px] shrink-0',
-        viewed
-          ? 'bg-white/20'
-          : 'bg-gradient-to-tr from-[#8b5cf6] via-[#2a7fff] to-[#f91880]'
-      )}
+      className="rounded-full shrink-0"
+      style={{
+        padding: '2.5px',
+        background: viewed
+          ? 'transparent'
+          : 'conic-gradient(from 45deg, #8b5cf6, #2a7fff, #06b6d4, #f59e0b, #ef4444, #8b5cf6)',
+      }}
     >
-      <div className="rounded-full bg-[#000000] p-[2px]">
-        <div className="rounded-full overflow-hidden" style={{ width: size - 10, height: size - 10 }}>
+      <div
+        className="rounded-full overflow-hidden"
+        style={{
+          padding: '1.5px',
+          background: viewed ? '#2f3336' : '#000',
+        }}
+      >
+        <div
+          className="rounded-full overflow-hidden"
+          style={{ width: size - 8, height: size - 8 }}
+        >
           {children}
         </div>
       </div>
@@ -49,8 +79,7 @@ function StoryRing({ viewed, children, size = 64 }: { viewed: boolean; children:
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   FULL-SCREEN STORY VIEWER — with touch swipe
-   85% top = pure image, 15% bottom = user info + reactions
+   FULL-SCREEN STORY VIEWER — X 2026 style
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function StoryViewer({
@@ -65,10 +94,16 @@ function StoryViewer({
   const [groupIdx, setGroupIdx] = useState(initialGroupIndex)
   const [storyIdx, setStoryIdx] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [paused, setPaused] = useState(false)
   const [liked, setLiked] = useState(false)
-  const [reactionAnim, setReactionAnim] = useState<'heart' | 'fire' | 'wow' | null>(null)
+  const [replyText, setReplyText] = useState('')
+  const [reactionAnim, setReactionAnim] = useState<'heart' | 'fire' | null>(null)
+  const [viewedGroups, setViewedGroups] = useState<Set<string>>(
+    () => new Set()
+  )
   const timerRef = useRef<ReturnType<typeof setInterval>>()
   const startRef = useRef(Date.now())
+  const replyInputRef = useRef<HTMLInputElement>(null)
 
   // Touch / swipe tracking
   const touchStartX = useRef(0)
@@ -78,9 +113,23 @@ function StoryViewer({
   const group = groups[groupIdx]
   const story = group?.stories[storyIdx]
 
+  // Mark group as viewed
+  useEffect(() => {
+    if (group) {
+      setViewedGroups((prev) => {
+        const next = new Set(prev)
+        next.add(group.userId)
+        return next
+      })
+    }
+  }, [groupIdx, group])
+
   // Auto-advance progress
   useEffect(() => {
-    if (!story) return
+    if (!story || paused) {
+      clearInterval(timerRef.current)
+      return
+    }
     startRef.current = Date.now()
     setProgress(0)
 
@@ -96,7 +145,7 @@ function StoryViewer({
     }, 50)
 
     return () => clearInterval(timerRef.current)
-  }, [groupIdx, storyIdx]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [groupIdx, storyIdx, paused]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const goNext = useCallback(() => {
     if (storyIdx + 1 < group.stories.length) {
@@ -119,16 +168,22 @@ function StoryViewer({
   }, [storyIdx, groupIdx, groups])
 
   // Tap zones — left 30% prev, right 70% next
-  const handleTap = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const pct = x / rect.width
-    if (pct < 0.3) goPrev()
-    else goNext()
-  }, [goNext, goPrev])
+  const handleTap = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      // Don't navigate if tapping on input area
+      if ((e.target as HTMLElement).closest('[data-story-input]')) return
+      const rect = e.currentTarget.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const pct = x / rect.width
+      if (pct < 0.3) goPrev()
+      else goNext()
+    },
+    [goNext, goPrev]
+  )
 
-  // ── Touch swipe handlers ──
+  // Touch swipe handlers
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest('[data-story-input]')) return
     const touch = e.touches[0]
     touchStartX.current = touch.clientX
     touchStartY.current = touch.clientY
@@ -143,19 +198,22 @@ function StoryViewer({
   const handleTouchEnd = useCallback(() => {
     const threshold = 50
     const deltaX = touchDeltaX.current
-    const deltaY = Math.abs(touchStartY.current) // not used for direction, just reference
-
     if (Math.abs(deltaX) > threshold) {
-      if (deltaX < 0) {
-        // Swipe left → next story
-        goNext()
-      } else {
-        // Swipe right → previous story
-        goPrev()
-      }
+      if (deltaX < 0) goNext()
+      else goPrev()
     }
     touchDeltaX.current = 0
   }, [goNext, goPrev])
+
+  // Long press to pause
+  const longPressRef = useRef<ReturnType<typeof setTimeout>>()
+  const handlePointerDown = useCallback(() => {
+    longPressRef.current = setTimeout(() => setPaused(true), 200)
+  }, [])
+  const handlePointerUp = useCallback(() => {
+    clearTimeout(longPressRef.current)
+    setPaused(false)
+  }, [])
 
   // Double-tap to like
   const lastTapRef = useRef(0)
@@ -182,36 +240,89 @@ function StoryViewer({
 
   if (!story) return null
 
+  const viewed = viewedGroups.has(group.userId)
+
   return (
-    <div className="fixed inset-0 z-50 bg-[#000000] flex flex-col animate-fade-in">
+    <div
+      className="fixed inset-0 z-50 bg-[#000] flex flex-col animate-fade-in select-none"
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+    >
       {/* ─── Progress bars ─── */}
-      <div className="absolute top-0 inset-x-0 z-20 flex gap-1 px-2 pt-2 safe-area-top">
+      <div className="absolute top-0 inset-x-0 z-30 flex gap-[3px] px-2 pt-2 safe-area-top">
         {group.stories.map((_, i) => (
-          <div key={i} className="flex-1 h-[2.5px] rounded-full bg-white/30 overflow-hidden">
+          <div
+            key={i}
+            className="flex-1 h-[2px] rounded-full bg-white/25 overflow-hidden"
+          >
             <div
               className={cn(
-                'h-full rounded-full transition-all duration-100',
-                i < storyIdx ? 'w-full bg-white' : i === storyIdx ? 'bg-white' : 'w-0 bg-white/0'
+                'h-full rounded-full',
+                i < storyIdx
+                  ? 'w-full bg-white'
+                  : i === storyIdx
+                    ? paused
+                      ? 'bg-white/70'
+                      : 'bg-white'
+                    : 'w-0'
               )}
-              style={i === storyIdx ? { width: `${progress}%` } : undefined}
+              style={
+                i === storyIdx
+                  ? { width: `${progress}%`, transition: 'width 80ms linear' }
+                  : undefined
+              }
             />
           </div>
         ))}
       </div>
 
-      {/* ─── Close button ─── */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-3 z-20 w-9 h-9 rounded-full bg-[#000000]/40 backdrop-blur-sm flex items-center justify-center hover:bg-[#000000]/60 transition-colors"
-      >
-        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-          <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
-        </svg>
-      </button>
+      {/* ─── Top overlay: avatar + name + time + close ─── */}
+      <div className="absolute top-3 inset-x-0 z-20 flex items-center justify-between px-3 pt-5">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <StoryRing viewed={viewed} size={32}>
+            {group.profileImage ? (
+              <img
+                src={group.profileImage}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-white/10 flex items-center justify-center text-[10px] text-white font-bold">
+                {(group.displayName || 'U')[0]}
+              </div>
+            )}
+          </StoryRing>
+          <div className="min-w-0">
+            <span className="text-[14px] font-bold text-white truncate inline-flex items-center gap-1">
+              {group.username}
+              {(group.verified || (group as any).badge) && (
+                <VerifiedBadge size={14} badge={(group as any).badge} />
+              )}
+            </span>
+            <p className="text-[11px] text-white/50 leading-tight">
+              {timeAgo(group.stories[storyIdx]?.id ? new Date().toISOString() : '')}
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors shrink-0 ml-2"
+        >
+          <svg
+            className="w-[18px] h-[18px] text-white"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
 
-      {/* ─── 85% — Image area (swipeable) ─── */}
+      {/* ─── Story image area (swipeable + tappable) ─── */}
       <div
-        className="relative flex-[85] min-h-0 select-none overflow-hidden"
+        className="flex-1 min-h-0 overflow-hidden relative"
         onClick={handleTap}
         onDoubleClick={handleDoubleTap}
         onTouchStart={handleTouchStart}
@@ -222,7 +333,7 @@ function StoryViewer({
         {reactionAnim && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
             <span className="text-8xl animate-heart-burst">
-              {reactionAnim === 'heart' ? '❤️' : reactionAnim === 'fire' ? '🔥' : '😮'}
+              {reactionAnim === 'heart' ? '❤️' : '🔥'}
             </span>
           </div>
         )}
@@ -234,65 +345,95 @@ function StoryViewer({
           draggable={false}
         />
 
-        {/* Caption overlay */}
+        {/* Caption overlay — bottom of image */}
         {story.caption && (
-          <div className="absolute bottom-0 inset-x-0 px-4 pb-2 pt-8 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
-            <p className="text-[14px] text-white/90">{story.caption}</p>
+          <div className="absolute bottom-0 inset-x-0 px-4 pb-4 pt-12 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none">
+            <p className="text-[14px] text-white/90 leading-snug">
+              {story.caption}
+            </p>
+          </div>
+        )}
+
+        {/* Pause indicator */}
+        {paused && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+            <div className="w-14 h-14 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <svg className="w-7 h-7 text-white ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16" rx="1" />
+                <rect x="14" y="4" width="4" height="16" rx="1" />
+              </svg>
+            </div>
           </div>
         )}
       </div>
 
-      {/* ─── 15% — User info + Reactions ─── */}
-      <div className="flex-[15] min-h-0 bg-[#000000] flex flex-col justify-between px-4 pt-2 pb-3 safe-area-bottom">
-        {/* User info */}
-        <div className="flex items-center gap-2.5">
-          <PAvatar src={group.profileImage} name={group.displayName} size={36} verified={group.verified} badge={(group as any).badge} />
-          <div className="flex-1 min-w-0">
-            <span className="text-[14px] font-bold text-white truncate inline-flex items-center gap-1">{group.displayName}{(group.verified || !!(group as any).badge) && <VerifiedBadge size={12} badge={(group as any).badge} />}</span>
-            <br />
-            <span className="text-[12px] text-[#94a3b8]">@{group.username}</span>
+      {/* ─── Bottom bar: reply input + actions ─── */}
+      <div
+        className="shrink-0 bg-black px-3 pt-2 pb-2 safe-area-bottom"
+        data-story-input
+      >
+        {/* Reply input — X style rounded bar */}
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-[36px] rounded-full bg-white/[0.07] border border-white/[0.08] flex items-center px-3">
+            <input
+              ref={replyInputRef}
+              type="text"
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              placeholder="Send message"
+              className="flex-1 bg-transparent text-[14px] text-white placeholder-white/30 outline-none"
+            />
           </div>
-        </div>
 
-        {/* Reaction buttons */}
-        <div className="flex items-center justify-between mt-2">
-          {/* Left: text input area (visual only) */}
-          <div className="flex-1 h-9 rounded-full bg-white/[0.08] border border-white/[0.1] flex items-center px-3 mr-3">
-            <span className="text-[13px] text-[#64748b]">Send message</span>
-          </div>
-
-          {/* Right: action buttons */}
-          <div className="flex items-center gap-1">
-            {/* Like */}
-            <button
-              onClick={() => { setLiked(!liked) }}
-              className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+          {/* Like button */}
+          <button
+            onClick={() => setLiked(!liked)}
+            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0"
+          >
+            <svg
+              className={cn(
+                'w-[20px] h-[20px] transition-all duration-200',
+                liked ? 'text-[#f91880]' : 'text-white'
+              )}
+              viewBox="0 0 24 24"
+              fill={liked ? 'currentColor' : 'none'}
+              stroke="currentColor"
+              strokeWidth={liked ? 0 : 1.8}
             >
-              <svg
-                className={cn('w-[22px] h-[22px] transition-colors', liked ? 'text-[#f91880]' : 'text-white')}
-                viewBox="0 0 24 24"
-                fill={liked ? 'currentColor' : 'none'}
-                stroke="currentColor"
-                strokeWidth={liked ? 0 : 1.8}
-              >
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-              </svg>
-            </button>
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            </svg>
+          </button>
 
-            {/* Send */}
-            <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors">
-              <svg className="w-[20px] h-[20px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+          {/* Send button */}
+          <button
+            className={cn(
+              'w-9 h-9 rounded-full flex items-center justify-center transition-colors shrink-0',
+              replyText.trim()
+                ? 'text-[#1d9bf0] hover:bg-white/[0.06]'
+                : 'text-white/30'
+            )}
+          >
+            <svg
+              className="w-[18px] h-[18px]"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+          </button>
 
-            {/* More */}
-            <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors">
-              <svg className="w-[20px] h-[20px] text-white" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" />
-              </svg>
-            </button>
-          </div>
+          {/* More button */}
+          <button className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
+            <svg
+              className="w-[18px] h-[18px] text-white"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <circle cx="5" cy="12" r="2" />
+              <circle cx="12" cy="12" r="2" />
+              <circle cx="19" cy="12" r="2" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -300,7 +441,8 @@ function StoryViewer({
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   STORIES VIEW — Grid of story avatars (real data from Firestore)
+   STORIES VIEW — X 2026 style
+   Top bar + horizontal tray + vertical story cards feed
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export function StoriesView() {
@@ -315,17 +457,18 @@ export function StoriesView() {
   const loadStories = useCallback(async () => {
     try {
       setLoading(true)
-      // Fetch groups and user stories in parallel
       const [groups, mySt] = await Promise.all([
         fetchStoryGroups().catch((e) => {
           console.error('[StoriesView] fetchStoryGroups failed:', e)
           toast.error('Failed to load stories. Check your connection.')
           return [] as StoryGroup[]
         }),
-        user ? fetchUserStories(user.id).catch((e) => {
-          console.error('[StoriesView] fetchUserStories failed:', e)
-          return [] as Story[]
-        }) : Promise.resolve([]),
+        user
+          ? fetchUserStories(user.id).catch((e) => {
+              console.error('[StoriesView] fetchUserStories failed:', e)
+              return []
+            })
+          : Promise.resolve([]),
       ])
       setFirestoreGroups(groups)
       setMyStories(mySt)
@@ -343,7 +486,6 @@ export function StoriesView() {
   // Build display groups: user's own first, then other users
   const displayGroups: DisplayGroup[] = []
 
-  // User's own stories first (if any)
   if (user && myStories.length > 0) {
     displayGroups.push({
       userId: user.id,
@@ -359,7 +501,6 @@ export function StoriesView() {
     })
   }
 
-  // Other users' stories (excluding current user)
   for (const g of firestoreGroups) {
     if (user && g.userId === user.id) continue
     displayGroups.push({
@@ -388,26 +529,66 @@ export function StoriesView() {
     loadStories()
   }, [loadStories])
 
-  // Show all stories as "unviewed" ring style (gradient)
-  return (
-    <div className="min-h-screen pb-4">
-      {/* Header area */}
-      <div className="px-4 pt-3 pb-2">
-        <h2 className="text-xl font-bold text-[#e7e9ea]">Stories</h2>
-        <p className="text-[13px] text-[#94a3b8] mt-0.5">Tap to view updates from people you follow</p>
-      </div>
+  // ── Tray items: your story + others ──
+  const trayGroups = displayGroups.filter((g) => g.userId !== user?.id)
 
-      {/* Your story + Story ring bar */}
-      <div className="px-4 pb-4">
-        <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-1">
-          {/* Your Story */}
+  return (
+    <div className="min-h-screen bg-black text-white">
+      {/* ─── Top Bar: X logo + "Stories" title + camera icon ─── */}
+      <div className="sticky top-0 z-20 bg-black/95 backdrop-blur-md border-b border-white/[0.06] safe-area-top">
+        <div className="flex items-center justify-between h-[53px] px-4">
+          {/* Left: X logo */}
+          <button
+            onClick={() => useAppStore.getState().navigate('feed')}
+            className="flex items-center"
+          >
+            <svg
+              className="w-[28px] h-[28px] text-white"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </button>
+
+          {/* Center: Stories title */}
+          <h1 className="text-[17px] font-bold text-white absolute inset-x-0 text-center pointer-events-none">
+            Stories
+          </h1>
+
+          {/* Right: Camera icon */}
           <button
             onClick={() => setUploadOpen(true)}
+            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+            aria-label="Create story"
+          >
+            <svg
+              className="w-[22px] h-[22px] text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* ─── Stories Tray (Horizontal Scroll) ─── */}
+      <div className="border-b border-white/[0.06]">
+        <div className="flex gap-3 px-4 py-3 overflow-x-auto no-scrollbar">
+          {/* Your Story */}
+          <button
+            onClick={() => (myStories.length > 0 ? openStory(0) : setUploadOpen(true))}
             className="flex flex-col items-center gap-1.5 shrink-0"
           >
             <div className="relative">
               {myStories.length > 0 ? (
-                <StoryRing viewed={false} size={64}>
+                <StoryRing viewed={false} size={56}>
                   <img
                     src={myStories[0].mediaUrl}
                     alt="Your story"
@@ -415,114 +596,212 @@ export function StoriesView() {
                   />
                 </StoryRing>
               ) : (
-                <div className="w-16 h-16 rounded-full bg-white/[0.06] border-2 border-dashed border-white/[0.2] flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center">
-                    <svg className="w-7 h-7 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-                    </svg>
-                  </div>
+                <div className="w-[56px] h-[56px] rounded-full bg-white/[0.06] overflow-hidden flex items-center justify-center">
+                  {user?.profileImage ? (
+                    <img
+                      src={user.profileImage}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-white/10 flex items-center justify-center text-[18px] text-white/50 font-bold">
+                      {(user?.displayName || 'U')[0]}
+                    </div>
+                  )}
                 </div>
               )}
-              {/* Camera icon overlay */}
-              <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-[#8b5cf6] flex items-center justify-center border-2 border-[#110f1a]">
-                <svg className="w-3.5 h-3.5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
-                  <circle cx="12" cy="13" r="4" />
+              {/* + icon for add */}
+              <div className="absolute -bottom-0.5 -right-0.5 w-[22px] h-[22px] rounded-full bg-[#1d9bf0] flex items-center justify-center border-[2.5px] border-black">
+                <svg
+                  className="w-[12px] h-[12px] text-white"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={3}
+                  strokeLinecap="round"
+                >
+                  <path d="M12 5v14M5 12h14" />
                 </svg>
               </div>
             </div>
-            <span className="text-[11px] text-[#94a3b8]">Your story</span>
+            <span className="text-[11px] text-white/50 max-w-[56px] truncate">
+              Your story
+            </span>
           </button>
 
-          {/* Other users' stories (ring bar) */}
-          {displayGroups.filter((g) => g.userId !== user?.id).map((g, i) => (
-            <button
-              key={g.userId}
-              onClick={() => openStory(displayGroups.indexOf(g))}
-              className="flex flex-col items-center gap-1.5 shrink-0"
-            >
-              <StoryRing viewed={false} size={64}>
-                {g.profileImage ? (
-                  <img src={g.profileImage} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[16px] text-[#8b5cf6] font-bold">
-                    {(g.displayName || 'U')[0]}
-                  </div>
-                )}
-              </StoryRing>
-              <div className="flex items-center gap-0.5">
-                <span className="text-[11px] text-[#e7e9ea] max-w-[64px] truncate">{g.displayName.split(' ')[0]}</span>
-                {g.verified && <VerifiedBadge size={12} badge={(g as any).badge} />}
-              </div>
-            </button>
-          ))}
+          {/* Following stories */}
+          {trayGroups.map((g) => {
+            const idx = displayGroups.indexOf(g)
+            return (
+              <button
+                key={g.userId}
+                onClick={() => openStory(idx)}
+                className="flex flex-col items-center gap-1.5 shrink-0"
+              >
+                <StoryRing viewed={false} size={56}>
+                  {g.profileImage ? (
+                    <img
+                      src={g.profileImage}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-white/10 flex items-center justify-center text-[18px] text-white/50 font-bold">
+                      {(g.displayName || 'U')[0]}
+                    </div>
+                  )}
+                </StoryRing>
+                <div className="flex items-center gap-0.5 max-w-[56px]">
+                  <span className="text-[11px] text-white truncate">
+                    {g.displayName.split(' ')[0]}
+                  </span>
+                  {g.verified && (
+                    <VerifiedBadge size={11} badge={(g as any).badge} />
+                  )}
+                </div>
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="border-t border-white/[0.06] mx-4" />
-
-      {/* Loading state */}
+      {/* ─── Loading state ─── */}
       {loading && (
-        <div className="flex items-center justify-center py-12">
-          <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+        <div className="flex items-center justify-center py-16">
+          <div className="w-5 h-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
         </div>
       )}
 
-      {/* Empty state */}
+      {/* ─── Empty state ─── */}
       {!loading && displayGroups.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 px-8">
-          <div className="w-20 h-20 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
-            <svg className="w-10 h-10 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/>
+        <div className="flex flex-col items-center justify-center py-20 px-8">
+          <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
+            <svg
+              className="w-8 h-8 text-white/30"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
               <circle cx="12" cy="13" r="4" />
             </svg>
           </div>
-          <h3 className="text-[16px] font-semibold text-[#e7e9ea] mb-1">No stories yet</h3>
-          <p className="text-[14px] text-[#94a3b8] text-center">Be the first to share a story! Tap the button above to get started.</p>
+          <h3 className="text-[15px] font-bold text-white mb-1">No stories yet</h3>
+          <p className="text-[13px] text-white/40 text-center leading-relaxed">
+            When people you follow share stories, they&apos;ll show up here.
+          </p>
+          <button
+            onClick={() => setUploadOpen(true)}
+            className="mt-4 px-5 py-2 rounded-full bg-[#1d9bf0] text-white text-[14px] font-bold hover:bg-[#1a8cd8] transition-colors"
+          >
+            Create your story
+          </button>
         </div>
       )}
 
-      {/* Story grid (thumbnail cards for each group) */}
+      {/* ─── Vertical Stories Feed (Fleets 2.0 style) ─── */}
       {!loading && displayGroups.length > 0 && (
-        <div className="px-4 pt-4">
-          <h3 className="text-[15px] font-bold text-[#94a3b8] mb-3">Recent Stories</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {displayGroups.map((g) => (
+        <div className="divide-y divide-white/[0.04]">
+          {displayGroups.map((g) => {
+            const idx = displayGroups.indexOf(g)
+            const latestStory = g.stories[0]
+            return (
               <button
                 key={g.userId}
-                onClick={() => openStory(displayGroups.indexOf(g))}
-                className="relative rounded-xl overflow-hidden aspect-[9/16] bg-white/[0.04] group"
+                onClick={() => openStory(idx)}
+                className="w-full flex items-start gap-3 px-4 py-3 hover:bg-white/[0.03] transition-colors text-left"
               >
-                <img
-                  src={g.stories[0].imageUrl}
-                  alt=""
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                {/* Story count badge */}
-                {g.stories.length > 1 && (
-                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center">
-                    <span className="text-[11px] text-white font-bold">{g.stories.length}</span>
-                  </div>
-                )}
-                <div className="absolute bottom-0 inset-x-0 p-2.5">
-                  <div className="flex items-center gap-2">
-                    <PAvatar src={g.profileImage} name={g.displayName} size={28} verified={g.verified} badge={(g as any).badge} />
-                    <div className="text-left min-w-0">
-                      <p className="text-[13px] font-semibold text-white truncate inline-flex items-center gap-1">{g.displayName}{(g.verified || !!(g as any).badge) && <VerifiedBadge size={11} badge={(g as any).badge} />}</p>
-                      <p className="text-[11px] text-[#94a3b8] truncate">
-                        @{g.username} · {g.stories.length} {g.stories.length === 1 ? 'story' : 'stories'}
-                      </p>
+                {/* Avatar */}
+                <StoryRing viewed={false} size={44}>
+                  {g.profileImage ? (
+                    <img
+                      src={g.profileImage}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-white/10 flex items-center justify-center text-[14px] text-white/50 font-bold">
+                      {(g.displayName || 'U')[0]}
                     </div>
+                  )}
+                </StoryRing>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  {/* Name + time */}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[14px] font-bold text-white truncate">
+                      {g.username}
+                    </span>
+                    {(g.verified || (g as any).badge) && (
+                      <VerifiedBadge size={14} badge={(g as any).badge} />
+                    )}
+                    <span className="text-[13px] text-white/40 shrink-0">
+                      &middot; {g.stories.length}h
+                    </span>
                   </div>
+
+                  {/* Story preview row */}
+                  {latestStory && (
+                    <div className="mt-2 flex gap-2">
+                      {/* Thumbnail card */}
+                      <div className="w-[72px] h-[96px] rounded-lg overflow-hidden bg-white/[0.04] shrink-0">
+                        <img
+                          src={latestStory.imageUrl}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+
+                      {/* Caption + more indicator */}
+                      <div className="flex-1 min-w-0 py-0.5">
+                        {latestStory.caption ? (
+                          <p className="text-[13px] text-white/60 line-clamp-2 leading-snug">
+                            {latestStory.caption}
+                          </p>
+                        ) : (
+                          <p className="text-[13px] text-white/30 italic">
+                            Tap to view story
+                          </p>
+                        )}
+                        {g.stories.length > 1 && (
+                          <p className="text-[12px] text-[#1d9bf0] mt-1">
+                            +{g.stories.length - 1} more
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right: chevron */}
+                <div className="flex items-center pt-6 shrink-0">
+                  <svg
+                    className="w-[16px] h-[16px] text-white/20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      d="M9 18l6-6-6-6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
               </button>
-            ))}
-          </div>
+            )
+          })}
         </div>
       )}
+
+      {/* ─── Bottom padding for MobileNav ─── */}
+      <div className="h-[60px] shrink-0" />
 
       {/* Full-screen Story Viewer */}
       {activeGroupIdx !== null && displayGroups.length > 0 && (
