@@ -13,14 +13,14 @@ interface StoryUploadSheetProps {
   onStoryUploaded: () => void
 }
 
-/* ── Compress image → returns both Blob (for Storage) and base64 (fallback) ── */
+/* ── Compress image → returns base64 data-URL for Firestore ── */
 function compressStoryImage(
   file: File,
   filterCss: string,
   maxWidth = 720,
   maxHeight = 1280,
-  quality = 0.55,
-): Promise<{ blob: Blob; base64: string }> {
+  quality = 0.5,
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = () => reject(new Error('Failed to read file'))
@@ -31,7 +31,6 @@ function compressStoryImage(
         const canvas = document.createElement('canvas')
         let { width, height } = img
 
-        // Constrain to max dimensions
         if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth }
         if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight }
 
@@ -46,17 +45,8 @@ function compressStoryImage(
         ctx.drawImage(img, 0, 0, width, height)
         ctx.filter = 'none'
 
-        // Get blob for Storage upload
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) { reject(new Error('Compression failed')); return }
-            // Get base64 as fallback (for Firestore direct storage)
-            const base64 = canvas.toDataURL('image/jpeg', quality)
-            resolve({ blob, base64 })
-          },
-          'image/jpeg',
-          quality,
-        )
+        const dataUrl = canvas.toDataURL('image/jpeg', quality)
+        resolve(dataUrl)
       }
       img.src = reader.result as string
     }
@@ -74,7 +64,6 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
   const [step, setStep] = useState<'idle' | 'compressing' | 'uploading' | 'done'>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Reset on open
   useEffect(() => {
     if (open) {
       setSelectedFile(null)
@@ -89,8 +78,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) return
     setSelectedFile(file)
-    const url = URL.createObjectURL(file)
-    setPreviewUrl(url)
+    setPreviewUrl(URL.createObjectURL(file))
   }, [])
 
   const handleShare = useCallback(async () => {
@@ -98,61 +86,53 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     setUploading(true)
 
     // Step 1: Compress
-    let compressed: { blob: Blob; base64: string }
+    let base64: string
     try {
       setStep('compressing')
-      compressed = await compressStoryImage(selectedFile, selectedFilter.css)
-      console.log('[StoryUpload] Compressed → blob:', Math.round(compressed.blob.size / 1024), 'KB, base64:', Math.round(compressed.base64.length / 1024), 'KB')
-    } catch (compressErr) {
-      console.error('[StoryUpload] Compression FAILED:', compressErr)
+      base64 = await compressStoryImage(selectedFile, selectedFilter.css)
+      console.log('[StoryUpload] Compressed →', Math.round(base64.length / 1024), 'KB')
+    } catch (err) {
+      console.error('[StoryUpload] Compression FAILED:', err)
       setUploading(false)
       setStep('idle')
       toast.error('Failed to process image. Try a different photo.')
       return
     }
 
-    // Step 2: Upload (tries Storage first, falls back to base64-in-Firestore)
+    // Step 2: Write to Firestore (direct, no Storage)
     try {
       setStep('uploading')
-      console.log('[StoryUpload] Uploading story…')
       await createStory({
         userId: user.id,
         username: user.username,
         displayName: user.displayName || 'You',
         profileImage: user.profileImage || '',
         verified: user.isVerified,
-        mediaBlob: compressed.blob,
-        mediaBase64: compressed.base64,
+        mediaUrl: base64,
         caption: caption.trim(),
       })
       console.log('[StoryUpload] Upload ✅')
-    } catch (uploadErr) {
-      console.error('[StoryUpload] Upload FAILED:', uploadErr)
+    } catch (err) {
+      console.error('[StoryUpload] Upload FAILED:', err)
       setUploading(false)
       setStep('idle')
-      const msg = uploadErr instanceof Error ? uploadErr.message : String(uploadErr)
-      toast.error(`Upload failed: ${msg}`)
+      toast.error(`Upload failed: ${err instanceof Error ? err.message : String(err)}`)
       return
     }
 
-    // Step 3: Done
+    // Done
     setStep('done')
     toast.success('Story shared!')
     onClose()
     setUploading(false)
-    // Reload stories after short delay for Firestore consistency
-    setTimeout(() => {
-      onStoryUploaded()
-    }, 600)
+    setTimeout(() => onStoryUploaded(), 600)
   }, [selectedFile, selectedFilter, caption, user, uploading, onStoryUploaded, onClose])
 
   const statusText = step === 'compressing'
     ? 'Compressing…'
     : step === 'uploading'
       ? 'Sharing…'
-      : uploading
-        ? 'Sharing…'
-        : 'Share Story'
+      : 'Share Story'
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose() }}>
@@ -160,15 +140,11 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
         side="bottom"
         className="bg-[#000] border-t border-white/[0.08] rounded-t-2xl max-h-[85vh] overflow-y-auto"
       >
-        {/* ── Compact header ── */}
         <SheetHeader className="px-4 pt-2 pb-0">
-          <SheetTitle className="text-[16px] font-bold text-[#e7e9ea] text-left">
-            New Story
-          </SheetTitle>
+          <SheetTitle className="text-[16px] font-bold text-[#e7e9ea] text-left">New Story</SheetTitle>
         </SheetHeader>
 
         <div className="px-4 pb-5 space-y-3">
-          {/* ── Upload zone / Preview ── */}
           {!previewUrl ? (
             <button
               onClick={() => fileInputRef.current?.click()}
@@ -187,15 +163,12 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) handleFile(file)
-                }}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
               />
             </button>
           ) : (
             <div className="space-y-3">
-              {/* ── Compact preview ── */}
+              {/* Preview */}
               <div className="relative rounded-xl overflow-hidden mx-auto" style={{ maxWidth: '180px', aspectRatio: '9/16' }}>
                 <img
                   src={previewUrl}
@@ -204,13 +177,10 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                   style={selectedFilter.css !== 'none' ? { filter: selectedFilter.css } : undefined}
                   draggable={false}
                 />
-                {/* Remove */}
                 <button
                   onClick={() => {
                     if (previewUrl) URL.revokeObjectURL(previewUrl)
-                    setSelectedFile(null)
-                    setPreviewUrl(null)
-                    setSelectedFilter(IMAGE_FILTERS[0])
+                    setSelectedFile(null); setPreviewUrl(null); setSelectedFilter(IMAGE_FILTERS[0])
                   }}
                   className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm
                              flex items-center justify-center hover:bg-black/80 transition-colors"
@@ -221,88 +191,50 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                 </button>
               </div>
 
-              {/* ── Compact filter strip ── */}
+              {/* Filters */}
               <div className="space-y-1.5">
                 <p className="text-[12px] font-medium text-white/40 uppercase tracking-wider">Filter</p>
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-0.5">
                   {IMAGE_FILTERS.map((f) => (
-                    <button
-                      key={f.id}
-                      onClick={() => setSelectedFilter(f)}
-                      className="shrink-0"
-                    >
-                      <div
-                        className={`
-                          w-[44px] h-[58px] rounded-lg overflow-hidden border-[1.5px] transition-all
-                          ${selectedFilter.id === f.id
-                            ? 'border-[#1d9bf0] scale-105'
-                            : 'border-transparent opacity-70 hover:opacity-100'
-                          }
-                        `}
-                      >
-                        <img
-                          src={previewUrl}
-                          alt={f.name}
-                          className="w-full h-full object-cover"
-                          style={f.css !== 'none' ? { filter: f.css } : undefined}
-                          draggable={false}
-                        />
+                    <button key={f.id} onClick={() => setSelectedFilter(f)} className="shrink-0">
+                      <div className={`w-[44px] h-[58px] rounded-lg overflow-hidden border-[1.5px] transition-all
+                        ${selectedFilter.id === f.id ? 'border-[#1d9bf0] scale-105' : 'border-transparent opacity-70 hover:opacity-100'}`}>
+                        <img src={previewUrl} alt={f.name} className="w-full h-full object-cover"
+                          style={f.css !== 'none' ? { filter: f.css } : undefined} draggable={false} />
                       </div>
                       <p className={`text-[9px] mt-0.5 text-center truncate w-[44px]
-                        ${selectedFilter.id === f.id ? 'text-[#1d9bf0] font-bold' : 'text-white/30'}`}>
-                        {f.name}
-                      </p>
+                        ${selectedFilter.id === f.id ? 'text-[#1d9bf0] font-bold' : 'text-white/30'}`}>{f.name}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* ── Caption ── */}
+              {/* Caption */}
               <div>
-                <textarea
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Add a caption…"
-                  maxLength={200}
-                  rows={1}
+                <textarea value={caption} onChange={(e) => setCaption(e.target.value)}
+                  placeholder="Add a caption…" maxLength={200} rows={1}
                   className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2
                              text-[14px] text-[#e7e9ea] placeholder-white/25 resize-none
-                             focus:outline-none focus:border-[#1d9bf0]/40 transition-colors"
-                />
+                             focus:outline-none focus:border-[#1d9bf0]/40 transition-colors" />
                 <p className="text-[11px] text-white/20 mt-0.5 text-right">{caption.length}/200</p>
               </div>
 
-              {/* Change photo */}
-              <button
-                onClick={() => {
-                  if (previewUrl) URL.revokeObjectURL(previewUrl)
-                  setPreviewUrl(null)
-                  setSelectedFile(null)
-                  setSelectedFilter(IMAGE_FILTERS[0])
-                }}
-                className="text-[13px] text-[#1d9bf0] font-medium hover:underline"
-              >
+              <button onClick={() => {
+                if (previewUrl) URL.revokeObjectURL(previewUrl)
+                setPreviewUrl(null); setSelectedFile(null); setSelectedFilter(IMAGE_FILTERS[0])
+              }} className="text-[13px] text-[#1d9bf0] font-medium hover:underline">
                 Change photo
               </button>
             </div>
           )}
 
-          {/* ── Share button ── */}
-          <button
-            onClick={handleShare}
-            disabled={!previewUrl || uploading}
-            className={`
-              w-full py-2.5 rounded-full text-[14px] font-bold transition-all
-              flex items-center justify-center gap-2
+          {/* Share */}
+          <button onClick={handleShare} disabled={!previewUrl || uploading}
+            className={`w-full py-2.5 rounded-full text-[14px] font-bold transition-all flex items-center justify-center gap-2
               ${previewUrl && !uploading
                 ? 'bg-[#1d9bf0] text-white hover:bg-[#1a8cd8] active:scale-[0.98]'
-                : 'bg-white/[0.06] text-white/25 cursor-not-allowed'
-              }
-            `}
-          >
-            {uploading && (
-              <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            )}
+                : 'bg-white/[0.06] text-white/25 cursor-not-allowed'}`}>
+            {uploading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
             {statusText}
           </button>
         </div>
