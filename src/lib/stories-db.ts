@@ -1,7 +1,7 @@
 /* ── Stories Firestore CRUD ─────────────────────────────────────────────────── */
 /* Stores compressed JPEG base64 in Firestore documents directly.
-   Firebase Storage is NOT enabled on this project, so we skip it entirely
-   to avoid hanging uploads. Images are compressed to ~50-150KB base64.   */
+   No composite indexes required — all queries use single-field filters only.
+   Client-side sorting handles ordering.                                  */
 
 import {
   db,
@@ -12,7 +12,6 @@ import {
   getDocs,
   query,
   where,
-  orderBy,
   deleteDoc,
   doc,
   Timestamp,
@@ -28,7 +27,7 @@ export interface Story {
   displayName: string;
   profileImage: string;
   verified: boolean;
-  mediaUrl: string;          // compressed JPEG data-URL
+  mediaUrl: string;
   caption: string;
   createdAt: string;
   expiresAt: string;
@@ -64,7 +63,6 @@ function twentyFourHoursFromNow() {
 
 /**
  * Create a new story. Stores compressed base64 JPEG directly in Firestore.
- * No Firebase Storage dependency — works immediately.
  */
 export async function createStory(params: {
   userId: string;
@@ -72,7 +70,7 @@ export async function createStory(params: {
   displayName: string;
   profileImage: string;
   verified: boolean;
-  mediaUrl: string;           // already compressed JPEG data-URL
+  mediaUrl: string;
   caption: string;
 }): Promise<Story> {
   console.log('[stories-db] createStory → userId:', params.userId, 'base64 size:', Math.round(params.mediaUrl.length / 1024), 'KB');
@@ -103,20 +101,16 @@ export async function createStory(params: {
 }
 
 /**
- * Fetch all active (non-expired) stories from Firestore,
- * grouped by user, ordered by most-recent-first within each group.
+ * Fetch all active (non-expired) stories from Firestore, grouped by user.
+ * Uses ONLY single-field query (no orderBy) — works without composite indexes.
+ * Sorts client-side.
  */
 export async function fetchStoryGroups(): Promise<StoryGroup[]> {
   console.log('[stories-db] fetchStoryGroups → fetching…');
 
-  const storiesRef = collection(db, 'stories');
-  const q = query(
-    storiesRef,
-    orderBy('createdAt', 'desc'),
-    firestoreLimit(200),
+  const snap = await getDocs(
+    query(collection(db, 'stories'), firestoreLimit(200))
   );
-
-  const snap = await getDocs(q);
   console.log('[stories-db] fetchStoryGroups → raw docs:', snap.docs.length);
 
   const now = Date.now();
@@ -151,9 +145,17 @@ export async function fetchStoryGroups(): Promise<StoryGroup[]> {
     });
   }
 
-  const groups = Array.from(groupMap.values()).sort(
-    (a, b) => new Date(b.latestCreatedAt).getTime() - new Date(a.latestCreatedAt).getTime()
-  );
+  // Sort groups by latest story, and stories within each group by time
+  const groups = Array.from(groupMap.values())
+    .map((g) => ({
+      ...g,
+      stories: [...g.stories].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      ),
+    }))
+    .sort(
+      (a, b) => new Date(b.latestCreatedAt).getTime() - new Date(a.latestCreatedAt).getTime()
+    );
 
   console.log('[stories-db] fetchStoryGroups ✅ → groups:', groups.length);
   return groups;
@@ -161,34 +163,23 @@ export async function fetchStoryGroups(): Promise<StoryGroup[]> {
 
 /**
  * Fetch stories for a specific user.
+ * Uses ONLY single-field where filter — works without composite indexes.
+ * Sorts client-side.
  */
 export async function fetchUserStories(userId: string): Promise<Story[]> {
   console.log('[stories-db] fetchUserStories → userId:', userId);
 
-  const storiesRef = collection(db, 'stories');
-  let docs: Awaited<ReturnType<typeof getDocs>>;
-
-  try {
-    const now = Timestamp.now();
-    const q = query(
-      storiesRef,
+  // Simple query: where userId == X only — single-field index, always works
+  const snap = await getDocs(
+    query(
+      collection(db, 'stories'),
       where('userId', '==', userId),
-      where('expiresAt', '>', now),
-      orderBy('createdAt', 'desc'),
-    );
-    docs = await getDocs(q);
-  } catch {
-    const q = query(
-      storiesRef,
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
       firestoreLimit(50),
-    );
-    docs = await getDocs(q);
-  }
+    )
+  );
 
   const now = Date.now();
-  const stories = docs.docs
+  const stories = snap.docs
     .map((docSnap) => {
       const d = docSnap.data()!;
       return {
@@ -204,7 +195,8 @@ export async function fetchUserStories(userId: string): Promise<Story[]> {
         expiresAt: tsToISO(d.expiresAt),
       };
     })
-    .filter((s) => new Date(s.expiresAt).getTime() > now);
+    .filter((s) => new Date(s.expiresAt).getTime() > now)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   console.log('[stories-db] fetchUserStories ✅ →', stories.length, 'stories');
   return stories;

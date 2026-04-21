@@ -453,30 +453,39 @@ export function StoriesView() {
   const [activeGroupIdx, setActiveGroupIdx] = useState<number | null>(null)
   const [uploadOpen, setUploadOpen] = useState(false)
 
+  // Track whether this is the initial mount (show spinner) vs a reload (don't hide)
+  const isInitialMount = useRef(true)
+
   // Fetch stories from Firestore on mount & after upload
   const loadStories = useCallback(async () => {
-    try {
-      setLoading(true)
-      const [groups, mySt] = await Promise.all([
-        fetchStoryGroups().catch((e) => {
-          console.error('[StoriesView] fetchStoryGroups failed:', e)
-          toast.error('Failed to load stories. Check your connection.')
-          return [] as StoryGroup[]
-        }),
-        user
-          ? fetchUserStories(user.id).catch((e) => {
-              console.error('[StoriesView] fetchUserStories failed:', e)
-              return []
-            })
-          : Promise.resolve([]),
-      ])
-      setFirestoreGroups(groups)
-      setMyStories(mySt)
-    } catch (err) {
-      console.error('[StoriesView] loadStories error:', err)
-    } finally {
-      setLoading(false)
+    const showSpinner = isInitialMount.current
+    isInitialMount.current = false
+
+    if (showSpinner) setLoading(true)
+
+    // Fetch user's own stories FIRST — small query, fast result
+    if (user) {
+      try {
+        const mySt = await fetchUserStories(user.id)
+        console.log('[StoriesView] myStories loaded:', mySt.length)
+        setMyStories(mySt)
+      } catch (e) {
+        console.error('[StoriesView] fetchUserStories failed:', e)
+      }
     }
+
+    // Only show spinner on initial load, not on reloads after upload
+    if (showSpinner) setLoading(false)
+
+    // Fetch other users' stories in background (can be slow if large docs exist)
+    fetchStoryGroups()
+      .then((groups) => {
+        console.log('[StoriesView] other groups loaded:', groups.length)
+        setFirestoreGroups(groups)
+      })
+      .catch((e) => {
+        console.error('[StoriesView] fetchStoryGroups failed:', e)
+      })
   }, [user])
 
   useEffect(() => {
