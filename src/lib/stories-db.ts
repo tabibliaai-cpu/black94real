@@ -1,8 +1,11 @@
 /* ── Stories Firestore CRUD ─────────────────────────────────────────────────── */
-/* Separate from db.ts (locked) — stories have their own collection & TTL logic. */
+/* Uses Firebase Storage for images (fast, binary upload) and Firestore for
+   metadata only (small, fast reads). This replaces the old base64-in-Firestore
+   approach which caused massive documents and timeout failures.            */
 
 import {
   db,
+  storage,
 } from './firebase';
 import {
   collection,
@@ -16,6 +19,11 @@ import {
   Timestamp,
   limit as firestoreLimit,
 } from 'firebase/firestore';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -26,7 +34,7 @@ export interface Story {
   displayName: string;
   profileImage: string;
   verified: boolean;
-  mediaUrl: string;          // compressed JPEG base64 data-URL
+  mediaUrl: string;          // Firebase Storage download URL (small string)
   caption: string;
   createdAt: string;
   expiresAt: string;         // 24 h from creation
@@ -68,8 +76,8 @@ function isNotExpired(createdAtISO: string, expiresAtISO: string): boolean {
 // ── CRUD ────────────────────────────────────────────────────────────────────
 
 /**
- * Create a new story document.
- * Returns the created Story object (with server-generated id).
+ * Upload image blob to Firebase Storage and create Firestore story doc.
+ * Returns the created Story object with the Storage download URL.
  */
 export async function createStory(params: {
   userId: string;
@@ -77,31 +85,53 @@ export async function createStory(params: {
   displayName: string;
   profileImage: string;
   verified: boolean;
-  mediaUrl: string;
+  mediaBlob: Blob;           // Compressed JPEG blob (from canvas)
   caption: string;
 }): Promise<Story> {
   console.log('[stories-db] createStory → userId:', params.userId);
 
   const now = new Date();
   const expiresAt = twentyFourHoursFromNow();
+  const storyId = `${params.userId}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
+  // Step 1: Upload blob to Firebase Storage (fast binary upload)
+  const storagePath = `stories/${params.userId}/${storyId}.jpg`;
+  const storageRef = ref(storage, storagePath);
+  await uploadBytes(storageRef, params.mediaBlob, {
+    contentType: 'image/jpeg',
+    cacheControl: 'public, max-age=86400', // 24h cache
+  });
+  console.log('[stories-db] Storage upload ✅ →', storagePath);
+
+  // Step 2: Get download URL
+  const mediaUrl = await getDownloadURL(storageRef);
+  console.log('[stories-db] Download URL ✅ →', mediaUrl.length, 'chars');
+
+  // Step 3: Write metadata to Firestore (small doc — no base64!)
   const ref = await addDoc(collection(db, 'stories'), {
     userId: params.userId,
     username: params.username,
     displayName: params.displayName,
     profileImage: params.profileImage,
     verified: params.verified,
-    mediaUrl: params.mediaUrl,
+    mediaUrl,                // Storage URL, not base64
     caption: params.caption,
+    storagePath,             // reference for cleanup
     createdAt: Timestamp.fromDate(now),
     expiresAt: Timestamp.fromDate(expiresAt),
   });
 
-  console.log('[stories-db] createStory ✅ → storyId:', ref.id);
+  console.log('[stories-db] Firestore write ✅ → storyId:', ref.id);
 
   return {
     id: ref.id,
-    ...params,
+    userId: params.userId,
+    username: params.username,
+    displayName: params.displayName,
+    profileImage: params.profileImage,
+    verified: params.verified,
+    mediaUrl,
+    caption: params.caption,
     createdAt: now.toISOString(),
     expiresAt: expiresAt.toISOString(),
   };
@@ -111,9 +141,8 @@ export async function createStory(params: {
  * Fetch all active (non-expired) stories from Firestore,
  * grouped by user, ordered by most-recent-first within each group.
  *
- * Uses a simple `orderBy('createdAt', 'desc')` query (single-field index,
- * auto-created by Firestore) and filters expired stories client-side.
- * This avoids composite-index dependency and works immediately.
+ * Firestore docs now contain only metadata + Storage URL (tiny),
+ * so this query is fast regardless of image count.
  */
 export async function fetchStoryGroups(): Promise<StoryGroup[]> {
   console.log('[stories-db] fetchStoryGroups → fetching all stories…');

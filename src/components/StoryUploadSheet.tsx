@@ -13,14 +13,14 @@ interface StoryUploadSheetProps {
   onStoryUploaded: () => void
 }
 
-/* ── Image compression (fast, small for stories) ─────────────────────── */
+/* ── Image compression → returns Blob (not base64) ─────────────────────── */
 function compressStoryImage(
   file: File,
   filterCss: string,
   maxWidth = 720,
   maxHeight = 1280,
-  quality = 0.55,
-): Promise<string> {
+  quality = 0.6,
+): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = () => reject(new Error('Failed to read file'))
@@ -31,7 +31,6 @@ function compressStoryImage(
         const canvas = document.createElement('canvas')
         let { width, height } = img
 
-        // Fit within maxWidth × maxHeight while preserving aspect ratio
         if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth }
         if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight }
 
@@ -42,26 +41,18 @@ function compressStoryImage(
 
         ctx.fillStyle = '#000000'
         ctx.fillRect(0, 0, width, height)
-
-        if (filterCss && filterCss !== 'none') {
-          ctx.filter = filterCss
-        }
-
+        if (filterCss && filterCss !== 'none') ctx.filter = filterCss
         ctx.drawImage(img, 0, 0, width, height)
         ctx.filter = 'none'
 
-        let dataUrl = canvas.toDataURL('image/jpeg', quality)
-
-        // Auto-recompress if still too large for Firestore
-        if (dataUrl.length > 500_000) {
-          // Try progressively lower quality
-          for (const q of [0.4, 0.3, 0.2]) {
-            const smaller = canvas.toDataURL('image/jpeg', q)
-            if (smaller.length < dataUrl.length) dataUrl = smaller
-            if (dataUrl.length < 400_000) break
-          }
-        }
-        resolve(dataUrl)
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob)
+            else reject(new Error('Compression failed'))
+          },
+          'image/jpeg',
+          quality,
+        )
       }
       img.src = reader.result as string
     }
@@ -75,11 +66,9 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [selectedFilter, setSelectedFilter] = useState<ImageFilter>(IMAGE_FILTERS[0])
   const [caption, setCaption] = useState('')
-  const [isDragging, setIsDragging] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [step, setStep] = useState<'idle' | 'compressing' | 'uploading' | 'done'>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const filtersScrollRef = useRef<HTMLDivElement>(null)
 
   // Reset on open
   useEffect(() => {
@@ -96,49 +85,20 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) return
     setSelectedFile(file)
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      setPreviewUrl(e.target?.result as string)
-    }
-    reader.readAsDataURL(file)
+    const url = URL.createObjectURL(file)
+    setPreviewUrl(url)
   }, [])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    const file = e.dataTransfer.files[0]
-    if (file) handleFile(file)
-  }, [handleFile])
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleDragLeave = useCallback(() => {
-    setIsDragging(false)
-  }, [])
-
-  const handleFileSelect = useCallback(() => {
-    fileInputRef.current?.click()
-  }, [])
-
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) handleFile(file)
-  }, [handleFile])
 
   const handleShare = useCallback(async () => {
-    if (!previewUrl || !selectedFile || !user || uploading) return
+    if (!selectedFile || !user || uploading) return
     setUploading(true)
 
-    // Step 1: Compress image
-    let compressed = ''
+    let blob: Blob
     try {
       setStep('compressing')
       console.log('[StoryUpload] Compressing image…')
-      compressed = await compressStoryImage(selectedFile, selectedFilter.css)
-      console.log('[StoryUpload] Compression done. Size:', Math.round(compressed.length / 1024), 'KB')
+      blob = await compressStoryImage(selectedFile, selectedFilter.css)
+      console.log('[StoryUpload] Compressed →', Math.round(blob.size / 1024), 'KB')
     } catch (compressErr) {
       console.error('[StoryUpload] Compression FAILED:', compressErr)
       setUploading(false)
@@ -147,22 +107,21 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
       return
     }
 
-    // Step 2: Upload to Firestore
     try {
       setStep('uploading')
-      console.log('[StoryUpload] Uploading to Firestore…')
+      console.log('[StoryUpload] Uploading to Firebase Storage…')
       await createStory({
         userId: user.id,
         username: user.username,
         displayName: user.displayName || 'You',
         profileImage: user.profileImage || '',
         verified: user.isVerified,
-        mediaUrl: compressed,
+        mediaBlob: blob,
         caption: caption.trim(),
       })
-      console.log('[StoryUpload] Firestore write ✅')
+      console.log('[StoryUpload] Upload ✅')
     } catch (uploadErr) {
-      console.error('[StoryUpload] Firestore write FAILED:', uploadErr)
+      console.error('[StoryUpload] Upload FAILED:', uploadErr)
       setUploading(false)
       setStep('idle')
       const msg = uploadErr instanceof Error ? uploadErr.message : String(uploadErr)
@@ -170,124 +129,107 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
       return
     }
 
-    // All done
     setStep('done')
     toast.success('Story shared!')
-    // Close sheet first, then reload after a short delay for Firestore consistency
     onClose()
     setUploading(false)
+    // Small delay for Firestore consistency, then reload
     setTimeout(() => {
       onStoryUploaded()
-    }, 800)
-  }, [previewUrl, selectedFile, selectedFilter, caption, user, uploading, onStoryUploaded, onClose])
+    }, 600)
+  }, [selectedFile, selectedFilter, caption, user, uploading, onStoryUploaded, onClose])
 
-  const handleClose = useCallback(() => {
-    onClose()
-  }, [onClose])
-
-  // Derive status text from step
-  const statusText = step === 'compressing' ? 'Compressing…' : step === 'uploading' ? 'Sharing to cloud…' : uploading ? 'Sharing…' : 'Share Story'
+  const statusText = step === 'compressing'
+    ? 'Compressing…'
+    : step === 'uploading'
+      ? 'Sharing…'
+      : uploading
+        ? 'Sharing…'
+        : 'Share Story'
 
   return (
-    <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose() }}>
+    <Sheet open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose() }}>
       <SheetContent
         side="bottom"
-        className="bg-[#000000] border-t border-white/[0.06] rounded-t-2xl max-h-[92vh] overflow-y-auto"
+        className="bg-[#000] border-t border-white/[0.08] rounded-t-2xl max-h-[85vh] overflow-y-auto"
       >
-        <SheetHeader className="px-4 pt-2 pb-1">
-          <SheetTitle className="text-[18px] font-bold text-[#e7e9ea] text-left">
-            Create Story
+        {/* ── Compact header ── */}
+        <SheetHeader className="px-4 pt-2 pb-0">
+          <SheetTitle className="text-[16px] font-bold text-[#e7e9ea] text-left">
+            New Story
           </SheetTitle>
         </SheetHeader>
 
-        <div className="px-4 pb-6 space-y-4">
-          {/* Upload zone */}
+        <div className="px-4 pb-5 space-y-3">
+          {/* ── Upload zone / Preview ── */}
           {!previewUrl ? (
-            <div
-              onClick={handleFileSelect}
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              className={`
-                relative rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer
-                aspect-[9/16] max-h-[420px] flex flex-col items-center justify-center gap-4
-                ${isDragging
-                  ? 'border-[#8b5cf6] bg-[#8b5cf6]/10'
-                  : 'border-white/[0.15] bg-white/[0.03] hover:border-white/[0.25] hover:bg-white/[0.05]'
-                }
-              `}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full rounded-xl border border-dashed border-white/[0.12] bg-white/[0.02]
+                         hover:border-white/[0.25] hover:bg-white/[0.04] transition-all cursor-pointer
+                         flex flex-col items-center justify-center gap-2 py-10"
             >
-              <div className={`
-                w-16 h-16 rounded-full flex items-center justify-center transition-colors
-                ${isDragging ? 'bg-[#8b5cf6]/20' : 'bg-white/[0.06]'}
-              `}>
-                <svg className={`w-8 h-8 transition-colors ${isDragging ? 'text-[#8b5cf6]' : 'text-[#94a3b8]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" strokeLinejoin="round" />
-                  <polyline points="17 8 12 3 7 8" strokeLinecap="round" strokeLinejoin="round" />
-                  <line x1="12" y1="3" x2="12" y2="15" strokeLinecap="round" />
+              <div className="w-11 h-11 rounded-full bg-white/[0.06] flex items-center justify-center">
+                <svg className="w-5 h-5 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                  <path d="M12 5v14M5 12h14" strokeLinecap="round" />
                 </svg>
               </div>
-              <div className="text-center px-4">
-                <p className="text-[15px] text-[#e7e9ea] font-medium">Tap to select a photo</p>
-                <p className="text-[13px] text-[#94a3b8] mt-1">or drag and drop an image</p>
-              </div>
+              <p className="text-[13px] text-white/50">Tap to select a photo</p>
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) handleFile(file)
+                }}
               />
-            </div>
+            </button>
           ) : (
-            <div className="space-y-4">
-              {/* Preview with filter */}
-              <div className="relative rounded-2xl overflow-hidden aspect-[9/16] max-h-[420px] mx-auto">
+            <div className="space-y-3">
+              {/* ── Compact preview ── */}
+              <div className="relative rounded-xl overflow-hidden mx-auto" style={{ maxWidth: '180px', aspectRatio: '9/16' }}>
                 <img
                   src={previewUrl}
-                  alt="Story preview"
+                  alt="Preview"
                   className="w-full h-full object-cover"
                   style={selectedFilter.css !== 'none' ? { filter: selectedFilter.css } : undefined}
+                  draggable={false}
                 />
-                {/* Remove button */}
+                {/* Remove */}
                 <button
                   onClick={() => {
+                    if (previewUrl) URL.revokeObjectURL(previewUrl)
                     setSelectedFile(null)
                     setPreviewUrl(null)
+                    setSelectedFilter(IMAGE_FILTERS[0])
                   }}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#000000]/60 backdrop-blur-sm flex items-center justify-center hover:bg-[#000000]/80 transition-colors"
+                  className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm
+                             flex items-center justify-center hover:bg-black/80 transition-colors"
                 >
-                  <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                  <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
                     <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
                   </svg>
                 </button>
-                {/* Current filter badge */}
-                {selectedFilter.id !== 'normal' && (
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#000000]/60 backdrop-blur-sm">
-                    <span className="text-[12px] text-white font-medium">{selectedFilter.name}</span>
-                  </div>
-                )}
               </div>
 
-              {/* ── Filter selector ── */}
-              <div className="space-y-2">
-                <h4 className="text-[14px] font-semibold text-[#e7e9ea]">Filters</h4>
-                <div
-                  ref={filtersScrollRef}
-                  className="flex gap-3 overflow-x-auto no-scrollbar pb-1"
-                >
+              {/* ── Compact filter strip ── */}
+              <div className="space-y-1.5">
+                <p className="text-[12px] font-medium text-white/40 uppercase tracking-wider">Filter</p>
+                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-0.5">
                   {IMAGE_FILTERS.map((f) => (
                     <button
                       key={f.id}
                       onClick={() => setSelectedFilter(f)}
-                      className="flex flex-col items-center gap-1 shrink-0"
+                      className="shrink-0"
                     >
                       <div
                         className={`
-                          w-[62px] h-[82px] rounded-xl overflow-hidden border-2 transition-all
+                          w-[44px] h-[58px] rounded-lg overflow-hidden border-[1.5px] transition-all
                           ${selectedFilter.id === f.id
-                            ? 'border-[#8b5cf6] scale-105 shadow-lg shadow-[#8b5cf6]/20'
-                            : 'border-transparent opacity-80 hover:opacity-100'
+                            ? 'border-[#1d9bf0] scale-105'
+                            : 'border-transparent opacity-70 hover:opacity-100'
                           }
                         `}
                       >
@@ -299,57 +241,60 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                           draggable={false}
                         />
                       </div>
-                      <span className={`text-[10px] truncate max-w-[62px] ${selectedFilter.id === f.id ? 'text-[#8b5cf6] font-bold' : 'text-[#94a3b8]'}`}>
+                      <p className={`text-[9px] mt-0.5 text-center truncate w-[44px]
+                        ${selectedFilter.id === f.id ? 'text-[#1d9bf0] font-bold' : 'text-white/30'}`}>
                         {f.name}
-                      </span>
+                      </p>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Caption input */}
+              {/* ── Caption ── */}
               <div>
                 <textarea
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Add a caption..."
+                  placeholder="Add a caption…"
                   maxLength={200}
-                  rows={2}
-                  className="w-full rounded-xl bg-white/[0.06] border border-white/[0.08] px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] resize-none focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30 transition-colors"
+                  rows={1}
+                  className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2
+                             text-[14px] text-[#e7e9ea] placeholder-white/25 resize-none
+                             focus:outline-none focus:border-[#1d9bf0]/40 transition-colors"
                 />
-                <p className="text-[12px] text-[#94a3b8] mt-1 text-right">
-                  {caption.length}/200
-                </p>
+                <p className="text-[11px] text-white/20 mt-0.5 text-right">{caption.length}/200</p>
               </div>
 
               {/* Change photo */}
               <button
                 onClick={() => {
+                  if (previewUrl) URL.revokeObjectURL(previewUrl)
                   setPreviewUrl(null)
                   setSelectedFile(null)
                   setSelectedFilter(IMAGE_FILTERS[0])
                 }}
-                className="text-[14px] text-[#8b5cf6] font-medium hover:underline"
+                className="text-[13px] text-[#1d9bf0] font-medium hover:underline"
               >
                 Change photo
               </button>
             </div>
           )}
 
-          {/* Share button */}
+          {/* ── Share button ── */}
           <button
             onClick={handleShare}
             disabled={!previewUrl || uploading}
             className={`
-              w-full py-3 rounded-full text-[15px] font-bold transition-all flex items-center justify-center gap-2
+              w-full py-2.5 rounded-full text-[14px] font-bold transition-all
+              flex items-center justify-center gap-2
               ${previewUrl && !uploading
-                ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.98]'
-                : 'bg-white/[0.08] text-[#64748b] cursor-not-allowed'
+                ? 'bg-[#1d9bf0] text-white hover:bg-[#1a8cd8] active:scale-[0.98]'
+                : 'bg-white/[0.06] text-white/25 cursor-not-allowed'
               }
             `}
           >
             {uploading && (
-              <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             )}
             {statusText}
           </button>
