@@ -13,14 +13,14 @@ interface StoryUploadSheetProps {
   onStoryUploaded: () => void
 }
 
-/* ── Image compression → returns Blob (not base64) ─────────────────────── */
+/* ── Compress image → returns both Blob (for Storage) and base64 (fallback) ── */
 function compressStoryImage(
   file: File,
   filterCss: string,
   maxWidth = 720,
   maxHeight = 1280,
-  quality = 0.6,
-): Promise<Blob> {
+  quality = 0.55,
+): Promise<{ blob: Blob; base64: string }> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = () => reject(new Error('Failed to read file'))
@@ -31,6 +31,7 @@ function compressStoryImage(
         const canvas = document.createElement('canvas')
         let { width, height } = img
 
+        // Constrain to max dimensions
         if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth }
         if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight }
 
@@ -45,10 +46,13 @@ function compressStoryImage(
         ctx.drawImage(img, 0, 0, width, height)
         ctx.filter = 'none'
 
+        // Get blob for Storage upload
         canvas.toBlob(
           (blob) => {
-            if (blob) resolve(blob)
-            else reject(new Error('Compression failed'))
+            if (!blob) { reject(new Error('Compression failed')); return }
+            // Get base64 as fallback (for Firestore direct storage)
+            const base64 = canvas.toDataURL('image/jpeg', quality)
+            resolve({ blob, base64 })
           },
           'image/jpeg',
           quality,
@@ -93,12 +97,12 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     if (!selectedFile || !user || uploading) return
     setUploading(true)
 
-    let blob: Blob
+    // Step 1: Compress
+    let compressed: { blob: Blob; base64: string }
     try {
       setStep('compressing')
-      console.log('[StoryUpload] Compressing image…')
-      blob = await compressStoryImage(selectedFile, selectedFilter.css)
-      console.log('[StoryUpload] Compressed →', Math.round(blob.size / 1024), 'KB')
+      compressed = await compressStoryImage(selectedFile, selectedFilter.css)
+      console.log('[StoryUpload] Compressed → blob:', Math.round(compressed.blob.size / 1024), 'KB, base64:', Math.round(compressed.base64.length / 1024), 'KB')
     } catch (compressErr) {
       console.error('[StoryUpload] Compression FAILED:', compressErr)
       setUploading(false)
@@ -107,16 +111,18 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
       return
     }
 
+    // Step 2: Upload (tries Storage first, falls back to base64-in-Firestore)
     try {
       setStep('uploading')
-      console.log('[StoryUpload] Uploading to Firebase Storage…')
+      console.log('[StoryUpload] Uploading story…')
       await createStory({
         userId: user.id,
         username: user.username,
         displayName: user.displayName || 'You',
         profileImage: user.profileImage || '',
         verified: user.isVerified,
-        mediaBlob: blob,
+        mediaBlob: compressed.blob,
+        mediaBase64: compressed.base64,
         caption: caption.trim(),
       })
       console.log('[StoryUpload] Upload ✅')
@@ -129,11 +135,12 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
       return
     }
 
+    // Step 3: Done
     setStep('done')
     toast.success('Story shared!')
     onClose()
     setUploading(false)
-    // Small delay for Firestore consistency, then reload
+    // Reload stories after short delay for Firestore consistency
     setTimeout(() => {
       onStoryUploaded()
     }, 600)

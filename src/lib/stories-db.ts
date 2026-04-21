@@ -1,7 +1,7 @@
 /* ── Stories Firestore CRUD ─────────────────────────────────────────────────── */
-/* Uses Firebase Storage for images (fast, binary upload) and Firestore for
-   metadata only (small, fast reads). This replaces the old base64-in-Firestore
-   approach which caused massive documents and timeout failures.            */
+/* Upload strategy: Try Firebase Storage first (fast binary upload).
+   If Storage is not set up or rules reject, fall back to compressed
+   base64 in Firestore. Either way the story gets created.              */
 
 import {
   db,
@@ -34,7 +34,7 @@ export interface Story {
   displayName: string;
   profileImage: string;
   verified: boolean;
-  mediaUrl: string;          // Firebase Storage download URL (small string)
+  mediaUrl: string;          // Storage download URL OR compressed data-URL
   caption: string;
   createdAt: string;
   expiresAt: string;         // 24 h from creation
@@ -68,16 +68,15 @@ function twentyFourHoursFromNow() {
   return new Date(Date.now() + 24 * 60 * 60 * 1000);
 }
 
-/** Check if a story ISO timestamp is still within 24h window. */
-function isNotExpired(createdAtISO: string, expiresAtISO: string): boolean {
-  return new Date(expiresAtISO).getTime() > Date.now();
-}
-
 // ── CRUD ────────────────────────────────────────────────────────────────────
 
 /**
- * Upload image blob to Firebase Storage and create Firestore story doc.
- * Returns the created Story object with the Storage download URL.
+ * Create a new story document.
+ * Strategy:
+ *   1. Try Firebase Storage upload (fast, binary). On success, store download URL.
+ *   2. If Storage fails (not set up, rules block, etc.), fall back to a heavily
+ *      compressed base64 data-URL stored directly in Firestore.
+ * Either way, the story is created and visible immediately.
  */
 export async function createStory(params: {
   userId: string;
@@ -85,46 +84,50 @@ export async function createStory(params: {
   displayName: string;
   profileImage: string;
   verified: boolean;
-  mediaBlob: Blob;           // Compressed JPEG blob (from canvas)
+  mediaBlob: Blob;
+  mediaBase64: string;       // fallback — compressed JPEG data-URL
   caption: string;
 }): Promise<Story> {
   console.log('[stories-db] createStory → userId:', params.userId);
 
   const now = new Date();
   const expiresAt = twentyFourHoursFromNow();
-  const storyId = `${params.userId}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  let mediaUrl = params.mediaBase64; // default: base64 fallback
+  let storagePath = '';
 
-  // Step 1: Upload blob to Firebase Storage (fast binary upload)
-  const storagePath = `stories/${params.userId}/${storyId}.jpg`;
-  const storageRef = ref(storage, storagePath);
-  await uploadBytes(storageRef, params.mediaBlob, {
-    contentType: 'image/jpeg',
-    cacheControl: 'public, max-age=86400', // 24h cache
-  });
-  console.log('[stories-db] Storage upload ✅ →', storagePath);
+  // ── Try Firebase Storage first ──
+  try {
+    const storyId = `${params.userId}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    storagePath = `stories/${params.userId}/${storyId}.jpg`;
+    const storageRef = ref(storage, storagePath);
+    await uploadBytes(storageRef, params.mediaBlob, {
+      contentType: 'image/jpeg',
+    });
+    mediaUrl = await getDownloadURL(storageRef);
+    console.log('[stories-db] Storage upload ✅ →', storagePath);
+  } catch (storageErr) {
+    console.warn('[stories-db] Storage upload failed, using base64 fallback:', storageErr);
+    // Keep mediaUrl as the compressed base64 — still works, just bigger doc
+  }
 
-  // Step 2: Get download URL
-  const mediaUrl = await getDownloadURL(storageRef);
-  console.log('[stories-db] Download URL ✅ →', mediaUrl.length, 'chars');
-
-  // Step 3: Write metadata to Firestore (small doc — no base64!)
-  const ref = await addDoc(collection(db, 'stories'), {
+  // ── Write to Firestore ──
+  const firestoreRef = await addDoc(collection(db, 'stories'), {
     userId: params.userId,
     username: params.username,
     displayName: params.displayName,
     profileImage: params.profileImage,
     verified: params.verified,
-    mediaUrl,                // Storage URL, not base64
+    mediaUrl,
     caption: params.caption,
-    storagePath,             // reference for cleanup
+    ...(storagePath ? { storagePath } : {}),
     createdAt: Timestamp.fromDate(now),
     expiresAt: Timestamp.fromDate(expiresAt),
   });
 
-  console.log('[stories-db] Firestore write ✅ → storyId:', ref.id);
+  console.log('[stories-db] Firestore write ✅ → storyId:', firestoreRef.id);
 
   return {
-    id: ref.id,
+    id: firestoreRef.id,
     userId: params.userId,
     username: params.username,
     displayName: params.displayName,
@@ -140,9 +143,6 @@ export async function createStory(params: {
 /**
  * Fetch all active (non-expired) stories from Firestore,
  * grouped by user, ordered by most-recent-first within each group.
- *
- * Firestore docs now contain only metadata + Storage URL (tiny),
- * so this query is fast regardless of image count.
  */
 export async function fetchStoryGroups(): Promise<StoryGroup[]> {
   console.log('[stories-db] fetchStoryGroups → fetching all stories…');
@@ -151,7 +151,7 @@ export async function fetchStoryGroups(): Promise<StoryGroup[]> {
   const q = query(
     storiesRef,
     orderBy('createdAt', 'desc'),
-    firestoreLimit(200),     // safety cap — stories are ephemeral (24h) so count is low
+    firestoreLimit(200),
   );
 
   const snap = await getDocs(q);
@@ -202,15 +202,12 @@ export async function fetchStoryGroups(): Promise<StoryGroup[]> {
 
 /**
  * Fetch stories for a specific user (e.g. the logged-in user).
- * Also uses simple query + client-side filtering.
  */
 export async function fetchUserStories(userId: string): Promise<Story[]> {
   console.log('[stories-db] fetchUserStories → userId:', userId);
 
   const storiesRef = collection(db, 'stories');
 
-  // Try the compound query first (needs composite index)
-  // Fall back to simple query if it fails
   let docs: Awaited<ReturnType<typeof getDocs>>;
 
   try {
@@ -223,7 +220,6 @@ export async function fetchUserStories(userId: string): Promise<Story[]> {
     );
     docs = await getDocs(q);
   } catch (indexErr) {
-    // Composite index likely missing — fall back to simple query
     console.warn('[stories-db] fetchUserStories → compound query failed, falling back:', indexErr);
     const q = query(
       storiesRef,
@@ -251,7 +247,6 @@ export async function fetchUserStories(userId: string): Promise<Story[]> {
         expiresAt: tsToISO(d.expiresAt),
       };
     })
-    // Client-side expiry filter as safety net
     .filter((s) => new Date(s.expiresAt).getTime() > now);
 
   console.log('[stories-db] fetchUserStories ✅ →', stories.length, 'stories for user', userId);
