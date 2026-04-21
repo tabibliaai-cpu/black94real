@@ -13,13 +13,13 @@ interface StoryUploadSheetProps {
   onStoryUploaded: () => void
 }
 
-/* ── Image compression (9:16 optimized for stories) ─────────────────────── */
+/* ── Image compression (fast, small for stories) ─────────────────────── */
 function compressStoryImage(
   file: File,
   filterCss: string,
-  maxWidth = 1080,
-  maxHeight = 1920,
-  quality = 0.82,
+  maxWidth = 720,
+  maxHeight = 1280,
+  quality = 0.55,
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -40,11 +40,9 @@ function compressStoryImage(
         const ctx = canvas.getContext('2d')
         if (!ctx) { reject(new Error('Canvas not supported')); return }
 
-        // White fill for JPEG transparency
-        ctx.fillStyle = '#FFFFFF'
+        ctx.fillStyle = '#000000'
         ctx.fillRect(0, 0, width, height)
 
-        // Apply CSS filter if not "Normal"
         if (filterCss && filterCss !== 'none') {
           ctx.filter = filterCss
         }
@@ -54,13 +52,16 @@ function compressStoryImage(
 
         let dataUrl = canvas.toDataURL('image/jpeg', quality)
 
-        // Auto-recompress if too large for Firestore
-        if (dataUrl.length > 750_000) {
-          const dataUrl2 = canvas.toDataURL('image/jpeg', 0.5)
-          resolve(dataUrl2.length < dataUrl.length ? dataUrl2 : dataUrl)
-        } else {
-          resolve(dataUrl)
+        // Auto-recompress if still too large for Firestore
+        if (dataUrl.length > 500_000) {
+          // Try progressively lower quality
+          for (const q of [0.4, 0.3, 0.2]) {
+            const smaller = canvas.toDataURL('image/jpeg', q)
+            if (smaller.length < dataUrl.length) dataUrl = smaller
+            if (dataUrl.length < 400_000) break
+          }
         }
+        resolve(dataUrl)
       }
       img.src = reader.result as string
     }
@@ -172,9 +173,12 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     // All done
     setStep('done')
     toast.success('Story shared!')
-    onStoryUploaded()
+    // Close sheet first, then reload after a short delay for Firestore consistency
     onClose()
     setUploading(false)
+    setTimeout(() => {
+      onStoryUploaded()
+    }, 800)
   }, [previewUrl, selectedFile, selectedFilter, caption, user, uploading, onStoryUploaded, onClose])
 
   const handleClose = useCallback(() => {

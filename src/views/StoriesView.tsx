@@ -534,50 +534,6 @@ export function StoriesView() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* ─── Top Bar: X logo + "Stories" title + camera icon ─── */}
-      <div className="sticky top-0 z-20 bg-black/95 backdrop-blur-md border-b border-white/[0.06] safe-area-top">
-        <div className="flex items-center justify-between h-[53px] px-4">
-          {/* Left: X logo */}
-          <button
-            onClick={() => useAppStore.getState().navigate('feed')}
-            className="flex items-center"
-          >
-            <svg
-              className="w-[28px] h-[28px] text-white"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          </button>
-
-          {/* Center: Stories title */}
-          <h1 className="text-[17px] font-bold text-white absolute inset-x-0 text-center pointer-events-none">
-            Stories
-          </h1>
-
-          {/* Right: Camera icon */}
-          <button
-            onClick={() => setUploadOpen(true)}
-            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
-            aria-label="Create story"
-          >
-            <svg
-              className="w-[22px] h-[22px] text-white"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
-              <circle cx="12" cy="13" r="4" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
       {/* ─── Stories Tray (Horizontal Scroll) ─── */}
       <div className="border-b border-white/[0.06]">
         <div className="flex gap-3 px-4 py-3 overflow-x-auto no-scrollbar">
