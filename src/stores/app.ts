@@ -191,6 +191,10 @@ interface AppState {
   setMessages: (messages: Message[]) => void
   addMessage: (message: Message) => void
 
+  // Notifications
+  unreadNotificationCount: number
+  setUnreadNotificationCount: (count: number) => void
+
   // UI
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
@@ -264,6 +268,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   messages: [],
   setMessages: (messages) => set({ messages }),
   addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+
+  // Notifications
+  unreadNotificationCount: 0,
+  setUnreadNotificationCount: (count) => set({ unreadNotificationCount: count }),
 
   // UI
   sidebarOpen: false,

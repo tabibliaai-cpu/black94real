@@ -316,7 +316,7 @@ export function FeedView() {
   }, [user])
 
   return (
-    <div>
+    <div className="mx-auto max-w-[600px]">
       {/* Tabs */}
       <div className="sticky top-[56px] z-20 bg-[#000000] border-b border-white/[0.06]">
         <div className="flex">

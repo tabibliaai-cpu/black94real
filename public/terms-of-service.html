@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Black94</title>
+    <meta name="description" content="Black94 Terms of Service - Read our terms and conditions for using the Black94 platform.">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #e4e4e7;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .header {
+            background-color: #111111;
+            border-bottom: 1px solid #1e1e2e;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .header-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .back-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link:hover {
+            color: #a78bfa;
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 20px 80px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .last-updated {
+            color: #71717a;
+            font-size: 14px;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #1e1e2e;
+        }
+
+        .last-updated strong {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            padding-left: 16px;
+            border-left: 3px solid #8b5cf6;
+            line-height: 1.3;
+        }
+
+        .section p {
+            margin-bottom: 16px;
+            color: #d4d4d8;
+            font-size: 15.5px;
+        }
+
+        .section ul, .section ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            color: #d4d4d8;
+            font-size: 15.5px;
+        }
+
+        .section li::marker {
+            color: #8b5cf6;
+        }
+
+        .highlight-box {
+            background-color: #111118;
+            border: 1px solid #1e1e2e;
+            border-left: 3px solid #8b5cf6;
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .highlight-box p {
+            color: #c4c4cc;
+            margin-bottom: 0;
+        }
+
+        .warning-box {
+            background-color: #18110f;
+            border: 1px solid #3a1c14;
+            border-left: 3px solid #ef4444;
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .warning-box p {
+            color: #d4c4c0;
+            margin-bottom: 0;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, #111118, #13111f);
+            border: 1px solid #2a1f4e;
+            border-radius: 12px;
+            padding: 28px;
+            margin-top: 48px;
+        }
+
+        .contact-box .section-title {
+            border-left: none;
+            padding-left: 0;
+            margin-bottom: 12px;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #d4d4d8;
+            font-size: 15.5px;
+        }
+
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #1e1b3a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-icon svg {
+            width: 16px;
+            height: 16px;
+            color: #8b5cf6;
+        }
+
+        .contact-method a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-method a:hover {
+            text-decoration: underline;
+            color: #a78bfa;
+        }
+
+        .footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 20px;
+            border-top: 1px solid #1e1e2e;
+            text-align: center;
+        }
+
+        .footer p {
+            color: #52525b;
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .toc {
+            background-color: #111118;
+            border: 1px solid #1e1e2e;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+
+        .toc-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .toc a:hover {
+            color: #a78bfa;
+            text-decoration: underline;
+        }
+
+        strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        em {
+            color: #a78bfa;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .page-title {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 19px;
+            }
+
+            .container {
+                padding: 32px 16px 60px;
+            }
+
+            .header-inner {
+                padding: 0 16px;
+            }
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .back-link span {
+                display: none;
+            }
+
+            .contact-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="brand">
+                <div class="brand-logo">B94</div>
+                <span class="brand-name">Black94</span>
+            </a>
+            <a href="/" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                <span>Back to App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <h1 class="page-title">Terms of Service</h1>
+        <p class="last-updated"><strong>Last Updated:</strong> April 22, 2026</p>
+
+        <div class="toc">
+            <div class="toc-title">Table of Contents</div>
+            <ol>
+                <li><a href="#acceptance-of-terms">Acceptance of Terms</a></li>
+                <li><a href="#user-accounts">User Accounts</a></li>
+                <li><a href="#user-content">User Content</a></li>
+                <li><a href="#intellectual-property">Intellectual Property</a></li>
+                <li><a href="#prohibited-content-and-conduct">Prohibited Content &amp; Conduct</a></li>
+                <li><a href="#privacy">Privacy</a></li>
+                <li><a href="#disclaimers">Disclaimers</a></li>
+                <li><a href="#limitation-of-liability">Limitation of Liability</a></li>
+                <li><a href="#changes-to-terms">Changes to These Terms</a></li>
+                <li><a href="#governing-law">Governing Law</a></li>
+                <li><a href="#contact-information">Contact Information</a></li>
+            </ol>
+        </div>
+
+        <!-- Section 1: Acceptance of Terms -->
+        <div class="section" id="acceptance-of-terms">
+            <h2 class="section-title">1. Acceptance of Terms</h2>
+            <p>Welcome to Black94. These Terms of Service ("Terms," "Agreement," or "Terms of Service") constitute a legally binding agreement between you ("User," "you," or "your") and Black94 ("we," "us," "our," or the "Company") governing your access to and use of the Black94 mobile application, website, and all related services, features, content, and functionality (collectively, the "Services"). By accessing, downloading, registering for, or using our Services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service in their entirety.</p>
+            <p>If you do not agree to these Terms of Service, you may not access, register for, download, or use any part of our Services. Your use of the Services is also governed by our <a href="privacy-policy.html" style="color: #8b5cf6;">Privacy Policy</a>, which is incorporated herein by reference. You must be at least 13 years of age (or the minimum age required in your jurisdiction to consent to the processing of your personal data) to use our Services. If you are using the Services on behalf of an organization or entity, you represent and warrant that you have the authority to bind that organization to these Terms, and "you" and "your" will refer to that organization.</p>
+            <p>These Terms apply to all visitors, users, and others who access or use our Services. We reserve the right to update, change, or replace any part of these Terms at our sole discretion. It is your responsibility to check these Terms periodically for changes. Your continued use of the Services following the posting of any changes constitutes acceptance of those changes. By creating an account or using our Services in any capacity, you affirm that you are of legal age, have the capacity to enter into this Agreement, and agree to all the provisions contained herein without reservation.</p>
+            <p>We may offer additional products, features, or services that are subject to separate terms and conditions. In the event of a conflict between these Terms and any additional terms applicable to a specific feature or service, the additional terms shall control with respect to that feature or service. These Terms constitute the entire and exclusive understanding and agreement between you and Black94 regarding the subject matter herein, and supersede all prior or contemporaneous agreements, representations, and understandings, whether written or oral.</p>
+        </div>
+
+        <!-- Section 2: User Accounts -->
+        <div class="section" id="user-accounts">
+            <h2 class="section-title">2. User Accounts</h2>
+            <p>To access certain features of our Services, you may be required to create a user account. When creating an account, you agree to provide accurate, current, and complete information during the registration process and to keep your account information updated at all times. Providing false, misleading, or inaccurate information may result in immediate suspension or termination of your account. You are responsible for maintaining the confidentiality of your account credentials, including your password, and for all activities that occur under your account.</p>
+
+            <p>You agree to the following obligations regarding your account:</p>
+            <ul>
+                <li>You must be at least 13 years of age to create an account, or the applicable minimum age in your jurisdiction.</li>
+                <li>You may only create one account per individual. Creating multiple accounts, including secondary or "burner" accounts for the purpose of circumventing restrictions, is prohibited.</li>
+                <li>You must not use another person's account without their explicit permission and authorization.</li>
+                <li>You are responsible for maintaining the security of your account password and for any activities or actions taken under your account.</li>
+                <li>You must immediately notify us of any unauthorized use of your account or any other breach of security you become aware of.</li>
+                <li>You may not transfer, sell, or assign your account to any other individual or entity without our prior written consent.</li>
+                <li>You must not use your account for any illegal, unauthorized, or fraudulent purpose.</li>
+            </ul>
+
+            <p>We reserve the right to suspend, disable, or terminate your account at our sole discretion, with or without notice, if you violate these Terms of Service, engage in any conduct that we determine to be inappropriate or harmful to the platform, our users, or third parties, or for any other reason we deem sufficient. Upon termination of your account, your right to use the Services will immediately cease. Certain provisions of these Terms shall survive account termination, including intellectual property provisions, warranty disclaimers, and limitations of liability. You may request deletion of your account and personal data at any time by contacting us or using the account deletion feature within the app, subject to our data retention policies as described in our Privacy Policy.</p>
+        </div>
+
+        <!-- Section 3: User Content -->
+        <div class="section" id="user-content">
+            <h2 class="section-title">3. User Content</h2>
+            <p>Our Services allow you to post, upload, publish, submit, store, send, receive, or otherwise make available text, images, videos, audio, graphics, comments, messages, and other materials and information (collectively, "User Content"). You retain all rights to any User Content you submit, post, or display on or through our Services. By submitting, posting, or displaying User Content on our Services, you grant Black94 a worldwide, non-exclusive, royalty-free, irrevocable, perpetual, transferable, and sublicensable license to use, copy, modify, adapt, reproduce, distribute, publish, display, perform, translate, create derivative works from, and otherwise exploit your User Content in connection with operating, providing, improving, promoting, and developing the Services.</p>
+            <p>You represent and warrant that: (a) you own or control all rights in and to your User Content and have the right to grant us the license described above; (b) your User Content does not and will not infringe, violate, or misappropriate any third-party right, including intellectual property rights, privacy rights, or proprietary rights; (c) your User Content does not contain any defamatory, libelous, obscene, pornographic, or otherwise unlawful material; and (d) your User Content does not contain any viruses, malware, or other harmful code.</p>
+            <p>We do not claim ownership over your User Content. You may delete your User Content at any time through the features provided within the Services, subject to certain exceptions such as content that has been shared, copied, or stored by other users. We are not responsible for the retention of User Content by other users or by our service providers after deletion. Please be aware that content you make publicly available may be indexed by search engines and may persist in cached or archived forms outside of our control. We do not have any obligation to monitor, edit, or disclose any User Content, but we reserve the right to do so for the purpose of operating, improving, and securing our Services, complying with applicable law, and enforcing our policies.</p>
+        </div>
+
+        <!-- Section 4: Intellectual Property -->
+        <div class="section" id="intellectual-property">
+            <h2 class="section-title">4. Intellectual Property</h2>
+            <p>The Services and all of their contents, features, and functionality, including but not limited to all information, software, text, displays, images, graphics, photographs, video, audio, design, presentation, selection, and arrangement, as well as all trademarks, trade names, service marks, logos, and trade dress contained therein, are owned by Black94, its licensors, or other providers of such material and are protected by United States and international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
+            <p>You are granted a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to access and use the Services for your personal, non-commercial purposes, subject to these Terms of Service. This license does not include the right to: (a) modify, reproduce, distribute, or create derivative works based upon the Services or any portion thereof; (b) use any data mining, robots, scraping, or similar data gathering or extraction methods on the Services; (c) download (other than page caching) any portion of the Services or any information contained therein, except as expressly permitted on the Services; (d) use the Services for any commercial solicitation purposes; or (e) use the Services in any manner that could damage, disable, overburden, or impair the Services or interfere with any other party's use and enjoyment of the Services.</p>
+            <p>The Black94 name, logo, and all related names, logos, product and service names, designs, and slogans are trademarks of Black94 or its affiliates. You may not use such marks without the prior written permission of Black94. Any other names of companies, products, or services mentioned in the Services may be the trademarks of their respective owners. The use of any trademark without the express written consent of its owner is strictly prohibited. Nothing in these Terms grants you any right, title, or interest in or to any intellectual property owned by Black94 or its licensors, except as expressly set forth in this section. All rights not expressly granted herein are reserved by Black94 and its licensors.</p>
+        </div>
+
+        <!-- Section 5: Prohibited Content and Conduct -->
+        <div class="section" id="prohibited-content-and-conduct">
+            <h2 class="section-title">5. Prohibited Content &amp; Conduct</h2>
+            <p>To maintain a safe, respectful, and positive environment for all users, you agree not to engage in the following prohibited activities or post the following prohibited content when using our Services. This list is not exhaustive, and we reserve the right to take action against any conduct or content that we determine, in our sole discretion, to be harmful, inappropriate, or in violation of these Terms:</p>
+
+            <p><strong>Prohibited Content includes, but is not limited to:</strong></p>
+            <ul>
+                <li>Content that is illegal, unlawful, or promotes illegal activities, including the sale, manufacture, or distribution of illegal drugs, weapons, or contraband.</li>
+                <li>Content that is threatening, abusive, harassing, bullying, intimidating, or that encourages violence or harm toward any individual or group based on race, ethnicity, national origin, religion, sex, gender identity, sexual orientation, disability, age, or any other protected characteristic.</li>
+                <li>Content that is defamatory, libelous, or makes false or misleading claims about individuals, businesses, products, or services.</li>
+                <li>Sexually explicit, pornographic, or adult content, including nudity and sexually suggestive material.</li>
+                <li>Content that depicts or promotes self-harm, suicide, eating disorders, or other dangerous activities.</li>
+                <li>Content that infringes upon the intellectual property rights of any third party, including copyrighted material, trademarks, or proprietary information.</li>
+                <li>Spam, unsolicited messages, repetitive content, or any form of unwanted communication designed to disrupt the platform or annoy other users.</li>
+                <li>Malicious software, viruses, worms, trojans, ransomware, or any code designed to disrupt, damage, or gain unauthorized access to systems, data, or accounts.</li>
+                <li>Content that impersonates or misrepresents your identity or affiliation with any person or entity, including creating fake accounts or misleading profiles.</li>
+                <li>Content that contains personal or confidential information of others without their consent, such as addresses, phone numbers, or financial information ("doxxing").</li>
+                <li>Content that violates any applicable local, state, national, or international law or regulation.</li>
+            </ul>
+
+            <p><strong>Prohibited Conduct includes, but is not limited to:</strong></p>
+            <ul>
+                <li>Using automated systems, bots, scripts, or other means to artificially inflate engagement, manipulate algorithms, scrape data, or gain unauthorized access to the Services.</li>
+                <li>Attempting to circumvent, disable, or interfere with security features, rate limits, content filters, or other technical measures implemented to protect the Services.</li>
+                <li>Reverse engineering, decompiling, disassembling, or otherwise attempting to discover the source code of the Services.</li>
+                <li>Interfering with or disrupting the operation of the Services, servers, or networks connected to the Services.</li>
+                <li>Using the Services to send unsolicited commercial communications, chain letters, or pyramid schemes.</li>
+                <li>Harvesting or collecting personal information of other users without their consent.</li>
+                <li>Creating multiple accounts to evade restrictions, manipulate features, or engage in coordinated inauthentic behavior.</li>
+                <li>Purchasing, selling, or trading accounts, followers, likes, or other engagement metrics.</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>Enforcement:</strong> We reserve the right to remove, edit, or restrict access to any content that violates these Terms, and to suspend, disable, or terminate accounts of users who engage in prohibited conduct. Violations may also result in legal action where appropriate.</p>
+            </div>
+        </div>
+
+        <!-- Section 6: Privacy -->
+        <div class="section" id="privacy">
+            <h2 class="section-title">6. Privacy</h2>
+            <p>Black94 is committed to protecting your privacy and personal information. Our collection, use, storage, and disclosure of personal information is governed by our <a href="privacy-policy.html" style="color: #8b5cf6; text-decoration: underline;">Privacy Policy</a>, which is incorporated into these Terms of Service by reference. By using our Services, you acknowledge and agree that you have read and understand our Privacy Policy, and you consent to the collection and use of your information as described therein.</p>
+            <p>Our Privacy Policy explains in detail the types of personal information we collect, how we use and share that information, the security measures we implement to protect your data, your rights regarding your personal information, and how you can contact us with privacy-related questions or concerns. We encourage you to review our Privacy Policy periodically to stay informed about our data practices. In the event of any conflict between these Terms of Service and our Privacy Policy regarding the handling of personal information, the Privacy Policy shall govern.</p>
+            <p>You understand and agree that by using our Services, you may be exposed to content from other users that you may find offensive, objectionable, or inaccurate. While we make reasonable efforts to moderate content and enforce our community guidelines, we do not guarantee that all content on our platform will comply with our standards. You acknowledge and accept this risk and agree that Black94 shall not be held responsible for any content posted by other users that you may encounter on the platform.</p>
+            <p>Furthermore, you acknowledge that other users may share information about themselves or others, and that we cannot control or verify the accuracy of such information. We encourage you to exercise caution and good judgment when interacting with other users and when sharing your own personal information on the platform. We strongly recommend that you review the privacy settings available within your account and configure them according to your preferences to control who can see your content and profile information.</p>
+        </div>
+
+        <!-- Section 7: Disclaimers -->
+        <div class="section" id="disclaimers">
+            <h2 class="section-title">7. Disclaimers</h2>
+            <p>THE SERVICES ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, BLACK94 EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, TITLE, AND ANY WARRANTIES ARISING FROM COURSE OF DEALING, USAGE, OR TRADE PRACTICE.</p>
+            <p>Black94 makes no representations or warranties that: (a) the Services will be uninterrupted, timely, secure, or error-free; (b) the results obtained from the use of the Services will be accurate or reliable; (c) the quality of any content, materials, or information obtained through the Services will meet your expectations; or (d) any errors or defects in the Services will be corrected. You understand and agree that your use of the Services is at your sole risk and that the Services are provided without any guarantee of availability, functionality, or suitability for any particular purpose.</p>
+            <p>No oral or written advice or information given by Black94, its employees, directors, officers, agents, affiliates, or service providers shall create any warranty. You acknowledge that Black94 does not control, and is not responsible for, the content, privacy policies, or practices of any third-party websites, applications, or services linked to or from our Services. We do not guarantee the accuracy, completeness, or usefulness of any content or information provided on or through our Services, and we shall not be responsible for any reliance you place on such content or information.</p>
+            <p>The Services may include features that allow you to connect with other users, share content, and participate in community activities. You acknowledge and agree that interactions with other users and the content they share are not within our control, and Black94 shall not be liable for any harm, damage, or loss arising from such interactions or content. We provide the Services as a platform for user-generated content and communication, and we do not endorse, verify, or guarantee the accuracy, quality, or appropriateness of any User Content or user interaction.</p>
+
+            <div class="highlight-box">
+                <p><strong>Note:</strong> Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability, so some of the above disclaimers and limitations may not apply to you. In such cases, our liability shall be limited to the maximum extent permitted by applicable law.</p>
+            </div>
+        </div>
+
+        <!-- Section 8: Limitation of Liability -->
+        <div class="section" id="limitation-of-liability">
+            <h2 class="section-title">8. Limitation of Liability</h2>
+            <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL BLACK94, ITS PARENT COMPANY, SUBSIDIARIES, AFFILIATES, DIRECTORS, OFFICERS, EMPLOYEES, AGENTS, SUCCESSORS, OR ASSIGNS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO DAMAGES FOR LOSS OF PROFITS, GOODWILL, DATA, USE, OR OTHER INTANGIBLE LOSSES, REGARDLESS OF WHETHER SUCH DAMAGES ARE BASED ON CONTRACT, TORT, STRICT LIABILITY, OR ANY OTHER LEGAL THEORY, AND WHETHER OR NOT BLACK94 HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+            <p>This limitation of liability applies to any and all claims, causes of action, or losses arising out of or in connection with: (a) your access to, use of, or inability to access or use the Services; (b) any content, information, or materials obtained through the Services; (c) any conduct or content of any third party on the Services; (d) any unauthorized access, use, or alteration of your account, data, or transmissions; (e) any interruption, suspension, or cessation of the Services; (f) any bugs, viruses, or similar harmful code that may be transmitted to or through the Services by any third party; (g) any errors, mistakes, inaccuracies, or omissions in any content; (h) any personal injury or property damage of any nature whatsoever; or (i) any other matter relating to the Services.</p>
+            <p>IN NO EVENT SHALL BLACK94'S TOTAL AGGREGATE LIABILITY TO YOU FOR ALL CLAIMS ARISING OUT OF OR RELATING TO THE USE OF, OR INABILITY TO USE, THE SERVICES EXCEED THE AMOUNT OF ONE HUNDRED U.S. DOLLARS ($100.00) OR THE AMOUNT YOU PAID TO BLACK94 IN THE TWELVE (12) MONTHS PRIOR TO THE EVENT GIVING RISE TO THE LIABILITY, WHICHEVER IS GREATER. THIS LIMITATION SHALL APPLY REGARDLESS OF THE LEGAL THEORY ON WHICH THE CLAIM IS BASED AND EVEN IF BLACK94 HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+            <p>Some jurisdictions do not allow the exclusion or limitation of liability for consequential or incidental damages, so the above limitation may not apply to you. In such jurisdictions, our liability shall be limited to the greatest extent permitted by applicable law. The limitations in this section shall survive and apply even if any limited remedy specified herein is found to have failed of its essential purpose. You agree that the Services are provided for personal, non-commercial use, and that the liability limitations set forth herein reflect a reasonable allocation of risk between the parties and are fundamental to the basis of the bargain between them.</p>
+        </div>
+
+        <!-- Section 9: Changes to Terms -->
+        <div class="section" id="changes-to-terms">
+            <h2 class="section-title">9. Changes to These Terms</h2>
+            <p>Black94 reserves the right, at its sole and absolute discretion, to modify, amend, update, or replace these Terms of Service at any time and for any reason without prior notice, except as may be required by applicable law. When we make material changes to these Terms, we will endeavor to provide you with reasonable advance notice by posting a prominent announcement on our platform, sending a notification to the email address associated with your account, or displaying an in-app notification. The "Last Updated" date at the top of this page indicates when the most recent changes were made.</p>
+            <p>Your continued use of the Services following the posting of revised Terms means that you accept and agree to the changes. You are expected to check this page periodically so you are aware of any changes, as they are binding on you. If you do not agree to the revised Terms, you must stop using the Services immediately and may request the deletion of your account in accordance with our account deletion procedures described in our Privacy Policy.</p>
+            <p>We may also change, modify, add, or remove features, functions, or capabilities of the Services at any time without prior notice or liability. Changes to the Services may require updates to these Terms, and we will update these Terms accordingly. We will make reasonable efforts to communicate significant changes that may affect your use of the Services. However, the ultimate responsibility for reviewing and understanding these Terms rests with you. By continuing to access or use our Services after any revisions become effective, you agree to be bound by the revised Terms.</p>
+            <p>In the event that any provision of these Terms is held to be invalid, illegal, or unenforceable by a court of competent jurisdiction or arbitrator, such invalidity, illegality, or unenforceability shall not affect any other provision of these Terms, and the remaining provisions shall continue in full force and effect. The invalid or unenforceable provision shall be modified to the minimum extent necessary to make it valid and enforceable while preserving the intent of the original provision.</p>
+        </div>
+
+        <!-- Section 10: Governing Law -->
+        <div class="section" id="governing-law">
+            <h2 class="section-title">10. Governing Law</h2>
+            <p>These Terms of Service and any disputes arising out of or related to these Terms or your use of the Services shall be governed by and construed in accordance with the laws of the United States, without regard to its conflict of law principles or any other principles that would require or permit the application of the laws of any other jurisdiction.</p>
+            <p>Any legal action, suit, or proceeding arising out of or related to these Terms of Service or your use of the Services shall be brought exclusively in the federal or state courts located in the United States, and you consent to the personal jurisdiction and venue of such courts. You waive any and all objections to the exercise of jurisdiction over you by such courts and to venue in such courts. You further agree not to bring any claims in any individual capacity or as a member of any class or representative action in any court or arbitration proceeding against Black94.</p>
+            <p>For any dispute that is not subject to arbitration, you and Black94 agree to submit to the personal and exclusive jurisdiction of the courts located in the United States. You agree to waive any right to a jury trial in connection with any action or litigation arising under or related to these Terms. Any claim or cause of action arising out of or related to your use of the Services or these Terms must be filed within one (1) year after such claim or cause of action arose, or be forever barred. These Terms shall not be governed by the United Nations Convention on Contracts for the International Sale of Goods.</p>
+            <p>If you are accessing the Services from a jurisdiction other than the United States, you acknowledge that you are doing so voluntarily and are responsible for complying with all applicable local laws. We make no representation that the Services are appropriate or available for use in all jurisdictions. Accessing the Services from jurisdictions where the content or Services are illegal is prohibited. If you choose to access the Services from outside the United States, you do so on your own initiative and are solely responsible for compliance with all applicable local laws.</p>
+        </div>
+
+        <!-- Section 11: Contact Information -->
+        <div class="section" id="contact-information">
+            <h2 class="section-title">11. Contact Information</h2>
+            <p>If you have any questions, concerns, or feedback about these Terms of Service, or if you need to report a violation of these Terms, please contact us. We value our users and are committed to providing prompt and helpful responses to all inquiries. You may reach us through any of the following methods:</p>
+
+            <div class="contact-box">
+                <h3 class="section-title">Get in Touch</h3>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                    <span>Email: <a href="mailto:privacy@black94.app">privacy@black94.app</a></span>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <span>Response Time: Within 30 days</span>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <span>Available: Mon - Fri, 9 AM - 6 PM EST</span>
+                </div>
+            </div>
+
+            <p style="margin-top: 24px; color: #a1a1aa; font-size: 14px; font-style: italic;">These Terms of Service, together with our Privacy Policy, represent the complete agreement between you and Black94 regarding the use of our Services. By using Black94, you acknowledge that you have read, understood, and agree to be bound by all of the terms and conditions set forth herein.</p>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Black94. All rights reserved. | <a href="terms-of-service.html">Terms of Service</a> | <a href="privacy-policy.html">Privacy Policy</a></p>
+    </footer>
+
+</body>
+</html>

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { runRecalculationCycle, getRankedFeed } from './engagement-engine'
 import type { RankedPost } from './engagement-engine'
+import { createNotification } from './db'
 
 /**
  * Client-side engagement engine hook.
@@ -26,6 +27,23 @@ export function useEngagementEngine(enabled = true) {
       const result = await runRecalculationCycle()
       if (result.notificationsEmitted.length > 0) {
         console.log(`[engagement] ${result.notificationsEmitted.length} notification events fired`)
+        // Write engagement notification events to Firestore
+        for (const evt of result.notificationsEmitted) {
+          try {
+            createNotification({
+              userId: evt.ownerUserId,
+              type: 'engagement',
+              actorId: evt.ownerUserId,
+              actorName: 'Engagement',
+              actorUsername: 'system',
+              actorProfileImage: '',
+              postId: evt.postId,
+              message: evt.message || 'Your post is gaining traction!',
+            })
+          } catch (notifErr) {
+            console.warn('[engagement] Failed to write notification:', notifErr)
+          }
+        }
       }
     } catch (err) {
       console.error('[engagement] Cycle error:', err)

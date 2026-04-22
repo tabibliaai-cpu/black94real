@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react'
 import { useAppStore, type AppView, type User as StoreUser } from '@/stores/app'
-import { auth, authReady, signIn, signOutUser, onAuthStateChanged } from '@/lib/firebase'
-import { createUserFromGoogle } from '@/lib/db'
+import { auth, authReady, signIn, signOutUser, onAuthStateChanged, requestNotificationPermission, saveFCMToken, setupFCMListener } from '@/lib/firebase'
+import { createUserFromGoogle, fetchNotifications, markNotificationRead } from '@/lib/db'
+import { onSnapshot, collection, query, where, getDocs } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 import { type User as FirebaseUser } from 'firebase/auth'
 import { MobileNav } from '@/components/MobileNav'
 import { Sidebar } from '@/components/Sidebar'
@@ -118,8 +120,11 @@ function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }
             {busy ? 'Signing in...' : 'Sign in with Google'}
           </span>
         </button>
-        <p className="mt-6 text-[11px] text-[#64748b] text-center">
-          By signing in, you agree to our Terms of Service and Privacy Policy.
+        <p className="mt-6 text-[11px] text-[#64748b] text-center leading-relaxed">
+          By signing in, you agree to our{' '}
+          <a href="/terms-of-service.html" target="_blank" rel="noopener noreferrer" className="text-[#8b5cf6] hover:text-[#a78bfa] underline underline-offset-2">Terms of Service</a>
+          {' '}and{' '}
+          <a href="/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="text-[#8b5cf6] hover:text-[#a78bfa] underline underline-offset-2">Privacy Policy</a>.
         </p>
       </div>
     </div>
@@ -367,6 +372,62 @@ export default function Black94App() {
     }
   }, [logout])
 
+  /* ── Real-time unread notification count ─────────────────────────── */
+  const setUnreadNotificationCount = useAppStore((s) => s.setUnreadNotificationCount)
+  useEffect(() => {
+    if (screen !== 'app' || !user?.id) return
+    try {
+      const notifsRef = collection(db, 'notifications')
+      const q = query(notifsRef, where('userId', '==', user.id), where('read', '==', false))
+      const unsubscribe = onSnapshot(q, (snap) => {
+        setUnreadNotificationCount(snap.size)
+      }, (err) => {
+        console.warn('[Notifications] Listener error:', err)
+      })
+      return () => unsubscribe()
+    } catch (err) {
+      console.warn('[Notifications] Failed to set up listener:', err)
+    }
+  }, [screen, user?.id, setUnreadNotificationCount])
+
+  /* ── FCM Push Notification Setup ───────────────────────────────── */
+  useEffect(() => {
+    if (screen !== 'app' || !user?.id) return
+    const setupFCM = async () => {
+      try {
+        // Setup foreground message listener
+        await setupFCMListener()
+        // Request permission and get token (only if not already granted)
+        const token = await requestNotificationPermission()
+        if (token && user?.id) {
+          await saveFCMToken(user.id, token)
+        }
+      } catch (err) {
+        console.warn('[FCM] Setup failed:', err)
+      }
+    }
+    setupFCM()
+  }, [screen, user?.id])
+
+  /* ── Mark notifications read when viewing notifications ──────────── */
+  useEffect(() => {
+    if (screen !== 'app' || !user?.id || currentView !== 'notifications') return
+    // Mark all unread as read
+    const markAllRead = async () => {
+      try {
+        const notifsRef = collection(db, 'notifications')
+        const q = query(notifsRef, where('userId', '==', user.id), where('read', '==', false))
+        const snap = await getDocs(q)
+        for (const docSnap of snap.docs) {
+          await markNotificationRead(docSnap.id)
+        }
+      } catch (err) {
+        console.warn('[Notifications] markAllRead error:', err)
+      }
+    }
+    markAllRead()
+  }, [screen, user?.id, currentView])
+
   /* ── Render ───────────────────────────────────────────────────────────── */
 
   if (screen === 'loading') return <LoadingScreen />
@@ -434,7 +495,7 @@ export default function Black94App() {
       )}
 
       {/* ─── Views ─── */}
-      <main><ViewRouter /></main>
+      <main className="md:ml-[260px] lg:ml-[260px]"><ViewRouter /></main>
 
       {/* ─── FAB — compose button ─── */}
       {isHomeFeed && (

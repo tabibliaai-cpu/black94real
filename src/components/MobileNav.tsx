@@ -81,11 +81,14 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
 ]
 
 export function MobileNav({ currentView, onNavigate }: MobileNavProps) {
+  const unreadNotificationCount = useAppStore((s) => s.unreadNotificationCount)
+
   return (
     <nav className="fixed bottom-0 inset-x-0 z-30 bg-[#000000] border-t border-white/[0.06] safe-area-bottom shrink-0">
       <div className="flex items-center justify-around h-[50px]">
         {NAV_ITEMS.map(({ view, label, icon }) => {
           const isActive = currentView === view
+          const showBadge = view === 'notifications' && unreadNotificationCount > 0
           return (
             <button
               key={view}
@@ -94,6 +97,11 @@ export function MobileNav({ currentView, onNavigate }: MobileNavProps) {
               aria-label={label}
             >
               {icon(isActive)}
+              {showBadge && (
+                <span className="absolute top-[4px] right-[10px] min-w-[16px] h-[16px] rounded-full bg-[#8b5cf6] text-white text-[10px] font-bold flex items-center justify-center px-1">
+                  {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                </span>
+              )}
             </button>
           )
         })}

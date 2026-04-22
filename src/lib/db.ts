@@ -108,7 +108,7 @@ export interface Message {
 export interface Black94Notification {
   id: string;
   userId: string;
-  type: 'like' | 'comment' | 'follow' | 'message' | 'mention' | 'repost';
+  type: 'like' | 'comment' | 'follow' | 'message' | 'mention' | 'repost' | 'engagement';
   actorId: string;
   actorName: string;
   actorUsername: string;
@@ -521,6 +521,22 @@ export async function toggleFollow(followerId: string, followingId: string): Pro
       followingId,
       createdAt: serverTimestamp(),
     });
+    // Notify the followed user (fire-and-forget)
+    try {
+      const followerSnap = await getDoc(doc(db, 'users', followerId));
+      const follower = followerSnap.exists() ? followerSnap.data() : null;
+      createNotification({
+        userId: followingId,
+        type: 'follow',
+        actorId: followerId,
+        actorName: follower?.displayName || '',
+        actorUsername: follower?.username || '',
+        actorProfileImage: follower?.profileImage || '',
+        message: 'started following you',
+      });
+    } catch (e) {
+      console.warn('[db] toggleFollow: notification failed (non-critical):', e);
+    }
     return true;
   }
 }
@@ -632,6 +648,34 @@ export async function fetchMessages(chatId: string, limitCount: number): Promise
 }
 
 // ── Notification Functions ──────────────────────────────────────────────────
+
+export async function createNotification(data: {
+  userId: string
+  type: 'like' | 'comment' | 'follow' | 'message' | 'mention' | 'repost' | 'engagement'
+  actorId: string
+  actorName: string
+  actorUsername: string
+  actorProfileImage: string
+  postId?: string
+  message?: string
+}): Promise<void> {
+  try {
+    await addDoc(collection(db, 'notifications'), {
+      userId: data.userId,
+      type: data.type,
+      actorId: data.actorId,
+      actorName: data.actorName,
+      actorUsername: data.actorUsername,
+      actorProfileImage: data.actorProfileImage,
+      postId: data.postId || null,
+      message: data.message || '',
+      read: false,
+      createdAt: serverTimestamp(),
+    });
+  } catch (err) {
+    console.warn('[notifications] Failed to create notification:', err);
+  }
+}
 
 export async function fetchNotifications(userId: string): Promise<Black94Notification[]> {
   const notifsRef = collection(db, 'notifications');

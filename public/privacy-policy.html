@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Black94</title>
+    <meta name="description" content="Black94 Privacy Policy - Learn how we collect, use, and protect your information.">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #e4e4e7;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .header {
+            background-color: #111111;
+            border-bottom: 1px solid #1e1e2e;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .header-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .back-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link:hover {
+            color: #a78bfa;
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 20px 80px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .last-updated {
+            color: #71717a;
+            font-size: 14px;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #1e1e2e;
+        }
+
+        .last-updated strong {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            padding-left: 16px;
+            border-left: 3px solid #8b5cf6;
+            line-height: 1.3;
+        }
+
+        .section p {
+            margin-bottom: 16px;
+            color: #d4d4d8;
+            font-size: 15.5px;
+        }
+
+        .section ul, .section ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            color: #d4d4d8;
+            font-size: 15.5px;
+        }
+
+        .section li::marker {
+            color: #8b5cf6;
+        }
+
+        .highlight-box {
+            background-color: #111118;
+            border: 1px solid #1e1e2e;
+            border-left: 3px solid #8b5cf6;
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .highlight-box p {
+            color: #c4c4cc;
+            margin-bottom: 0;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, #111118, #13111f);
+            border: 1px solid #2a1f4e;
+            border-radius: 12px;
+            padding: 28px;
+            margin-top: 48px;
+        }
+
+        .contact-box .section-title {
+            border-left: none;
+            padding-left: 0;
+            margin-bottom: 12px;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #d4d4d8;
+            font-size: 15.5px;
+        }
+
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #1e1b3a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-icon svg {
+            width: 16px;
+            height: 16px;
+            color: #8b5cf6;
+        }
+
+        .contact-method a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-method a:hover {
+            text-decoration: underline;
+            color: #a78bfa;
+        }
+
+        .footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 20px;
+            border-top: 1px solid #1e1e2e;
+            text-align: center;
+        }
+
+        .footer p {
+            color: #52525b;
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .toc {
+            background-color: #111118;
+            border: 1px solid #1e1e2e;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+        }
+
+        .toc-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .toc a:hover {
+            color: #a78bfa;
+            text-decoration: underline;
+        }
+
+        strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        em {
+            color: #a78bfa;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .page-title {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 19px;
+            }
+
+            .container {
+                padding: 32px 16px 60px;
+            }
+
+            .header-inner {
+                padding: 0 16px;
+            }
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .back-link span {
+                display: none;
+            }
+
+            .contact-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="brand">
+                <div class="brand-logo">B94</div>
+                <span class="brand-name">Black94</span>
+            </a>
+            <a href="/" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                <span>Back to App</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <h1 class="page-title">Privacy Policy</h1>
+        <p class="last-updated"><strong>Last Updated:</strong> April 22, 2026</p>
+
+        <div class="toc">
+            <div class="toc-title">Table of Contents</div>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#information-we-collect">Information We Collect</a></li>
+                <li><a href="#how-we-use">How We Use Your Information</a></li>
+                <li><a href="#information-sharing">Information Sharing</a></li>
+                <li><a href="#data-storage-security">Data Storage &amp; Security</a></li>
+                <li><a href="#your-rights">Your Rights</a></li>
+                <li><a href="#childrens-privacy">Children's Privacy</a></li>
+                <li><a href="#third-party-links">Third-Party Links</a></li>
+                <li><a href="#changes-to-policy">Changes to This Policy</a></li>
+                <li><a href="#contact-information">Contact Information</a></li>
+            </ol>
+        </div>
+
+        <!-- Section 1: Introduction -->
+        <div class="section" id="introduction">
+            <h2 class="section-title">1. Introduction</h2>
+            <p>Welcome to Black94 ("we," "our," or "us"). We are committed to protecting and respecting your privacy. This Privacy Policy describes how we collect, use, store, disclose, and safeguard your information when you use our mobile application, website, and related services (collectively, the "Services"). By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy.</p>
+            <p>Black94 is a social media platform designed to connect people through shared experiences, content creation, and community engagement. We understand that when you use our platform, you trust us with your personal information. We take that trust seriously and strive to provide a transparent, secure, and privacy-respecting experience for all of our users. This policy applies to all users of the Black94 platform, including registered members, visitors, and any other individuals who interact with our Services.</p>
+            <p>We encourage you to read this Privacy Policy carefully and to check this page periodically for any changes. If you do not agree with the terms of this Privacy Policy, please do not access or use our Services. Your continued use of the Services after any modifications to this Privacy Policy will constitute your acknowledgment of the modifications and your consent to abide by and be bound by the updated Privacy Policy.</p>
+            <p>In this policy, "personal information" means any information that can be used to identify you directly or indirectly, alone or in combination with other information. We collect personal information that you voluntarily provide to us when you register on the platform, express an interest in obtaining information about us or our Services, or otherwise contact us. We also automatically collect certain information when you visit, use, or navigate our Services.</p>
+        </div>
+
+        <!-- Section 2: Information We Collect -->
+        <div class="section" id="information-we-collect">
+            <h2 class="section-title">2. Information We Collect</h2>
+            <p>We collect several types of information to provide and improve our Services for you. The types of information we collect depend on how you interact with our platform and the choices you make. Below is a detailed description of the categories of information we may collect:</p>
+
+            <p><strong>Personal Information:</strong> When you create a Black94 account, we collect personal identification information such as your full name, username, email address, phone number, and profile picture. You may also choose to provide additional information in your profile, including a bio, date of birth, gender, location, website links, and other details you wish to share with the community. If you use social sign-on (such as Google, Apple, or Facebook authentication), we may receive authentication tokens and basic profile information from those services. We also collect information you provide when you communicate with us, such as when you submit support requests, report issues, or participate in surveys.</p>
+
+            <p><strong>Usage Data:</strong> We automatically collect information about your interactions with our Services, including your browsing patterns, features used, search queries, content viewed, likes, shares, comments, messages sent and received, accounts you follow, and other engagement metrics. We track session duration, frequency of use, and navigation paths through the application. This usage data helps us understand how users interact with our platform so we can improve the user experience and develop new features that our community finds valuable.</p>
+
+            <p><strong>Device Information:</strong> We collect information about the device you use to access our Services, including the device type, model, manufacturer, operating system and version, browser type and version, screen resolution, unique device identifiers (such as advertising identifiers, IMEI, or device serial number), mobile network information, carrier, and other technical specifications. This information is used for device optimization, troubleshooting, analytics, and security purposes.</p>
+
+            <p><strong>Location Information:</strong> With your explicit consent, we may collect and process information about your precise or approximate geographic location. This may include GPS coordinates, Wi-Fi access points, Bluetooth beacons, cell tower data, and IP-based location data. We use location information to provide location-based features such as geotagged posts, local content discovery, nearby user suggestions, and targeted recommendations. You can control location permissions through your device settings at any time. If you decline to share location data, some features may not be available or may provide a degraded experience.</p>
+
+            <p><strong>Cookies and Tracking Technologies:</strong> We and our third-party service providers use cookies, web beacons, pixels, device fingerprints, local storage, and similar tracking technologies to collect and store information about your interactions with our Services. These technologies help us remember your preferences, analyze traffic, deliver personalized content, measure advertising effectiveness, and provide enhanced functionality. We use both session cookies (which expire when you close your browser) and persistent cookies (which remain on your device until they expire or you delete them). You can manage your cookie preferences through your browser settings, though disabling cookies may affect certain features of our Services.</p>
+
+            <div class="highlight-box">
+                <p><strong>Important:</strong> We do not sell your personal information to any third parties. We collect only what is necessary to provide, improve, and secure our Services, and we are transparent about how that information is used.</p>
+            </div>
+        </div>
+
+        <!-- Section 3: How We Use Your Information -->
+        <div class="section" id="how-we-use">
+            <h2 class="section-title">3. How We Use Your Information</h2>
+            <p>We use the information we collect for a variety of purposes to provide, maintain, and improve our Services, to communicate with you, and to ensure the security and integrity of our platform. Specifically, we use your information for the following purposes:</p>
+
+            <p><strong>Providing and Operating Our Services:</strong> We use your personal information to create and manage your account, authenticate your identity, process your transactions, provide customer support, and deliver the core features of the Black94 platform. This includes enabling you to create, publish, and share content, interact with other users, send and receive messages, follow accounts, and access all platform functionality. Your information is essential to maintaining a personalized and functional experience throughout your use of our Services.</p>
+
+            <p><strong>Personalizing Your Experience:</strong> We use the information we collect to customize and personalize your experience on Black94. This includes curating your content feed based on your interests and engagement history, recommending users to follow, suggesting groups and communities, tailoring search results, and displaying relevant content and advertisements. Our recommendation algorithms analyze your interactions, preferences, and behavior patterns to surface content that is most likely to be interesting and relevant to you, creating a more engaging and enjoyable platform experience.</p>
+
+            <p><strong>Analytics and Research:</strong> We use aggregated and anonymized usage data for analytical purposes to understand how our Services are being used, identify trends, measure the effectiveness of features, diagnose technical issues, and conduct research to improve our platform. These analytics help us make data-driven decisions about product development, feature prioritization, and user experience enhancements. We may also use this data for internal benchmarking, reporting, and strategic planning purposes. When possible, we de-identify or anonymize data before using it for analysis.</p>
+
+            <p><strong>Communication:</strong> We use your contact information to communicate with you about your account, our Services, and important updates. This may include transactional communications such as account verification emails, password reset notifications, security alerts, activity confirmations, and customer support responses. With your consent, we may also send promotional communications, newsletters, product announcements, event invitations, and marketing materials about features, updates, and offerings that we believe may interest you. You can opt out of promotional communications at any time through your account settings or by following the unsubscribe instructions included in each communication.</p>
+
+            <p><strong>Safety and Security:</strong> We use your information to detect, prevent, investigate, and respond to security threats, fraud, spam, abuse, and other harmful or illegal activities. This includes monitoring for suspicious account behavior, verifying user identity, enforcing our Terms of Service, protecting the rights and safety of our users and the public, and maintaining the integrity and security of our platform. We may also use automated systems to screen content and behavior for potential policy violations.</p>
+
+            <p><strong>Legal and Compliance:</strong> We may use your information to comply with applicable laws, regulations, legal processes, law enforcement requests, and governmental requirements. This includes responding to subpoenas, court orders, regulatory inquiries, and other legal obligations. We may also use your information to exercise or defend legal claims, enforce our agreements, and comply with our legal and regulatory obligations across the jurisdictions in which we operate.</p>
+        </div>
+
+        <!-- Section 4: Information Sharing -->
+        <div class="section" id="information-sharing">
+            <h2 class="section-title">4. Information Sharing</h2>
+            <p>We understand that your personal information is valuable and sensitive. We do not sell, rent, or trade your personal information to third parties for their marketing purposes. However, we may share your information in the following circumstances:</p>
+
+            <p><strong>Public Information:</strong> Certain information you share on the Black94 platform is inherently public by nature. This includes your profile information that you choose to make visible to others (such as your username, profile picture, and bio), your public posts, comments, likes, and other interactions. Please be mindful that information you choose to make public can be viewed, copied, and shared by anyone, including people who are not registered users of our Services. We recommend that you carefully consider what information you share publicly.</p>
+
+            <p><strong>Other Users:</strong> When you interact with other users on our platform, such as by sending direct messages, commenting on posts, or collaborating on content, the recipients of those interactions may see information you choose to share with them. Other users may also see certain activity information, such as mutual connections and public engagement metrics. You have control over your privacy settings and can configure who can see your content and activity through your account preferences.</p>
+
+            <p><strong>Service Providers:</strong> We engage trusted third-party service providers who perform services on our behalf, including but not limited to: cloud hosting and data storage (Google Cloud Platform, Firebase), analytics (Google Analytics), payment processing, email delivery, customer support, fraud detection, and security monitoring. These service providers access your information only as necessary to perform the services we have engaged them to provide and are contractually obligated to maintain the confidentiality and security of your data. They are prohibited from using your personal information for their own purposes or sharing it with others except as required to provide the contracted services.</p>
+
+            <p><strong>Business Transfers:</strong> In the event of a merger, acquisition, reorganization, bankruptcy, or sale of all or a portion of our assets, user information may be transferred as part of such transaction. We will notify you via email or a prominent notice on our platform before your personal information becomes subject to a different privacy policy, and you will have the opportunity to exercise any rights available to you with respect to your data.</p>
+
+            <p><strong>Legal Requirements:</strong> We may disclose your personal information when we believe in good faith that such disclosure is necessary to: comply with applicable law, regulation, or legal process; respond to lawful requests from public authorities, including law enforcement and government agencies; enforce our Terms of Service and other agreements; protect the rights, privacy, safety, or property of Black94, our users, or the public; detect, prevent, or address fraud, security issues, or technical problems; or as otherwise required or permitted by law. We will make such disclosures only when legally required or when we have a good-faith belief that they are necessary.</p>
+        </div>
+
+        <!-- Section 5: Data Storage & Security -->
+        <div class="section" id="data-storage-security">
+            <h2 class="section-title">5. Data Storage &amp; Security</h2>
+            <p>The security and integrity of your personal information is a top priority for Black94. We implement robust technical, administrative, and physical safeguards to protect your data against unauthorized access, alteration, disclosure, or destruction. Below is an overview of our data storage and security practices:</p>
+
+            <p><strong>Data Storage:</strong> Your personal information is stored on secure servers operated by Google Cloud Platform (GCP) and Firebase, our trusted cloud infrastructure providers. Data is stored in data centers located in the United States and may be replicated to backup facilities for redundancy and disaster recovery purposes. Our servers are housed in facilities with stringent physical security controls, including 24/7 monitoring, biometric access controls, surveillance systems, and environmental controls. By using industry-leading cloud providers, we benefit from their extensive security certifications and compliance programs.</p>
+
+            <p><strong>Encryption:</strong> We employ strong encryption measures to protect your data both in transit and at rest. All data transmitted between your device and our servers is encrypted using TLS (Transport Layer Security) 1.2 or higher with strong cipher suites. Data stored on our servers is encrypted using AES-256 encryption or equivalent standards. Sensitive information such as passwords is hashed and salted using industry-standard algorithms (bcrypt or Argon2) and is never stored in plaintext. We continuously evaluate and update our encryption standards to incorporate the latest security best practices and technological advances.</p>
+
+            <p><strong>Access Controls:</strong> We implement strict access controls to limit who can access your personal information within our organization. Access to user data is granted on a need-to-know basis and is limited to employees, contractors, and agents who require such access to perform their job functions. All personnel with data access undergo background checks, receive comprehensive security training, and are bound by confidentiality obligations. We maintain detailed audit logs of data access to monitor for unauthorized or inappropriate access and to support security investigations.</p>
+
+            <p><strong>Security Monitoring and Incident Response:</strong> We maintain comprehensive security monitoring systems that continuously scan for threats, vulnerabilities, and suspicious activity. We conduct regular security assessments, penetration testing, and vulnerability scans to identify and address potential weaknesses in our systems. In the event of a data security incident or breach, we have an incident response plan in place to quickly contain, investigate, and remediate the issue. We will notify affected users and relevant authorities as required by applicable data breach notification laws, and we will provide timely and transparent communication about the incident and the steps taken to address it.</p>
+
+            <p><strong>Data Retention:</strong> We retain your personal information for as long as your account is active or as needed to provide you with our Services. If you delete your account, we will remove your personal information from our active records within a reasonable timeframe, except where we are required or permitted to retain certain information to comply with legal obligations, resolve disputes, enforce our agreements, protect against fraud, or for legitimate business purposes such as analytics and record-keeping. Anonymized or aggregated data that cannot reasonably be used to identify you may be retained indefinitely.</p>
+        </div>
+
+        <!-- Section 6: Your Rights -->
+        <div class="section" id="your-rights">
+            <h2 class="section-title">6. Your Rights</h2>
+            <p>We believe you should have meaningful control over your personal information. Depending on your location and applicable law, you may have the following rights with respect to your personal information. We are committed to honoring these rights and facilitating your requests in a timely manner:</p>
+
+            <p><strong>Right of Access:</strong> You have the right to request access to the personal information we hold about you. Upon verification of your identity, we will provide you with a copy of your personal data in a commonly used, machine-readable format. This allows you to review what information we have collected, understand how it has been used, and verify its accuracy. You can access much of your information directly through your account settings at any time.</p>
+
+            <p><strong>Right to Correction:</strong> You have the right to request correction of any inaccurate or incomplete personal information we hold about you. You can update most of your account information directly through your profile settings. For other corrections, you may submit a request to our privacy team, and we will address it promptly. We rely on accurate information to provide our Services effectively, and we encourage you to keep your information current and correct.</p>
+
+            <p><strong>Right to Deletion:</strong> You have the right to request deletion of your personal information, subject to certain exceptions. You can delete your account at any time through your account settings, which will initiate the deletion of your personal data. Upon receiving a verified deletion request, we will delete your information from our active systems and direct our service providers to do the same, except where retention is required by law, necessary to complete transactions, or needed for legitimate business purposes as described in this policy. Please note that some information, such as anonymized analytics data or content shared publicly, may not be fully deletable.</p>
+
+            <p><strong>Right to Data Portability:</strong> You have the right to request a copy of your personal information in a structured, commonly used, and machine-readable format, enabling you to transfer that data to another service provider if you choose. We support data portability and will provide your data in a format such as JSON or CSV upon request. You can request a data export through your account settings or by contacting our privacy team.</p>
+
+            <p><strong>Right to Opt-Out:</strong> You have the right to opt out of certain data processing activities. Specifically, you can: opt out of receiving promotional communications by using the unsubscribe link in our emails or through your notification preferences; opt out of personalized advertising by adjusting your device advertising identifier settings or using platform-level opt-out mechanisms; opt out of location tracking by disabling location permissions in your device settings; and opt out of cookies and similar tracking technologies through your browser settings. Please note that opting out of certain data processing may affect the functionality and personalization of our Services.</p>
+
+            <p><strong>Exercising Your Rights:</strong> To exercise any of these rights, please contact us at <em>privacy@black94.app</em>. We will respond to verified requests within 30 days, or within the timeframe required by applicable law. We may ask for information to verify your identity before processing your request. We will not discriminate against you for exercising any of your privacy rights.</p>
+        </div>
+
+        <!-- Section 7: Children's Privacy -->
+        <div class="section" id="childrens-privacy">
+            <h2 class="section-title">7. Children's Privacy</h2>
+            <p>The Black94 platform and Services are not directed at children under the age of 13 (or the applicable minimum age of digital consent in your jurisdiction, which may be 14, 15, or 16 depending on your location). We do not knowingly collect, use, or disclose personal information from children under the age of 13. Our account registration process requires users to confirm that they are at least 13 years of age, and we use reasonable measures to verify the age of our users.</p>
+            <p>If you are a parent or guardian and become aware that your child under the age of 13 has provided us with personal information without your consent, please contact us immediately at <em>privacy@black94.app</em>. Upon receiving verifiable notice that we have collected personal information from a child under the age of 13, we will take prompt steps to delete that information from our servers and records. If we discover that a child under 13 has provided us with personal information, we will delete that information as quickly as commercially feasible.</p>
+            <p>We are committed to complying with the Children's Online Privacy Protection Act (COPPA) and other applicable children's privacy laws. In jurisdictions where the minimum age for data processing consent is higher than 13 (such as 16 in certain European countries under the GDPR), we require that users meet the applicable age threshold. We encourage parents and guardians to actively participate in their children's online activities and to supervise their use of social media platforms and other online services. We provide additional safety resources and parental guidance features within our platform to support online safety for younger users.</p>
+        </div>
+
+        <!-- Section 8: Third-Party Links -->
+        <div class="section" id="third-party-links">
+            <h2 class="section-title">8. Third-Party Links</h2>
+            <p>Our Services may contain links to third-party websites, applications, services, or platforms that are not owned, operated, or controlled by Black94. These third-party links may be present in user-generated content, advertisements, or other areas of our platform. We provide these links for your convenience and information, but we do not review, endorse, or take responsibility for the content, privacy policies, or practices of any third-party websites or services.</p>
+            <p>When you click on a third-party link and leave our Services, you are subject to the privacy policy, terms of service, and other policies of that third-party website or service. We strongly recommend that you read the privacy policies of every website and service you visit to understand how they collect, use, and protect your personal information. Black94 shall not be liable for any damages, losses, or harm arising from or related to your interactions with third-party websites, services, or content accessed through links on our platform.</p>
+            <p>We do not have control over and assume no responsibility for the content, privacy policies, security measures, or practices of any third-party services. The inclusion of any link on our platform does not imply our endorsement, sponsorship, or recommendation of the linked website or service. If you decide to access any third-party website or service through links on our platform, you do so entirely at your own risk and subject to the terms and conditions of use for such websites or services. We encourage you to exercise caution when clicking on external links and to ensure that any third-party site you visit maintains appropriate security and privacy standards.</p>
+        </div>
+
+        <!-- Section 9: Changes to This Policy -->
+        <div class="section" id="changes-to-policy">
+            <h2 class="section-title">9. Changes to This Policy</h2>
+            <p>Black94 reserves the right to update, modify, or replace this Privacy Policy at any time to reflect changes in our practices, technologies, legal requirements, or other factors. When we make material changes to this Privacy Policy, we will notify you through appropriate means, such as posting a prominent notice on our platform, sending an email notification to the address associated with your account, or displaying an in-app notification when you next access our Services.</p>
+            <p>The "Last Updated" date at the top of this Privacy Policy will always indicate when the most recent revision was made. We encourage you to review this Privacy Policy periodically to stay informed about how we collect, use, and protect your information. Your continued use of our Services after any changes to this Privacy Policy constitutes your acknowledgment of the changes and your consent to the updated terms.</p>
+            <p>If we make changes that significantly affect how we handle your personal information, we will make reasonable efforts to provide you with advance notice and, where required by applicable law, obtain your explicit consent before implementing such changes. In cases where your consent is required, you will have the opportunity to review the changes and decide whether to continue using our Services. If you do not agree with the updated Privacy Policy, you may terminate your account and stop using our Services at any time as described in this policy.</p>
+        </div>
+
+        <!-- Section 10: Contact Information -->
+        <div class="section" id="contact-information">
+            <h2 class="section-title">10. Contact Information</h2>
+            <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, we encourage you to reach out to us. We are committed to addressing your inquiries and resolving any issues promptly and transparently. You may contact our Privacy Team through any of the following methods:</p>
+
+            <div class="contact-box">
+                <h3 class="section-title">Get in Touch</h3>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                    <span>Email: <a href="mailto:privacy@black94.app">privacy@black94.app</a></span>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <span>Response Time: Within 30 days</span>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <span>Available: Mon - Fri, 9 AM - 6 PM EST</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Black94. All rights reserved. | <a href="terms-of-service.html">Terms of Service</a> | <a href="privacy-policy.html">Privacy Policy</a></p>
+    </footer>
+
+</body>
+</html>

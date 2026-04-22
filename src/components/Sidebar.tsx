@@ -129,6 +129,17 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
+    id: 'notifications',
+    label: 'Notifications',
+    icon: () => (
+      <svg viewBox="0 0 24 24" fill="none" className="h-[26px] w-[26px]">
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    view: 'notifications',
+  },
+  {
     id: 'premium',
     label: 'Premium',
     icon: IconStar,
@@ -178,7 +189,7 @@ function useIsMobile(breakpoint = 768): boolean {
 // ─── Sidebar Component ───────────────────────────────────────────────────────
 
 export function Sidebar() {
-  const { currentView, navigate, setSidebarOpen, sidebarOpen, user } = useAppStore()
+  const { currentView, navigate, setSidebarOpen, sidebarOpen, user, unreadNotificationCount } = useAppStore()
   const isMobile = useIsMobile(768)
   const [expanded, setExpanded] = useState(true)
 
@@ -274,6 +285,7 @@ export function Sidebar() {
           {NAV_ITEMS.map((item) => {
             const IconComponent = item.icon
             const isActive = currentView === item.view
+            const itemBadge = item.id === 'notifications' && unreadNotificationCount > 0 ? unreadNotificationCount : undefined
 
             // Profile item uses standard icon (same as other nav items)
             if (item.id === 'profile') {
@@ -312,7 +324,7 @@ export function Sidebar() {
                   icon={<IconComponent className="h-full w-full" />}
                   label={item.label}
                   active={isActive}
-                  badge={item.badge}
+                  badge={itemBadge}
                   collapsed={!isExpanded}
                   onClick={() => handleNavigate(item.view)}
                 />

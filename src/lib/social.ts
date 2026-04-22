@@ -16,6 +16,7 @@ import {
   increment,
   addDoc,
 } from 'firebase/firestore';
+import { createNotification } from './db';
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
@@ -121,6 +122,27 @@ export async function togglePostLike(postId: string, userId: string): Promise<bo
       } catch (countErr) {
         console.warn('[social] togglePostLike: count update failed (non-critical):', getErrorInfo(countErr));
       }
+      // Notify post author (fire-and-forget)
+      try {
+        const postSnap = await getDoc(postRef);
+        const post = postSnap.data();
+        if (post && post.authorId && post.authorId !== userId) {
+          const actorSnap = await getDoc(doc(db, 'users', userId));
+          const actor = actorSnap.exists() ? actorSnap.data() : null;
+          createNotification({
+            userId: post.authorId,
+            type: 'like',
+            actorId: userId,
+            actorName: actor?.displayName || '',
+            actorUsername: actor?.username || '',
+            actorProfileImage: actor?.profileImage || '',
+            postId,
+            message: 'liked your post',
+          });
+        }
+      } catch (e) {
+        console.warn('[social] togglePostLike: notification failed (non-critical):', e);
+      }
       return true;
     }
   } catch (err) {
@@ -169,6 +191,26 @@ export async function addPostComment(
       });
     } catch (countErr) {
       console.warn('[social] addPostComment: count update failed (non-critical):', getErrorInfo(countErr));
+    }
+
+    // Notify post author (fire-and-forget)
+    try {
+      const postSnap = await getDoc(doc(db, 'posts', postId));
+      const post = postSnap.data();
+      if (post && post.authorId && post.authorId !== userId) {
+        createNotification({
+          userId: post.authorId,
+          type: 'comment',
+          actorId: userId,
+          actorName: authorData.displayName,
+          actorUsername: authorData.username,
+          actorProfileImage: authorData.profileImage,
+          postId,
+          message: `commented: "${content.slice(0, 60)}${content.length > 60 ? '...' : ''}"`,
+        });
+      }
+    } catch (e) {
+      console.warn('[social] addPostComment: notification failed (non-critical):', e);
     }
 
     const snap = await getDoc(commentRef);
@@ -256,6 +298,27 @@ export async function togglePostRepost(postId: string, userId: string): Promise<
         await updateDoc(postRef, { repostCount: increment(1) });
       } catch (countErr) {
         console.warn('[social] togglePostRepost: count update failed (non-critical):', getErrorInfo(countErr));
+      }
+      // Notify post author (fire-and-forget)
+      try {
+        const postSnap = await getDoc(postRef);
+        const post = postSnap.data();
+        if (post && post.authorId && post.authorId !== userId) {
+          const actorSnap = await getDoc(doc(db, 'users', userId));
+          const actor = actorSnap.exists() ? actorSnap.data() : null;
+          createNotification({
+            userId: post.authorId,
+            type: 'repost',
+            actorId: userId,
+            actorName: actor?.displayName || '',
+            actorUsername: actor?.username || '',
+            actorProfileImage: actor?.profileImage || '',
+            postId,
+            message: 'reposted your post',
+          });
+        }
+      } catch (e) {
+        console.warn('[social] togglePostRepost: notification failed (non-critical):', e);
       }
       return true;
     }
