@@ -144,54 +144,87 @@ function LoadingScreen() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   VIEW ROUTER
+   VIEW ROUTER — with persistent view caching for instant tab switching
+   ═══════════════════════════════════════════════════════════════════════════
+   Main tab views (Home, Search, Chat, Alerts, Stories, Anon) stay MOUNTED
+   in the DOM but hidden with CSS display:none. This means:
+   - Zero re-fetching when switching between tabs
+   - Firestore real-time listeners persist
+   - Scroll position is preserved
+   - No engagement engine restart on Feed tab switch
+   - Chat list stays in sync in the background
+   Secondary views (chat-room, profile, settings, etc.) still mount/unmount
+   normally to avoid wasting memory on rarely-visited pages.
    ═══════════════════════════════════════════════════════════════════════════ */
+
+// The 6 main bottom-nav tabs that should stay mounted for instant switching
+const PERSISTENT_VIEWS = ['feed', 'search', 'chat', 'notifications', 'stories', 'anonymous-chat'] as const
 
 function ViewRouter() {
   const currentView = useAppStore((s) => s.currentView)
+  const isPersistent = PERSISTENT_VIEWS.includes(currentView as any)
+
+  // All view components mapped by view name
   const views: Record<string, React.ReactNode> = {
-    feed: <Suspense fallback={<ViewLoader />}><FeedView /></Suspense>,
-    explore: <Suspense fallback={<ViewLoader />}><ExploreView /></Suspense>,
-    chat: <Suspense fallback={<ViewLoader />}><ChatListView /></Suspense>,
-    'chat-room': <Suspense fallback={<ViewLoader />}><ChatRoomView /></Suspense>,
-    profile: <Suspense fallback={<ViewLoader />}><ProfileView /></Suspense>,
-    'user-profile': <Suspense fallback={<ViewLoader />}><ProfileView /></Suspense>,
-    'edit-profile': <Suspense fallback={<ViewLoader />}><SettingsView /></Suspense>,
-    notifications: <Suspense fallback={<ViewLoader />}><NotificationsView /></Suspense>,
-    search: <Suspense fallback={<ViewLoader />}><SearchView /></Suspense>,
-    settings: <Suspense fallback={<ViewLoader />}><SettingsView /></Suspense>,
-    stories: <Suspense fallback={<ViewLoader />}><StoriesView /></Suspense>,
-    'anonymous-chat': <Suspense fallback={<ViewLoader />}><AnonymousChatView /></Suspense>,
-    'anonymous-room': <Suspense fallback={<ViewLoader />}><AnonymousChatRoomView /></Suspense>,
-    'dual-pane-chat': <Suspense fallback={<ViewLoader />}><MessagesView /></Suspense>,
-    'audio-call': <Suspense fallback={<ViewLoader />}><AudioCallView /></Suspense>,
-    'subscriptions': <Suspense fallback={<ViewLoader />}><SubscriptionsView /></Suspense>,
-    'business-dashboard': <Suspense fallback={<ViewLoader />}><BusinessDashboardView /></Suspense>,
-    'premium-dashboard': <Suspense fallback={<ViewLoader />}><PremiumDashboardView /></Suspense>,
-    'ads-manager': <Suspense fallback={<ViewLoader />}><AdsManagerView /></Suspense>,
-    'create-ad': <Suspense fallback={<ViewLoader />}><CreateAdView /></Suspense>,
-    'crm-leads': <Suspense fallback={<ViewLoader />}><CrmLeadsView /></Suspense>,
-    'crm-deals': <Suspense fallback={<ViewLoader />}><CrmDealsView /></Suspense>,
-    'crm-orders': <Suspense fallback={<ViewLoader />}><CrmOrdersView /></Suspense>,
-    'crm-analytics': <Suspense fallback={<ViewLoader />}><CrmAnalyticsView /></Suspense>,
-    'privacy-settings': <Suspense fallback={<ViewLoader />}><PrivacySettingsView /></Suspense>,
-    'share-profile': <Suspense fallback={<ViewLoader />}><ShareProfileView /></Suspense>,
-    'write-article': <Suspense fallback={<ViewLoader />}><WriteArticleView /></Suspense>,
-    'article': <Suspense fallback={<ViewLoader />}><ArticleView /></Suspense>,
-    'affiliates': <Suspense fallback={<ViewLoader />}><AffiliatesView /></Suspense>,
-    'salary': <Suspense fallback={<ViewLoader />}><SalaryView /></Suspense>,
-    'performance': <Suspense fallback={<ViewLoader />}><PerformanceView /></Suspense>,
-    'storefront': <Suspense fallback={<ViewLoader />}><StorefrontView /></Suspense>,
-    'product-detail': <Suspense fallback={<ViewLoader />}><ProductDetailView /></Suspense>,
-    'cart': <Suspense fallback={<ViewLoader />}><CartView /></Suspense>,
-    'checkout': <Suspense fallback={<ViewLoader />}><CheckoutView /></Suspense>,
-    'my-store': <Suspense fallback={<ViewLoader />}><MyStoreView /></Suspense>,
-    'add-product': <Suspense fallback={<ViewLoader />}><AddProductView /></Suspense>,
-    'order-tracking': <Suspense fallback={<ViewLoader />}><OrderTrackingView /></Suspense>,
-    'business-orders': <Suspense fallback={<ViewLoader />}><BusinessOrdersView /></Suspense>,
-    'store-dashboard': <Suspense fallback={<ViewLoader />}><StoreDashboardView /></Suspense>,
+    feed: <FeedView />,
+    explore: <ExploreView />,
+    chat: <ChatListView />,
+    'chat-room': <ChatRoomView />,
+    profile: <ProfileView />,
+    'user-profile': <ProfileView />,
+    'edit-profile': <SettingsView />,
+    notifications: <NotificationsView />,
+    search: <SearchView />,
+    settings: <SettingsView />,
+    stories: <StoriesView />,
+    'anonymous-chat': <AnonymousChatView />,
+    'anonymous-room': <AnonymousChatRoomView />,
+    'dual-pane-chat': <MessagesView />,
+    'audio-call': <AudioCallView />,
+    'subscriptions': <SubscriptionsView />,
+    'business-dashboard': <BusinessDashboardView />,
+    'premium-dashboard': <PremiumDashboardView />,
+    'ads-manager': <AdsManagerView />,
+    'create-ad': <CreateAdView />,
+    'crm-leads': <CrmLeadsView />,
+    'crm-deals': <CrmDealsView />,
+    'crm-orders': <CrmOrdersView />,
+    'crm-analytics': <CrmAnalyticsView />,
+    'privacy-settings': <PrivacySettingsView />,
+    'share-profile': <ShareProfileView />,
+    'write-article': <WriteArticleView />,
+    'article': <ArticleView />,
+    'affiliates': <AffiliatesView />,
+    'salary': <SalaryView />,
+    'performance': <PerformanceView />,
+    'storefront': <StorefrontView />,
+    'product-detail': <ProductDetailView />,
+    'cart': <CartView />,
+    'checkout': <CheckoutView />,
+    'my-store': <MyStoreView />,
+    'add-product': <AddProductView />,
+    'order-tracking': <OrderTrackingView />,
+    'business-orders': <BusinessOrdersView />,
+    'store-dashboard': <StoreDashboardView />,
   }
-  return <>{views[currentView] || <Suspense fallback={<ViewLoader />}><FeedView /></Suspense>}</>
+
+  return (
+    <>
+      {/* Persistent views: always mounted, CSS toggles visibility */}
+      {PERSISTENT_VIEWS.map((view) => (
+        <div
+          key={view}
+          style={{ display: currentView === view ? 'block' : 'none' }}
+        >
+          <Suspense fallback={<ViewLoader />}>{views[view]}</Suspense>
+        </div>
+      ))}
+      {/* Non-persistent views: mount only when active (saves memory) */}
+      {!isPersistent && (
+        <Suspense fallback={<ViewLoader />}>{views[currentView] || views['feed']}</Suspense>
+      )}
+    </>
+  )
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
