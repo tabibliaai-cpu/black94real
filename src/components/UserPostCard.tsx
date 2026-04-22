@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { PAvatar, VerifiedBadge } from './PAvatar'
+import { useAppStore } from '@/stores/app'
 import type { TrendingLabel } from '@/lib/engagement-engine'
 import { ExpandableText } from './ExpandableText'
 import { CommentSheet } from './CommentSheet'
@@ -227,6 +228,22 @@ export function UserPostCard({
 
   const isOwnPost = userId === post.authorId
 
+  /* ── BULLETPROOF BADGE: For current user's own posts, always derive badge
+     directly from the live Zustand store — no race conditions possible.
+     This ensures old posts (created before verification) always show the
+     correct checkmark regardless of feed enrichment timing. ── */
+  const liveUser = useAppStore((s) => s.user)
+  const isLiveOwnPost = liveUser && post.authorId === liveUser.id
+  const displayVerified = isLiveOwnPost
+    ? (liveUser.isVerified || post.authorIsVerified)
+    : post.authorIsVerified
+  const displayBadge = isLiveOwnPost
+    ? (liveUser.badge || post.authorBadge)
+    : post.authorBadge
+  const displayProfileImage = isLiveOwnPost
+    ? (liveUser.profileImage || post.authorProfileImage)
+    : post.authorProfileImage
+
   return (
     <>
       <article
@@ -261,11 +278,9 @@ export function UserPostCard({
           {/* Avatar */}
           <div className="shrink-0" onClick={() => onProfileTap?.(post.authorId)}>
             <PAvatar
-              src={post.authorProfileImage}
+              src={displayProfileImage}
               name={post.authorDisplayName}
               size={48}
-              verified={post.authorIsVerified}
-              badge={post.authorBadge}
             />
           </div>
 
@@ -280,8 +295,8 @@ export function UserPostCard({
               >
                 {post.authorDisplayName || post.authorUsername || 'User'}
               </button>
-              {(post.authorIsVerified || !!post.authorBadge) && (
-                <VerifiedBadge size={18} badge={post.authorBadge} />
+              {(displayVerified || !!displayBadge) && (
+                <VerifiedBadge size={18} badge={displayBadge} />
               )}
               <span className="text-[#94a3b8] text-[15px]">@{post.authorUsername || 'user'}</span>
               <span className="text-[#94a3b8]">·</span>
@@ -522,9 +537,9 @@ export function UserPostCard({
         onClose={() => setCommentSheetOpen(false)}
         postId={post.id}
         postAuthor={post.authorDisplayName || post.authorUsername || 'User'}
-        postAuthorProfileImage={post.authorProfileImage}
-        postAuthorIsVerified={post.authorIsVerified}
-        postAuthorBadge={post.authorBadge}
+        postAuthorProfileImage={displayProfileImage}
+        postAuthorIsVerified={displayVerified}
+        postAuthorBadge={displayBadge}
         postCaption={post.caption}
         initialComments={comments}
         userId={userId}
