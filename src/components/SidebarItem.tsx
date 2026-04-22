@@ -34,24 +34,20 @@ export function SidebarItem({
       aria-label={label}
       aria-current={active ? 'page' : undefined}
       onClick={onClick}
-
       className={cn(
-        'group relative flex items-center gap-3 rounded-xl px-4 py-3 text-[15px] transition-all duration-200 ease-in-out outline-none',
-        'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
+        'group relative flex items-center gap-3 rounded-full px-3 py-2.5 text-[15px] font-bold transition-all duration-150 ease-in-out outline-none',
+        'focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
         active
-          ? 'font-bold text-[#e7e9ea]'
-          : 'text-gray-300 hover:text-[#e7e9ea]',
-        active
-          ? 'bg-white/[0.08]'
-          : 'hover:bg-white/[0.06]',
+          ? 'text-white font-bold'
+          : 'text-[#71767b] hover:text-white hover:bg-white/[0.07]',
         collapsed ? 'justify-center' : 'w-full'
       )}
     >
       {/* Icon */}
       <span
         className={cn(
-          'shrink-0 transition-colors duration-200',
-          active ? 'text-[#8b5cf6]' : 'text-gray-400 group-hover:text-[#e7e9ea]',
+          'shrink-0 transition-colors duration-150',
+          active ? 'text-white' : 'text-[#71767b] group-hover:text-white',
           'h-[26px] w-[26px]'
         )}
       >
@@ -60,19 +56,22 @@ export function SidebarItem({
 
       {/* Label */}
       {!collapsed && (
-        <span className="truncate select-none">{label}</span>
+        <span className={cn(
+          'truncate select-none',
+          active ? 'text-white font-bold' : 'font-bold'
+        )}>{label}</span>
       )}
 
       {/* Badge */}
       {showBadge && !collapsed && (
-        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8b5cf6] px-1.5 text-xs font-bold text-black">
+        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#1d9bf0] px-1.5 text-xs font-bold text-white">
           {typeof badge === 'number' && badge > 99 ? '99+' : badge}
         </span>
       )}
 
       {/* Badge dot for collapsed */}
       {showBadge && collapsed && (
-        <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-[#8b5cf6] ring-2 ring-[#000000]" />
+        <span className="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-[#1d9bf0] ring-2 ring-[#000000]" />
       )}
     </button>
   )
@@ -85,7 +84,7 @@ export function SidebarItem({
         <TooltipContent
           side="right"
           sideOffset={12}
-          className="rounded-lg border border-white/10 bg-[#1a1823] px-3 py-1.5 text-sm font-medium text-[#e7e9ea] shadow-lg"
+          className="rounded-lg border border-white/10 bg-[#1a1823] px-3 py-1.5 text-sm font-bold text-white shadow-lg"
         >
           {label}
         </TooltipContent>
