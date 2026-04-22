@@ -123,7 +123,7 @@ export function AddProductView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-53px)]">
-        <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] rounded-full animate-spin" />
       </div>
     )
   }
@@ -147,7 +147,7 @@ export function AddProductView() {
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="e.g. Wireless Headphones Pro"
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             />
           </div>
 
@@ -159,7 +159,7 @@ export function AddProductView() {
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="Describe your product..."
               rows={4}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors resize-none"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none"
             />
           </div>
 
@@ -172,7 +172,7 @@ export function AddProductView() {
                 value={form.price}
                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                 placeholder="0"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
               />
             </div>
             <div className="space-y-1.5">
@@ -182,7 +182,7 @@ export function AddProductView() {
                 value={form.compareAtPrice}
                 onChange={(e) => setForm((f) => ({ ...f, compareAtPrice: e.target.value }))}
                 placeholder="Original price"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
               />
             </div>
           </div>
@@ -197,7 +197,7 @@ export function AddProductView() {
                   onClick={() => setForm((f) => ({ ...f, category: cat }))}
                   className={`px-3 py-1.5 rounded-full text-[12px] font-medium transition-all ${
                     form.category === cat
-                      ? 'bg-[#D4A574] text-black'
+                      ? 'bg-[#FFFFFF] text-black'
                       : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1]'
                   }`}
                 >
@@ -215,7 +215,7 @@ export function AddProductView() {
               value={form.tags}
               onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
               placeholder="e.g. wireless, audio, premium"
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             />
           </div>
 
@@ -227,7 +227,7 @@ export function AddProductView() {
               onChange={(e) => setForm((f) => ({ ...f, images: e.target.value }))}
               placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
               rows={2}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors resize-none"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none"
             />
             {form.images && (
               <div className="flex gap-2 overflow-x-auto pt-1">
@@ -253,7 +253,7 @@ export function AddProductView() {
                 value={form.stock}
                 onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                 placeholder="0"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
               />
             </div>
             <div className="space-y-1.5">
@@ -263,7 +263,7 @@ export function AddProductView() {
                 value={form.sku}
                 onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))}
                 placeholder="PROD-001"
-                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
               />
             </div>
           </div>
@@ -276,7 +276,7 @@ export function AddProductView() {
               onChange={(e) => setForm((f) => ({ ...f, variants: e.target.value }))}
               placeholder='[{"name":"Size","values":["S","M","L"]}]'
               rows={3}
-              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors resize-none font-mono"
+              className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none font-mono"
             />
           </div>
 
@@ -289,7 +289,7 @@ export function AddProductView() {
               </div>
               <button
                 onClick={() => setForm((f) => ({ ...f, isDigital: !f.isDigital }))}
-                className={`w-11 h-6 rounded-full transition-colors relative ${form.isDigital ? 'bg-[#D4A574]' : 'bg-white/[0.15]'}`}
+                className={`w-11 h-6 rounded-full transition-colors relative ${form.isDigital ? 'bg-[#FFFFFF]' : 'bg-white/[0.15]'}`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${form.isDigital ? 'translate-x-[22px]' : 'translate-x-0.5'}`} />
               </button>
@@ -301,7 +301,7 @@ export function AddProductView() {
               </div>
               <button
                 onClick={() => setForm((f) => ({ ...f, isFeatured: !f.isFeatured }))}
-                className={`w-11 h-6 rounded-full transition-colors relative ${form.isFeatured ? 'bg-[#D4A574]' : 'bg-white/[0.15]'}`}
+                className={`w-11 h-6 rounded-full transition-colors relative ${form.isFeatured ? 'bg-[#FFFFFF]' : 'bg-white/[0.15]'}`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${form.isFeatured ? 'translate-x-[22px]' : 'translate-x-0.5'}`} />
               </button>
@@ -315,7 +315,7 @@ export function AddProductView() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+          className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black font-bold text-[15px] shadow-lg shadow-[#FFFFFF]/20 active:scale-[0.98] transition-all disabled:opacity-50"
         >
           {saving ? (
             <span className="flex items-center justify-center gap-2">

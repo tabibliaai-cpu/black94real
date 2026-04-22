@@ -55,11 +55,11 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
       <div className="relative w-[24px] h-[24px]">
         <div className={cn(
           'w-[24px] h-[24px] rounded-full',
-          active ? 'ring-[2.5px] ring-[#D4A574]' : 'ring-[2px] ring-[#d1d5db]'
+          active ? 'ring-[2.5px] ring-[#FFFFFF]' : 'ring-[2px] ring-[#d1d5db]'
         )} />
         <div className="absolute inset-[4px] rounded-full bg-[#000000]" />
         <div className="absolute inset-[4px] rounded-full bg-[#000000] flex items-center justify-center">
-          <svg className={cn('w-2.5 h-2.5', active ? 'text-[#D4A574]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+          <svg className={cn('w-2.5 h-2.5', active ? 'text-[#FFFFFF]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
             <circle cx="12" cy="12" r="5" />
           </svg>
         </div>
@@ -70,7 +70,7 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     view: 'anonymous-chat',
     label: 'Anon',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#D4A574]' : 'text-[#d1d5db]')} viewBox="0 0 64 64" fill="currentColor">
+      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#FFFFFF]' : 'text-[#d1d5db]')} viewBox="0 0 64 64" fill="currentColor">
         <ellipse cx="32" cy="26" rx="14" ry="16" />
         <path d="M18 38c0 0-3 6 2 14h24c5-8 2-14 2-14l-3.5 3.5-3.5-3.5-3.5 3.5-3.5-3.5-3.5 3.5-3.5-3.5z" />
         <circle cx="26" cy="22" r="2" fill="black" />
@@ -98,7 +98,7 @@ export function MobileNav({ currentView, onNavigate }: MobileNavProps) {
             >
               {icon(isActive)}
               {showBadge && (
-                <span className="absolute top-[4px] right-[10px] min-w-[16px] h-[16px] rounded-full bg-[#D4A574] text-black text-[10px] font-bold flex items-center justify-center px-1">
+                <span className="absolute top-[4px] right-[10px] min-w-[16px] h-[16px] rounded-full bg-[#FFFFFF] text-black text-[10px] font-bold flex items-center justify-center px-1">
                   {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
                 </span>
               )}

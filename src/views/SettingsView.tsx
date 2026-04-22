@@ -53,7 +53,7 @@ export function SettingsView() {
             {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={14} badge={user?.badge} />}
           </p>
           <p className="text-[14px] text-[#94a3b8]">@{user?.username}</p>
-          <button className="mt-2 text-[14px] text-[#D4A574] font-semibold hover:text-[#B8895C] transition-colors">
+          <button className="mt-2 text-[14px] text-[#FFFFFF] font-semibold hover:text-[#D1D5DB] transition-colors">
             Change photo
           </button>
         </div>
@@ -68,7 +68,7 @@ export function SettingsView() {
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             placeholder="Your display name"
           />
         </div>
@@ -76,7 +76,7 @@ export function SettingsView() {
         {/* Username */}
         <div className="space-y-1.5">
           <label className="text-[14px] text-[#94a3b8] font-medium">Username</label>
-          <div className="flex items-center bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 focus-within:border-[#D4A574]/50 transition-colors">
+          <div className="flex items-center bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 focus-within:border-[#FFFFFF]/50 transition-colors">
             <span className="text-[15px] text-[#64748b] mr-1">@</span>
             <input
               type="text"
@@ -96,7 +96,7 @@ export function SettingsView() {
             onChange={(e) => setBio(e.target.value)}
             maxLength={160}
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none"
             placeholder="Tell us about yourself"
           />
           <p className="text-[13px] text-[#94a3b8] text-right">{bio.length}/160</p>
@@ -109,7 +109,7 @@ export function SettingsView() {
             type="url"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
-            className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             placeholder="https://yourwebsite.com"
           />
         </div>

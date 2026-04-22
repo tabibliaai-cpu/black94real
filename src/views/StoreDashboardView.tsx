@@ -41,7 +41,7 @@ const DEFAULT_SETTINGS: StoreSettings = {
 const STATUS_COLORS: Record<string, string> = {
   pending: 'text-yellow-400 bg-yellow-500/15',
   confirmed: 'text-blue-400 bg-blue-500/15',
-  processing: 'text-[#D4A574] bg-[#D4A574]/15',
+  processing: 'text-[#FFFFFF] bg-[#FFFFFF]/15',
   shipped: 'text-cyan-400 bg-cyan-500/15',
   delivered: 'text-green-400 bg-green-500/15',
   cancelled: 'text-red-400 bg-red-500/15',
@@ -79,7 +79,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'overview',
     label: 'Overview',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#FFFFFF]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
       </svg>
     ),
@@ -88,7 +88,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'products',
     label: 'Products',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#FFFFFF]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" />
       </svg>
     ),
@@ -97,7 +97,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'inventory',
     label: 'Inventory',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#FFFFFF]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
       </svg>
     ),
@@ -106,7 +106,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'orders',
     label: 'Orders',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#FFFFFF]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" />
       </svg>
     ),
@@ -115,7 +115,7 @@ const DASH_TABS: { key: DashTab; label: string; icon: (active: boolean) => React
     key: 'settings',
     label: 'Settings',
     icon: (active) => (
-      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg className={cn('w-[18px] h-[18px]', active ? 'text-[#FFFFFF]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
       </svg>
     ),
@@ -133,7 +133,7 @@ function SectionTabs({ active, onChange }: { active: DashTab; onChange: (tab: Da
             className={cn(
               'flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold whitespace-nowrap transition-all flex-shrink-0',
               active === tab.key
-                ? 'bg-[#D4A574] text-black shadow-md shadow-[#D4A574]/20'
+                ? 'bg-[#FFFFFF] text-black shadow-md shadow-[#FFFFFF]/20'
                 : 'text-[#94a3b8] hover:text-[#e7e9ea]'
             )}
           >
@@ -164,9 +164,9 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
   const recentOrders = orders.slice(0, 3)
 
   const stats = [
-    { label: 'Revenue', value: `₹${totalRevenue.toLocaleString()}`, icon: '💰', color: 'from-[#D4A574]/20 to-[#D4A574]/5 border-[#D4A574]/20' },
+    { label: 'Revenue', value: `₹${totalRevenue.toLocaleString()}`, icon: '💰', color: 'from-[#FFFFFF]/20 to-[#FFFFFF]/5 border-[#FFFFFF]/20' },
     { label: 'Products', value: products.length.toString(), icon: '📦', color: 'from-blue-500/20 to-blue-500/5 border-blue-500/20' },
-    { label: 'Total Sold', value: totalSold.toString(), icon: '🛒', color: 'from-[#D4A574]/20 to-[#D4A574]/5 border-[#D4A574]/20' },
+    { label: 'Total Sold', value: totalSold.toString(), icon: '🛒', color: 'from-[#FFFFFF]/20 to-[#FFFFFF]/5 border-[#FFFFFF]/20' },
     { label: 'Active Orders', value: activeOrders.toString(), icon: '📋', color: 'from-amber-500/20 to-amber-500/5 border-amber-500/20' },
     { label: 'Avg Rating', value: `${avgRating}★`, icon: '⭐', color: 'from-yellow-500/20 to-yellow-500/5 border-yellow-500/20' },
     { label: 'Total Orders', value: orders.length.toString(), icon: '📊', color: 'from-cyan-500/20 to-cyan-500/5 border-cyan-500/20' },
@@ -196,9 +196,9 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
         <h3 className="text-[15px] font-bold text-[#e7e9ea] mb-3">Quick Actions</h3>
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Add Product', view: 'add-product' as const, icon: '➕', color: 'bg-[#D4A574]/10 border-[#D4A574]/20 text-[#D4A574]' },
+            { label: 'Add Product', view: 'add-product' as const, icon: '➕', color: 'bg-[#FFFFFF]/10 border-[#FFFFFF]/20 text-[#FFFFFF]' },
             { label: 'View Orders', view: 'business-orders' as const, icon: '📋', color: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
-            { label: 'Inventory', view: '' as const, icon: '📦', color: 'bg-[#D4A574]/10 border-[#D4A574]/20 text-[#D4A574]' },
+            { label: 'Inventory', view: '' as const, icon: '📦', color: 'bg-[#FFFFFF]/10 border-[#FFFFFF]/20 text-[#FFFFFF]' },
           ].map((action) => (
             <QuickActionCard key={action.label} {...action} />
           ))}
@@ -220,7 +220,7 @@ function OverviewSection({ products, orders }: { products: ShopProduct[]; orders
                   <p className="text-[11px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[14px] font-bold text-[#D4A574]">₹{order.total.toLocaleString()}</p>
+                  <p className="text-[14px] font-bold text-[#FFFFFF]">₹{order.total.toLocaleString()}</p>
                   <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize', STATUS_COLORS[order.status] || '')}>
                     {order.status}
                   </span>
@@ -301,7 +301,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
         </div>
         <button
           onClick={() => navigate('add-product')}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#D4A574] text-black text-[13px] font-bold shadow-md shadow-[#D4A574]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FFFFFF] text-black text-[13px] font-bold shadow-md shadow-[#FFFFFF]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
             <path d="M12 5v14M5 12h14" />
@@ -313,7 +313,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
       {/* Products List */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] rounded-full animate-spin" />
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-16">
@@ -350,7 +350,7 @@ function ProductsSection({ products, loading, onDelete }: { products: ShopProduc
                   )}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[13px] font-bold text-[#D4A574]">₹{product.price.toLocaleString()}</span>
+                  <span className="text-[13px] font-bold text-[#FFFFFF]">₹{product.price.toLocaleString()}</span>
                   {hasDiscount && (
                     <span className="text-[11px] text-[#94a3b8] line-through">₹{product.compareAtPrice!.toLocaleString()}</span>
                   )}
@@ -437,13 +437,13 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
                 type="number"
                 value={stockInput}
                 onChange={(e) => setStockInput(e.target.value)}
-                className="w-16 bg-transparent border border-[#D4A574]/40 rounded-lg px-2 py-1.5 text-[13px] text-[#e7e9ea] text-center outline-none focus:border-[#D4A574]"
+                className="w-16 bg-transparent border border-[#FFFFFF]/40 rounded-lg px-2 py-1.5 text-[13px] text-[#e7e9ea] text-center outline-none focus:border-[#FFFFFF]"
                 autoFocus
                 min={0}
               />
               <button
                 onClick={() => handleSaveStock(product.id)}
-                className="w-8 h-8 rounded-lg bg-[#D4A574] flex items-center justify-center"
+                className="w-8 h-8 rounded-lg bg-[#FFFFFF] flex items-center justify-center"
               >
                 <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round">
                   <path d="M20 6L9 17l-5-5" />
@@ -539,7 +539,7 @@ function InventorySection({ products, onUpdateStock }: { products: ShopProduct[]
 const STATUS_OPTIONS: { value: ShopOrder['status']; label: string; color: string }[] = [
   { value: 'pending', label: 'Pending', color: 'text-yellow-400 bg-yellow-500/15' },
   { value: 'confirmed', label: 'Confirmed', color: 'text-blue-400 bg-blue-500/15' },
-  { value: 'processing', label: 'Processing', color: 'text-[#D4A574] bg-[#D4A574]/15' },
+  { value: 'processing', label: 'Processing', color: 'text-[#FFFFFF] bg-[#FFFFFF]/15' },
   { value: 'shipped', label: 'Shipped', color: 'text-cyan-400 bg-cyan-500/15' },
   { value: 'delivered', label: 'Delivered', color: 'text-green-400 bg-green-500/15' },
   { value: 'cancelled', label: 'Cancelled', color: 'text-red-400 bg-red-500/15' },
@@ -567,7 +567,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
             onClick={() => setFilter(f)}
             className={cn(
               'flex-shrink-0 px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all',
-              filter === f ? 'bg-[#D4A574] text-black' : 'bg-white/[0.06] text-[#94a3b8]'
+              filter === f ? 'bg-[#FFFFFF] text-black' : 'bg-white/[0.06] text-[#94a3b8]'
             )}
           >
             {f}
@@ -578,7 +578,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
       {/* Orders */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] rounded-full animate-spin" />
         </div>
       ) : filteredOrders.length === 0 ? (
         <div className="text-center py-16">
@@ -616,7 +616,7 @@ function OrdersSection({ orders, loading, onStatusChange }: { orders: ShopOrder[
                 <p className="text-[13px] text-[#e7e9ea] font-medium">{order.buyerName}</p>
                 <div className="flex items-center justify-between mt-1">
                   <p className="text-[12px] text-[#94a3b8]">{items.map((i) => i.productName).join(', ')}</p>
-                  <p className="text-[15px] font-bold text-[#D4A574]">₹{order.total.toLocaleString()}</p>
+                  <p className="text-[15px] font-bold text-[#FFFFFF]">₹{order.total.toLocaleString()}</p>
                 </div>
               </button>
 
@@ -761,7 +761,7 @@ function SettingsSection() {
             value={settings.storeName}
             onChange={(e) => updateSetting('storeName', e.target.value)}
             placeholder="Your store name"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
           />
         </div>
 
@@ -773,7 +773,7 @@ function SettingsSection() {
             onChange={(e) => updateSetting('storeDescription', e.target.value)}
             placeholder="Tell customers about your store..."
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none"
           />
         </div>
       </div>
@@ -792,7 +792,7 @@ function SettingsSection() {
             onClick={() => toggleSetting('shippingEnabled')}
             className={cn(
               'w-11 h-6 rounded-full transition-colors relative',
-              settings.shippingEnabled ? 'bg-[#D4A574]' : 'bg-white/[0.15]'
+              settings.shippingEnabled ? 'bg-[#FFFFFF]' : 'bg-white/[0.15]'
             )}
           >
             <div className={cn(
@@ -810,7 +810,7 @@ function SettingsSection() {
             value={settings.freeShippingAbove}
             onChange={(e) => updateSetting('freeShippingAbove', e.target.value)}
             placeholder="500"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
           />
           <p className="text-[11px] text-[#64748b]">Orders above this amount get free shipping</p>
         </div>
@@ -825,7 +825,7 @@ function SettingsSection() {
                 className={cn(
                   'flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer',
                   settings.defaultShippingPartner === partner.name
-                    ? 'bg-[#D4A574]/10 border-[#D4A574]/30'
+                    ? 'bg-[#FFFFFF]/10 border-[#FFFFFF]/30'
                     : 'bg-[#000000] border-white/[0.06] hover:border-white/[0.12]'
                 )}
                 onClick={() => updateSetting('defaultShippingPartner', partner.name)}
@@ -833,11 +833,11 @@ function SettingsSection() {
                 <div className={cn(
                   'w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0',
                   settings.defaultShippingPartner === partner.name
-                    ? 'border-[#D4A574]'
+                    ? 'border-[#FFFFFF]'
                     : 'border-white/[0.2]'
                 )}>
                   {settings.defaultShippingPartner === partner.name && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#D4A574]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#FFFFFF]" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -870,7 +870,7 @@ function SettingsSection() {
             value={settings.taxRate}
             onChange={(e) => updateSetting('taxRate', e.target.value)}
             placeholder="18"
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
           />
         </div>
 
@@ -885,7 +885,7 @@ function SettingsSection() {
                 className={cn(
                   'px-4 py-2 rounded-lg text-[13px] font-semibold transition-all',
                   settings.currency === cur
-                    ? 'bg-[#D4A574] text-black'
+                    ? 'bg-[#FFFFFF] text-black'
                     : 'bg-white/[0.06] text-[#94a3b8]'
                 )}
               >
@@ -903,7 +903,7 @@ function SettingsSection() {
             onChange={(e) => updateSetting('returnPolicy', e.target.value)}
             placeholder="Describe your return policy..."
             rows={3}
-            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors resize-none"
+            className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none"
           />
         </div>
       </div>
@@ -912,7 +912,7 @@ function SettingsSection() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+        className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black font-bold text-[15px] shadow-lg shadow-[#FFFFFF]/20 active:scale-[0.98] transition-all disabled:opacity-50"
       >
         {saving ? (
           <span className="flex items-center justify-center gap-2">
@@ -999,7 +999,7 @@ export function StoreDashboardView() {
       <div className="min-h-screen bg-[#000000]">
         <DashHeader title="Store Dashboard" onBack={handleBack} />
         <div className="flex items-center justify-center py-32">
-          <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] rounded-full animate-spin" />
         </div>
       </div>
     )
@@ -1010,11 +1010,11 @@ export function StoreDashboardView() {
       <DashHeader title="Store Dashboard" onBack={handleBack} />
 
       {/* Store Banner */}
-      <div className="relative h-20 bg-gradient-to-r from-[#D4A574]/20 via-[#110f1a] to-[#D4A574]/10">
+      <div className="relative h-20 bg-gradient-to-r from-[#FFFFFF]/20 via-[#110f1a] to-[#FFFFFF]/10">
         <div className="absolute inset-0 bg-[#000000]/40" />
         <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black to-transparent" />
         <div className="absolute left-4 bottom-3 flex items-center gap-2 z-10">
-          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-[#D4A574] to-[#B8895C] flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-[#FFFFFF] to-[#D1D5DB] flex items-center justify-center flex-shrink-0">
             {user?.profileImage ? (
               <img src={user.profileImage} alt="" className="w-full h-full object-cover" />
             ) : (

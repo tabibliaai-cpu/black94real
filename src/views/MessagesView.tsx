@@ -52,11 +52,11 @@ const REACTION_EMOJIS = ['❤️', '😂', '🔥', '😍', '😮', '😢', '💯
 
 function E2EEBadge() {
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#D4A574]/10 border border-[#D4A574]/20">
-      <svg className="w-3.5 h-3.5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFFFFF]/10 border border-[#FFFFFF]/20">
+      <svg className="w-3.5 h-3.5 text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
-      <span className="text-[11px] text-[#D4A574] font-semibold tracking-wide">E2E ENCRYPTED</span>
+      <span className="text-[11px] text-[#FFFFFF] font-semibold tracking-wide">E2E ENCRYPTED</span>
     </div>
   )
 }
@@ -142,7 +142,7 @@ function ReactionsBar({
             r.reacted
               ? isMine
                 ? 'bg-[#000000]/20 border-black/30 text-black'
-                : 'bg-[#D4A574]/15 border-[#D4A574]/25 text-[#D4A574]'
+                : 'bg-[#FFFFFF]/15 border-[#FFFFFF]/25 text-[#FFFFFF]'
               : 'bg-white/[0.04] border-white/[0.06] text-[#94a3b8] hover:border-white/[0.12]'
           )}
         >
@@ -208,7 +208,7 @@ function MessageBubble({
       <div className={cn(
         'max-w-[82%] animate-fade-in',
         isMine
-          ? 'bg-gradient-to-br from-[#D4A574] to-[#B8895C] text-black rounded-2xl rounded-br-sm'
+          ? 'bg-gradient-to-br from-[#FFFFFF] to-[#D1D5DB] text-black rounded-2xl rounded-br-sm'
           : 'bg-white/[0.06] text-[#e7e9ea] rounded-2xl rounded-bl-sm border border-white/[0.06]'
       )}>
         {msg.replyTo && (
@@ -216,9 +216,9 @@ function MessageBubble({
             'mx-2 mt-2 mb-1 px-2.5 py-1.5 rounded-lg border-l-[3px]',
             isMine
               ? 'bg-[#000000]/10 border-l-black/40'
-              : 'bg-white/[0.04] border-l-[#D4A574]/50'
+              : 'bg-white/[0.04] border-l-[#FFFFFF]/50'
           )}>
-            <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#D4A574]')}>
+            <span className={cn('text-[11px] font-bold block leading-tight', isMine ? 'text-black/60' : 'text-[#FFFFFF]')}>
               {msg.replyTo.isMine ? 'You' : msg.replyTo.senderName}
             </span>
             <span className={cn('text-[12px] block leading-snug mt-0.5 line-clamp-1', isMine ? 'text-black/50' : 'text-[#64748b]')}>
@@ -234,7 +234,7 @@ function MessageBubble({
       <div className={cn('flex items-center gap-1 mt-0.5 px-1', isMine ? 'flex-row-reverse' : '')}>
         <span className="text-[10px] text-[#64748b]">{formatTime(msg.timestamp)}</span>
         {isMine && (
-          <svg className="w-3.5 h-3.5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-3.5 h-3.5 text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
             <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         )}
@@ -293,9 +293,9 @@ function ReplyBar() {
   return (
     <div className="shrink-0 px-3 pt-2 bg-[#000000]/80 backdrop-blur-xl animate-reply-slide-in">
       <div className="flex items-center gap-2.5 px-3 py-2 rounded-t-xl bg-white/[0.04] border-x border-t border-white/[0.06]">
-        <div className="w-[3px] h-8 rounded-full bg-[#D4A574] shrink-0" />
+        <div className="w-[3px] h-8 rounded-full bg-[#FFFFFF] shrink-0" />
         <div className="flex-1 min-w-0">
-          <span className="text-[12px] font-bold text-[#D4A574] block">
+          <span className="text-[12px] font-bold text-[#FFFFFF] block">
             {replyTo.isMine ? 'You' : replyTo.senderName}
           </span>
           <span className="text-[12px] text-[#64748b] block truncate">{replyTo.content}</span>
@@ -471,7 +471,7 @@ function ChatSettingsSheet({
               }}
               className={cn(
                 'relative w-11 h-6 rounded-full transition-colors duration-200 shrink-0',
-                isMuted ? 'bg-[#D4A574]' : 'bg-white/[0.15]'
+                isMuted ? 'bg-[#FFFFFF]' : 'bg-white/[0.15]'
               )}
             >
               <div className={cn(
@@ -523,8 +523,8 @@ function ChatSettingsSheet({
           {/* Disappearing Messages */}
           <button className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.03] transition-colors">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#D4A574]/10 flex items-center justify-center">
-                <svg className="w-[18px] h-[18px] text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-9 h-9 rounded-full bg-[#FFFFFF]/10 flex items-center justify-center">
+                <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                 </svg>
               </div>
@@ -541,14 +541,14 @@ function ChatSettingsSheet({
           {/* Encryption */}
           <div className="flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.03] transition-colors">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#D4A574]/10 flex items-center justify-center">
-                <svg className="w-[18px] h-[18px] text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-9 h-9 rounded-full bg-[#FFFFFF]/10 flex items-center justify-center">
+                <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
               </div>
               <div>
                 <span className="text-[14px] text-[#e7e9ea] font-medium block">Encryption</span>
-                <span className="text-[12px] text-[#D4A574]">End-to-end encrypted</span>
+                <span className="text-[12px] text-[#FFFFFF]">End-to-end encrypted</span>
               </div>
             </div>
           </div>
@@ -726,7 +726,7 @@ function ChatRoomView() {
               <span className="text-[14px] font-bold text-white">{chatPartner.name}</span>
               {chatPartner.verified && <VerifiedBadge size={14} />}
             </div>
-            <span className="text-[11px] text-[#D4A574]">{chatPartner.online ? 'Online' : 'Offline'}</span>
+            <span className="text-[11px] text-[#FFFFFF]">{chatPartner.online ? 'Online' : 'Offline'}</span>
           </div>
         </div>
 
@@ -958,7 +958,7 @@ function ChatListView() {
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           aria-label="Compose new message"
         >
-          <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
           </svg>
         </button>
@@ -1045,7 +1045,7 @@ function ChatListView() {
 
                 <div className="flex items-center gap-1 shrink-0">
                   {chat.unreadCount > 0 && !isBlocked && (
-                    <div className="w-5 h-5 rounded-full bg-[#D4A574] flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-[#FFFFFF] flex items-center justify-center">
                       <span className="text-[10px] font-bold text-black">{chat.unreadCount}</span>
                     </div>
                   )}
@@ -1107,7 +1107,7 @@ function ChatListView() {
                 </div>
               </div>
               {(chat.unreadCount ?? 0) > 0 && (
-                <div className="w-5 h-5 rounded-full bg-[#D4A574] flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 rounded-full bg-[#FFFFFF] flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-bold text-black">{chat.unreadCount}</span>
                 </div>
               )}

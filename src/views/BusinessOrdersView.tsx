@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 const STATUS_OPTIONS: { value: ShopOrder['status']; label: string; color: string }[] = [
   { value: 'pending', label: 'Pending', color: 'text-yellow-400 bg-yellow-500/15' },
   { value: 'confirmed', label: 'Confirmed', color: 'text-blue-400 bg-blue-500/15' },
-  { value: 'processing', label: 'Processing', color: 'text-[#D4A574] bg-[#D4A574]/15' },
+  { value: 'processing', label: 'Processing', color: 'text-[#FFFFFF] bg-[#FFFFFF]/15' },
   { value: 'shipped', label: 'Shipped', color: 'text-cyan-400 bg-cyan-500/15' },
   { value: 'delivered', label: 'Delivered', color: 'text-green-400 bg-green-500/15' },
   { value: 'cancelled', label: 'Cancelled', color: 'text-red-400 bg-red-500/15' },
@@ -78,11 +78,11 @@ export function BusinessOrdersView() {
   return (
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       {/* Revenue Summary */}
-      <div className="mx-4 mt-3 p-4 rounded-xl bg-gradient-to-r from-[#D4A574]/10 via-transparent to-[#ffd700]/5 border border-[#D4A574]/20">
+      <div className="mx-4 mt-3 p-4 rounded-xl bg-gradient-to-r from-[#FFFFFF]/10 via-transparent to-[#ffd700]/5 border border-[#FFFFFF]/20">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-[11px] text-[#94a3b8] uppercase tracking-wider">Total Revenue</p>
-            <p className="text-[22px] font-bold text-[#D4A574]">₹{totalRevenue.toLocaleString()}</p>
+            <p className="text-[22px] font-bold text-[#FFFFFF]">₹{totalRevenue.toLocaleString()}</p>
           </div>
           <div>
             <p className="text-[11px] text-[#94a3b8] uppercase tracking-wider">Pending Orders</p>
@@ -99,7 +99,7 @@ export function BusinessOrdersView() {
             onClick={() => setActiveFilter(f)}
             className={`flex-shrink-0 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all ${
               activeFilter === f
-                ? 'bg-[#D4A574] text-black'
+                ? 'bg-[#FFFFFF] text-black'
                 : 'bg-white/[0.06] text-[#94a3b8] hover:text-[#e7e9ea]'
             }`}
           >
@@ -112,7 +112,7 @@ export function BusinessOrdersView() {
       <div className="px-4 mt-4 space-y-3">
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] rounded-full animate-spin" />
           </div>
         ) : filteredOrders.length === 0 ? (
           <div className="text-center py-16">
@@ -145,7 +145,7 @@ export function BusinessOrdersView() {
                   <p className="text-[13px] text-[#e7e9ea] font-medium">{order.buyerName}</p>
                   <div className="flex items-center justify-between mt-1">
                     <p className="text-[12px] text-[#94a3b8]">{new Date(order.createdAt).toLocaleDateString()}</p>
-                    <p className="text-[15px] font-bold text-[#D4A574]">₹{order.total.toLocaleString()}</p>
+                    <p className="text-[15px] font-bold text-[#FFFFFF]">₹{order.total.toLocaleString()}</p>
                   </div>
                 </button>
 
@@ -201,14 +201,14 @@ export function BusinessOrdersView() {
                           value={trackingInput[order.id] || ''}
                           onChange={(e) => setTrackingInput((prev) => ({ ...prev, [order.id]: e.target.value }))}
                           placeholder={order.trackingNumber || 'Enter tracking number'}
-                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[13px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[13px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
                         />
                         <button
                           onClick={() => {
                             if (!trackingInput[order.id]?.trim()) return
                             handleStatusChange(order.id, order.status)
                           }}
-                          className="px-4 py-2 rounded-lg bg-[#D4A574]/10 text-[#D4A574] text-[13px] font-medium hover:bg-[#D4A574]/20 transition-colors"
+                          className="px-4 py-2 rounded-lg bg-[#FFFFFF]/10 text-[#FFFFFF] text-[13px] font-medium hover:bg-[#FFFFFF]/20 transition-colors"
                         >
                           Save
                         </button>

@@ -67,8 +67,8 @@ function genAlias(): string {
 
 function genColor(): string {
   const colors = [
-    '#D4A574', '#2a7fff', '#06b6d4', '#f59e0b', '#f91880',
-    '#D4A574', '#ef4444', '#10b981', '#ec4899', '#6366f1',
+    '#FFFFFF', '#2a7fff', '#06b6d4', '#f59e0b', '#f91880',
+    '#FFFFFF', '#ef4444', '#10b981', '#ec4899', '#6366f1',
     '#14b8a6', '#f97316', '#84cc16', '#a78bfa', '#fb7185',
   ]
   return randItem(colors)

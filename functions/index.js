@@ -104,7 +104,7 @@ exports.sendPushNotification = onDocumentCreated(
         android: {
           notification: {
             icon: 'ic_stat_black94',
-            color: '#D4A574',
+            color: '#FFFFFF',
             sound: 'default',
           },
           priority: 'high',

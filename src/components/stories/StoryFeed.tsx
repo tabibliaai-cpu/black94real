@@ -91,7 +91,7 @@ function StoryRing({ viewed, children, size = 66 }: { viewed: boolean; children:
       <div
         className="rounded-full p-[3px] w-full h-full"
         style={{
-          background: 'conic-gradient(from 45deg, #D4A574, #3b82f6, #06b6d4, #a855f7, #ec4899, #D4A574)',
+          background: 'conic-gradient(from 45deg, #FFFFFF, #3b82f6, #06b6d4, #a855f7, #ec4899, #FFFFFF)',
         }}
       >
         {children}
@@ -176,7 +176,7 @@ function YourStoryCircle({ onTap }: { onTap: () => void }) {
         <div
           className="rounded-full p-[3px] w-full h-full"
           style={{
-            background: 'conic-gradient(from 45deg, #D4A574, #3b82f6, #06b6d4, #D4A574)',
+            background: 'conic-gradient(from 45deg, #FFFFFF, #3b82f6, #06b6d4, #FFFFFF)',
           }}
         >
           <div className="rounded-full bg-black overflow-hidden flex items-center justify-center" style={{ width: size, height: size }}>
@@ -300,7 +300,7 @@ function DiscoverCard({
       {/* Unviewed indicator dot */}
       {!group.viewed && (
         <motion.div
-          className="absolute top-3 right-3 w-2 h-2 rounded-full bg-[#D4A574] z-10"
+          className="absolute top-3 right-3 w-2 h-2 rounded-full bg-[#FFFFFF] z-10"
           animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
@@ -337,7 +337,7 @@ function StoryCardVisual({ story }: { story: StoryCard }) {
             {waveform.map((h, i) => (
               <motion.div
                 key={i}
-                className="w-[3px] rounded-full bg-[#D4A574]/60"
+                className="w-[3px] rounded-full bg-[#FFFFFF]/60"
                 initial={{ height: 4 }}
                 animate={{ height: `${(h / 100) * 56 + 8}px` }}
                 transition={{ duration: 0.5, delay: i * 0.03, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
@@ -345,7 +345,7 @@ function StoryCardVisual({ story }: { story: StoryCard }) {
             ))}
           </div>
           <div className="flex items-center gap-1.5 mt-3">
-            <Mic size={12} className="text-[#D4A574]/60" />
+            <Mic size={12} className="text-[#FFFFFF]/60" />
             <span className="text-[10px] text-white/30">{story.voiceDuration ?? 45}s</span>
           </div>
           {story.content && (
@@ -364,8 +364,8 @@ function StoryCardVisual({ story }: { story: StoryCard }) {
           </p>
           <div className="w-full space-y-1.5 px-2">
             {options?.slice(0, 3).map((opt, i) => {
-              const colors = ['bg-[#D4A574]/20', 'bg-[#3b82f6]/20', 'bg-[#06b6d4]/20']
-              const barColors = ['bg-[#D4A574]/40', 'bg-[#3b82f6]/40', 'bg-[#06b6d4]/40']
+              const colors = ['bg-[#FFFFFF]/20', 'bg-[#3b82f6]/20', 'bg-[#06b6d4]/20']
+              const barColors = ['bg-[#FFFFFF]/40', 'bg-[#3b82f6]/40', 'bg-[#06b6d4]/40']
               return (
                 <div key={opt.id} className="relative rounded-lg overflow-hidden h-7">
                   <motion.div
@@ -449,8 +449,8 @@ function StoryCardVisual({ story }: { story: StoryCard }) {
       return (
         <div className="absolute inset-0 flex flex-col items-center justify-center p-4" style={{ background: 'linear-gradient(180deg, #111 0%, #1a1a1a 100%)' }}>
           <div className="flex items-center gap-2 mb-3">
-            <FileText size={14} className="text-[#D4A574]" />
-            <span className="text-[10px] font-bold text-[#D4A574] tracking-wider uppercase">Thread</span>
+            <FileText size={14} className="text-[#FFFFFF]" />
+            <span className="text-[10px] font-bold text-[#FFFFFF] tracking-wider uppercase">Thread</span>
           </div>
           <div className="flex items-center gap-1.5 mb-2">
             <span className="text-[11px] text-white/40 font-mono bg-white/5 px-2 py-0.5 rounded-full">{current}/{total}</span>
@@ -478,7 +478,7 @@ function StoryCardVisual({ story }: { story: StoryCard }) {
       return (
         <div className="absolute inset-0 flex items-center justify-center p-4 bg-black">
           <div className="flex items-start gap-2">
-            <Newspaper size={14} className="text-[#D4A574] mt-0.5 shrink-0" />
+            <Newspaper size={14} className="text-[#FFFFFF] mt-0.5 shrink-0" />
             <p className="text-[12px] text-white/60 leading-relaxed line-clamp-4">{story.content}</p>
           </div>
         </div>
@@ -511,7 +511,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         onClick={onCreate}
-        className="px-6 py-2.5 rounded-full bg-[#D4A574] text-[13px] font-semibold text-white shadow-lg shadow-[#D4A574]/25"
+        className="px-6 py-2.5 rounded-full bg-[#FFFFFF] text-[13px] font-semibold text-white shadow-lg shadow-[#FFFFFF]/25"
       >
         Create your first story
       </motion.button>
@@ -567,7 +567,7 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
               <motion.span
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="text-[11px] font-semibold text-[#D4A574] bg-[#D4A574]/10 px-2 py-0.5 rounded-full"
+                className="text-[11px] font-semibold text-[#FFFFFF] bg-[#FFFFFF]/10 px-2 py-0.5 rounded-full"
               >
                 {unviewedCount} new
               </motion.span>
@@ -617,7 +617,7 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
                   {isActive && (
                     <motion.div
                       layoutId="storyCategoryPill"
-                      className="absolute inset-0 bg-[#D4A574] rounded-full"
+                      className="absolute inset-0 bg-[#FFFFFF] rounded-full"
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -671,14 +671,14 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
             onClick={onOpenCreator}
             className="fixed bottom-20 right-5 z-30 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
             style={{
-              background: 'linear-gradient(135deg, #D4A574, #3b82f6)',
-              boxShadow: '0 4px 20px rgba(212, 165, 116, 0.4)',
+              background: 'linear-gradient(135deg, #FFFFFF, #3b82f6)',
+              boxShadow: '0 4px 20px rgba(255, 255, 255, 0.4)',
             }}
             aria-label="Create story"
           >
             <motion.div
               className="absolute inset-0 rounded-full"
-              style={{ background: 'linear-gradient(135deg, #D4A574, #3b82f6)' }}
+              style={{ background: 'linear-gradient(135deg, #FFFFFF, #3b82f6)' }}
               animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
             />

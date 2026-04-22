@@ -62,7 +62,7 @@ export function SearchView() {
     <div className="px-4 pt-2">
       {/* Search bar */}
       <div className="sticky top-0 z-10 bg-[#000000] pt-2 pb-3 -mx-4 px-4">
-        <div className="flex items-center gap-3 bg-white/[0.06] rounded-full px-4 py-2.5 border border-white/[0.08] focus-within:border-[#D4A574]/50 focus-within:bg-white/[0.08] transition-all">
+        <div className="flex items-center gap-3 bg-white/[0.06] rounded-full px-4 py-2.5 border border-white/[0.08] focus-within:border-[#FFFFFF]/50 focus-within:bg-white/[0.08] transition-all">
           <svg className="w-5 h-5 text-[#94a3b8] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <circle cx="11" cy="11" r="7" />
             <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
@@ -77,7 +77,7 @@ export function SearchView() {
           <button
             onClick={() => handleSearch(query)}
             disabled={loading || !query.trim()}
-            className="text-[#D4A574] hover:text-[#c4e899] transition-colors disabled:text-[#64748b] disabled:pointer-events-none shrink-0"
+            className="text-[#FFFFFF] hover:text-[#c4e899] transition-colors disabled:text-[#64748b] disabled:pointer-events-none shrink-0"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
               <circle cx="11" cy="11" r="7" />
@@ -102,7 +102,7 @@ export function SearchView() {
               >
                 {t}
                 {tab === t && (
-                  <div className="absolute bottom-0 inset-x-6 h-1 bg-[#D4A574] rounded-full" />
+                  <div className="absolute bottom-0 inset-x-6 h-1 bg-[#FFFFFF] rounded-full" />
                 )}
               </button>
             ))}

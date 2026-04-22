@@ -22,7 +22,7 @@ function getInitials(name: string | null | undefined): string {
 function resolveBadgeColor(badge?: string): string {
   if (badge === 'gold') return '#ffd700'
   if (badge === 'pro' || badge === 'blue') return '#1d9bf0'
-  return '#D4A574' // default rose gold for generic verified
+  return '#FFFFFF' // default rose gold for generic verified
 }
 
 function BadgeIcon({ badge, size }: { badge: string; size: number }) {
@@ -78,7 +78,7 @@ export function PAvatar({ src, name, size = 40, className, verified, badge }: PA
       ) : (
         <div
           className={cn(
-            'rounded-full bg-gradient-to-br from-[#D4A574] to-[#9B7345] flex items-center justify-center text-black font-bold shrink-0',
+            'rounded-full bg-gradient-to-br from-[#FFFFFF] to-[#9CA3AF] flex items-center justify-center text-black font-bold shrink-0',
             className
           )}
           style={{ width: size, height: size, fontSize: size * 0.38 }}

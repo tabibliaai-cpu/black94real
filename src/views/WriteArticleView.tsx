@@ -133,8 +133,8 @@ export function WriteArticleView() {
             className={cn(
               'px-5 py-2 rounded-full text-[14px] font-bold transition-all duration-200',
               publishing
-                ? 'bg-[#D4A574]/40 text-black/60 cursor-not-allowed'
-                : 'bg-[#D4A574] text-black hover:bg-[#B8895C] active:scale-95'
+                ? 'bg-[#FFFFFF]/40 text-black/60 cursor-not-allowed'
+                : 'bg-[#FFFFFF] text-black hover:bg-[#D1D5DB] active:scale-95'
             )}
           >
             {publishing ? 'Publishing...' : 'Publish'}
@@ -147,7 +147,7 @@ export function WriteArticleView() {
         {/* Cover Image */}
         <button
           onClick={handleCoverClick}
-          className="w-full relative group mb-6 rounded-2xl overflow-hidden border border-dashed border-white/[0.12] hover:border-[#D4A574]/40 transition-colors"
+          className="w-full relative group mb-6 rounded-2xl overflow-hidden border border-dashed border-white/[0.12] hover:border-[#FFFFFF]/40 transition-colors"
           style={{ aspectRatio: '16/9' }}
         >
           {coverImage ? (
@@ -158,13 +158,13 @@ export function WriteArticleView() {
             />
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#000000]">
-              <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center group-hover:bg-[#D4A574]/10 transition-colors">
-                <svg className="w-6 h-6 text-[#94a3b8] group-hover:text-[#D4A574] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center group-hover:bg-[#FFFFFF]/10 transition-colors">
+                <svg className="w-6 h-6 text-[#94a3b8] group-hover:text-[#FFFFFF] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
                   <circle cx="12" cy="13" r="4" />
                 </svg>
               </div>
-              <span className="text-[14px] text-[#94a3b8] group-hover:text-[#D4A574] transition-colors">
+              <span className="text-[14px] text-[#94a3b8] group-hover:text-[#FFFFFF] transition-colors">
                 Add Cover Image
               </span>
             </div>
@@ -191,13 +191,13 @@ export function WriteArticleView() {
         {/* ─── Toolbar (word/char/readtime) ─── */}
         <div className="flex items-center gap-4 mt-4 pt-4 border-t border-white/[0.06]">
           <span className="text-[13px] text-[#94a3b8]">
-            <span className="text-[#D4A574] font-semibold">{wordCount}</span> words
+            <span className="text-[#FFFFFF] font-semibold">{wordCount}</span> words
           </span>
           <span className="text-[13px] text-[#94a3b8]">
-            <span className="text-[#D4A574] font-semibold">{charCount}</span> characters
+            <span className="text-[#FFFFFF] font-semibold">{charCount}</span> characters
           </span>
           <span className="text-[13px] text-[#94a3b8]">
-            <span className="text-[#D4A574] font-semibold">{readTime}</span>
+            <span className="text-[#FFFFFF] font-semibold">{readTime}</span>
           </span>
         </div>
 
@@ -208,7 +208,7 @@ export function WriteArticleView() {
             className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
           >
             <div className="flex items-center gap-3">
-              <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
                 <path d="M22 4L12 14.01l-3-3" />
               </svg>
@@ -218,7 +218,7 @@ export function WriteArticleView() {
             <div
               className={cn(
                 'w-11 h-6 rounded-full transition-colors relative flex-shrink-0',
-                factCheckEnabled ? 'bg-[#D4A574]' : 'bg-white/[0.15]'
+                factCheckEnabled ? 'bg-[#FFFFFF]' : 'bg-white/[0.15]'
               )}
             >
               <div
@@ -239,7 +239,7 @@ export function WriteArticleView() {
                   <select
                     value={factCheckStatus}
                     onChange={(e) => setFactCheckStatus(e.target.value as FactCheckStatus)}
-                    className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] outline-none focus:border-[#D4A574]/50 transition-colors cursor-pointer"
+                    className="w-full appearance-none bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] outline-none focus:border-[#FFFFFF]/50 transition-colors cursor-pointer"
                   >
                     <option value="Pending Review" className="bg-[#000000] text-[#e7e9ea]">Pending Review</option>
                     <option value="Verified" className="bg-[#000000] text-[#e7e9ea]">Verified</option>
@@ -259,7 +259,7 @@ export function WriteArticleView() {
                   value={factCheckUrl}
                   onChange={(e) => setFactCheckUrl(e.target.value)}
                   placeholder="https://example.com/source"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
                 />
               </div>
             </div>
@@ -277,7 +277,7 @@ export function WriteArticleView() {
               'flex-1 py-2.5 rounded-full text-[14px] font-bold border transition-all duration-200',
               saving
                 ? 'border-white/[0.06] text-[#64748b] cursor-not-allowed'
-                : 'border-[#D4A574]/40 text-[#D4A574] hover:bg-[#D4A574]/10 active:scale-[0.98]'
+                : 'border-[#FFFFFF]/40 text-[#FFFFFF] hover:bg-[#FFFFFF]/10 active:scale-[0.98]'
             )}
           >
             {saving ? 'Saving...' : 'Save as Draft'}
@@ -288,8 +288,8 @@ export function WriteArticleView() {
             className={cn(
               'flex-1 py-2.5 rounded-full text-[14px] font-bold transition-all duration-200',
               publishing
-                ? 'bg-[#D4A574]/40 text-black/60 cursor-not-allowed'
-                : 'bg-[#D4A574] text-black hover:bg-[#B8895C] active:scale-[0.98]'
+                ? 'bg-[#FFFFFF]/40 text-black/60 cursor-not-allowed'
+                : 'bg-[#FFFFFF] text-black hover:bg-[#D1D5DB] active:scale-[0.98]'
             )}
           >
             {publishing ? 'Publishing...' : 'Publish'}

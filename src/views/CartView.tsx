@@ -42,7 +42,7 @@ export function CartView() {
         <p className="text-[14px] text-[#94a3b8] mb-6 text-center">Discover amazing products in our store</p>
         <button
           onClick={() => navigate('store')}
-          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20"
+          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black font-bold text-[15px] shadow-lg shadow-[#FFFFFF]/20"
         >
           Browse Store
         </button>
@@ -87,7 +87,7 @@ export function CartView() {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <h3
-                className="text-[14px] font-semibold text-[#e7e9ea] line-clamp-1 cursor-pointer hover:text-[#D4A574] transition-colors"
+                className="text-[14px] font-semibold text-[#e7e9ea] line-clamp-1 cursor-pointer hover:text-[#FFFFFF] transition-colors"
                 onClick={() => navigate('product-detail', { id: item.productId })}
               >
                 {item.productName}
@@ -144,18 +144,18 @@ export function CartView() {
 
       {/* Free shipping banner */}
       {subtotal < 999 && subtotal > 0 && (
-        <div className="mx-4 mt-4 p-3 rounded-xl bg-gradient-to-r from-[#D4A574]/10 to-transparent border border-[#D4A574]/20">
+        <div className="mx-4 mt-4 p-3 rounded-xl bg-gradient-to-r from-[#FFFFFF]/10 to-transparent border border-[#FFFFFF]/20">
           <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-[#D4A574] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4 text-[#FFFFFF] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <circle cx="12" cy="12" r="10" />
               <path d="M12 8v4l3 3" />
             </svg>
-            <p className="text-[13px] text-[#D4A574]">
+            <p className="text-[13px] text-[#FFFFFF]">
               Add ₹{(999 - subtotal).toLocaleString()} more for free shipping
             </p>
           </div>
           <div className="mt-2 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
-            <div className="h-full rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] transition-all" style={{ width: `${Math.min(100, (subtotal / 999) * 100)}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] transition-all" style={{ width: `${Math.min(100, (subtotal / 999) * 100)}%` }} />
           </div>
         </div>
       )}
@@ -170,13 +170,13 @@ export function CartView() {
           </div>
           <div className="flex justify-between">
             <span className="text-[13px] text-[#94a3b8]">Shipping</span>
-            <span className={cn('text-[13px]', shipping === 0 ? 'text-[#D4A574]' : 'text-[#e7e9ea]')}>
+            <span className={cn('text-[13px]', shipping === 0 ? 'text-[#FFFFFF]' : 'text-[#e7e9ea]')}>
               {shipping === 0 ? 'FREE' : `₹${shipping}`}
             </span>
           </div>
           <div className="border-t border-white/[0.06] pt-2 flex justify-between">
             <span className="text-[15px] font-bold text-[#e7e9ea]">Total</span>
-            <span className="text-[18px] font-bold text-[#D4A574]">₹{total.toLocaleString()}</span>
+            <span className="text-[18px] font-bold text-[#FFFFFF]">₹{total.toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -185,7 +185,7 @@ export function CartView() {
       <div className="fixed bottom-[50px] left-0 right-0 z-20 bg-[#000000]/90 backdrop-blur-xl border-t border-white/[0.08] p-4 safe-area-bottom">
         <button
           onClick={() => navigate('checkout')}
-          className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20 hover:shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+          className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black font-bold text-[15px] shadow-lg shadow-[#FFFFFF]/20 hover:shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
         >
           <span>Checkout</span>
           <span className="text-[13px] bg-[#000000]/20 px-2 py-0.5 rounded-full">₹{total.toLocaleString()}</span>

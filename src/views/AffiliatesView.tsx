@@ -110,8 +110,8 @@ export function AffiliatesView() {
       {/* ── Plan Info Card ──────────────────────────────── */}
       <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-[#D4A574]/10 flex items-center justify-center">
-            <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-10 h-10 rounded-xl bg-[#FFFFFF]/10 flex items-center justify-center">
+            <svg className="w-5 h-5 text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z" />
               <path d="M2 17l10 5 10-5" />
               <path d="M2 12l10 5 10-5" />
@@ -125,7 +125,7 @@ export function AffiliatesView() {
         <div className="flex items-center gap-3">
           <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] transition-all duration-500"
               style={{ width: `${Math.min((freeBadgesUsed / FREE_BADGES) * 100, 100)}%` }}
             />
           </div>
@@ -146,8 +146,8 @@ export function AffiliatesView() {
                 className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 rounded-full bg-[#D4A574]/15 flex items-center justify-center shrink-0">
-                    <span className="text-[14px] font-bold text-[#D4A574]">
+                  <div className="w-11 h-11 rounded-full bg-[#FFFFFF]/15 flex items-center justify-center shrink-0">
+                    <span className="text-[14px] font-bold text-[#FFFFFF]">
                       {getInitials(affiliate.name)}
                     </span>
                   </div>
@@ -159,7 +159,7 @@ export function AffiliatesView() {
                     </div>
                     <p className="text-[13px] text-[#64748b] truncate">{affiliate.email}</p>
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#D4A574]/10 border border-[#D4A574]/20 text-[#D4A574] text-[12px] font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFFFFF]/10 border border-[#FFFFFF]/20 text-[#FFFFFF] text-[12px] font-medium">
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                         </svg>
@@ -172,12 +172,12 @@ export function AffiliatesView() {
                           type="text"
                           value={editRole}
                           onChange={(e) => setEditRole(e.target.value)}
-                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-1.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+                          className="flex-1 bg-transparent border border-white/[0.08] rounded-lg px-3 py-1.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
                           placeholder="Role/Title"
                         />
                         <button
                           onClick={() => handleEditSave(affiliate.id)}
-                          className="px-3 py-1.5 rounded-lg bg-[#D4A574] text-black text-[13px] font-semibold hover:bg-[#B8895C] transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-[#FFFFFF] text-black text-[13px] font-semibold hover:bg-[#D1D5DB] transition-colors"
                         >
                           Save
                         </button>
@@ -238,7 +238,7 @@ export function AffiliatesView() {
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Enter full name"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             />
           </div>
           <div className="space-y-1.5">
@@ -248,7 +248,7 @@ export function AffiliatesView() {
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               placeholder="Enter email address"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             />
           </div>
           <div className="space-y-1.5">
@@ -258,7 +258,7 @@ export function AffiliatesView() {
               value={newRole}
               onChange={(e) => setNewRole(e.target.value)}
               placeholder="e.g. Sales Lead, Account Executive"
-              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
+              className="w-full bg-transparent border border-white/[0.08] rounded-xl px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
             />
           </div>
           {!allFreeUsed ? (
@@ -268,7 +268,7 @@ export function AffiliatesView() {
               className={cn(
                 'w-full py-2.5 rounded-xl text-[15px] font-bold transition-all duration-200',
                 newName.trim() && newEmail.trim() && newRole.trim()
-                  ? 'bg-[#D4A574] text-black hover:bg-[#B8895C] active:scale-[0.98]'
+                  ? 'bg-[#FFFFFF] text-black hover:bg-[#D1D5DB] active:scale-[0.98]'
                   : 'bg-white/[0.06] text-[#64748b] cursor-not-allowed'
               )}
             >
@@ -336,7 +336,7 @@ export function AffiliatesView() {
 
           <button
             onClick={handlePurchase}
-            className="w-full py-2.5 rounded-xl bg-[#D4A574] text-black text-[15px] font-bold hover:bg-[#B8895C] active:scale-[0.98] transition-all duration-200"
+            className="w-full py-2.5 rounded-xl bg-[#FFFFFF] text-black text-[15px] font-bold hover:bg-[#D1D5DB] active:scale-[0.98] transition-all duration-200"
           >
             Purchase
           </button>

@@ -36,10 +36,10 @@ export function SidebarItem({
       onClick={onClick}
       className={cn(
         'group relative flex items-center gap-3 rounded-full px-3 py-2.5 text-[15px] transition-all duration-150 ease-in-out outline-none',
-        'focus-visible:ring-2 focus-visible:ring-[#D4A574]/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
+        'focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
         active
-          ? 'bg-[#D4A574]/10 text-white'
-          : 'text-[#71767b] hover:text-white hover:bg-white/[0.07]',
+          ? 'border border-white/[0.15] text-white'
+          : 'border border-transparent text-[#71767b] hover:text-white hover:bg-white/[0.05]',
         collapsed ? 'justify-center' : 'w-full'
       )}
     >
@@ -47,7 +47,7 @@ export function SidebarItem({
       <span
         className={cn(
           'shrink-0 transition-colors duration-150',
-          active ? 'text-[#D4A574]' : 'text-[#71767b] group-hover:text-white',
+          active ? 'text-white' : 'text-[#71767b] group-hover:text-white',
           'h-[26px] w-[26px]'
         )}
       >
@@ -57,21 +57,21 @@ export function SidebarItem({
       {/* Label */}
       {!collapsed && (
         <span className={cn(
-          'truncate select-none tracking-wide',
-          active ? 'text-white font-extrabold' : 'font-extrabold'
+          'truncate select-none',
+          active ? 'text-white font-bold' : 'font-bold text-[#71767b]'
         )}>{label}</span>
       )}
 
       {/* Badge */}
       {showBadge && !collapsed && (
-        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#D4A574] px-1.5 text-xs font-bold text-black">
+        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-xs font-bold text-black">
           {typeof badge === 'number' && badge > 99 ? '99+' : badge}
         </span>
       )}
 
       {/* Badge dot for collapsed */}
       {showBadge && collapsed && (
-        <span className="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-[#D4A574] ring-2 ring-[#000000]" />
+        <span className="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-white ring-2 ring-[#000000]" />
       )}
     </button>
   )

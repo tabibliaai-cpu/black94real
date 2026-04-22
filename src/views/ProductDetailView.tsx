@@ -75,7 +75,7 @@ export function ProductDetailView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-53px)]">
-        <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#FFFFFF]/30 border-t-[#FFFFFF] rounded-full animate-spin" />
       </div>
     )
   }
@@ -84,7 +84,7 @@ export function ProductDetailView() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-53px)] px-4">
         <p className="text-[15px] text-[#94a3b8] mb-4">Product not found</p>
-        <button onClick={() => navigate('store')} className="px-6 py-2 rounded-full bg-[#D4A574] text-black font-bold text-sm">
+        <button onClick={() => navigate('store')} className="px-6 py-2 rounded-full bg-[#FFFFFF] text-black font-bold text-sm">
           Back to Store
         </button>
       </div>
@@ -184,7 +184,7 @@ export function ProductDetailView() {
             <button
               key={i}
               onClick={() => setActiveImage(i)}
-              className={`w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${i === activeImage ? 'border-[#D4A574]' : 'border-transparent opacity-60'}`}
+              className={`w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${i === activeImage ? 'border-[#FFFFFF]' : 'border-transparent opacity-60'}`}
             >
               <img src={img} alt="" className="w-full h-full object-cover" />
             </button>
@@ -222,7 +222,7 @@ export function ProductDetailView() {
             {product.businessImage ? (
               <img src={product.businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#D4A574] to-[#B8895C] flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-[#FFFFFF] to-[#D1D5DB] flex items-center justify-center">
                 <span className="text-sm font-bold text-black">{product.businessName[0]?.toUpperCase()}</span>
               </div>
             )}
@@ -244,7 +244,7 @@ export function ProductDetailView() {
 
         {/* Category & Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="px-3 py-1 rounded-full bg-[#D4A574]/10 text-[#D4A574] text-[12px] font-medium">{product.category}</span>
+          <span className="px-3 py-1 rounded-full bg-[#FFFFFF]/10 text-[#FFFFFF] text-[12px] font-medium">{product.category}</span>
           {product.tags.slice(0, 3).map((tag) => (
             <span key={tag} className="px-3 py-1 rounded-full bg-white/[0.06] text-[#94a3b8] text-[12px]">#{tag}</span>
           ))}
@@ -254,7 +254,7 @@ export function ProductDetailView() {
         {variants.length > 0 && variants.map((variant) => (
           <div key={variant.name} className="mb-4">
             <h3 className="text-[14px] font-semibold text-[#e7e9ea] mb-2">
-              {variant.name}: <span className="text-[#D4A574]">{selectedVariant[variant.name] || 'Select'}</span>
+              {variant.name}: <span className="text-[#FFFFFF]">{selectedVariant[variant.name] || 'Select'}</span>
             </h3>
             <div className="flex flex-wrap gap-2">
               {variant.values.map((value) => (
@@ -263,7 +263,7 @@ export function ProductDetailView() {
                   onClick={() => setSelectedVariant((prev) => ({ ...prev, [variant.name]: value }))}
                   className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-all ${
                     selectedVariant[variant.name] === value
-                      ? 'bg-[#D4A574] text-black'
+                      ? 'bg-[#FFFFFF] text-black'
                       : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1]'
                   }`}
                 >
@@ -365,13 +365,13 @@ export function ProductDetailView() {
         <div className="flex gap-3">
           <button
             onClick={handleAddToCart}
-            className="flex-1 py-3.5 rounded-full border border-[#D4A574] text-[#D4A574] font-bold text-[15px] hover:bg-[#D4A574]/10 transition-colors active:scale-[0.98]"
+            className="flex-1 py-3.5 rounded-full border border-[#FFFFFF] text-[#FFFFFF] font-bold text-[15px] hover:bg-[#FFFFFF]/10 transition-colors active:scale-[0.98]"
           >
             Add to Cart
           </button>
           <button
             onClick={handleBuyNow}
-            className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20 hover:shadow-xl transition-all active:scale-[0.98]"
+            className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black font-bold text-[15px] shadow-lg shadow-[#FFFFFF]/20 hover:shadow-xl transition-all active:scale-[0.98]"
           >
             Buy Now
           </button>

@@ -66,7 +66,7 @@ const shareTargets = [
   { label: 'WhatsApp', color: '#25D366', icon: 'M' },
   { label: 'Telegram', color: '#0088cc', icon: 'T' },
   { label: 'Twitter', color: '#1DA1F2', icon: 'X' },
-  { label: 'Copy', color: '#D4A574', icon: 'C' },
+  { label: 'Copy', color: '#FFFFFF', icon: 'C' },
 ]
 
 function ShareRow({ shareUrl, onCopy }: { shareUrl: string; onCopy: () => void }) {
@@ -265,8 +265,8 @@ export function ShareProfileView() {
                 expired
                   ? 'bg-white/[0.04] text-[#64748b] cursor-not-allowed'
                   : linkCopied
-                    ? 'bg-[#D4A574]/20 text-[#D4A574]'
-                    : 'bg-[#D4A574]/15 text-[#D4A574] hover:bg-[#D4A574]/25'
+                    ? 'bg-[#FFFFFF]/20 text-[#FFFFFF]'
+                    : 'bg-[#FFFFFF]/15 text-[#FFFFFF] hover:bg-[#FFFFFF]/25'
               )}
             >
               {linkCopied ? 'Copied!' : 'Copy'}
@@ -283,7 +283,7 @@ export function ShareProfileView() {
             </>
           ) : (
             <>
-              <div className="w-2 h-2 rounded-full bg-[#D4A574] animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[#FFFFFF] animate-pulse" />
               <span className="text-[14px] text-[#94a3b8]">
                 Link expires in{' '}
                 <span className="text-[#e7e9ea] font-semibold font-mono">
@@ -301,7 +301,7 @@ export function ShareProfileView() {
         {expired && (
           <button
             onClick={generateNewLink}
-            className="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black text-[14px] font-bold hover:opacity-90 active:scale-95 transition-all shadow-md shadow-[#D4A574]/20"
+            className="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black text-[14px] font-bold hover:opacity-90 active:scale-95 transition-all shadow-md shadow-[#FFFFFF]/20"
           >
             Generate New Link
           </button>

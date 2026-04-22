@@ -204,13 +204,12 @@ export function Sidebar() {
 
       {/* ── Middle: Navigation ── */}
       <nav role="menu" className="flex-1 overflow-y-auto px-3 py-2 scrollbar-thin">
-        {/* Post button — rose gold accent outline */}
+        {/* Post button — clean white outline */}
         <button
           onClick={() => { setComposeOpen(!composeOpen); if (isMobile) useAppStore.getState().setSidebarOpen(false) }}
           className={cn(
-            'w-full rounded-full font-extrabold text-[15px] transition-all duration-200 mb-4',
-            'bg-[#D4A574] text-black hover:bg-[#E8C4A0] active:scale-[0.97]',
-            'shadow-[0_2px_12px_rgba(212,165,116,0.3)]',
+            'w-full rounded-full font-bold text-[15px] transition-all duration-150 mb-4',
+            'border border-white/[0.2] text-white hover:bg-white/[0.08] active:scale-[0.97]',
             isExpanded ? 'py-3 px-4' : 'py-3 px-0 flex items-center justify-center'
           )}
         >
@@ -258,7 +257,7 @@ export function Sidebar() {
             {isExpanded ? (
               <>
                 <IconMore className="h-[26px] w-[26px] shrink-0" />
-                <span className="text-[15px] font-extrabold select-none">More</span>
+                <span className="text-[15px] font-bold select-none">More</span>
               </>
             ) : (
               <IconArrowLeft className="h-[26px] w-[26px] shrink-0" />

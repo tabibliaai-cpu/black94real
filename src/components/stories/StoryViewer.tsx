@@ -42,7 +42,7 @@ const LONG_PRESS_MS = 500
 const CRICKET_UPDATE_MS = 30000
 const POLL_UPDATE_MS = 3000
 
-const POLL_COLORS = ['#D4A574', '#3b82f6', '#06b6d4', '#f59e0b']
+const POLL_COLORS = ['#FFFFFF', '#3b82f6', '#06b6d4', '#f59e0b']
 
 const EXTENDED_REACTIONS: { type: ReactionType; emoji: string; label: string }[] = [
   { type: 'fire', emoji: '🔥', label: 'Fire' },
@@ -667,7 +667,7 @@ function CreatorProfileOverlay({
           {/* Avatar row */}
           <div className="flex flex-col items-center mb-5">
             <div className="relative mb-3">
-              <div className="w-20 h-20 rounded-full p-[2px]" style={{ background: 'linear-gradient(135deg, #D4A574, #06b6d4)' }}>
+              <div className="w-20 h-20 rounded-full p-[2px]" style={{ background: 'linear-gradient(135deg, #FFFFFF, #06b6d4)' }}>
                 <img
                   src={group.creatorAvatar}
                   alt={group.creatorName}
@@ -1249,7 +1249,7 @@ export default function StoryViewer({ groups, initialGroupIndex, onClose, onNavi
           {/* Avatar with gradient ring */}
           <div
             className="w-9 h-9 rounded-full p-[2px] shrink-0"
-            style={{ background: 'linear-gradient(135deg, #D4A574, #06b6d4)' }}
+            style={{ background: 'linear-gradient(135deg, #FFFFFF, #06b6d4)' }}
           >
             <img
               src={currentGroup?.creatorAvatar}
