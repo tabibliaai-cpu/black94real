@@ -38,8 +38,8 @@ export function SidebarItem({
         'group relative flex items-center gap-3 rounded-full px-3 py-2.5 text-[15px] transition-all duration-150 ease-in-out outline-none',
         'focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
         active
-          ? 'border border-white/[0.15] text-white'
-          : 'border border-transparent text-[#71767b] hover:text-white hover:bg-white/[0.05]',
+          ? 'text-white'
+          : 'text-[#71767b] hover:text-white hover:bg-white/[0.05]',
         collapsed ? 'justify-center' : 'w-full'
       )}
     >

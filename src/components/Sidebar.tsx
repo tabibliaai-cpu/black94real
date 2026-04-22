@@ -204,18 +204,6 @@ export function Sidebar() {
 
       {/* ── Middle: Navigation ── */}
       <nav role="menu" className="flex-1 overflow-y-auto px-3 py-2 scrollbar-thin">
-        {/* Post button — clean white outline */}
-        <button
-          onClick={() => { setComposeOpen(!composeOpen); if (isMobile) useAppStore.getState().setSidebarOpen(false) }}
-          className={cn(
-            'w-full rounded-full font-bold text-[15px] transition-all duration-150 mb-4',
-            'border border-white/[0.2] text-white hover:bg-white/[0.08] active:scale-[0.97]',
-            isExpanded ? 'py-3 px-4' : 'py-3 px-0 flex items-center justify-center'
-          )}
-        >
-          {isExpanded ? 'Post' : <IconPlus className="w-6 h-6" />}
-        </button>
-
         <ul className="flex flex-col gap-0.5" role="menubar">
           {NAV_ITEMS.map((item) => {
             const IconComponent = item.icon
