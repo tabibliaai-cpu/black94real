@@ -56,9 +56,6 @@ export function VerifiedBadge({ size = 14, badge }: { size?: number; badge?: str
 export function PAvatar({ src, name, size = 40, className, verified, badge }: PAvatarProps) {
   const initials = getInitials(name)
 
-  // Determine badge type: explicit badge prop takes priority, fall back to verified
-  const badgeType = badge === 'gold' ? 'gold' : badge === 'pro' || badge === 'blue' ? 'pro' : verified ? 'default' : null
-
   return (
     <div className="relative inline-flex shrink-0">
       {src ? (
@@ -84,14 +81,6 @@ export function PAvatar({ src, name, size = 40, className, verified, badge }: PA
           style={{ width: size, height: size, fontSize: size * 0.38 }}
         >
           {initials}
-        </div>
-      )}
-      {badgeType && (
-        <div
-          className="absolute -bottom-0.5 -right-0.5 rounded-full bg-[#000000] flex items-center justify-center"
-          style={{ width: size * 0.35, height: size * 0.35 }}
-        >
-          <BadgeIcon badge={badgeType} size={size * 0.28} />
         </div>
       )}
     </div>

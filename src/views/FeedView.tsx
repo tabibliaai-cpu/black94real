@@ -98,13 +98,20 @@ export function FeedView() {
    */
   const enrichWithLiveProfile = useCallback((postsList: any[]) => {
     if (!user) return postsList
+    const profileImage = user.profileImage
     const isVerified = user.isVerified
     const badge = user.badge
-    // If user has no badge/verified, nothing to enrich
-    if (!isVerified && !badge) return postsList
+    // If user has no profile data changes, nothing to enrich
+    if (!profileImage && !isVerified && !badge) return postsList
     return postsList.map((p: any) => {
       if (p.authorId === user.id) {
-        return { ...p, authorIsVerified: p.authorIsVerified ?? isVerified, authorBadge: p.authorBadge || badge }
+        return {
+          ...p,
+          // Always use latest profile image for own posts
+          authorProfileImage: profileImage || p.authorProfileImage,
+          authorIsVerified: isVerified || p.authorIsVerified,
+          authorBadge: badge || p.authorBadge,
+        }
       }
       return p
     })

@@ -171,6 +171,25 @@ export function ProfileView() {
     }
   }, [user])
 
+  // Enrich own posts with live profile data (badge, profile image)
+  useEffect(() => {
+    if (!user || posts.length === 0 || !isOwnProfile) return
+    const hasBadge = user.isVerified || !!user.badge
+    const hasProfileImage = !!user.profileImage
+    if (!hasBadge && !hasProfileImage) return
+    setPosts((prev) => prev.map((p: any) => {
+      if (p.authorId === user.id) {
+        return {
+          ...p,
+          authorProfileImage: user.profileImage || p.authorProfileImage,
+          authorIsVerified: user.isVerified || p.authorIsVerified,
+          authorBadge: user.badge || p.authorBadge,
+        }
+      }
+      return p
+    }))
+  }, [user?.isVerified, user?.badge, user?.profileImage, isOwnProfile])
+
   // Use profile data directly (never bleed logged-in user's data into other user's profile)
   const displayName = profile?.displayName || (isOwnProfile ? user?.displayName : null) || 'User'
   const username = profile?.username || (isOwnProfile ? user?.username : null) || 'user'

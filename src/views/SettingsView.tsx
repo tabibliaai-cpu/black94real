@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { updateUser, checkUsernameAvailability, updateUsername } from '@/lib/db'
+import { updateUser, checkUsernameAvailability, updateUsername, getUser } from '@/lib/db'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   EDIT PROFILE VIEW — Profile editing: name, username, bio, website,
-   profile picture upload, banner upload, username availability check
+   EDIT PROFILE VIEW — Profile editing with real-time username check,
+   image upload, and save confirmation
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function compressImage(file: File, maxSize = 800, quality = 0.75): Promise<string> {
@@ -74,40 +74,62 @@ export function SettingsView() {
   const [bio, setBio] = useState(user?.bio || '')
   const [website, setWebsite] = useState(user?.website || '')
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [profilePreview, setProfilePreview] = useState<string | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(null)
   const [uploadingProfile, setUploadingProfile] = useState(false)
   const [uploadingBanner, setUploadingBanner] = useState(false)
 
   // Username availability states
-  const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken' | 'invalid'>('idle')
+  const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken' | 'invalid' | 'current'>('current')
   const usernameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const mountedRef = useRef(true)
 
-  // Debounced username availability check
-  const checkUsername = useCallback(async (val: string) => {
+  useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false } }, [])
+
+  // Actual username check function (not memoized — always uses latest closure)
+  const doUsernameCheck = async (val: string) => {
     const trimmed = val.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
     if (!trimmed || trimmed.length < 3) {
-      setUsernameStatus('invalid')
+      if (mountedRef.current) setUsernameStatus('invalid')
       return
     }
-    if (trimmed === user?.username?.toLowerCase()) {
-      setUsernameStatus('idle')
+    // Allow current username
+    if (user && trimmed === user.username?.toLowerCase()) {
+      if (mountedRef.current) setUsernameStatus('current')
       return
     }
-    setUsernameStatus('checking')
+    if (mountedRef.current) setUsernameStatus('checking')
     try {
       const available = await checkUsernameAvailability(trimmed)
-      setUsernameStatus(available ? 'available' : 'taken')
-    } catch {
-      setUsernameStatus('idle')
+      if (mountedRef.current) setUsernameStatus(available ? 'available' : 'taken')
+    } catch (err) {
+      console.error('[Settings] Username check error:', err)
+      if (mountedRef.current) setUsernameStatus('idle')
     }
-  }, [user?.username])
+  }
 
   const handleUsernameChange = (val: string) => {
     const cleaned = val.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase()
     setUsername(cleaned)
+    // Clear previous timer
     if (usernameTimerRef.current) clearTimeout(usernameTimerRef.current)
-    usernameTimerRef.current = setTimeout(() => checkUsername(cleaned), 500)
+    // Set debounce timer
+    if (cleaned.length >= 3) {
+      usernameTimerRef.current = setTimeout(() => doUsernameCheck(cleaned), 600)
+    } else if (cleaned.length > 0) {
+      setUsernameStatus('invalid')
+    } else {
+      setUsernameStatus('idle')
+    }
+  }
+
+  // Also check on blur (final check when user leaves the field)
+  const handleUsernameBlur = () => {
+    if (usernameTimerRef.current) clearTimeout(usernameTimerRef.current)
+    if (username.length >= 3) {
+      doUsernameCheck(username)
+    }
   }
 
   // Cleanup timer on unmount
@@ -155,7 +177,7 @@ export function SettingsView() {
   }
 
   const handleSave = async () => {
-    if (!user) return
+    if (!user || saving) return
 
     // Validate username
     const trimmed = username.trim().toLowerCase()
@@ -171,6 +193,7 @@ export function SettingsView() {
     }
 
     setSaving(true)
+    setSaved(false)
     try {
       // Save display name, bio, website
       await updateUser(user.id, { displayName, bio })
@@ -180,20 +203,29 @@ export function SettingsView() {
         await updateUsername(user.id, trimmed)
       }
 
-      // Refresh user in store
-      const { getUser } = await import('@/lib/db')
+      // Refresh user from Firestore for accurate data
       const freshUser = await getUser(user.id)
       if (freshUser) {
         setUser({
           ...user,
-          displayName,
+          displayName: freshUser.displayName,
           username: freshUser.username,
-          bio,
+          bio: freshUser.bio,
           profileImage: profilePreview || user.profileImage,
           coverImage: bannerPreview || user.coverImage,
+          isVerified: freshUser.isVerified,
+          badge: freshUser.badge,
         })
       }
-      toast.success('Profile updated')
+
+      // Show saved confirmation
+      setSaved(true)
+      toast.success('Profile updated successfully')
+
+      // Navigate back after short delay to show the confirmation
+      setTimeout(() => {
+        if (mountedRef.current) navigate('profile')
+      }, 800)
     } catch (err: any) {
       toast.error(err?.message || 'Failed to update profile')
     } finally {
@@ -210,13 +242,15 @@ export function SettingsView() {
     available: 'text-[#00ba7c]',
     taken: 'text-red-400',
     invalid: 'text-[#71767b]',
+    current: 'text-[#64748b]',
   }
   const usernameStatusText: Record<string, string> = {
     idle: '',
-    checking: 'Checking...',
-    available: 'Username is available',
-    taken: 'Username is already taken',
+    checking: 'Checking availability...',
+    available: 'This username is available',
+    taken: 'This username is already taken',
     invalid: 'Min 3 characters (a-z, 0-9, _)',
+    current: 'This is your current username',
   }
   const usernameBorderClass: Record<string, string> = {
     idle: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
@@ -224,6 +258,7 @@ export function SettingsView() {
     available: 'border-[#00ba7c]/40 focus-within:border-[#00ba7c]/70',
     taken: 'border-red-400/40 focus-within:border-red-400/70',
     invalid: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
+    current: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
   }
 
   return (
@@ -275,7 +310,7 @@ export function SettingsView() {
       {/* ─── Profile Avatar ─── */}
       <div className="flex items-center gap-4 -mt-8 relative z-10">
         <div className="relative">
-          <PAvatar src={displayProfileImage} name={user?.displayName} size={80} verified={user?.isVerified} badge={user?.badge} className="ring-4 ring-black" />
+          <PAvatar src={displayProfileImage} name={user?.displayName} size={80} className="ring-4 ring-black" />
           <button
             onClick={() => profileInputRef.current?.click()}
             className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#1d9bf0] flex items-center justify-center shadow-lg hover:bg-[#1a8cd8] transition-colors"
@@ -339,17 +374,23 @@ export function SettingsView() {
               type="text"
               value={username}
               onChange={(e) => handleUsernameChange(e.target.value)}
+              onBlur={handleUsernameBlur}
               className="flex-1 bg-transparent text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none"
               placeholder="username"
             />
             {usernameStatus === 'available' && (
-              <svg className="w-4.5 h-4.5 text-[#00ba7c] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#00ba7c] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             )}
             {usernameStatus === 'taken' && (
-              <svg className="w-4.5 h-4.5 text-red-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-red-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            )}
+            {usernameStatus === 'current' && (
+              <svg className="w-[18px] h-[18px] text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             )}
             {usernameStatus === 'checking' && (
@@ -393,15 +434,33 @@ export function SettingsView() {
       {/* ─── Save Button ─── */}
       <button
         onClick={handleSave}
-        disabled={saving || usernameStatus === 'taken' || usernameStatus === 'checking'}
+        disabled={saving || saved || usernameStatus === 'taken' || usernameStatus === 'checking'}
         className={cn(
-          'w-full py-3 rounded-full text-[15px] font-bold transition-all',
-          !saving && usernameStatus !== 'taken' && usernameStatus !== 'checking'
-            ? 'bg-[#e7e9ea] text-black hover:bg-gray-200 active:scale-[0.98]'
-            : 'bg-white/[0.08] text-[#64748b]'
+          'w-full py-3 rounded-full text-[15px] font-bold transition-all flex items-center justify-center gap-2',
+          saved && 'bg-[#00ba7c] text-white',
+          !saved && saving && 'bg-white/[0.08] text-[#64748b]',
+          !saved && !saving && usernameStatus !== 'taken' && usernameStatus !== 'checking' && 'bg-[#e7e9ea] text-black hover:bg-gray-200 active:scale-[0.98]',
+          !saved && !saving && (usernameStatus === 'taken' || usernameStatus === 'checking') && 'bg-white/[0.08] text-[#64748b]'
         )}
       >
-        {saving ? 'Saving...' : 'Save changes'}
+        {saved && (
+          <>
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Saved
+          </>
+        )}
+        {!saved && saving && (
+          <>
+            <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+            Saving...
+          </>
+        )}
+        {!saved && !saving && (usernameStatus === 'taken' || usernameStatus === 'checking')
+          ? 'Fix username to save'
+          : !saved && !saving && 'Save changes'
+        }
       </button>
     </div>
   )
