@@ -223,6 +223,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       recordingInterval.current = setInterval(() => {
         setRecordingTime((t) => {
           if (t >= 60) {
+            // Fire-and-forget: stopRecording returns a Promise but we're in a setState callback
             stopRecording()
             return 60
           }
@@ -251,7 +252,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       if (recordingInterval.current) clearInterval(recordingInterval.current)
       if (waveformInterval.current) clearInterval(waveformInterval.current)
     }
-  }, [isRecording])
+  }, [isRecording, stopRecording])
 
   // Reset on close
   useEffect(() => {
@@ -430,6 +431,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       const story = buildStory()
 
       // Upload voice audio to Firebase Storage if needed
+      // If recording just stopped, wait for the blob to be ready before uploading
+      if (format === 'voice') {
+        // Ensure the audio blob is ready (handles race condition when stop just happened)
+        for (let i = 0; i < 20; i++) {
+          if (audioBlobRef.current) break
+          await new Promise((r) => setTimeout(r, 100))
+        }
+      }
       let voiceUrl: string | undefined
       if (format === 'voice' && audioBlobRef.current) {
         try {
@@ -439,7 +448,8 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           await uploadBytes(audioRef, audioFile)
           voiceUrl = await getDownloadURL(audioRef)
         } catch (audioErr) {
-          console.warn('Audio upload failed, publishing without audio:', audioErr)
+          console.error('Audio upload failed:', audioErr)
+          toast.error('Audio upload failed. Your story will be posted without audio.')
         }
       }
 
@@ -478,6 +488,11 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
       await createStory(user.id, firestoreData)
 
+      // Attach voiceUrl to local story card so the viewer can play it
+      if (format === 'voice' && voiceUrl) {
+        story.mediaUrl = voiceUrl
+      }
+
       // Notify parent for local display
       onStoryPublished(story)
 
@@ -500,26 +515,42 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
   // ---- Voice helpers ----
 
-  const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop()
-    }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((t) => t.stop())
-      streamRef.current = null
-    }
-    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-      audioContextRef.current.close()
-      audioContextRef.current = null
-    }
-    analyserRef.current = null
-    setIsRecording(false)
-    setHasRecorded(true)
+  const stopRecording = useCallback((): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        const recorder = mediaRecorderRef.current
+        const originalOnStop = recorder.onstop
+        recorder.onstop = (e) => {
+          // Create blob from accumulated chunks
+          const blob = new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' })
+          audioBlobRef.current = blob
+          setHasRecorded(true)
+          // Also call any original handler if exists
+          if (originalOnStop) originalOnStop.call(recorder, e)
+          resolve()
+        }
+        recorder.stop()
+      } else {
+        resolve()
+      }
+
+      // Clean up stream and audio context
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop())
+        streamRef.current = null
+      }
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close()
+        audioContextRef.current = null
+      }
+      analyserRef.current = null
+      setIsRecording(false)
+    })
   }, [])
 
   const toggleRecording = useCallback(async () => {
     if (isRecording) {
-      stopRecording()
+      await stopRecording()
       return
     }
     try {
