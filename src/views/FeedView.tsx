@@ -60,6 +60,12 @@ export function FeedView() {
   // Engagement engine: trending labels per post
   const [trendingMap, setTrendingMap] = useState<Map<string, TrendingLabel>>(new Map())
 
+  // CRITICAL: Keep a ref to the latest user object so enrichment functions
+  // always read the CURRENT user data, not a stale closure value.
+  // This fixes the race condition where loadPosts fires before user is available.
+  const userRef = useRef(user)
+  userRef.current = user
+
   const lastDocRef = useRef<DocumentSnapshot<DocumentData> | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -97,14 +103,16 @@ export function FeedView() {
    * correct verified badge.
    */
   const enrichWithLiveProfile = useCallback((postsList: any[]) => {
-    if (!user) return postsList
-    const profileImage = user.profileImage
-    const isVerified = user.isVerified
-    const badge = user.badge
-    // If user has no profile data changes, nothing to enrich
+    // ALWAYS use ref — reads the latest user data at call time, not closure time
+    const u = userRef.current
+    if (!u) return postsList
+    const profileImage = u.profileImage
+    const isVerified = u.isVerified
+    const badge = u.badge
+    // If user has no enrichable data, nothing to do
     if (!profileImage && !isVerified && !badge) return postsList
     return postsList.map((p: any) => {
-      if (p.authorId === user.id) {
+      if (p.authorId === u.id) {
         return {
           ...p,
           // Always use latest profile image for own posts
@@ -115,16 +123,17 @@ export function FeedView() {
       }
       return p
     })
-  }, [user])
+  }, []) // Stable reference — no deps needed, reads from ref
 
   // Check interactions for a batch of posts and return enriched posts
   const enrichWithInteractions = useCallback(async (postsList: any[]) => {
-    if (!user) return postsList
+    const u = userRef.current
+    if (!u) return postsList
     const realPosts = postsList.filter((p: any) => !p.id?.startsWith('mock-'))
     if (realPosts.length === 0) return postsList
     try {
       const postIds = realPosts.map((p: any) => p.id)
-      const statusMap = await checkPostInteractions(postIds, user.id)
+      const statusMap = await checkPostInteractions(postIds, u.id)
       return postsList.map((p: any) => {
         const status = statusMap[p.id]
         if (!status) return p
@@ -134,7 +143,7 @@ export function FeedView() {
       console.error('Failed to check interactions:', err)
       return postsList
     }
-  }, [user])
+  }, []) // Stable reference — reads from ref
 
   // Fetch posts — stable reference, no state dependencies
   const loadPosts = useCallback(async (reset = false) => {
@@ -226,23 +235,26 @@ export function FeedView() {
 
   // CRITICAL: Re-enrich posts when current user's profile data changes DURING this session
   // (e.g., user uploads new avatar, gets verified, changes display name)
-  // This ensures instant visual consistency without needing to re-fetch posts
+  // Uses functional setPosts so it always operates on latest posts state.
   useEffect(() => {
-    if (!user || posts.length === 0) return
-    setPosts((prev) => prev.map((p: any) => {
-      if (p.authorId === user.id) {
-        return {
-          ...p,
-          authorProfileImage: user.profileImage || p.authorProfileImage,
-          authorIsVerified: user.isVerified || p.authorIsVerified,
-          authorBadge: user.badge || p.authorBadge,
-          authorDisplayName: user.displayName || p.authorDisplayName,
-          authorUsername: user.username || p.authorUsername,
+    if (!user) return
+    setPosts((prev) => {
+      if (prev.length === 0) return prev
+      return prev.map((p: any) => {
+        if (p.authorId === user.id) {
+          return {
+            ...p,
+            authorProfileImage: user.profileImage || p.authorProfileImage,
+            authorIsVerified: user.isVerified || p.authorIsVerified,
+            authorBadge: user.badge || p.authorBadge,
+            authorDisplayName: user.displayName || p.authorDisplayName,
+            authorUsername: user.username || p.authorUsername,
+          }
         }
-      }
-      return p
-    }))
-  }, [user?.profileImage, user?.isVerified, user?.badge, user?.displayName])
+        return p
+      })
+    })
+  }, [user?.id, user?.isVerified, user?.badge, user?.profileImage, user?.displayName, user?.username])
 
   // Refresh trending labels every 3 minutes
   useEffect(() => {
