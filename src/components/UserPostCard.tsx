@@ -323,14 +323,12 @@ export function UserPostCard({
               {/* More — three dots (top-right, opposite profile name) */}
               <button
                 ref={moreBtnRef}
-                className="group ml-auto shrink-0"
+                className="group ml-auto shrink-0 flex items-center justify-center w-[34px] h-[34px] -mr-2 rounded-full hover:bg-white/[0.06] transition-colors"
                 onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
               >
-                <div className="p-2 rounded-full group-hover:bg-white/[0.06] transition-colors -mr-2">
-                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
-                  </svg>
-                </div>
+                <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+                </svg>
               </button>
             </div>
 
