@@ -320,6 +320,18 @@ export function UserPostCard({
                   {trendingLabel.charAt(0).toUpperCase() + trendingLabel.slice(1)}
                 </span>
               )}
+              {/* More — three dots (top-right, opposite profile name) */}
+              <button
+                ref={moreBtnRef}
+                className="group ml-auto shrink-0"
+                onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
+              >
+                <div className="p-2 rounded-full group-hover:bg-white/[0.06] transition-colors -mr-2">
+                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+                  </svg>
+                </div>
+              </button>
             </div>
 
             {/* Caption — ExpandableText with line-clamp and Zustand state */}
@@ -480,19 +492,6 @@ export function UserPostCard({
                       <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" strokeLinecap="round" strokeLinejoin="round"/>
                       <polyline points="16 6 12 2 8 6" strokeLinecap="round" strokeLinejoin="round"/>
                       <line x1="12" y1="2" x2="12" y2="15" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                </button>
-
-                {/* More */}
-                <button
-                  ref={moreBtnRef}
-                  className="group"
-                  onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
-                >
-                  <div className="p-2.5 rounded-full group-hover:bg-white/[0.06] transition-colors">
-                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
-                      <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
                     </svg>
                   </div>
                 </button>
