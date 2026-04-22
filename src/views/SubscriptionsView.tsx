@@ -10,6 +10,7 @@ import {
   FEATURE_COMPARISON,
   type Plan,
 } from '@/lib/subscription'
+import { startProTrial, startGoldTrial } from '@/lib/business'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ICONS
@@ -165,6 +166,30 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
     ? 'bg-gradient-to-r from-[#ffd700] to-[#f0c800] text-black hover:from-[#f0c800] hover:to-[#e0b800] active:scale-[0.97]'
     : ''
 
+  const [trialLoading, setTrialLoading] = useState(false)
+
+  const handleStartTrial = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const currentUser = useAppStore.getState().user
+    if (!currentUser?.id || isCurrent || trialLoading) return
+    setTrialLoading(true)
+    try {
+      if (plan.id === 'pro') {
+        await startProTrial(currentUser.id)
+        useAppStore.getState().setUser({ ...currentUser, subscription: 'pro', badge: 'blue', isVerified: true, role: 'professional' })
+        toast.success('Pro trial activated! 7-day free trial started.')
+      } else if (plan.id === 'gold') {
+        await startGoldTrial(currentUser.id)
+        useAppStore.getState().setUser({ ...currentUser, subscription: 'gold', badge: 'gold', isVerified: true, role: 'business' })
+        toast.success('Business trial activated! 7-day free trial started.')
+      }
+    } catch (err: any) {
+      toast.error('Trial activation failed: ' + (err?.message || 'Unknown error'))
+    } finally {
+      setTrialLoading(false)
+    }
+  }
+
   const handleUpgrade = () => {
     if (isCurrent) return
     toast.success(`Upgrade to ${plan.name} initiated!`)
@@ -211,17 +236,32 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       )}
 
       {/* CTA */}
-      <button
-        onClick={handleUpgrade}
-        disabled={isCurrent || !canUpgrade}
-        className={cn(
-          'w-full py-2.5 rounded-full text-[14px] font-bold transition-all duration-200',
-          btnClass,
-          !isCurrent && !canUpgrade && 'bg-white/[0.04] text-[#64748b] cursor-not-allowed'
+      <div className="space-y-2">
+        <button
+          onClick={handleUpgrade}
+          disabled={isCurrent || !canUpgrade || trialLoading}
+          className={cn(
+            'w-full py-2.5 rounded-full text-[14px] font-bold transition-all duration-200',
+            btnClass,
+            !isCurrent && !canUpgrade && 'bg-white/[0.04] text-[#64748b] cursor-not-allowed'
+          )}
+        >
+          {isCurrent ? 'Current Plan' : canUpgrade ? 'Upgrade' : 'Unavailable'}
+        </button>
+        {!isCurrent && canUpgrade && plan.price > 0 && (
+          <button
+            onClick={handleStartTrial}
+            disabled={trialLoading}
+            className={cn(
+              'w-full py-2 rounded-full text-[13px] font-semibold transition-all duration-200',
+              'border border-white/[0.15] text-[#e7e9ea] hover:bg-white/[0.06] active:scale-[0.97]',
+              trialLoading && 'opacity-50 cursor-not-allowed'
+            )}
+          >
+            {trialLoading ? 'Activating...' : `Start ${plan.id === 'pro' ? '7-day' : '7-day'} Free Trial`}
+          </button>
         )}
-      >
-        {isCurrent ? 'Current Plan' : canUpgrade ? 'Upgrade' : 'Unavailable'}
-      </button>
+      </div>
 
       {/* Divider */}
       <div className="my-4 border-t border-white/[0.06]" />

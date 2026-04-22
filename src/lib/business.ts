@@ -362,6 +362,8 @@ import {
 } from 'firebase/firestore'
 import { db } from './firebase'
 
+const PRO_TRIAL_DURATION_DAYS = 7
+const GOLD_TRIAL_DURATION_DAYS = 7
 const TRIAL_DURATION_DAYS = 30
 
 function tsToISO(value: unknown): string {
@@ -395,6 +397,78 @@ export async function upgradeToBusinessTrial(uid: string): Promise<void> {
     isActive: true,
     createdAt: serverTimestamp(),
   })
+}
+
+export async function startProTrial(uid: string): Promise<void> {
+  const now = new Date()
+  const endDate = new Date(now.getTime() + PRO_TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000)
+
+  const userRef = doc(db, 'users', uid)
+  await updateDoc(userRef, {
+    subscription: 'pro',
+    badge: 'blue',
+    isVerified: true,
+    role: 'professional',
+    updatedAt: serverTimestamp(),
+  })
+
+  const trialRef = doc(db, 'subscription_trials', `pro_${uid}`)
+  await setDoc(trialRef, {
+    uid,
+    plan: 'pro',
+    startDate: now.toISOString(),
+    endDate: endDate.toISOString(),
+    isActive: true,
+    createdAt: serverTimestamp(),
+  })
+}
+
+export async function startGoldTrial(uid: string): Promise<void> {
+  const now = new Date()
+  const endDate = new Date(now.getTime() + GOLD_TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000)
+
+  const userRef = doc(db, 'users', uid)
+  await updateDoc(userRef, {
+    subscription: 'gold',
+    badge: 'gold',
+    isVerified: true,
+    role: 'business',
+    updatedAt: serverTimestamp(),
+  })
+
+  const trialRef = doc(db, 'subscription_trials', `gold_${uid}`)
+  await setDoc(trialRef, {
+    uid,
+    plan: 'gold',
+    startDate: now.toISOString(),
+    endDate: endDate.toISOString(),
+    isActive: true,
+    createdAt: serverTimestamp(),
+  })
+}
+
+export async function getSubscriptionTrial(uid: string, plan: 'pro' | 'gold'): Promise<BusinessTrial | null> {
+  const trialRef = doc(db, 'subscription_trials', `${plan}_${uid}`)
+  const snap = await getDoc(trialRef)
+
+  if (!snap.exists()) return null
+
+  const d = snap.data()
+  const startDate = tsToISO(d.startDate)
+  const endDate = tsToISO(d.endDate)
+  const now = new Date()
+  const end = new Date(endDate)
+  const isActive = now < end && d.isActive !== false
+  const daysRemaining = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+
+  return {
+    uid: d.uid ?? uid,
+    plan: d.plan ?? plan,
+    startDate,
+    endDate,
+    isActive,
+    daysRemaining,
+  }
 }
 
 export async function getBusinessTrial(uid: string): Promise<BusinessTrial | null> {

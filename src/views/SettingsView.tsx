@@ -1,37 +1,229 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { updateUser } from '@/lib/db'
+import { updateUser, checkUsernameAvailability, updateUsername } from '@/lib/db'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   EDIT PROFILE VIEW — Only profile editing: name, username, bio, website
+   EDIT PROFILE VIEW — Profile editing: name, username, bio, website,
+   profile picture upload, banner upload, username availability check
    ═══════════════════════════════════════════════════════════════════════════ */
+
+function compressImage(file: File, maxSize = 800, quality = 0.75): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        let { width, height } = img
+        if (width > height) {
+          if (width > maxSize) { height = (height * maxSize) / width; width = maxSize }
+        } else {
+          if (height > maxSize) { width = (width * maxSize) / height; height = maxSize }
+        }
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')!
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.onerror = reject
+      img.src = e.target?.result as string
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
+function compressBanner(file: File, maxW = 1500, quality = 0.75): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        let { width, height } = img
+        const maxH = 400
+        if (width > maxW) { height = (height * maxW) / width; width = maxW }
+        if (height > maxH) { width = (width * maxH) / height; height = maxH }
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')!
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.onerror = reject
+      img.src = e.target?.result as string
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
 
 export function SettingsView() {
   const user = useAppStore((s) => s.user)
+  const setUser = useAppStore((s) => s.setUser)
   const navigate = useAppStore((s) => s.navigate)
 
   const [displayName, setDisplayName] = useState(user?.displayName || '')
   const [username, setUsername] = useState(user?.username || '')
   const [bio, setBio] = useState(user?.bio || '')
-  const [website, setWebsite] = useState(user?.nameVisibility || '')
+  const [website, setWebsite] = useState(user?.website || '')
   const [saving, setSaving] = useState(false)
+  const [profilePreview, setProfilePreview] = useState<string | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null)
+  const [uploadingProfile, setUploadingProfile] = useState(false)
+  const [uploadingBanner, setUploadingBanner] = useState(false)
+
+  // Username availability states
+  const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken' | 'invalid'>('idle')
+  const usernameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Debounced username availability check
+  const checkUsername = useCallback(async (val: string) => {
+    const trimmed = val.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
+    if (!trimmed || trimmed.length < 3) {
+      setUsernameStatus('invalid')
+      return
+    }
+    if (trimmed === user?.username?.toLowerCase()) {
+      setUsernameStatus('idle')
+      return
+    }
+    setUsernameStatus('checking')
+    try {
+      const available = await checkUsernameAvailability(trimmed)
+      setUsernameStatus(available ? 'available' : 'taken')
+    } catch {
+      setUsernameStatus('idle')
+    }
+  }, [user?.username])
+
+  const handleUsernameChange = (val: string) => {
+    const cleaned = val.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase()
+    setUsername(cleaned)
+    if (usernameTimerRef.current) clearTimeout(usernameTimerRef.current)
+    usernameTimerRef.current = setTimeout(() => checkUsername(cleaned), 500)
+  }
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => { if (usernameTimerRef.current) clearTimeout(usernameTimerRef.current) }
+  }, [])
+
+  const profileInputRef = useRef<HTMLInputElement>(null)
+  const bannerInputRef = useRef<HTMLInputElement>(null)
+
+  const handleProfileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+    setUploadingProfile(true)
+    try {
+      const base64 = await compressImage(file, 400, 0.8)
+      setProfilePreview(base64)
+      await updateUser(user.id, { profileImage: base64 })
+      setUser({ ...user, profileImage: base64 })
+      toast.success('Profile photo updated')
+    } catch {
+      toast.error('Failed to upload photo')
+    } finally {
+      setUploadingProfile(false)
+      if (profileInputRef.current) profileInputRef.current.value = ''
+    }
+  }
+
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+    setUploadingBanner(true)
+    try {
+      const base64 = await compressBanner(file, 1200, 0.75)
+      setBannerPreview(base64)
+      await updateUser(user.id, { coverImage: base64 })
+      setUser({ ...user, coverImage: base64 })
+      toast.success('Banner updated')
+    } catch {
+      toast.error('Failed to upload banner')
+    } finally {
+      setUploadingBanner(false)
+      if (bannerInputRef.current) bannerInputRef.current.value = ''
+    }
+  }
 
   const handleSave = async () => {
     if (!user) return
+
+    // Validate username
+    const trimmed = username.trim().toLowerCase()
+    if (trimmed && trimmed.length >= 3 && trimmed !== user.username?.toLowerCase()) {
+      if (usernameStatus === 'taken') {
+        toast.error('This username is already taken')
+        return
+      }
+      if (usernameStatus === 'invalid') {
+        toast.error('Username must be at least 3 characters (letters, numbers, underscores)')
+        return
+      }
+    }
+
     setSaving(true)
     try {
+      // Save display name, bio, website
       await updateUser(user.id, { displayName, bio })
+
+      // Save username if changed
+      if (trimmed && trimmed.length >= 3 && trimmed !== user.username?.toLowerCase()) {
+        await updateUsername(user.id, trimmed)
+      }
+
+      // Refresh user in store
+      const { getUser } = await import('@/lib/db')
+      const freshUser = await getUser(user.id)
+      if (freshUser) {
+        setUser({
+          ...user,
+          displayName,
+          username: freshUser.username,
+          bio,
+          profileImage: profilePreview || user.profileImage,
+          coverImage: bannerPreview || user.coverImage,
+        })
+      }
       toast.success('Profile updated')
-    } catch {
-      toast.error('Failed to update profile')
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to update profile')
     } finally {
       setSaving(false)
     }
+  }
+
+  const displayProfileImage = profilePreview || user?.profileImage || ''
+  const displayBanner = bannerPreview || user?.coverImage || ''
+
+  const usernameStatusColor: Record<string, string> = {
+    idle: 'text-[#64748b]',
+    checking: 'text-[#71767b]',
+    available: 'text-[#00ba7c]',
+    taken: 'text-red-400',
+    invalid: 'text-[#71767b]',
+  }
+  const usernameStatusText: Record<string, string> = {
+    idle: '',
+    checking: 'Checking...',
+    available: 'Username is available',
+    taken: 'Username is already taken',
+    invalid: 'Min 3 characters (a-z, 0-9, _)',
+  }
+  const usernameBorderClass: Record<string, string> = {
+    idle: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
+    checking: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
+    available: 'border-[#00ba7c]/40 focus-within:border-[#00ba7c]/70',
+    taken: 'border-red-400/40 focus-within:border-red-400/70',
+    invalid: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
   }
 
   return (
@@ -44,17 +236,79 @@ export function SettingsView() {
         <h1 className="text-xl font-bold text-[#e7e9ea]">Edit Profile</h1>
       </div>
 
+      {/* ─── Banner ─── */}
+      <div
+        className="relative w-full h-[120px] rounded-2xl overflow-hidden bg-white/[0.04] cursor-pointer group"
+        onClick={() => bannerInputRef.current?.click()}
+      >
+        {displayBanner ? (
+          <img src={displayBanner} alt="Banner" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+            <svg className="w-8 h-8 text-[#536471] group-hover:text-[#71767b] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span className="text-[12px] text-[#536471] group-hover:text-[#71767b] transition-colors">Add banner</span>
+          </div>
+        )}
+        {uploadingBanner && (
+          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+          {!uploadingBanner && (
+            <svg className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>
+            </svg>
+          )}
+        </div>
+        <input
+          ref={bannerInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleBannerUpload}
+        />
+      </div>
+
       {/* ─── Profile Avatar ─── */}
-      <div className="flex items-center gap-4">
-        <PAvatar src={user?.profileImage} name={user?.displayName} size={80} verified={user?.isVerified} badge={user?.badge} />
+      <div className="flex items-center gap-4 -mt-8 relative z-10">
+        <div className="relative">
+          <PAvatar src={displayProfileImage} name={user?.displayName} size={80} verified={user?.isVerified} badge={user?.badge} className="ring-4 ring-black" />
+          <button
+            onClick={() => profileInputRef.current?.click()}
+            className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#1d9bf0] flex items-center justify-center shadow-lg hover:bg-[#1a8cd8] transition-colors"
+            disabled={uploadingProfile}
+          >
+            {uploadingProfile ? (
+              <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>
+              </svg>
+            )}
+          </button>
+          <input
+            ref={profileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleProfileUpload}
+          />
+        </div>
         <div>
           <p className="font-bold text-[15px] text-[#e7e9ea] flex items-center gap-1">
             {user?.displayName}
             {(user?.isVerified || !!user?.badge) && <VerifiedBadge size={14} badge={user?.badge} />}
           </p>
           <p className="text-[14px] text-[#94a3b8]">@{user?.username}</p>
-          <button className="mt-2 text-[14px] text-[#FFFFFF] font-semibold hover:text-[#D1D5DB] transition-colors">
-            Change photo
+          <button
+            onClick={() => profileInputRef.current?.click()}
+            className="mt-2 text-[14px] text-[#1d9bf0] font-semibold hover:text-[#1a8cd8] transition-colors"
+            disabled={uploadingProfile}
+          >
+            {uploadingProfile ? 'Uploading...' : 'Change photo'}
           </button>
         </div>
       </div>
@@ -76,16 +330,37 @@ export function SettingsView() {
         {/* Username */}
         <div className="space-y-1.5">
           <label className="text-[14px] text-[#94a3b8] font-medium">Username</label>
-          <div className="flex items-center bg-transparent border border-white/[0.08] rounded-xl px-4 py-3 focus-within:border-[#FFFFFF]/50 transition-colors">
+          <div className={cn(
+            'flex items-center bg-transparent border rounded-xl px-4 py-3 transition-colors',
+            usernameBorderClass[usernameStatus]
+          )}>
             <span className="text-[15px] text-[#64748b] mr-1">@</span>
             <input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => handleUsernameChange(e.target.value)}
               className="flex-1 bg-transparent text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none"
               placeholder="username"
             />
+            {usernameStatus === 'available' && (
+              <svg className="w-4.5 h-4.5 text-[#00ba7c] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            )}
+            {usernameStatus === 'taken' && (
+              <svg className="w-4.5 h-4.5 text-red-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            )}
+            {usernameStatus === 'checking' && (
+              <div className="w-4 h-4 border-2 border-white/20 border-t-white/60 rounded-full animate-spin shrink-0" />
+            )}
           </div>
+          {usernameStatusText[usernameStatus] && (
+            <p className={cn('text-[12px]', usernameStatusColor[usernameStatus])}>
+              {usernameStatusText[usernameStatus]}
+            </p>
+          )}
         </div>
 
         {/* Bio */}
@@ -118,10 +393,10 @@ export function SettingsView() {
       {/* ─── Save Button ─── */}
       <button
         onClick={handleSave}
-        disabled={saving}
+        disabled={saving || usernameStatus === 'taken' || usernameStatus === 'checking'}
         className={cn(
           'w-full py-3 rounded-full text-[15px] font-bold transition-all',
-          !saving
+          !saving && usernameStatus !== 'taken' && usernameStatus !== 'checking'
             ? 'bg-[#e7e9ea] text-black hover:bg-gray-200 active:scale-[0.98]'
             : 'bg-white/[0.08] text-[#64748b]'
         )}
