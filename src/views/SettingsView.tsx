@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { updateUser, checkUsernameAvailability, updateUsername, getUser } from '@/lib/db'
+import { updateUser, checkUsernameAvailability, updateUsername, getUser, updateAuthorDataInPosts } from '@/lib/db'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
 
@@ -101,7 +101,7 @@ export function SettingsView() {
     }
     if (mountedRef.current) setUsernameStatus('checking')
     try {
-      const available = await checkUsernameAvailability(trimmed)
+      const available = await checkUsernameAvailability(trimmed, user?.id)
       if (mountedRef.current) setUsernameStatus(available ? 'available' : 'taken')
     } catch (err) {
       console.error('[Settings] Username check error:', err)
@@ -148,7 +148,10 @@ export function SettingsView() {
       const base64 = await compressImage(file, 400, 0.8)
       setProfilePreview(base64)
       await updateUser(user.id, { profileImage: base64 })
-      setUser({ ...user, profileImage: base64 })
+      const updatedUser = { ...user, profileImage: base64 }
+      setUser(updatedUser)
+      // Batch-update all posts with new avatar
+      updateAuthorDataInPosts(user.id, { authorProfileImage: base64 }).catch(() => {})
       toast.success('Profile photo updated')
     } catch {
       toast.error('Failed to upload photo')
@@ -206,15 +209,30 @@ export function SettingsView() {
       // Refresh user from Firestore for accurate data
       const freshUser = await getUser(user.id)
       if (freshUser) {
-        setUser({
+        const updatedUser = {
           ...user,
           displayName: freshUser.displayName,
           username: freshUser.username,
           bio: freshUser.bio,
-          profileImage: profilePreview || user.profileImage,
-          coverImage: bannerPreview || user.coverImage,
+          profileImage: profilePreview || freshUser.profileImage,
+          coverImage: bannerPreview || freshUser.coverImage,
           isVerified: freshUser.isVerified,
           badge: freshUser.badge,
+        }
+        setUser(updatedUser)
+
+        // CRITICAL: Batch-update ALL posts by this user with latest profile data
+        // This ensures feed/profile consistency — avatar, badge, name always match
+        // (same pattern X/Twitter uses — fan-out on profile write)
+        updateAuthorDataInPosts(user.id, {
+          authorProfileImage: updatedUser.profileImage,
+          authorIsVerified: updatedUser.isVerified,
+          authorBadge: updatedUser.badge,
+          authorDisplayName: updatedUser.displayName,
+          authorUsername: updatedUser.username,
+        }).catch((err) => {
+          // Non-blocking — posts will still be enriched client-side
+          console.warn('[Settings] Background post update failed:', err)
         })
       }
 

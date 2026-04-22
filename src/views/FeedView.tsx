@@ -224,6 +224,26 @@ export function FeedView() {
     enrichWithInteractions(posts).then(enriched => setPosts(enriched)).catch(() => {})
   }, [user?.id])
 
+  // CRITICAL: Re-enrich posts when current user's profile data changes DURING this session
+  // (e.g., user uploads new avatar, gets verified, changes display name)
+  // This ensures instant visual consistency without needing to re-fetch posts
+  useEffect(() => {
+    if (!user || posts.length === 0) return
+    setPosts((prev) => prev.map((p: any) => {
+      if (p.authorId === user.id) {
+        return {
+          ...p,
+          authorProfileImage: user.profileImage || p.authorProfileImage,
+          authorIsVerified: user.isVerified || p.authorIsVerified,
+          authorBadge: user.badge || p.authorBadge,
+          authorDisplayName: user.displayName || p.authorDisplayName,
+          authorUsername: user.username || p.authorUsername,
+        }
+      }
+      return p
+    }))
+  }, [user?.profileImage, user?.isVerified, user?.badge, user?.displayName])
+
   // Refresh trending labels every 3 minutes
   useEffect(() => {
     if (posts.length === 0) return

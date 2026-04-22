@@ -330,19 +330,34 @@ export async function updateUser(uid: string, data: Partial<Black94User>): Promi
   await updateDoc(userRef, updatePayload);
 }
 
-export async function checkUsernameAvailability(username: string): Promise<boolean> {
+export async function checkUsernameAvailability(username: string, excludeUserId?: string): Promise<boolean> {
   const usernameLower = username.toLowerCase();
 
   // Check usernames collection
   const usernameRef = doc(db, 'usernames', usernameLower);
   const usernameSnap = await getDoc(usernameRef);
-  if (usernameSnap.exists()) return false;
+  if (usernameSnap.exists()) {
+    // If this username doc belongs to the user we're excluding, it's still available for them
+    if (excludeUserId && usernameSnap.data()?.uid === excludeUserId) {
+      // Don't return false — continue to check users collection too
+    } else {
+      return false;
+    }
+  }
 
   // Also query users collection for usernameLower
   const usersRef = collection(db, 'users');
   const q = query(usersRef, where('usernameLower', '==', usernameLower));
   const usersSnap = await getDocs(q);
-  if (!usersSnap.empty) return false;
+  if (!usersSnap.empty) {
+    // If the only user with this username is the one we're excluding, it's available
+    if (excludeUserId) {
+      const otherUsers = usersSnap.docs.filter(d => d.id !== excludeUserId);
+      if (otherUsers.length > 0) return false;
+    } else {
+      return false;
+    }
+  }
 
   return true;
 }
@@ -382,6 +397,40 @@ export async function updateUsername(uid: string, newUsername: string): Promise<
       updatedAt: serverTimestamp(),
     });
   });
+}
+
+/**
+ * Batch-update ALL posts by a user with their latest profile data.
+ * This ensures feed consistency — posts always show the author's current
+ * avatar, badge, and verification status (same pattern as X/Twitter).
+ */
+export async function updateAuthorDataInPosts(
+  uid: string,
+  data: { authorProfileImage?: string; authorIsVerified?: boolean; authorBadge?: string; authorDisplayName?: string; authorUsername?: string }
+): Promise<void> {
+  const postsRef = collection(db, 'posts');
+  const q = query(postsRef, where('authorId', '==', uid));
+  const snap = await getDocs(q);
+
+  if (snap.empty) return;
+
+  // Firestore batch write limit is 500 operations
+  let batch = writeBatch(db);
+  let count = 0;
+
+  for (const docSnap of snap.docs) {
+    batch.update(docSnap.ref, data);
+    count++;
+
+    if (count % 500 === 0) {
+      await batch.commit();
+      batch = writeBatch(db);
+    }
+  }
+
+  if (count % 500 !== 0) {
+    await batch.commit();
+  }
 }
 
 // ── Post Functions ──────────────────────────────────────────────────────────

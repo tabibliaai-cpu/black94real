@@ -11,6 +11,7 @@ import {
   type Plan,
 } from '@/lib/subscription'
 import { startProTrial, startGoldTrial } from '@/lib/business'
+import { updateAuthorDataInPosts } from '@/lib/db'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ICONS
@@ -176,11 +177,17 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
     try {
       if (plan.id === 'pro') {
         await startProTrial(currentUser.id)
-        useAppStore.getState().setUser({ ...currentUser, subscription: 'pro', badge: 'blue', isVerified: true, role: 'professional' })
+        const updatedUser = { ...currentUser, subscription: 'pro', badge: 'blue', isVerified: true, role: 'professional' }
+        useAppStore.getState().setUser(updatedUser)
+        // Batch-update all posts with new verification badge
+        updateAuthorDataInPosts(currentUser.id, { authorIsVerified: true, authorBadge: 'blue' }).catch(() => {})
         toast.success('Pro trial activated! 7-day free trial started.')
       } else if (plan.id === 'gold') {
         await startGoldTrial(currentUser.id)
-        useAppStore.getState().setUser({ ...currentUser, subscription: 'gold', badge: 'gold', isVerified: true, role: 'business' })
+        const updatedUser = { ...currentUser, subscription: 'gold', badge: 'gold', isVerified: true, role: 'business' }
+        useAppStore.getState().setUser(updatedUser)
+        // Batch-update all posts with new verification badge
+        updateAuthorDataInPosts(currentUser.id, { authorIsVerified: true, authorBadge: 'gold' }).catch(() => {})
         toast.success('Business trial activated! 7-day free trial started.')
       }
     } catch (err: any) {

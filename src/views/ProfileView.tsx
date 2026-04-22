@@ -171,24 +171,22 @@ export function ProfileView() {
     }
   }, [user])
 
-  // Enrich own posts with live profile data (badge, profile image)
+  // Enrich ALL posts on this profile page with the profile's live data
+  // This ensures consistency: profile header and posts always show the same avatar/badge
   useEffect(() => {
-    if (!user || posts.length === 0 || !isOwnProfile) return
-    const hasBadge = user.isVerified || !!user.badge
-    const hasProfileImage = !!user.profileImage
-    if (!hasBadge && !hasProfileImage) return
+    if (!profile || posts.length === 0) return
     setPosts((prev) => prev.map((p: any) => {
-      if (p.authorId === user.id) {
-        return {
-          ...p,
-          authorProfileImage: user.profileImage || p.authorProfileImage,
-          authorIsVerified: user.isVerified || p.authorIsVerified,
-          authorBadge: user.badge || p.authorBadge,
-        }
+      // All posts on this profile page belong to this profile user
+      return {
+        ...p,
+        authorProfileImage: profile.profileImage || p.authorProfileImage,
+        authorIsVerified: profile.isVerified || p.authorIsVerified,
+        authorBadge: profile.badge || p.authorBadge,
+        authorDisplayName: profile.displayName || p.authorDisplayName,
+        authorUsername: profile.username || p.authorUsername,
       }
-      return p
     }))
-  }, [user?.isVerified, user?.badge, user?.profileImage, isOwnProfile])
+  }, [profile?.profileImage, profile?.isVerified, profile?.badge, profile?.displayName, profile?.username])
 
   // Use profile data directly (never bleed logged-in user's data into other user's profile)
   const displayName = profile?.displayName || (isOwnProfile ? user?.displayName : null) || 'User'
