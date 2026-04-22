@@ -1,17 +1,111 @@
 'use client'
 
-import { useState, useCallback, useMemo, useRef } from 'react'
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import StoryFeed from '@/components/stories/StoryFeed'
 import StoryCreator from '@/components/stories/StoryCreator'
 import StoryViewer from '@/components/stories/StoryViewer'
 import { MOCK_STORY_GROUPS, type StoryGroup, type StoryCard } from '@/lib/story-mock-data'
+import { fetchStories, type Story as FirestoreStory } from '@/lib/db'
 
 export function StoriesView() {
   const [storyGroups, setStoryGroups] = useState<StoryGroup[]>(MOCK_STORY_GROUPS)
   const [viewingGroupId, setViewingGroupId] = useState<string | null>(null)
   const [creatorOpen, setCreatorOpen] = useState(false)
   const selfGroupCounterRef = useRef(0)
+  const [loading, setLoading] = useState(true)
+
+  // Fetch real stories from Firestore on mount
+  useEffect(() => {
+    async function loadStories() {
+      try {
+        const stories = await fetchStories(50)
+        if (stories.length === 0) {
+          setLoading(false)
+          return
+        }
+
+        // Convert Firestore stories into StoryGroups (grouped by authorId)
+        const authorMap = new Map<string, {
+          stories: StoryCard[]
+          authorId: string
+          authorUsername: string
+          authorDisplayName: string
+          authorProfileImage: string
+          authorIsVerified: boolean
+          latestCreatedAt: string
+        }>()
+
+        for (const s of stories) {
+          const existing = authorMap.get(s.authorId)
+          const storyCard: StoryCard = {
+            id: s.id,
+            format: s.format as StoryCard['format'],
+            content: s.content,
+            mediaUrl: s.mediaUrl || undefined,
+            language: s.language as StoryCard['language'],
+            pollOptions: s.pollOptions as StoryCard['pollOptions'],
+            festivalTemplate: s.festivalTemplate as StoryCard['festivalTemplate'],
+            cricketData: s.cricketData as StoryCard['cricketData'],
+            voiceWaveform: s.voiceWaveform,
+            voiceDuration: s.voiceDuration,
+          }
+
+          if (existing) {
+            existing.stories.push(storyCard)
+            if (s.createdAt > existing.latestCreatedAt) {
+              existing.latestCreatedAt = s.createdAt
+            }
+          } else {
+            authorMap.set(s.authorId, {
+              stories: [storyCard],
+              authorId: s.authorId,
+              authorUsername: s.authorUsername,
+              authorDisplayName: s.authorDisplayName,
+              authorProfileImage: s.authorProfileImage,
+              authorIsVerified: s.authorIsVerified,
+              latestCreatedAt: s.createdAt,
+            })
+          }
+        }
+
+        // Convert to StoryGroup format
+        const firestoreGroups: StoryGroup[] = Array.from(authorMap.values()).map((a) => ({
+          creatorId: a.authorId,
+          creatorName: a.authorDisplayName || a.authorUsername,
+          creatorHandle: a.authorUsername,
+          creatorAvatar: a.authorProfileImage || `https://api.dicebear.com/9.x/avataaars/svg?seed=${a.authorUsername}&backgroundColor=00f0ff`,
+          creatorVerified: a.authorIsVerified,
+          creatorCountry: '🇮🇳',
+          creatorLanguages: ['en'],
+          viewed: true,
+          stories: a.stories,
+          createdAt: a.latestCreatedAt,
+          viewCount: 1,
+          tippingEnabled: false,
+          reactions: {
+            agree: 0,
+            disagree: 0,
+            fire: 0,
+            skull: 0,
+            mindblown: 0,
+            clapping: 0,
+          },
+        }))
+
+        // Merge: Firestore stories first, then mock data (deduped)
+        const mockIds = new Set(MOCK_STORY_GROUPS.map(g => g.creatorId))
+        const firestoreOnly = firestoreGroups.filter(g => !mockIds.has(g.creatorId))
+        setStoryGroups([...firestoreOnly, ...MOCK_STORY_GROUPS])
+      } catch (err) {
+        console.warn('Failed to load stories from Firestore, using mock data:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadStories()
+  }, [])
 
   // Find the index of a group by creatorId in the original array
   const viewingGroupIndex = useMemo(() => {

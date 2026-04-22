@@ -6,6 +6,10 @@ import { cn } from '@/lib/utils'
 import { LANGUAGES, FESTIVAL_TEMPLATES, type StoryFormat, type Language, type StoryAudience, type StoryExpiry, type StoryCard, type PollOption, type FestivalTemplate } from '@/lib/story-mock-data'
 import confetti from 'canvas-confetti'
 import { toast } from 'sonner'
+import { useAppStore } from '@/stores/app'
+import { createStory } from '@/lib/db'
+import { storage } from '@/lib/firebase'
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -168,6 +172,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   const [hasRecorded, setHasRecorded] = useState(false)
   const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null)
   const waveformInterval = useRef<ReturnType<typeof setInterval> | null>(null)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const audioChunksRef = useRef<Blob[]>([])
+  const audioBlobRef = useRef<Blob | null>(null)
+  const analyserRef = useRef<AnalyserNode | null>(null)
+  const audioContextRef = useRef<AudioContext | null>(null)
+  const streamRef = useRef<MediaStream | null>(null)
+
+  const user = useAppStore((s) => s.user)
 
   // Thread format state
   const [selectedThread, setSelectedThread] = useState<string | null>(null)
@@ -205,24 +217,32 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
   // ---- Effects ----
 
-  // Recording timer
+  // Recording timer + real waveform from analyser
   useEffect(() => {
     if (isRecording) {
       recordingInterval.current = setInterval(() => {
         setRecordingTime((t) => {
           if (t >= 60) {
-            setIsRecording(false)
-            setHasRecorded(true)
+            stopRecording()
             return 60
           }
           return t + 1
         })
       }, 1000)
+      // Real waveform from audio analyser
       waveformInterval.current = setInterval(() => {
-        setVoiceWaveform(
-          Array.from({ length: 20 }, () => Math.floor(Math.random() * 80 + 20)),
-        )
-      }, 150)
+        if (analyserRef.current) {
+          const data = new Uint8Array(analyserRef.current.frequencyBinCount)
+          analyserRef.current.getByteFrequencyData(data)
+          // Sample 20 bars from the frequency data
+          const bars: number[] = []
+          const step = Math.floor(data.length / 20)
+          for (let i = 0; i < 20; i++) {
+            bars.push(data[i * step] || 0)
+          }
+          setVoiceWaveform(bars)
+        }
+      }, 100)
     } else {
       if (recordingInterval.current) clearInterval(recordingInterval.current)
       if (waveformInterval.current) clearInterval(waveformInterval.current)
@@ -275,6 +295,19 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       setCricketCommentary('')
       setFeedUrl('')
       setFeedCaption('')
+      // Clean up voice recording refs
+      audioBlobRef.current = null
+      audioChunksRef.current = []
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop())
+        streamRef.current = null
+      }
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close()
+        audioContextRef.current = null
+      }
+      mediaRecorderRef.current = null
+      analyserRef.current = null
     }
   }, [open])
 
@@ -386,13 +419,66 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
         return
       }
 
+      if (!user?.id) {
+        toast.error('You must be logged in to publish a story')
+        return
+      }
+
       setPublishing(true)
 
-      // Simulate upload delay
-      await new Promise((r) => setTimeout(r, 1200))
-
-      // Build and publish the story
+      // Build the story card for local display
       const story = buildStory()
+
+      // Upload voice audio to Firebase Storage if needed
+      let voiceUrl: string | undefined
+      if (format === 'voice' && audioBlobRef.current) {
+        try {
+          const audioFile = new File([audioBlobRef.current], `voice_${Date.now()}.webm`, { type: 'audio/webm' })
+          const audioStoragePath = `stories/${user.id}/${Date.now()}.webm`
+          const audioRef = storageRef(storage, audioStoragePath)
+          await uploadBytes(audioRef, audioFile)
+          voiceUrl = await getDownloadURL(audioRef)
+        } catch (audioErr) {
+          console.warn('Audio upload failed, publishing without audio:', audioErr)
+        }
+      }
+
+      // Save to Firestore
+      const firestoreData: Parameters<typeof createStory>[1] = {
+        format: format!,
+        content: story.content,
+        language,
+        audience,
+        expiry,
+      }
+
+      // Add format-specific data
+      if (format === 'text') {
+        firestoreData.mediaUrl = textGradient
+        if (story.pollOptions) firestoreData.pollOptions = story.pollOptions
+      }
+      if (format === 'voice') {
+        firestoreData.voiceUrl = voiceUrl
+        firestoreData.voiceDuration = recordingTime
+        firestoreData.voiceWaveform = story.voiceWaveform
+      }
+      if (format === 'poll' && story.pollOptions) {
+        firestoreData.pollOptions = story.pollOptions
+      }
+      if (format === 'festival' && story.festivalTemplate) {
+        firestoreData.festivalTemplate = story.festivalTemplate as Parameters<typeof createStory>[1]['festivalTemplate']
+        firestoreData.mediaUrl = story.festivalTemplate.gradient
+      }
+      if (format === 'cricket' && story.cricketData) {
+        firestoreData.cricketData = story.cricketData as Parameters<typeof createStory>[1]['cricketData']
+      }
+      if (format === 'feed') {
+        firestoreData.mediaUrl = feedUrl
+      }
+
+      await createStory(user.id, firestoreData)
+
+      // Notify parent for local display
       onStoryPublished(story)
 
       // Success feedback
@@ -414,18 +500,70 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
   // ---- Voice helpers ----
 
-  const toggleRecording = useCallback(() => {
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop()
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop())
+      streamRef.current = null
+    }
+    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+      audioContextRef.current.close()
+      audioContextRef.current = null
+    }
+    analyserRef.current = null
+    setIsRecording(false)
+    setHasRecorded(true)
+  }, [])
+
+  const toggleRecording = useCallback(async () => {
     if (isRecording) {
-      setIsRecording(false)
-      if (recordingTime > 0) setHasRecorded(true)
-    } else {
-      if (recordingTime >= 60) return
+      stopRecording()
+      return
+    }
+    try {
+      // Request microphone permission
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      streamRef.current = stream
+
+      // Set up audio analyser for real waveform
+      const audioCtx = new AudioContext()
+      audioContextRef.current = audioCtx
+      const source = audioCtx.createMediaStreamSource(stream)
+      const analyser = audioCtx.createAnalyser()
+      analyser.fftSize = 128
+      source.connect(analyser)
+      analyserRef.current = analyser
+
+      // Set up MediaRecorder
+      audioChunksRef.current = []
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : 'audio/webm'
+      const recorder = new MediaRecorder(stream, { mimeType })
+      mediaRecorderRef.current = recorder
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data)
+      }
+
+      recorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: mimeType })
+        audioBlobRef.current = blob
+        setHasRecorded(true)
+      }
+
+      recorder.start(1000) // Collect data every second
       setIsRecording(true)
       setRecordingTime(0)
       setHasRecorded(false)
       setVoiceWaveform([])
+    } catch (err) {
+      console.error('Microphone access denied:', err)
+      toast.error('Microphone access denied. Please allow microphone permission.')
     }
-  }, [isRecording, recordingTime])
+  }, [isRecording, stopRecording])
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)

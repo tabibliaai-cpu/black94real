@@ -836,3 +836,119 @@ export async function searchPosts(queryStr: string, limitCount: number): Promise
   const snap = await getDocs(q);
   return snap.docs.map(docToPost);
 }
+
+// ── Story Functions ─────────────────────────────────────────────────────────
+
+export interface Story {
+  id: string;
+  authorId: string;
+  authorUsername: string;
+  authorDisplayName: string;
+  authorProfileImage: string;
+  authorIsVerified: boolean;
+  format: string;
+  content: string;
+  mediaUrl: string;           // gradient for text, image URL for feed/festival
+  language: string;
+  pollOptions?: Array<{ id: string; text: string; votes: number; percentage: number }>;
+  voiceUrl?: string;          // Firebase Storage URL for voice audio
+  voiceDuration?: number;
+  voiceWaveform?: number[];
+  festivalTemplate?: { id: string; name: string; gradient: string; emoji: string; textColor: string };
+  cricketData?: { team1: string; team2: string; team1Score: string; team2Score: string; overs: string; venue: string; status: string };
+  audience: string;
+  expiry: string;
+  viewCount: number;
+  createdAt: string;
+}
+
+function docToStory(docSnap: DocumentSnapshot<DocumentData>): Story {
+  const d = docSnap.data()!;
+  return {
+    id: docSnap.id,
+    authorId: d.authorId ?? '',
+    authorUsername: d.authorUsername ?? '',
+    authorDisplayName: d.authorDisplayName ?? '',
+    authorProfileImage: d.authorProfileImage ?? '',
+    authorIsVerified: d.authorIsVerified ?? false,
+    format: d.format ?? 'text',
+    content: d.content ?? '',
+    mediaUrl: d.mediaUrl ?? '',
+    language: d.language ?? 'en',
+    pollOptions: d.pollOptions,
+    voiceUrl: d.voiceUrl,
+    voiceDuration: d.voiceDuration,
+    voiceWaveform: d.voiceWaveform,
+    festivalTemplate: d.festivalTemplate,
+    cricketData: d.cricketData,
+    audience: d.audience ?? 'everyone',
+    expiry: d.expiry ?? '24h',
+    viewCount: d.viewCount ?? 0,
+    createdAt: tsToISO(d.createdAt),
+  };
+}
+
+/**
+ * Create a new story in Firestore.
+ * Returns the created story document.
+ */
+export async function createStory(
+  authorId: string,
+  data: {
+    format: string;
+    content: string;
+    mediaUrl?: string;
+    language?: string;
+    pollOptions?: Array<{ id: string; text: string; votes: number; percentage: number }>;
+    voiceUrl?: string;
+    voiceDuration?: number;
+    voiceWaveform?: number[];
+    festivalTemplate?: { id: string; name: string; gradient: string; emoji: string; textColor: string };
+    cricketData?: { team1: string; team2: string; team1Score: string; team2Score: string; overs: string; venue: string; status: string };
+    audience?: string;
+    expiry?: string;
+  },
+): Promise<Story> {
+  const author = await getUser(authorId);
+  if (!author) throw new Error('Author not found');
+
+  const storyRef = await addDoc(collection(db, 'stories'), {
+    authorId,
+    authorUsername: author.username,
+    authorDisplayName: author.displayName,
+    authorProfileImage: author.profileImage,
+    authorIsVerified: author.isVerified,
+    format: data.format,
+    content: data.content,
+    mediaUrl: data.mediaUrl ?? '',
+    language: data.language ?? 'en',
+    pollOptions: data.pollOptions ?? null,
+    voiceUrl: data.voiceUrl ?? null,
+    voiceDuration: data.voiceDuration ?? null,
+    voiceWaveform: data.voiceWaveform ?? null,
+    festivalTemplate: data.festivalTemplate ?? null,
+    cricketData: data.cricketData ?? null,
+    audience: data.audience ?? 'everyone',
+    expiry: data.expiry ?? '24h',
+    viewCount: 0,
+    createdAt: serverTimestamp(),
+  });
+
+  const snap = await getDoc(storyRef);
+  return docToStory(snap);
+}
+
+/**
+ * Fetch recent stories from Firestore (for the story feed).
+ * Stories are fetched in reverse chronological order.
+ */
+export async function fetchStories(limitCount: number): Promise<Story[]> {
+  const storiesRef = collection(db, 'stories');
+  const q = query(
+    storiesRef,
+    orderBy('createdAt', 'desc'),
+    firestoreLimit(limitCount),
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(docToStory);
+}
