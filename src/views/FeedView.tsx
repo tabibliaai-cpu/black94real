@@ -3,13 +3,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { fetchFeedPosts } from '@/lib/db'
+import { fetchFeedPosts, docToPost } from '@/lib/db'
 import { checkPostInteractions, togglePostLike, togglePostRepost, togglePostBookmark } from '@/lib/social'
 import { deletePost } from '@/lib/db'
 import { useEngagementEngine, fetchRankedFeedPosts } from '@/lib/useEngagementEngine'
 import { getPostScore } from '@/lib/engagement-engine'
 import { UserPostCard } from '@/components/UserPostCard'
 import { toast } from 'sonner'
+import { getDoc, doc } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 import type { DocumentSnapshot, DocumentData } from 'firebase/firestore'
 import type { TrendingLabel } from '@/lib/engagement-engine'
 
@@ -164,14 +166,14 @@ export function FeedView() {
           const ranked = await fetchRankedFeedPosts(20)
           if (ranked.length > 0) {
             rankedPostIdsRef.current = ranked.map((r) => r.postId)
-            // Fetch full post docs in order of ranking
-            const { fetchFeedPosts: fetchAll } = await import('@/lib/db')
-            const allResult = await fetchAll(50)
-            const postMap = new Map(allResult.posts.map((p: any) => [p.id, p]))
-            fetchedPosts = ranked
-              .map((r) => postMap.get(r.postId))
-              .filter(Boolean)
-            // Fetch trending labels for ranked posts
+            // Fetch ONLY the 20 ranked posts by ID — no need to fetch 50 and filter
+            const postResults = await Promise.all(
+              ranked.map((r) => getDoc(doc(db, 'posts', r.postId)))
+            )
+            fetchedPosts = postResults
+              .filter((snap) => snap.exists())
+              .map((snap) => docToPost(snap))
+            // Extract trending labels from ranked results (already fetched during scoring)
             const tMap = new Map<string, TrendingLabel>()
             ranked.forEach((r) => { if (r.trendingLabel) tMap.set(r.postId, r.trendingLabel) })
             setTrendingMap(tMap)
@@ -256,14 +258,8 @@ export function FeedView() {
     })
   }, [user?.id, user?.isVerified, user?.badge, user?.profileImage, user?.displayName, user?.username])
 
-  // Refresh trending labels every 3 minutes
-  useEffect(() => {
-    if (posts.length === 0) return
-    const timer = setInterval(() => {
-      fetchTrendingLabels(posts)
-    }, 180_000)
-    return () => clearInterval(timer)
-  }, [posts, fetchTrendingLabels])
+  // NOTE: Trending labels are already fetched during the ranked feed load.
+  // No need for a periodic refetch — they stay fresh from the scoring cycle.
 
   // Pull-to-refresh
   const handleRefresh = useCallback(() => {

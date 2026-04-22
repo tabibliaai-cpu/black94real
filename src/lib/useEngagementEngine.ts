@@ -55,10 +55,10 @@ export function useEngagementEngine(enabled = true) {
   useEffect(() => {
     if (!enabled) return
 
-    // Run first cycle after a short delay (let auth settle)
+    // Run first cycle after 30s delay (let initial feed load finish first)
     const initialTimer = setTimeout(() => {
       runCycle()
-    }, 5000)
+    }, 30_000)
 
     // Then repeat every 3 minutes
     timerRef.current = setInterval(() => {

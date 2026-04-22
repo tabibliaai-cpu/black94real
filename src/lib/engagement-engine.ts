@@ -258,21 +258,34 @@ export function rankPosts(
 
 /**
  * Convenience: fetch ranked feed directly from Firestore + post_scores.
+ *
+ * PERFORMANCE OPTIMIZED: Only fetches up to MAX_CANDIDATES posts (not ALL 7-day posts),
+ * scores them in parallel, and returns full post data to avoid a second fetch in the UI.
  */
+const MAX_RANKED_CANDIDATES = 200
+
 export async function getRankedFeed(limitCount = 20): Promise<RankedPost[]> {
   const cutoff = new Date(
     Date.now() - POST_AGE_LIMIT_DAYS * 86_400_000,
   ).toISOString()
 
+  // Fetch a bounded set of recent posts (not ALL posts from 7 days)
   const snap = await getDocs(
-    query(collection(db, 'posts'), where('createdAt', '>=', cutoff), orderBy('createdAt', 'desc')),
+    query(
+      collection(db, 'posts'),
+      where('createdAt', '>=', cutoff),
+      orderBy('createdAt', 'desc'),
+      firestoreLimit(MAX_RANKED_CANDIDATES),
+    ),
   )
 
-  const scored: Array<{ postId: string; score: number; velocity: number; trendingLabel: TrendingLabel }> = []
+  if (snap.empty) return []
 
-  // Read score records in parallel chunks of 10
   const ids = snap.docs.map((d) => d.id)
-  const CHUNK = 10
+
+  // Read score records in parallel chunks of 20 (increased from 10)
+  const CHUNK = 20
+  const scored: Array<{ postId: string; score: number; velocity: number; trendingLabel: TrendingLabel }> = []
   for (let i = 0; i < ids.length; i += CHUNK) {
     const results = await Promise.all(
       ids.slice(i, i + CHUNK).map((id) => getEngagementRecord(id)),

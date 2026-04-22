@@ -390,41 +390,52 @@ export async function checkPostInteractions(
     result[postId] = { isLiked: false, isReposted: false, isBookmarked: false };
   }
 
-  // Check likes (top-level collection)
-  try {
-    await Promise.all(postIds.map(async (postId) => {
-      const docId = `${postId}_${userId}`;
-      const ref = doc(db, LIKES_COL, docId);
-      const snap = await getDoc(ref);
-      if (snap.exists()) result[postId].isLiked = true;
-    }));
-  } catch (err) {
-    console.error('Error checking likes:', err);
-  }
+  // Build batch query for each interaction type — runs in parallel
+  // Uses `where('userId', '==', userId)` + `where('postId', 'in', postIds)` 
+  // to replace N individual getDoc calls with 1 query per category.
+  // Firestore 'in' operator supports max 30 items per query, so chunk if needed.
+  const CHUNK_SIZE = 30;
 
-  // Check reposts (top-level collection)
-  try {
-    await Promise.all(postIds.map(async (postId) => {
-      const docId = `${postId}_${userId}`;
-      const ref = doc(db, REPOSTS_COL, docId);
-      const snap = await getDoc(ref);
-      if (snap.exists()) result[postId].isReposted = true;
-    }));
-  } catch (err) {
-    console.error('Error checking reposts:', err);
-  }
+  const checkBatch = async (
+    collectionName: string,
+    field: keyof PostInteractionStatus,
+  ) => {
+    for (let i = 0; i < postIds.length; i += CHUNK_SIZE) {
+      const chunk = postIds.slice(i, i + CHUNK_SIZE);
+      try {
+        const q = query(
+          collection(db, collectionName),
+          where('userId', '==', userId),
+          where('postId', 'in', chunk),
+        );
+        const snap = await getDocs(q);
+        for (const docSnap of snap.docs) {
+          const postId = docSnap.data().postId;
+          if (postId && result[postId]) {
+            (result[postId] as any)[field] = true;
+          }
+        }
+      } catch (err) {
+        // Fallback: if the composite index doesn't exist yet, use individual reads
+        console.warn(`[social] Batch query failed for ${collectionName}, falling back to individual reads:`, err);
+        await Promise.all(chunk.map(async (postId) => {
+          const docId = `${postId}_${userId}`;
+          const ref = doc(db, collectionName, docId);
+          const snap = await getDoc(ref);
+          if (snap.exists() && result[postId]) {
+            (result[postId] as any)[field] = true;
+          }
+        }));
+      }
+    }
+  };
 
-  // Check bookmarks (top-level collection)
-  try {
-    await Promise.all(postIds.map(async (postId) => {
-      const docId = `${postId}_${userId}`;
-      const ref = doc(db, BOOKMARKS_COL, docId);
-      const snap = await getDoc(ref);
-      if (snap.exists()) result[postId].isBookmarked = true;
-    }));
-  } catch (err) {
-    console.error('Error checking bookmarks:', err);
-  }
+  // Run all 3 categories in parallel — saves 2 round-trips of latency
+  await Promise.all([
+    checkBatch(LIKES_COL, 'isLiked'),
+    checkBatch(REPOSTS_COL, 'isReposted'),
+    checkBatch(BOOKMARKS_COL, 'isBookmarked'),
+  ]);
 
   return result;
 }

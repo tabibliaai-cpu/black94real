@@ -87,6 +87,30 @@
       "fields": [
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "post_likes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "postId", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "post_reposts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "postId", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "post_bookmarks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "postId", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

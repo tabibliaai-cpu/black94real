@@ -156,7 +156,7 @@ function docToBlack94User(docSnap: DocumentSnapshot<DocumentData>): Black94User 
   };
 }
 
-function docToPost(docSnap: DocumentSnapshot<DocumentData>): Post {
+export function docToPost(docSnap: DocumentSnapshot<DocumentData>): Post {
   const d = docSnap.data()!;
   return {
     id: docSnap.id,
