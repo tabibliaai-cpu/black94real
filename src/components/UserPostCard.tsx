@@ -285,7 +285,7 @@ export function UserPostCard({
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0" onClick={handleDoubleTap}>
+          <div className="flex-1 min-w-0 relative" onClick={handleDoubleTap}>
             {/* Header row */}
             <div className="flex items-center gap-1 leading-none" style={{ minHeight: 0 }}>
               <button
@@ -320,6 +320,16 @@ export function UserPostCard({
                   {trendingLabel.charAt(0).toUpperCase() + trendingLabel.slice(1)}
                 </span>
               )}
+              {/* More — vertical dots, absolutely positioned top-right */}
+              <button
+                ref={moreBtnRef}
+                className="absolute top-0 right-0 flex items-center justify-center w-8 h-8 -mr-2 rounded-full hover:bg-white/[0.06] transition-colors"
+                onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
+              >
+                <svg className="w-[18px] h-[18px] text-[#94a3b8] hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
+                </svg>
+              </button>
             </div>
 
             {/* Caption — ExpandableText with line-clamp and Zustand state */}
@@ -480,19 +490,6 @@ export function UserPostCard({
                       <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" strokeLinecap="round" strokeLinejoin="round"/>
                       <polyline points="16 6 12 2 8 6" strokeLinecap="round" strokeLinejoin="round"/>
                       <line x1="12" y1="2" x2="12" y2="15" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                </button>
-
-                {/* More */}
-                <button
-                  ref={moreBtnRef}
-                  className="group"
-                  onClick={(e) => { e.stopPropagation(); setShowMoreMenu(!showMoreMenu) }}
-                >
-                  <div className="p-2.5 rounded-full group-hover:bg-white/[0.06] transition-colors">
-                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
-                      <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
                     </svg>
                   </div>
                 </button>
