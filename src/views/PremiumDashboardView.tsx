@@ -113,7 +113,7 @@ export function PremiumDashboardView() {
   }
 
   return (
-    <div className="px-4 pt-2 pb-24 space-y-5">
+    <div className="max-w-[600px] mx-auto px-4 pt-2 pb-24 space-y-5">
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('feed')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.06] transition-colors">
@@ -125,9 +125,17 @@ export function PremiumDashboardView() {
       {/* ─── Account Status Card ─── */}
       <div className="rounded-xl bg-gradient-to-br from-[#8b5cf6]/10 via-black to-[#ffd700]/5 border border-white/[0.06] p-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-black font-bold text-lg">
-            {user?.displayName?.[0]?.toUpperCase() || 'U'}
-          </div>
+          {user?.profileImage ? (
+            <img
+              src={user.profileImage}
+              alt={user.displayName || 'User'}
+              className="w-12 h-12 rounded-full object-cover border-2 border-[#8b5cf6]/30"
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-black font-bold text-lg">
+              {user?.displayName?.[0]?.toUpperCase() || 'U'}
+            </div>
+          )}
           <div>
             <p className="text-[17px] font-bold text-[#e7e9ea] inline-flex items-center gap-1.5">{user?.displayName || 'User'}{(user?.isVerified || !!user?.badge) && <VerifiedBadge size={16} badge={user?.badge} />}</p>
             <div className="flex items-center gap-2 mt-0.5">

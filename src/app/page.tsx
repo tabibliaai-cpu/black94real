@@ -479,31 +479,34 @@ export default function Black94App() {
     <div className="min-h-screen bg-[#000000]">
       {/* ─── Sidebar ─── */}
       <Sidebar />
-      {/* ─── Header ─── */}
+      {/* ─── Header (mobile only — desktop uses sidebar) ─── */}
       {showChrome && (
-        <MobileHeader
-          user={user ? { displayName: user.displayName || 'User', username: user.username, profileImage: user.profileImage } : null}
-          showBack={!!headerTitle}
-          onBack={() => navigate('feed')}
-          onProfileClick={() => navigate('profile')}
-          onSettingsClick={() => useAppStore.getState().setSidebarOpen(true)}
-          onSignOut={handleSignOut}
-          onLogoClick={() => navigate('feed')}
-          headerState={isHomeFeed ? headerState : 'visible'}
-          title={headerTitle}
-        />
+        <div className="md:hidden">
+          <MobileHeader
+            user={user ? { displayName: user.displayName || 'User', username: user.username, profileImage: user.profileImage } : null}
+            showBack={!!headerTitle}
+            onBack={() => navigate('feed')}
+            onProfileClick={() => navigate('profile')}
+            onSettingsClick={() => useAppStore.getState().setSidebarOpen(true)}
+            onSignOut={handleSignOut}
+            onLogoClick={() => navigate('feed')}
+            headerState={isHomeFeed ? headerState : 'visible'}
+            title={headerTitle}
+          />
+        </div>
       )}
 
       {/* ─── Views ─── */}
       <main className="md:ml-[260px] lg:ml-[260px]"><ViewRouter /></main>
 
-      {/* ─── FAB — compose button ─── */}
+      {/* ─── FAB — compose button (mobile only) ─── */}
       {isHomeFeed && (
         <button
           onClick={() => setComposeOpen(true)}
           className={cn(
             'fixed bottom-[62px] right-4 z-30 w-14 h-14 rounded-full bg-[#8b5cf6] flex items-center justify-center shadow-lg transition-all duration-300',
             'hover:bg-[#7c3aed] active:scale-90',
+            'md:hidden',
             fabVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-75 pointer-events-none'
           )}
           aria-label="Create new post"
@@ -517,12 +520,14 @@ export default function Black94App() {
       {/* ─── Compose Dialog ─── */}
       <ComposeDialog open={composeOpen} onClose={() => setComposeOpen(false)} />
 
-      {/* ─── Bottom Nav ─── */}
+      {/* ─── Bottom Nav (mobile only — desktop uses sidebar) ─── */}
       {showChrome && (
-        <MobileNav
-          currentView={currentView}
-          onNavigate={(view) => navigate(view as AppView)}
-        />
+        <div className="md:hidden">
+          <MobileNav
+            currentView={currentView}
+            onNavigate={(view) => navigate(view as AppView)}
+          />
+        </div>
       )}
     </div>
   )
