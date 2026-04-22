@@ -91,7 +91,7 @@ function StoryRing({ viewed, children, size = 66 }: { viewed: boolean; children:
       <div
         className="rounded-full p-[3px] w-full h-full"
         style={{
-          background: 'conic-gradient(from 45deg, #FFFFFF, #3b82f6, #06b6d4, #a855f7, #ec4899, #FFFFFF)',
+          background: 'conic-gradient(from 45deg, #00f0ff, #ff00aa, #39ff14, #a855f7, #00f0ff)',
         }}
       >
         {children}
@@ -100,7 +100,7 @@ function StoryRing({ viewed, children, size = 66 }: { viewed: boolean; children:
       <motion.div
         className="absolute inset-0 rounded-full"
         style={{
-          background: 'conic-gradient(from 45deg, rgba(139,92,246,0.3), transparent 40%, rgba(59,130,246,0.2) 60%, transparent 80%, rgba(139,92,246,0.3))',
+          background: 'conic-gradient(from 45deg, rgba(0,240,255,0.3), transparent 40%, rgba(255,0,170,0.2) 60%, transparent 80%, rgba(0,240,255,0.3))',
         }}
         animate={{ rotate: 360 }}
         transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
@@ -176,17 +176,17 @@ function YourStoryCircle({ onTap }: { onTap: () => void }) {
         <div
           className="rounded-full p-[3px] w-full h-full"
           style={{
-            background: 'conic-gradient(from 45deg, #FFFFFF, #3b82f6, #06b6d4, #FFFFFF)',
+            background: 'conic-gradient(from 45deg, #00f0ff, #ff00aa, #00f0ff)',
           }}
         >
           <div className="rounded-full bg-black overflow-hidden flex items-center justify-center" style={{ width: size, height: size }}>
-            <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
-              <Plus size={20} className="text-white" strokeWidth={2.5} />
+            <div className="w-9 h-9 rounded-full bg-[#00f0ff]/10 flex items-center justify-center">
+              <Plus size={20} className="text-[#00f0ff]" strokeWidth={2.5} />
             </div>
           </div>
         </div>
       </div>
-      <span className="text-[11px] text-white/50 group-hover:text-white/80 transition-colors">
+      <span className="text-[11px] text-[#00f0ff]/60 group-hover:text-[#00f0ff] transition-colors">
         Your Story
       </span>
     </motion.button>
@@ -511,7 +511,11 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         onClick={onCreate}
-        className="px-6 py-2.5 rounded-full bg-[#FFFFFF] text-[13px] font-semibold text-white shadow-lg shadow-[#FFFFFF]/25"
+        className="px-6 py-2.5 rounded-full text-[13px] font-semibold text-black"
+        style={{
+          background: 'linear-gradient(135deg, #00f0ff, #ff00aa)',
+          boxShadow: '0 0 20px rgba(0,240,255,0.4), 0 0 40px rgba(255,0,170,0.2)',
+        }}
       >
         Create your first story
       </motion.button>
@@ -562,12 +566,12 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
       <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <h1 className="text-[20px] font-bold text-white">Stories</h1>
+            <h1 className="text-[20px] font-bold text-white" style={{ textShadow: '0 0 20px rgba(0,240,255,0.3)' }}>Stories</h1>
             {unviewedCount > 0 && (
               <motion.span
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="text-[11px] font-semibold text-[#FFFFFF] bg-[#FFFFFF]/10 px-2 py-0.5 rounded-full"
+                className="text-[11px] font-semibold text-[#00f0ff] bg-[#00f0ff]/10 border border-[#00f0ff]/20 px-2 py-0.5 rounded-full"
               >
                 {unviewedCount} new
               </motion.span>
@@ -617,7 +621,7 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
                   {isActive && (
                     <motion.div
                       layoutId="storyCategoryPill"
-                      className="absolute inset-0 bg-[#FFFFFF] rounded-full"
+                      className="absolute inset-0 bg-gradient-to-r from-[#00f0ff] to-[#ff00aa] rounded-full"
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -632,7 +636,7 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
 
       {/* ─── Section Header ─── */}
       <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-        <h2 className="text-[14px] font-semibold text-white/60">
+        <h2 className="text-[14px] font-semibold text-[#00f0ff]/60">
           {activeCategory === 'all' ? 'Discover' : FORMAT_CONFIG[activeCategory as StoryFormat]?.label + ' Stories'}
         </h2>
         <span className="text-[12px] text-white/30">{filteredGroups.length} stories</span>
@@ -671,14 +675,14 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
             onClick={onOpenCreator}
             className="fixed bottom-20 right-5 z-30 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF, #3b82f6)',
-              boxShadow: '0 4px 20px rgba(255, 255, 255, 0.4)',
+              background: 'linear-gradient(135deg, #00f0ff, #ff00aa)',
+              boxShadow: '0 4px 20px rgba(0,240,255,0.5), 0 0 40px rgba(255,0,170,0.3)',
             }}
             aria-label="Create story"
           >
             <motion.div
               className="absolute inset-0 rounded-full"
-              style={{ background: 'linear-gradient(135deg, #FFFFFF, #3b82f6)' }}
+              style={{ background: 'linear-gradient(135deg, #00f0ff, #ff00aa)' }}
               animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
             />

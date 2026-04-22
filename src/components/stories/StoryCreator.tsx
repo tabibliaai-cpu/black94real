@@ -27,6 +27,7 @@ const FORMAT_OPTIONS: { value: StoryFormat; icon: string; label: string; desc: s
   { value: 'thread', icon: '🧵', label: 'Thread', desc: 'Import your threads' },
   { value: 'poll', icon: '📊', label: 'Poll', desc: 'Ask your audience' },
   { value: 'festival', icon: '🎉', label: 'Festival', desc: 'Celebration cards' },
+  { value: 'cricket', icon: '🏏', label: 'Cricket', desc: 'Live match updates' },
   { value: 'feed', icon: '📰', label: 'Feed', desc: 'Share a post URL' },
 ]
 
@@ -129,38 +130,23 @@ const MOCK_MATCHES = [
 ]
 
 // ---------------------------------------------------------------------------
-// Animation helpers
-// ---------------------------------------------------------------------------
-
-const slideVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
-    opacity: 0,
-  }),
-  center: { x: 0, opacity: 1 },
-  exit: (direction: number) => ({
-    x: direction > 0 ? -300 : 300,
-    opacity: 0,
-  }),
-}
-
-const springTransition = { type: 'spring' as const, stiffness: 300, damping: 30 }
-
-// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export default function StoryCreator({ open, onClose, onStoryPublished }: StoryCreatorProps) {
   // ---- State ----
-  const [step, setStep] = useState(1)
-  const [direction, setDirection] = useState(1)
-  const [format, setFormat] = useState<StoryFormat | null>(null)
+  const [format, setFormat] = useState<StoryFormat>('text')
   const [language, setLanguage] = useState<Language>('en')
   const [audience, setAudience] = useState<StoryAudience>('everyone')
   const [expiry, setExpiry] = useState<StoryExpiry>('24h')
   const [region, setRegion] = useState('all_india')
   const [publishing, setPublishing] = useState(false)
   const [published, setPublished] = useState(false)
+
+  // Collapsible dropdown toggles
+  const [audienceOpen, setAudienceOpen] = useState(false)
+  const [expiryOpen, setExpiryOpen] = useState(false)
+  const [languageOpen, setLanguageOpen] = useState(false)
 
   // Text format state
   const [textContent, setTextContent] = useState('')
@@ -217,8 +203,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
     [selectedMatch],
   )
 
-  const totalSteps = 5
-
   // ---- Effects ----
 
   // Recording timer
@@ -249,18 +233,19 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
     }
   }, [isRecording])
 
-  // Reset step-related state when format changes
+  // Reset on close
   useEffect(() => {
     if (!open) {
-      // Full reset on close
-      setStep(1)
-      setFormat(null)
+      setFormat('text')
       setLanguage('en')
       setAudience('everyone')
       setExpiry('24h')
       setRegion('all_india')
       setPublishing(false)
       setPublished(false)
+      setAudienceOpen(false)
+      setExpiryOpen(false)
+      setLanguageOpen(false)
       setTextContent('')
       setTextGradient(GRADIENT_COLORS[0])
       setTextFontSize('M')
@@ -293,42 +278,9 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
     }
   }, [open])
 
-  // ---- Navigation ----
+  // ---- Content validation ----
 
-  const goNext = useCallback(() => {
-    if (step < totalSteps) {
-      setDirection(1)
-      setStep((s) => s + 1)
-    }
-  }, [step])
-
-  const goBack = useCallback(() => {
-    if (step > 1) {
-      setDirection(-1)
-      setStep((s) => s - 1)
-    }
-  }, [step])
-
-  // ---- Can proceed ----
-
-  const canProceed = useMemo(() => {
-    switch (step) {
-      case 1:
-        return format !== null
-      case 2:
-        return true
-      case 3:
-        return checkStep3Content()
-      case 4:
-        return true
-      case 5:
-        return true
-      default:
-        return false
-    }
-  }, [step, format, textContent, textPollEnabled, pollOptions, hasRecorded, selectedThread, standalonePollQuestion, standalonePollOptions, selectedFestival, festivalMessage, selectedMatch, cricketCommentary, feedUrl])
-
-  function checkStep3Content(): boolean {
+  function hasContent(): boolean {
     switch (format) {
       case 'text':
         return textContent.trim().length > 0
@@ -427,20 +379,38 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
   // ---- Publish ----
 
-  const handlePublish = useCallback(async () => {
-    setPublishing(true)
-    // Simulate upload
-    await new Promise((r) => setTimeout(r, 1500))
-    confetti({ particleCount: 150, spread: 80, origin: { y: 0.7 } })
-    setPublishing(false)
-    setPublished(true)
-    toast.success('Story published! 🎉')
-    const story = buildStory()
-    onStoryPublished(story)
-    setTimeout(() => {
-      onClose()
-    }, 2000)
-  }, [onStoryPublished, onClose, format, textContent, textGradient, textPollEnabled, pollOptions, voiceWaveform, recordingTime, threadCards, standalonePollQuestion, standalonePollOptions, selectedFestival, festivalMessage, selectedMatchData, cricketCommentary, feedUrl, feedCaption, language])
+  const handlePublish = async () => {
+    try {
+      if (!hasContent()) {
+        toast.error('Please add content before publishing')
+        return
+      }
+
+      setPublishing(true)
+
+      // Simulate upload delay
+      await new Promise((r) => setTimeout(r, 1200))
+
+      // Build and publish the story
+      const story = buildStory()
+      onStoryPublished(story)
+
+      // Success feedback
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.7 } })
+      setPublishing(false)
+      setPublished(true)
+      toast.success('Story published!')
+
+      // Close creator after a brief delay so user sees the success state
+      setTimeout(() => {
+        onClose()
+      }, 1500)
+    } catch (err) {
+      console.error('Story publish failed:', err)
+      setPublishing(false)
+      toast.error('Failed to publish story. Please try again.')
+    }
+  }
 
   // ---- Voice helpers ----
 
@@ -549,249 +519,21 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
     )
   }, [])
 
-  // =========================================================================
-  // RENDER
-  // =========================================================================
-
-  if (!open) return null
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-50 bg-black flex flex-col"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-    >
-      {/* ---- Top Bar ---- */}
-      <header className="flex items-center justify-between px-4 py-3 shrink-0">
-        <button
-          onClick={step > 1 ? goBack : onClose}
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/[0.06] text-white"
-        >
-          {step > 1 ? (
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M13 4L7 10l6 6" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 5l10 10M15 5L5 15" />
-            </svg>
-          )}
-        </button>
-
-        <div className="flex items-center gap-1.5">
-          {Array.from({ length: totalSteps }, (_, i) => (
-            <motion.div
-              key={i}
-              className={cn(
-                'h-1.5 rounded-full transition-all duration-300',
-                step === i + 1
-                  ? 'w-6 bg-[#FFFFFF]'
-                  : i + 1 < step
-                    ? 'w-3 bg-[#FFFFFF]/50'
-                    : 'w-3 bg-white/20',
-              )}
-              layout
-            />
-          ))}
-        </div>
-
-        <span className="text-white/40 text-xs font-medium tabular-nums">
-          Step {step} of {totalSteps}
-        </span>
-      </header>
-
-      {/* ---- Step Content ---- */}
-      <div className="flex-1 overflow-hidden relative">
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={step}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={springTransition}
-            className="absolute inset-0 overflow-y-auto px-4 pb-4"
-          >
-            {step === 1 && <StepFormatPicker selected={format} onSelect={setFormat} />}
-            {step === 2 && <StepLanguageSelector selected={language} onSelect={setLanguage} />}
-            {step === 3 && <StepCreationCanvas format={format} />}
-            {step === 4 && (
-              <StepAudienceExpiry
-                audience={audience}
-                onAudienceChange={setAudience}
-                expiry={expiry}
-                onExpiryChange={setExpiry}
-                region={region}
-                onRegionChange={setRegion}
-              />
-            )}
-            {step === 5 && <StepPublish publishing={publishing} published={published} onPublish={handlePublish} />}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* ---- Bottom Button ---- */}
-      {step < totalSteps && (
-        <div className="px-4 pb-6 pt-2 shrink-0">
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={goNext}
-            disabled={!canProceed}
-            className={cn(
-              'w-full py-4 rounded-2xl text-white font-semibold text-base transition-all duration-200',
-              canProceed
-                ? 'bg-[#FFFFFF] shadow-lg shadow-[#FFFFFF]/25'
-                : 'bg-white/[0.08] text-white/30 cursor-not-allowed',
-            )}
-          >
-            Next
-          </motion.button>
-        </div>
-      )}
-    </motion.div>
-  )
+  // ---- Close all dropdowns ----
+  const closeDropdowns = useCallback(() => {
+    setAudienceOpen(false)
+    setExpiryOpen(false)
+    setLanguageOpen(false)
+  }, [])
 
   // =========================================================================
-  // Step 1 — Format Picker
+  // CANVAS COMPONENTS (defined before return for proper JSX rendering)
   // =========================================================================
-
-  function StepFormatPicker({
-    selected,
-    onSelect,
-  }: {
-    selected: StoryFormat | null
-    onSelect: (f: StoryFormat) => void
-  }) {
-    return (
-      <div className="pt-4">
-        <h2 className="text-xl font-bold text-white mb-1">Create a Story</h2>
-        <p className="text-white/40 text-sm mb-6">Choose a format to get started</p>
-
-        <div className="grid grid-cols-2 gap-3">
-          {FORMAT_OPTIONS.map((fmt, i) => (
-            <motion.button
-              key={fmt.value}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08, type: 'spring', stiffness: 300, damping: 25 }}
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => onSelect(fmt.value)}
-              className={cn(
-                'flex flex-col items-start rounded-2xl p-4 text-left transition-all duration-200',
-                selected === fmt.value
-                  ? 'border border-[#FFFFFF] bg-[#FFFFFF]/10'
-                  : 'border border-white/[0.08] bg-white/[0.04]',
-              )}
-            >
-              <span className="text-[32px] leading-none mb-3">{fmt.icon}</span>
-              <span className="text-white font-bold text-sm">{fmt.label}</span>
-              <span className="text-white/40 text-xs mt-0.5">{fmt.desc}</span>
-            </motion.button>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  // =========================================================================
-  // Step 2 — Language Selector
-  // =========================================================================
-
-  function StepLanguageSelector({
-    selected,
-    onSelect,
-  }: {
-    selected: Language
-    onSelect: (l: Language) => void
-  }) {
-    return (
-      <div className="pt-4">
-        <h2 className="text-xl font-bold text-white mb-1">Choose Language</h2>
-        <p className="text-white/40 text-sm mb-6">Select the primary language of your story</p>
-
-        <div className="flex gap-2.5 overflow-x-auto pb-2 -mx-1 px-1">
-          {LANGUAGES.map((lang) => (
-            <motion.button
-              key={lang.code}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onSelect(lang.code)}
-              className={cn(
-                'relative flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-sm font-medium transition-colors shrink-0',
-                selected === lang.code
-                  ? 'bg-[#FFFFFF] text-white'
-                  : 'bg-white/[0.06] text-white/60',
-              )}
-            >
-              {selected === lang.code && (
-                <motion.div
-                  layoutId="lang-pill"
-                  className="absolute inset-0 bg-[#FFFFFF] rounded-full"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{lang.flag}</span>
-              <span className="relative z-10">{lang.nativeLabel}</span>
-            </motion.button>
-          ))}
-        </div>
-
-        <div className="mt-8 rounded-2xl bg-white/[0.04] border border-white/[0.08] p-5">
-          <p className="text-white/30 text-xs mb-2">Selected language</p>
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">
-              {LANGUAGES.find((l) => l.code === selected)?.flag}
-            </span>
-            <div>
-              <p className="text-white font-semibold">
-                {LANGUAGES.find((l) => l.code === selected)?.nativeLabel}
-              </p>
-              <p className="text-white/40 text-sm">
-                {LANGUAGES.find((l) => l.code === selected)?.label}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // =========================================================================
-  // Step 3 — Creation Canvas
-  // =========================================================================
-
-  function StepCreationCanvas({ format: fmt }: { format: StoryFormat | null }) {
-    if (!fmt) return null
-
-    switch (fmt) {
-      case 'text':
-        return <TextCanvas />
-      case 'voice':
-        return <VoiceCanvas />
-      case 'thread':
-        return <ThreadCanvas />
-      case 'poll':
-        return <PollCanvas />
-      case 'festival':
-        return <FestivalCanvas />
-      case 'cricket':
-        return <CricketCanvas />
-      case 'feed':
-        return <FeedCanvas />
-      default:
-        return null
-    }
-  }
 
   // ---- TEXT ----
-
   function TextCanvas() {
     return (
-      <div className="pt-2 flex flex-col gap-4">
-        {/* Preview / canvas */}
+      <div className="pt-2 pb-20 flex flex-col gap-4">
         <div
           className="rounded-2xl p-5 min-h-[200px] flex items-center justify-center relative overflow-hidden"
           style={{ background: textGradient }}
@@ -811,7 +553,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           />
         </div>
 
-        {/* Font size picker */}
         <div className="flex items-center gap-2">
           <span className="text-white/40 text-xs mr-1">Size</span>
           {(['S', 'M', 'L'] as const).map((size) => (
@@ -820,18 +561,18 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               whileTap={{ scale: 0.92 }}
               onClick={() => setTextFontSize(size)}
               className={cn(
-                'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all',
+                'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border',
                 textFontSize === size
-                  ? 'bg-[#FFFFFF] text-white'
-                  : 'bg-white/[0.06] text-white/50',
+                  ? 'border-[#00f0ff] bg-[#00f0ff]/15 shadow-[0_0_8px_rgba(0,240,255,0.25)]'
+                  : 'border-white/[0.08] bg-white/[0.04] text-white/50',
               )}
+              style={textFontSize === size ? { color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' } : undefined}
             >
               {size}
             </motion.button>
           ))}
         </div>
 
-        {/* Color picker */}
         <div className="flex items-center gap-2.5">
           <span className="text-white/40 text-xs mr-1">BG</span>
           {GRADIENT_COLORS.map((grad, i) => (
@@ -841,15 +582,19 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               onClick={() => setTextGradient(grad)}
               className={cn(
                 'w-8 h-8 rounded-full shrink-0 transition-all border-2',
-                textGradient === grad ? 'border-white scale-110' : 'border-transparent',
+                textGradient === grad
+                  ? 'border-[#00f0ff] scale-110 shadow-[0_0_10px_rgba(0,240,255,0.4)]'
+                  : 'border-transparent',
               )}
               style={{ background: grad }}
             />
           ))}
         </div>
 
-        {/* Inline poll toggle */}
-        <div className="flex items-center justify-between rounded-xl bg-white/[0.04] border border-white/[0.08] p-3.5">
+        <div className={cn(
+          'flex items-center justify-between rounded-xl bg-white/[0.04] border p-3.5 transition-all',
+          textPollEnabled ? 'border-[#00f0ff]/30 shadow-[0_0_12px_rgba(0,240,255,0.1)]' : 'border-white/[0.08]',
+        )}>
           <div>
             <p className="text-white text-sm font-medium">Add live poll below</p>
             <p className="text-white/30 text-xs">Let viewers vote on options</p>
@@ -858,7 +603,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             onClick={() => setTextPollEnabled(!textPollEnabled)}
             className={cn(
               'w-12 h-7 rounded-full relative transition-colors duration-200',
-              textPollEnabled ? 'bg-[#FFFFFF]' : 'bg-white/20',
+              textPollEnabled ? 'bg-[#00f0ff]' : 'bg-white/20',
             )}
           >
             <motion.div
@@ -869,7 +614,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           </button>
         </div>
 
-        {/* Inline poll options */}
         <AnimatePresence>
           {textPollEnabled && (
             <motion.div
@@ -886,7 +630,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                       value={opt.text}
                       onChange={(e) => updateTextPollOption(i, e.target.value)}
                       placeholder={`Option ${i + 1}`}
-                      className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#FFFFFF]/50 transition-colors"
+                      className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#00f0ff]/50 transition-colors"
                     />
                     {pollOptions.length > 2 && (
                       <button
@@ -901,7 +645,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 {pollOptions.length < 4 && (
                   <button
                     onClick={addTextPollOption}
-                    className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] text-white/50 text-xs hover:bg-white/[0.1] transition-colors"
+                    className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-colors bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] hover:bg-[#00f0ff]/20"
                   >
                     <span className="text-sm">+</span> Add option
                   </button>
@@ -915,11 +659,9 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // ---- VOICE ----
-
   function VoiceCanvas() {
     return (
-      <div className="pt-4 flex flex-col items-center gap-6">
-        {/* Waveform */}
+      <div className="pt-4 pb-20 flex flex-col items-center gap-6">
         <div className="flex items-center justify-center gap-[3px] h-24 w-full max-w-xs">
           {(voiceWaveform.length > 0
             ? voiceWaveform
@@ -927,33 +669,32 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           ).map((h, i) => (
             <motion.div
               key={i}
-              className="w-[5px] rounded-full bg-[#FFFFFF]"
-              animate={{
-                height: `${Math.max(4, h)}%`,
-              }}
-              transition={{
-                duration: 0.15,
-                ease: 'easeOut',
-              }}
+              className="w-[5px] rounded-full"
               style={{
                 minHeight: 4,
                 height: `${Math.max(4, h)}%`,
+                background: isRecording
+                  ? 'linear-gradient(to top, #00f0ff, #ff00aa)'
+                  : 'rgba(0,240,255,0.6)',
+                boxShadow: isRecording ? '0 0 6px rgba(0,240,255,0.5)' : 'none',
               }}
+              animate={{ height: `${Math.max(4, h)}%` }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
             />
           ))}
         </div>
 
-        {/* Timer */}
         <div className="text-center">
-          <p className="text-white font-mono text-3xl tabular-nums font-bold tracking-wider">
+          <p
+            className="font-mono text-3xl tabular-nums font-bold tracking-wider"
+            style={{ color: '#00f0ff', textShadow: '0 0 12px rgba(0,240,255,0.4)' }}
+          >
             {formatTime(recordingTime)}
           </p>
           <p className="text-white/30 text-sm mt-1">/ 01:00</p>
         </div>
 
-        {/* Record button */}
         <div className="relative flex items-center justify-center">
-          {/* Pulse rings when recording */}
           <AnimatePresence>
             {isRecording && (
               <>
@@ -963,13 +704,9 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     initial={{ scale: 1, opacity: 0.6 }}
                     animate={{ scale: 2.2 + ring * 0.4, opacity: 0 }}
                     exit={{ opacity: 0 }}
-                    transition={{
-                      duration: 1.2,
-                      repeat: Infinity,
-                      delay: ring * 0.3,
-                      ease: 'easeOut',
-                    }}
-                    className="absolute w-20 h-20 rounded-full border-2 border-red-500/40"
+                    transition={{ duration: 1.2, repeat: Infinity, delay: ring * 0.3, ease: 'easeOut' }}
+                    className="absolute w-20 h-20 rounded-full border-2"
+                    style={{ borderColor: 'rgba(0,240,255,0.3)' }}
                   />
                 ))}
               </>
@@ -979,12 +716,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={toggleRecording}
-            className={cn(
-              'relative z-10 w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-all duration-200',
-              isRecording
-                ? 'bg-red-500 shadow-red-500/30'
-                : 'bg-red-500 shadow-red-500/20',
-            )}
+            className="relative z-10 w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 bg-red-500 shadow-red-500/20"
           >
             {isRecording ? (
               <div className="w-6 h-6 rounded-md bg-white" />
@@ -1000,21 +732,24 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           {isRecording ? 'Tap to stop' : hasRecorded ? 'Tap to re-record' : 'Tap to record'}
         </p>
 
-        {/* Playback controls */}
         {hasRecorded && !isRecording && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4"
+            className="flex items-center gap-4 w-full max-w-xs"
           >
-            <button className="w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center text-white">
+            <button
+              className="w-12 h-12 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center"
+              style={{ color: '#00f0ff' }}
+            >
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
             </button>
             <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-[#FFFFFF] rounded-full"
+                className="h-full rounded-full"
+                style={{ background: 'linear-gradient(to right, #00f0ff, #ff00aa)' }}
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
                 transition={{ duration: recordingTime, ease: 'linear' }}
@@ -1023,8 +758,10 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           </motion.div>
         )}
 
-        {/* Auto-caption toggle */}
-        <div className="w-full rounded-xl bg-white/[0.04] border border-white/[0.08] p-4">
+        <div className={cn(
+          'w-full rounded-xl bg-white/[0.04] border p-4 transition-all',
+          autoCaption ? 'border-[#00f0ff]/20' : 'border-white/[0.08]',
+        )}>
           <div className="flex items-center justify-between mb-3">
             <div>
               <p className="text-white text-sm font-medium">Auto-caption</p>
@@ -1034,7 +771,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               onClick={() => setAutoCaption(!autoCaption)}
               className={cn(
                 'w-12 h-7 rounded-full relative transition-colors duration-200',
-                autoCaption ? 'bg-[#FFFFFF]' : 'bg-white/20',
+                autoCaption ? 'bg-[#00f0ff]' : 'bg-white/20',
               )}
             >
               <motion.div
@@ -1056,11 +793,12 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     key={lang.code}
                     onClick={() => setVoiceCaptionLang(lang.code)}
                     className={cn(
-                      'shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all',
+                      'shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
                       voiceCaptionLang === lang.code
-                        ? 'bg-[#FFFFFF] text-white'
-                        : 'bg-white/[0.06] text-white/50',
+                        ? 'border-[#00f0ff] bg-[#00f0ff]/15 shadow-[0_0_8px_rgba(0,240,255,0.25)]'
+                        : 'border-white/[0.08] bg-white/[0.04] text-white/50',
                     )}
+                    style={voiceCaptionLang === lang.code ? { color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' } : undefined}
                   >
                     {lang.flag} {lang.nativeLabel}
                   </button>
@@ -1074,16 +812,13 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // ---- THREAD ----
-
   function ThreadCanvas() {
     return (
-      <div className="pt-2 flex flex-col gap-4">
+      <div className="pt-2 pb-20 flex flex-col gap-4">
         {!selectedThread ? (
           <>
             <h3 className="text-lg font-bold text-white">Your recent threads</h3>
-            <p className="text-white/40 text-sm">
-              Select a thread to convert into a story series
-            </p>
+            <p className="text-white/40 text-sm">Select a thread to convert into a story series</p>
             <div className="flex flex-col gap-3 mt-2">
               {MOCK_THREADS.map((thread, i) => (
                 <motion.button
@@ -1093,26 +828,19 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   transition={{ delay: i * 0.1 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => selectThread(thread.id)}
-                  className="flex items-center gap-3 rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left"
+                  className="flex items-center gap-3 rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left hover:border-[#00f0ff]/20 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[#FFFFFF]/20 flex items-center justify-center text-[#FFFFFF] font-bold text-sm shrink-0">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shrink-0"
+                    style={{ background: 'rgba(0,240,255,0.15)', color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}
+                  >
                     {thread.cardCount}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-white font-semibold text-sm truncate">
-                      {thread.title}
-                    </p>
-                    <p className="text-white/40 text-xs">
-                      {thread.cardCount} cards
-                    </p>
+                    <p className="text-white font-semibold text-sm truncate">{thread.title}</p>
+                    <p className="text-white/40 text-xs">{thread.cardCount} cards</p>
                   </div>
-                  <svg
-                    className="w-4 h-4 text-white/30 shrink-0 ml-auto"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4 text-white/30 shrink-0 ml-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M9 5l7 7-7 7" />
                   </svg>
                 </motion.button>
@@ -1126,11 +854,8 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 {MOCK_THREADS.find((t) => t.id === selectedThread)?.title}
               </h3>
               <button
-                onClick={() => {
-                  setSelectedThread(null)
-                  setThreadCards([])
-                }}
-                className="text-white/40 text-xs hover:text-white transition-colors"
+                onClick={() => { setSelectedThread(null); setThreadCards([]) }}
+                className="text-white/40 text-xs hover:text-[#00f0ff] transition-colors"
               >
                 Change thread
               </button>
@@ -1142,24 +867,20 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   <motion.div
                     key={`${selectedThread}-${i}`}
                     layout
-                    className="relative shrink-0 w-64 rounded-2xl bg-white/[0.04] border border-white/[0.08] p-4 snap-start"
+                    className={cn(
+                      'relative shrink-0 w-64 rounded-2xl bg-white/[0.04] border p-4 snap-start transition-colors',
+                      editingCardIndex === i ? 'border-[#00f0ff]/50 shadow-[0_0_12px_rgba(0,240,255,0.15)]' : 'border-white/[0.08]',
+                    )}
                   >
-                    {/* Card number */}
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-[#FFFFFF] text-xs font-bold">
+                      <span className="text-xs font-bold" style={{ color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' }}>
                         Card {i + 1}
                       </span>
                       <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => startEditCard(i)}
-                          className="text-white/40 hover:text-[#FFFFFF] transition-colors text-xs font-medium"
-                        >
+                        <button onClick={() => startEditCard(i)} className="text-white/40 hover:text-[#00f0ff] transition-colors text-xs font-medium">
                           Edit
                         </button>
-                        <button
-                          onClick={() => removeThreadCard(i)}
-                          className="w-6 h-6 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors text-xs"
-                        >
+                        <button onClick={() => removeThreadCard(i)} className="w-6 h-6 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors text-xs">
                           ×
                         </button>
                       </div>
@@ -1169,28 +890,24 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                       <textarea
                         value={editingCardText}
                         onChange={(e) => setEditingCardText(e.target.value)}
-                        className="w-full bg-white/[0.06] rounded-lg p-2.5 text-sm text-white outline-none resize-none border border-[#FFFFFF]/30"
+                        className="w-full bg-white/[0.06] rounded-lg p-2.5 text-sm text-white outline-none resize-none border border-[#00f0ff]/30 focus:border-[#00f0ff]/60"
                         rows={4}
                         autoFocus
                       />
                     ) : (
-                      <p className="text-white/70 text-sm leading-relaxed line-clamp-5">
-                        {card}
-                      </p>
+                      <p className="text-white/70 text-sm leading-relaxed line-clamp-5">{card}</p>
                     )}
 
                     {editingCardIndex === i && (
                       <div className="flex gap-2 mt-2">
                         <button
                           onClick={saveEditCard}
-                          className="flex-1 py-1.5 rounded-lg bg-[#FFFFFF] text-white text-xs font-medium"
+                          className="flex-1 py-1.5 rounded-lg text-white text-xs font-medium"
+                          style={{ background: 'linear-gradient(135deg, #00f0ff 0%, #00b8d4 100%)' }}
                         >
                           Save
                         </button>
-                        <button
-                          onClick={() => setEditingCardIndex(null)}
-                          className="flex-1 py-1.5 rounded-lg bg-white/[0.06] text-white/60 text-xs font-medium"
-                        >
+                        <button onClick={() => setEditingCardIndex(null)} className="flex-1 py-1.5 rounded-lg bg-white/[0.06] text-white/60 text-xs font-medium">
                           Cancel
                         </button>
                       </div>
@@ -1209,7 +926,8 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     const thread = MOCK_THREADS.find((t) => t.id === selectedThread)
                     if (thread) setThreadCards([...thread.cards])
                   }}
-                  className="mt-3 text-[#FFFFFF] text-sm font-medium"
+                  className="mt-3 text-sm font-medium"
+                  style={{ color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' }}
                 >
                   Reset cards
                 </button>
@@ -1217,7 +935,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             )}
 
             <p className="text-white/30 text-xs text-center">
-              Swipe to preview all cards • {threadCards.length} card{threadCards.length !== 1 ? 's' : ''} selected
+              Swipe to preview all cards · {threadCards.length} card{threadCards.length !== 1 ? 's' : ''} selected
             </p>
           </>
         )}
@@ -1226,9 +944,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // ---- POLL ----
-
   function PollCanvas() {
-    // Compute mock percentages for the live preview
     const mockPercentages = useMemo(() => {
       const total = standalonePollOptions.reduce(
         (sum, o) => sum + (o.text.trim() ? Math.floor(Math.random() * 80 + 20) : 0),
@@ -1241,8 +957,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
     }, [standalonePollOptions])
 
     return (
-      <div className="pt-2 flex flex-col gap-5">
-        {/* Question */}
+      <div className="pt-2 pb-20 flex flex-col gap-5">
         <input
           type="text"
           value={standalonePollQuestion}
@@ -1251,7 +966,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           className="w-full bg-transparent text-white text-xl font-bold placeholder:text-white/20 outline-none"
         />
 
-        {/* Options */}
         <div className="flex flex-col gap-2.5">
           {standalonePollOptions.map((opt, i) => (
             <div key={opt.id} className="flex items-center gap-2">
@@ -1261,14 +975,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   value={opt.text}
                   onChange={(e) => updatePollOption(i, e.target.value)}
                   placeholder={`Option ${i + 1}`}
-                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#FFFFFF]/50 transition-colors"
+                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#00f0ff]/50 transition-colors"
                 />
-                {/* Mock percentage bar */}
                 {opt.text.trim() && (
                   <motion.div
                     initial={{ width: '0%' }}
                     animate={{ width: `${mockPercentages[i] || 0}%` }}
-                    className="absolute inset-0 bg-[#FFFFFF]/15 rounded-xl pointer-events-none"
+                    className="absolute inset-0 rounded-xl pointer-events-none"
+                    style={{ background: 'rgba(0,240,255,0.1)' }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                   />
                 )}
@@ -1277,26 +991,19 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 {opt.text.trim() ? `${mockPercentages[i]}%` : ''}
               </span>
               {standalonePollOptions.length > 2 && (
-                <button
-                  onClick={() => removePollOption(i)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 transition-colors text-lg"
-                >
+                <button onClick={() => removePollOption(i)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 transition-colors text-lg">
                   ×
                 </button>
               )}
             </div>
           ))}
           {standalonePollOptions.length < 4 && (
-            <button
-              onClick={addPollOption}
-              className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] text-white/50 text-xs hover:bg-white/[0.1] transition-colors"
-            >
+            <button onClick={addPollOption} className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-colors bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] hover:bg-[#00f0ff]/20">
               <span className="text-sm">+</span> Add option
             </button>
           )}
         </div>
 
-        {/* Reaction emojis row */}
         <div>
           <p className="text-white/30 text-xs mb-2">Reaction emojis</p>
           <div className="flex gap-2">
@@ -1304,12 +1011,8 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               <motion.button
                 key={i}
                 whileTap={{ scale: 0.85 }}
-                onClick={() => {
-                  setPollReactionEmojis((prev) =>
-                    prev.filter((_, idx) => idx !== i),
-                  )
-                }}
-                className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center justify-center text-lg hover:bg-white/[0.1] transition-colors"
+                onClick={() => setPollReactionEmojis((prev) => prev.filter((_, idx) => idx !== i))}
+                className="w-10 h-10 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-lg hover:border-[#00f0ff]/30 transition-colors"
               >
                 {emoji}
               </motion.button>
@@ -1318,48 +1021,41 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               onClick={() => {
                 const emojis = ['😂', '❤️', '🤔', '😤', '🙌', '💯', '🎉', '😢', '🤩', '👏']
                 const random = emojis[Math.floor(Math.random() * emojis.length)]
-                if (pollReactionEmojis.length < 8) {
-                  setPollReactionEmojis((prev) => [...prev, random])
-                }
+                if (pollReactionEmojis.length < 8) setPollReactionEmojis((prev) => [...prev, random])
               }}
-              className="w-10 h-10 rounded-lg bg-[#FFFFFF]/20 flex items-center justify-center text-[#FFFFFF] text-lg font-bold hover:bg-[#FFFFFF]/30 transition-colors"
+              className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-lg font-bold hover:bg-[#00f0ff]/20 transition-colors"
+              style={{ color: '#00f0ff' }}
             >
               +
             </button>
           </div>
         </div>
 
-        {/* Live preview */}
         {standalonePollQuestion.trim() && standalonePollOptions.some((o) => o.text.trim()) && (
-          <div className="rounded-2xl bg-white/[0.04] border border-white/[0.08] p-5">
-            <p className="text-white/30 text-xs mb-3 font-medium uppercase tracking-wider">
-              Live Preview
-            </p>
-            <p className="text-white font-bold text-base mb-4">
-              {standalonePollQuestion || 'Your question here'}
-            </p>
+          <div className="rounded-2xl bg-white/[0.04] border border-[#00f0ff]/20 p-5">
+            <p className="text-white/30 text-xs mb-3 font-medium uppercase tracking-wider">Live Preview</p>
+            <p className="text-white font-bold text-base mb-4">{standalonePollQuestion || 'Your question here'}</p>
             <div className="flex flex-col gap-2">
-              {standalonePollOptions
-                .filter((o) => o.text.trim())
-                .map((opt, i) => {
-                  const pct = mockPercentages[standalonePollOptions.indexOf(opt)] || 0
-                  return (
-                    <div key={opt.id} className="relative">
-                      <motion.div
-                        initial={{ width: '0%' }}
-                        animate={{ width: `${pct}%` }}
-                        transition={{ duration: 0.6, ease: 'easeOut', delay: i * 0.1 }}
-                        className="absolute inset-0 bg-[#FFFFFF]/20 rounded-xl"
-                      />
-                      <div className="relative flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
-                        <span className="text-white text-sm">{opt.text}</span>
-                        <span className="text-[#FFFFFF] text-sm font-bold tabular-nums">
-                          {pct}%
-                        </span>
-                      </div>
+              {standalonePollOptions.filter((o) => o.text.trim()).map((opt) => {
+                const pct = mockPercentages[standalonePollOptions.indexOf(opt)] || 0
+                return (
+                  <div key={opt.id} className="relative">
+                    <motion.div
+                      initial={{ width: '0%' }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 0.6, ease: 'easeOut', delay: standalonePollOptions.indexOf(opt) * 0.1 }}
+                      className="absolute inset-0 rounded-xl"
+                      style={{ background: 'rgba(0,240,255,0.15)' }}
+                    />
+                    <div className="relative flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+                      <span className="text-white text-sm">{opt.text}</span>
+                      <span className="text-sm font-bold tabular-nums" style={{ color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' }}>
+                        {pct}%
+                      </span>
                     </div>
-                  )
-                })}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
@@ -1368,16 +1064,13 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // ---- FESTIVAL ----
-
   function FestivalCanvas() {
     return (
-      <div className="pt-2 flex flex-col gap-4">
+      <div className="pt-2 pb-20 flex flex-col gap-4">
         {!selectedFestival ? (
           <>
             <h3 className="text-lg font-bold text-white">Festival Templates</h3>
-            <p className="text-white/40 text-sm">
-              Choose a template and add your message
-            </p>
+            <p className="text-white/40 text-sm">Choose a template and add your message</p>
             <div className="grid grid-cols-2 gap-3 mt-1">
               {FESTIVAL_TEMPLATES.map((tpl, i) => (
                 <motion.button
@@ -1387,16 +1080,10 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   transition={{ delay: i * 0.05, type: 'spring', stiffness: 300, damping: 25 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedFestival(tpl)}
-                  className="relative rounded-2xl overflow-hidden aspect-[3/4] flex flex-col items-center justify-end p-4"
-                  style={{ background: tpl.gradient }}
+                  className="relative rounded-2xl overflow-hidden aspect-[3/4] flex flex-col items-center justify-end p-4 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)] transition-shadow border border-transparent hover:border-[#00f0ff]/30"
                 >
                   <span className="text-5xl mb-3 drop-shadow-lg">{tpl.emoji}</span>
-                  <span
-                    className="font-bold text-sm drop-shadow-md"
-                    style={{ color: tpl.textColor }}
-                  >
-                    {tpl.name}
-                  </span>
+                  <span className="font-bold text-sm drop-shadow-md" style={{ color: tpl.textColor }}>{tpl.name}</span>
                 </motion.button>
               ))}
             </div>
@@ -1405,24 +1092,15 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           <>
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">Customise Card</h3>
-              <button
-                onClick={() => {
-                  setSelectedFestival(null)
-                  setFestivalMessage('')
-                }}
-                className="text-white/40 text-xs hover:text-white transition-colors"
-              >
+              <button onClick={() => { setSelectedFestival(null); setFestivalMessage('') }} className="text-white/40 text-xs hover:text-[#00f0ff] transition-colors">
                 Change template
               </button>
             </div>
-
-            {/* Live preview */}
             <div
-              className="relative rounded-2xl overflow-hidden aspect-[3/4] flex flex-col items-center justify-end p-6"
+              className="relative rounded-2xl overflow-hidden aspect-[3/4] flex flex-col items-center justify-end p-6 border border-[#00f0ff]/20"
               style={{ background: selectedFestival.gradient }}
             >
               <span className="text-6xl mb-4 drop-shadow-lg">{selectedFestival.emoji}</span>
-
               <textarea
                 value={festivalMessage}
                 onChange={(e) => setFestivalMessage(e.target.value)}
@@ -1432,11 +1110,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 rows={3}
                 autoFocus
               />
-
-              <p
-                className="text-xs mt-3 font-medium drop-shadow-sm opacity-60"
-                style={{ color: selectedFestival.textColor }}
-              >
+              <p className="text-xs mt-3 font-medium drop-shadow-sm opacity-60" style={{ color: selectedFestival.textColor }}>
                 {selectedFestival.name} Greetings
               </p>
             </div>
@@ -1447,15 +1121,13 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // ---- CRICKET ----
-
   function CricketCanvas() {
     return (
-      <div className="pt-2 flex flex-col gap-5">
+      <div className="pt-2 pb-20 flex flex-col gap-5">
         {!selectedMatch ? (
           <>
             <h3 className="text-lg font-bold text-white">Live Matches</h3>
             <p className="text-white/40 text-sm">Select a match to add your take</p>
-
             <div className="flex flex-col gap-3 mt-2">
               {MOCK_MATCHES.map((match, i) => (
                 <motion.button
@@ -1465,17 +1137,12 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   transition={{ delay: i * 0.1 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setSelectedMatch(match.id)}
-                  className="rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left"
+                  className="rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left hover:border-[#00f0ff]/20 transition-colors"
                 >
-                  {/* Status badge */}
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 animate-pulse">
-                      {match.status}
-                    </span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 animate-pulse">{match.status}</span>
                     <span className="text-white/30 text-xs">{match.venue}</span>
                   </div>
-
-                  {/* Teams */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{match.team1Flag}</span>
@@ -1484,9 +1151,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                         <p className="text-white/60 text-xs">{match.team1Score}/{match.overs} ov</p>
                       </div>
                     </div>
-
                     <span className="text-white/20 text-xs font-bold">VS</span>
-
                     <div className="flex items-center gap-2">
                       <div className="text-right">
                         <p className="text-white font-bold text-sm">{match.team2}</p>
@@ -1501,22 +1166,18 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           </>
         ) : (
           <>
-            {/* Score preview widget */}
             {selectedMatchData && (
-              <div className="rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border border-white/[0.08] p-5">
+              <div className="rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border border-[#00f0ff]/20 p-5 shadow-[0_0_16px_rgba(0,240,255,0.1)]">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 animate-pulse">
-                    {selectedMatchData.status}
-                  </span>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 animate-pulse">{selectedMatchData.status}</span>
                   <span className="text-white/30 text-xs">{selectedMatchData.venue}</span>
                 </div>
-
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2.5">
                     <span className="text-3xl">{selectedMatchData.team1Flag}</span>
                     <div>
                       <p className="text-white font-bold">{selectedMatchData.team1}</p>
-                      <p className="text-[#FFFFFF] font-mono text-lg font-bold">{selectedMatchData.team1Score}</p>
+                      <p className="font-mono text-lg font-bold" style={{ color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}>{selectedMatchData.team1Score}</p>
                     </div>
                   </div>
                   <span className="text-white/20 text-xs">vs</span>
@@ -1528,7 +1189,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     <span className="text-3xl">{selectedMatchData.team2Flag}</span>
                   </div>
                 </div>
-
                 <div className="flex items-center gap-1">
                   <span className="text-white/30 text-xs">Overs:</span>
                   <span className="text-white/70 text-xs font-mono">{selectedMatchData.overs}</span>
@@ -1536,47 +1196,37 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               </div>
             )}
 
-            {/* Commentary input */}
             <div>
               <label className="text-white/40 text-xs mb-2 block">Add your take</label>
               <textarea
                 value={cricketCommentary}
                 onChange={(e) => setCricketCommentary(e.target.value)}
                 placeholder="What do you think about this match?"
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none resize-none text-sm focus:border-[#FFFFFF]/50 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none resize-none text-sm focus:border-[#00f0ff]/50 transition-colors"
                 rows={3}
               />
             </div>
 
-            {/* Preview */}
             {cricketCommentary.trim() && selectedMatchData && (
-              <div className="rounded-2xl overflow-hidden">
-                <div
-                  className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-5 flex flex-col items-center justify-center min-h-[200px]"
-                >
+              <div className="rounded-2xl overflow-hidden border border-[#00f0ff]/15">
+                <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-5 flex flex-col items-center justify-center min-h-[200px]">
                   <div className="flex items-center gap-6 mb-4">
                     <div className="text-center">
                       <span className="text-3xl">{selectedMatchData.team1Flag}</span>
                       <p className="text-white/50 text-xs mt-1">{selectedMatchData.team1}</p>
                     </div>
                     <div>
-                      <p className="text-[#FFFFFF] font-mono font-bold text-sm">
-                        {selectedMatchData.team1Score}
-                      </p>
+                      <p className="font-mono font-bold text-sm" style={{ color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}>{selectedMatchData.team1Score}</p>
                       <p className="text-white/30 text-[10px]">vs</p>
-                      <p className="text-white/60 font-mono font-bold text-sm">
-                        {selectedMatchData.team2Score}
-                      </p>
+                      <p className="text-white/60 font-mono font-bold text-sm">{selectedMatchData.team2Score}</p>
                     </div>
                     <div className="text-center">
                       <span className="text-3xl">{selectedMatchData.team2Flag}</span>
                       <p className="text-white/50 text-xs mt-1">{selectedMatchData.team2}</p>
                     </div>
                   </div>
-                  <div className="w-16 h-[1px] bg-white/10 mb-4" />
-                  <p className="text-white text-sm text-center font-medium leading-relaxed px-2">
-                    "{cricketCommentary}"
-                  </p>
+                  <div className="w-16 h-[1px] bg-[#00f0ff]/20 mb-4" />
+                  <p className="text-white text-sm text-center font-medium leading-relaxed px-2">&ldquo;{cricketCommentary}&rdquo;</p>
                 </div>
               </div>
             )}
@@ -1587,14 +1237,12 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // ---- FEED ----
-
   function FeedCanvas() {
     return (
-      <div className="pt-4 flex flex-col gap-5">
+      <div className="pt-4 pb-20 flex flex-col gap-5">
         <h3 className="text-lg font-bold text-white">Share a Post</h3>
         <p className="text-white/40 text-sm">Paste a URL from a post or article</p>
 
-        {/* URL input */}
         <div>
           <label className="text-white/40 text-xs mb-2 block">Post URL</label>
           <div className="relative">
@@ -1603,13 +1251,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               value={feedUrl}
               onChange={(e) => setFeedUrl(e.target.value)}
               placeholder="https://example.com/post/..."
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#FFFFFF]/50 transition-colors pr-12"
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#00f0ff]/50 transition-colors pr-12"
             />
             {feedUrl.trim() && (
               <motion.button
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#39ff14]/20 flex items-center justify-center"
+                style={{ color: '#39ff14' }}
               >
                 <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path d="M5 13l4 4L19 7" />
@@ -1619,33 +1268,29 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           </div>
         </div>
 
-        {/* Caption */}
         <div>
           <label className="text-white/40 text-xs mb-2 block">Add a caption (optional)</label>
           <textarea
             value={feedCaption}
             onChange={(e) => setFeedCaption(e.target.value)}
             placeholder="What do you think about this?"
-            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none resize-none focus:border-[#FFFFFF]/50 transition-colors"
+            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none resize-none focus:border-[#00f0ff]/50 transition-colors"
             rows={3}
           />
         </div>
 
-        {/* Link preview mock */}
         {feedUrl.trim() && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl bg-white/[0.04] border border-white/[0.08] overflow-hidden"
+            className="rounded-2xl bg-white/[0.04] border border-[#00f0ff]/15 overflow-hidden"
           >
-            <div className="h-32 bg-gradient-to-br from-[#FFFFFF]/30 to-[#6366f1]/20 flex items-center justify-center">
+            <div className="h-32 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(0,240,255,0.15) 0%, rgba(255,0,170,0.1) 100%)' }}>
               <span className="text-4xl">📰</span>
             </div>
             <div className="p-4">
               <p className="text-white/30 text-xs mb-1">article.example.com</p>
-              <p className="text-white font-semibold text-sm mb-1">
-                {feedCaption || 'Shared post from the feed'}
-              </p>
+              <p className="text-white font-semibold text-sm mb-1">{feedCaption || 'Shared post from the feed'}</p>
               <p className="text-white/40 text-xs truncate">{feedUrl}</p>
             </div>
           </motion.div>
@@ -1655,277 +1300,266 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // =========================================================================
-  // Step 4 — Audience + Expiry
+  // RENDER
   // =========================================================================
 
-  function StepAudienceExpiry({
-    audience: aud,
-    onAudienceChange,
-    expiry: exp,
-    onExpiryChange,
-    region: reg,
-    onRegionChange,
-  }: {
-    audience: StoryAudience
-    onAudienceChange: (a: StoryAudience) => void
-    expiry: StoryExpiry
-    onExpiryChange: (e: StoryExpiry) => void
-    region: string
-    onRegionChange: (r: string) => void
-  }) {
-    return (
-      <div className="pt-4 flex flex-col gap-8">
-        {/* Audience */}
-        <section>
-          <h3 className="text-lg font-bold text-white mb-1">Audience</h3>
-          <p className="text-white/40 text-sm mb-4">Who can see this story?</p>
-          <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1">
-            {AUDIENCE_OPTIONS.map((opt) => (
-              <motion.button
-                key={opt.value}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onAudienceChange(opt.value)}
-                className={cn(
-                  'relative flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-sm font-medium transition-all shrink-0',
-                  aud === opt.value
-                    ? 'bg-[#FFFFFF] text-white'
-                    : 'bg-white/[0.06] text-white/60',
-                )}
-              >
-                <span>{opt.icon}</span>
-                <span>{opt.label}</span>
-              </motion.button>
-            ))}
-          </div>
-        </section>
+  if (!open) return null
 
-        {/* Expiry */}
-        <section>
-          <h3 className="text-lg font-bold text-white mb-1">Story Expiry</h3>
-          <p className="text-white/40 text-sm mb-4">How long should this story be visible?</p>
-          <div className="flex flex-col gap-2.5">
-            {EXPIRY_OPTIONS.map((opt) => (
-              <motion.button
-                key={opt.value}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onExpiryChange(opt.value)}
-                className={cn(
-                  'flex items-center gap-3 rounded-xl p-4 text-left transition-all',
-                  exp === opt.value
-                    ? 'bg-[#FFFFFF]/10 border border-[#FFFFFF]/50'
-                    : 'bg-white/[0.04] border border-white/[0.08]',
-                )}
-              >
-                <div
-                  className={cn(
-                    'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors',
-                    exp === opt.value ? 'border-[#FFFFFF]' : 'border-white/20',
-                  )}
-                >
-                  {exp === opt.value && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="w-2.5 h-2.5 rounded-full bg-[#FFFFFF]"
-                    />
-                  )}
-                </div>
-                <div>
-                  <p
-                    className={cn(
-                      'text-sm font-semibold transition-colors',
-                      exp === opt.value ? 'text-white' : 'text-white/70',
-                    )}
-                  >
-                    {opt.label}
-                  </p>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        </section>
+  const currentLang = LANGUAGES.find((l) => l.code === language)
 
-        {/* Region */}
-        <section>
-          <h3 className="text-lg font-bold text-white mb-1">Region Targeting</h3>
-          <p className="text-white/40 text-sm mb-4">Boost visibility in your area</p>
-          <div className="flex flex-col gap-2.5">
-            {REGION_OPTIONS.map((opt) => (
-              <motion.button
-                key={opt.value}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onRegionChange(opt.value)}
-                className={cn(
-                  'flex items-center gap-3 rounded-xl p-4 text-left transition-all',
-                  reg === opt.value
-                    ? 'bg-[#FFFFFF]/10 border border-[#FFFFFF]/50'
-                    : 'bg-white/[0.04] border border-white/[0.08]',
-                )}
-              >
-                <div
-                  className={cn(
-                    'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors',
-                    reg === opt.value ? 'border-[#FFFFFF]' : 'border-white/20',
-                  )}
-                >
-                  {reg === opt.value && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="w-2.5 h-2.5 rounded-full bg-[#FFFFFF]"
-                    />
-                  )}
-                </div>
-                <p
-                  className={cn(
-                    'text-sm font-semibold transition-colors',
-                    reg === opt.value ? 'text-white' : 'text-white/70',
-                  )}
-                >
-                  {opt.label}
-                </p>
-              </motion.button>
-            ))}
-          </div>
-        </section>
-      </div>
-    )
-  }
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 bg-[#0a0a0f] flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      {/* ============ HEADER ============ */}
+      <header className="flex items-center justify-between px-4 py-3 shrink-0 relative z-30">
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={onClose}
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-white/[0.06] text-white/70 hover:text-white transition-colors"
+        >
+          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 5l10 10M15 5L5 15" />
+          </svg>
+        </motion.button>
 
-  // =========================================================================
-  // Step 5 — Publish
-  // =========================================================================
+        <h1
+          className="text-sm font-bold tracking-wide"
+          style={{ color: '#00f0ff', textShadow: '0 0 10px rgba(0,240,255,0.5)' }}
+        >
+          Create Story
+        </h1>
 
-  function StepPublish({
-    publishing: pub,
-    published: done,
-    onPublish: pubFn,
-  }: {
-    publishing: boolean
-    published: boolean
-    onPublish: () => void
-  }) {
-    return (
-      <div className="pt-4 flex flex-col items-center justify-center min-h-[60vh] gap-6 px-4">
-        {done ? (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center">
-              <motion.svg
-                width="36"
-                height="36"
-                fill="none"
-                stroke="#22c55e"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                viewBox="0 0 24 24"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <motion.path
-                  d="M5 13l4 4L19 7"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                />
-              </motion.svg>
-            </div>
-            <div className="text-center">
-              <p className="text-white font-bold text-lg">Story Published!</p>
-              <p className="text-white/40 text-sm mt-1">Your story is now live 🎉</p>
-            </div>
-          </motion.div>
-        ) : (
-          <>
-            {/* Story summary */}
-            <div className="w-full rounded-2xl bg-white/[0.04] border border-white/[0.08] p-5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#FFFFFF]/20 flex items-center justify-center text-xl">
-                  {FORMAT_OPTIONS.find((f) => f.value === format)?.icon}
-                </div>
-                <div>
-                  <p className="text-white font-semibold">
-                    {FORMAT_OPTIONS.find((f) => f.value === format)?.label} Story
-                  </p>
-                  <p className="text-white/40 text-xs">
-                    {LANGUAGES.find((l) => l.code === language)?.flag}{' '}
-                    {LANGUAGES.find((l) => l.code === language)?.label} • {audience} •{' '}
-                    {expiry}
-                  </p>
-                </div>
-              </div>
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          onClick={handlePublish}
+          disabled={publishing || published}
+          className={cn(
+            'relative px-5 py-2 rounded-full text-sm font-bold transition-all overflow-hidden',
+            (publishing || published) ? 'bg-white/20 text-white/40 cursor-wait' : 'text-[#0a0a0f]',
+          )}
+          style={
+            !publishing && !published
+              ? { background: 'linear-gradient(135deg, #00f0ff 0%, #ff00aa 100%)', boxShadow: '0 0 20px rgba(0,240,255,0.4), 0 0 40px rgba(255,0,170,0.2)' }
+              : undefined
+          }
+        >
+          {publishing && (
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+          )}
+          <span className="relative z-10 flex items-center gap-1.5">
+            {publishing ? (
+              <>
+                <svg className="animate-spin" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                </svg>
+                Posting...
+              </>
+            ) : published ? (
+              '✓ Done'
+            ) : (
+              'Post'
+            )}
+          </span>
+        </motion.button>
+      </header>
 
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2.5 py-1 rounded-full bg-white/[0.06] text-white/50 text-xs">
-                  {EXPIRY_OPTIONS.find((e) => e.value === expiry)?.label}
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-white/[0.06] text-white/50 text-xs">
-                  {AUDIENCE_OPTIONS.find((a) => a.value === audience)?.icon}{' '}
-                  {AUDIENCE_OPTIONS.find((a) => a.value === audience)?.label}
-                </span>
-                <span className="px-2.5 py-1 rounded-full bg-white/[0.06] text-white/50 text-xs">
-                  📍 {REGION_OPTIONS.find((r) => r.value === region)?.label}
-                </span>
-              </div>
-            </div>
-
-            {/* Publish button */}
+      {/* ============ COLLAPSIBLE OPTIONS ROW ============ */}
+      <div className="shrink-0 px-4 pb-2 relative z-20">
+        <div className="flex items-center gap-2">
+          {/* Audience */}
+          <div className="relative">
             <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={pubFn}
-              disabled={pub}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { setAudienceOpen(!audienceOpen); setExpiryOpen(false); setLanguageOpen(false) }}
               className={cn(
-                'w-full py-4 rounded-2xl text-white font-semibold text-base transition-all relative overflow-hidden',
-                pub
-                  ? 'bg-white/[0.08] text-white/30 cursor-wait'
-                  : 'bg-gradient-to-r from-[#FFFFFF] to-[#6366f1] shadow-lg shadow-[#FFFFFF]/25',
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
+                audienceOpen
+                  ? 'border-[#00f0ff] bg-[#00f0ff]/10 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
+                  : 'border-white/[0.08] bg-white/[0.04] text-white/60',
               )}
             >
-              {pub && (
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
-                />
-              )}
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                {pub ? (
-                  <>
-                    <svg
-                      className="animate-spin"
-                      width="18"
-                      height="18"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M12 2a10 10 0 0 1 10 10"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    Publishing...
-                  </>
-                ) : (
-                  'Publish Story'
-                )}
-              </span>
+              <span>{AUDIENCE_OPTIONS.find((a) => a.value === audience)?.icon}</span>
+              <span>{AUDIENCE_OPTIONS.find((a) => a.value === audience)?.label}</span>
+              <svg className={cn('w-3 h-3 transition-transform', audienceOpen && 'rotate-180')} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
             </motion.button>
+            <AnimatePresence>
+              {audienceOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 mt-1.5 bg-[#13131a] border border-[#00f0ff]/20 rounded-xl shadow-[0_0_20px_rgba(0,240,255,0.15)] p-1.5 min-w-[160px] z-50"
+                >
+                  {AUDIENCE_OPTIONS.map((opt) => (
+                    <motion.button
+                      key={opt.value}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => { setAudience(opt.value); setAudienceOpen(false) }}
+                      className={cn(
+                        'flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs font-medium transition-all',
+                        audience === opt.value
+                          ? 'bg-[#00f0ff]/15 text-[#00f0ff]'
+                          : 'text-white/60 hover:text-white hover:bg-white/[0.04]',
+                      )}
+                    >
+                      <span>{opt.icon}</span>
+                      <span>{opt.label}</span>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-            <p className="text-white/20 text-xs text-center">
-              Your story will be visible to {AUDIENCE_OPTIONS.find((a) => a.value === audience)?.label.toLowerCase()} for{' '}
-              {EXPIRY_OPTIONS.find((e) => e.value === expiry)?.label}
-            </p>
-          </>
-        )}
+          {/* Expiry */}
+          <div className="relative">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { setExpiryOpen(!expiryOpen); setAudienceOpen(false); setLanguageOpen(false) }}
+              className={cn(
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
+                expiryOpen
+                  ? 'border-[#00f0ff] bg-[#00f0ff]/10 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
+                  : 'border-white/[0.08] bg-white/[0.04] text-white/60',
+              )}
+            >
+              <span>⏱</span>
+              <span>{EXPIRY_OPTIONS.find((e) => e.value === expiry)?.label}</span>
+              <svg className={cn('w-3 h-3 transition-transform', expiryOpen && 'rotate-180')} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
+            </motion.button>
+            <AnimatePresence>
+              {expiryOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 mt-1.5 bg-[#13131a] border border-[#00f0ff]/20 rounded-xl shadow-[0_0_20px_rgba(0,240,255,0.15)] p-1.5 min-w-[140px] z-50"
+                >
+                  {EXPIRY_OPTIONS.map((opt) => (
+                    <motion.button
+                      key={opt.value}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => { setExpiry(opt.value); setExpiryOpen(false) }}
+                      className={cn(
+                        'flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs font-medium transition-all',
+                        expiry === opt.value
+                          ? 'bg-[#00f0ff]/15 text-[#00f0ff]'
+                          : 'text-white/60 hover:text-white hover:bg-white/[0.04]',
+                      )}
+                    >
+                      <span>{opt.label}</span>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Language */}
+          <div className="relative">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { setLanguageOpen(!languageOpen); setAudienceOpen(false); setExpiryOpen(false) }}
+              className={cn(
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
+                languageOpen
+                  ? 'border-[#00f0ff] bg-[#00f0ff]/10 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
+                  : 'border-white/[0.08] bg-white/[0.04] text-white/60',
+              )}
+            >
+              <span>{currentLang?.flag}</span>
+              <span>{currentLang?.nativeLabel}</span>
+              <svg className={cn('w-3 h-3 transition-transform', languageOpen && 'rotate-180')} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
+            </motion.button>
+            <AnimatePresence>
+              {languageOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 mt-1.5 bg-[#13131a] border border-[#00f0ff]/20 rounded-xl shadow-[0_0_20px_rgba(0,240,255,0.15)] p-1.5 min-w-[160px] max-h-[200px] overflow-y-auto z-50"
+                >
+                  {LANGUAGES.map((lang) => (
+                    <motion.button
+                      key={lang.code}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => { setLanguage(lang.code); setLanguageOpen(false) }}
+                      className={cn(
+                        'flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs font-medium transition-all',
+                        language === lang.code
+                          ? 'bg-[#00f0ff]/15 text-[#00f0ff]'
+                          : 'text-white/60 hover:text-white hover:bg-white/[0.04]',
+                      )}
+                    >
+                      <span>{lang.flag}</span>
+                      <span>{lang.nativeLabel}</span>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
-    )
-  }
+
+      {/* ============ SCROLLABLE CANVAS AREA ============ */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden relative z-10" onClick={closeDropdowns}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={format}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="px-4 pb-4"
+          >
+            {format === 'text' && <TextCanvas />}
+            {format === 'voice' && <VoiceCanvas />}
+            {format === 'thread' && <ThreadCanvas />}
+            {format === 'poll' && <PollCanvas />}
+            {format === 'festival' && <FestivalCanvas />}
+            {format === 'cricket' && <CricketCanvas />}
+            {format === 'feed' && <FeedCanvas />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* ============ FORMAT STRIP (Bottom) ============ */}
+      <div className="shrink-0 z-20 border-t border-white/[0.06] bg-[#0a0a0f]/90 backdrop-blur-xl">
+        <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          {FORMAT_OPTIONS.map((fmt) => (
+            <motion.button
+              key={fmt.value}
+              whileTap={{ scale: 0.92 }}
+              onClick={() => setFormat(fmt.value)}
+              className={cn(
+                'flex items-center gap-1.5 px-3.5 py-2 rounded-full whitespace-nowrap text-xs font-medium transition-all shrink-0 border',
+                format === fmt.value
+                  ? 'border-[#00f0ff] bg-[#00f0ff]/10 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
+                  : 'border-white/[0.08] bg-white/[0.04] text-white/50 hover:text-white/70',
+              )}
+              style={format === fmt.value ? { color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' } : undefined}
+            >
+              <span className={cn('text-sm', format === fmt.value && 'drop-shadow-[0_0_6px_rgba(0,240,255,0.6)]')}>
+                {fmt.icon}
+              </span>
+              <span>{fmt.label}</span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  )
 }

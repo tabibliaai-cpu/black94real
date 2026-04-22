@@ -896,8 +896,8 @@ export function ChatRoomView() {
               <div key={msg.id} className={cn('flex', isMine ? 'justify-end' : 'justify-start')}>
                 <div
                   className={cn(
-                    'max-w-[75%] px-4 py-3 rounded-2xl text-[15px] leading-relaxed',
-                    isMine ? 'bg-[#FFFFFF] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
+                    'max-w-[75%] px-3 py-2 rounded-2xl text-[15px] leading-relaxed',
+                    isMine ? 'bg-[#1d9bf0] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
                   )}
                 >
                   {msg.messageType === 'image' && msg.mediaUrl ? (
