@@ -253,10 +253,10 @@ export function ProfileView() {
               <button
                 onClick={handleMessage}
                 disabled={messaging}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-full border border-[#8b5cf6]/40 text-[15px] font-bold text-[#8b5cf6] hover:bg-[#8b5cf6]/10 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-full border border-[#D4A574]/40 text-[15px] font-bold text-[#D4A574] hover:bg-[#D4A574]/10 transition-colors disabled:opacity-50 disabled:pointer-events-none"
               >
                 {messaging ? (
-                  <div className="w-4 h-4 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
                 ) : (
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
@@ -275,7 +275,7 @@ export function ProfileView() {
         <p className="text-[15px] text-[#94a3b8]">@{username}</p>
         {isBusinessAccount && trial && trial.isActive && (
           <div className="flex items-center gap-1.5 mt-1.5">
-            <svg className={cn('w-3.5 h-3.5', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#8b5cf6]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg className={cn('w-3.5 h-3.5', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#D4A574]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             <span className={cn('text-[12px] font-medium', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#94a3b8]')}>
               Free Trial — {trial.daysRemaining} day{trial.daysRemaining !== 1 ? 's' : ''} remaining
             </span>
@@ -312,7 +312,7 @@ export function ProfileView() {
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#8b5cf6] rounded-full animate-tab-indicator" />
+                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#D4A574] rounded-full animate-tab-indicator" />
               )}
             </button>
           ))}
@@ -348,7 +348,7 @@ export function ProfileView() {
             <div className="flex flex-col items-center gap-3 pt-4 pb-24">
               <button
                 onClick={() => navigate('store-dashboard')}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[14px] shadow-lg shadow-[#8b5cf6]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[14px] shadow-lg shadow-[#D4A574]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -359,7 +359,7 @@ export function ProfileView() {
               </button>
               <button
                 onClick={() => navigate('add-product')}
-                className="flex items-center gap-1.5 text-[13px] font-medium text-[#8b5cf6] hover:text-[#c4e899] transition-colors"
+                className="flex items-center gap-1.5 text-[13px] font-medium text-[#D4A574] hover:text-[#c4e899] transition-colors"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                   <path d="M12 5v14M5 12h14" />

@@ -37,8 +37,8 @@ export function CrmOrdersView() {
         {[
           { label: 'Total', value: totalOrders, color: 'text-[#e7e9ea]' },
           { label: 'Pending', value: pending, color: 'text-yellow-400' },
-          { label: 'Shipped', value: shipped, color: 'text-purple-400' },
-          { label: 'Delivered', value: delivered, color: 'text-[#8b5cf6]' },
+          { label: 'Shipped', value: shipped, color: 'text-[#D4A574]' },
+          { label: 'Delivered', value: delivered, color: 'text-[#D4A574]' },
         ].map((stat) => (
           <div key={stat.label} className="rounded-xl bg-[#000000] border border-white/[0.06] p-3 text-center">
             <p className={cn('text-xl font-bold', stat.color)}>{stat.value}</p>
@@ -73,7 +73,7 @@ export function CrmOrdersView() {
                   <p className="text-[13px] text-[#94a3b8] truncate">{order.product}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <span className="text-[15px] font-bold text-[#8b5cf6] block">{formatCurrency(order.amount)}</span>
+                  <span className="text-[15px] font-bold text-[#D4A574] block">{formatCurrency(order.amount)}</span>
                   <span className="text-[11px] text-[#64748b]">{order.date}</span>
                 </div>
               </div>

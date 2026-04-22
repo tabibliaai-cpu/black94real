@@ -160,7 +160,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
   const btnClass = isCurrent
     ? 'bg-white/[0.06] text-[#94a3b8] cursor-default'
     : plan.id === 'pro'
-    ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed] active:scale-[0.97]'
+    ? 'bg-[#D4A574] text-black hover:bg-[#B8895C] active:scale-[0.97]'
     : plan.id === 'gold'
     ? 'bg-gradient-to-r from-[#ffd700] to-[#f0c800] text-black hover:from-[#f0c800] hover:to-[#e0b800] active:scale-[0.97]'
     : ''
@@ -309,14 +309,14 @@ function FeatureCell({
           className={cn(
             'w-6 h-6 rounded-full flex items-center justify-center',
             highlight
-              ? 'bg-[#8b5cf6]/15'
+              ? 'bg-[#D4A574]/15'
               : 'bg-white/[0.04]'
           )}
         >
           <CheckIcon
             className={cn(
               'w-3.5 h-3.5',
-              highlight ? 'text-[#8b5cf6]' : accentColor ? '' : 'text-[#64748b]'
+              highlight ? 'text-[#D4A574]' : accentColor ? '' : 'text-[#64748b]'
             )}
             style={highlight ? undefined : { stroke: accentColor || undefined }}
           />

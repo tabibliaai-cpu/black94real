@@ -114,7 +114,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
               <div className="w-full h-full bg-[#000000]" />
             )}
           </div>
-          <span className="text-[11px] text-[#94a3b8] group-hover/biz:text-[#8b5cf6] transition-colors truncate">
+          <span className="text-[11px] text-[#94a3b8] group-hover/biz:text-[#D4A574] transition-colors truncate">
             {product.businessName}
           </span>
         </button>
@@ -140,7 +140,7 @@ export function ProductCard({ product }: { product: ShopProduct }) {
 
           <button
             onClick={handleAddToCart}
-            className="w-8 h-8 rounded-full bg-[#8b5cf6] flex items-center justify-center hover:bg-[#7c3aed] active:scale-90 transition-all shadow-md shadow-[#8b5cf6]/20"
+            className="w-8 h-8 rounded-full bg-[#D4A574] flex items-center justify-center hover:bg-[#B8895C] active:scale-90 transition-all shadow-md shadow-[#D4A574]/20"
             aria-label="Add to cart"
           >
             <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">

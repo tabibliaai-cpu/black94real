@@ -89,15 +89,15 @@ export function AudioCallView() {
           {/* Ripple rings — only when ringing */}
           {callState === 'ringing' && (
             <>
-              <div className="absolute inset-[-20px] rounded-full border-2 border-[#8b5cf6]/30 animate-ping-slow" />
-              <div className="absolute inset-[-40px] rounded-full border border-[#8b5cf6]/20 animate-ping-slower" />
-              <div className="absolute inset-[-60px] rounded-full border border-[#8b5cf6]/10 animate-ping-slowest" />
+              <div className="absolute inset-[-20px] rounded-full border-2 border-[#D4A574]/30 animate-ping-slow" />
+              <div className="absolute inset-[-40px] rounded-full border border-[#D4A574]/20 animate-ping-slower" />
+              <div className="absolute inset-[-60px] rounded-full border border-[#D4A574]/10 animate-ping-slowest" />
             </>
           )}
 
           {/* Connected glow */}
           {callState === 'connected' && (
-            <div className="absolute inset-[-16px] rounded-full bg-[#8b5cf6]/10 blur-xl animate-pulse" />
+            <div className="absolute inset-[-16px] rounded-full bg-[#D4A574]/10 blur-xl animate-pulse" />
           )}
 
           {/* Main avatar */}
@@ -125,8 +125,8 @@ export function AudioCallView() {
           {callState === 'ringing' && (
             <>
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse" />
-                <span className="text-[15px] text-[#8b5cf6] font-medium">Calling...</span>
+                <div className="w-2 h-2 rounded-full bg-[#D4A574] animate-pulse" />
+                <span className="text-[15px] text-[#D4A574] font-medium">Calling...</span>
               </div>
             </>
           )}
@@ -149,10 +149,10 @@ export function AudioCallView() {
 
         {/* E2E badge */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
-          <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <span className="text-[11px] text-[#8b5cf6] font-semibold tracking-wide">E2E ENCRYPTED</span>
+          <span className="text-[11px] text-[#D4A574] font-semibold tracking-wide">E2E ENCRYPTED</span>
         </div>
       </div>
 
@@ -195,7 +195,7 @@ export function AudioCallView() {
             <div className={cn(
               'w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200',
               isMuted
-                ? 'bg-[#8b5cf6] text-black'
+                ? 'bg-[#D4A574] text-black'
                 : 'bg-white/[0.08] text-white hover:bg-white/[0.12]'
             )}>
               {isMuted ? (
@@ -212,7 +212,7 @@ export function AudioCallView() {
                 </svg>
               )}
             </div>
-            <span className={cn('text-[11px]', isMuted ? 'text-[#8b5cf6] font-semibold' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[11px]', isMuted ? 'text-[#D4A574] font-semibold' : 'text-[#94a3b8]')}>
               {isMuted ? 'Unmute' : 'Mute'}
             </span>
           </button>
@@ -225,7 +225,7 @@ export function AudioCallView() {
             <div className={cn(
               'w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200',
               isSpeaker
-                ? 'bg-[#8b5cf6] text-black'
+                ? 'bg-[#D4A574] text-black'
                 : 'bg-white/[0.08] text-white hover:bg-white/[0.12]'
             )}>
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -240,7 +240,7 @@ export function AudioCallView() {
                 )}
               </svg>
             </div>
-            <span className={cn('text-[11px]', isSpeaker ? 'text-[#8b5cf6] font-semibold' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[11px]', isSpeaker ? 'text-[#D4A574] font-semibold' : 'text-[#94a3b8]')}>
               {isSpeaker ? 'Speaker On' : 'Speaker'}
             </span>
           </button>
@@ -253,7 +253,7 @@ export function AudioCallView() {
             <div className={cn(
               'w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200',
               showKeypad
-                ? 'bg-[#8b5cf6] text-black'
+                ? 'bg-[#D4A574] text-black'
                 : 'bg-white/[0.08] text-white hover:bg-white/[0.12]'
             )}>
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -264,7 +264,7 @@ export function AudioCallView() {
                 <line x1="3" y1="15" x2="21" y2="15"/>
               </svg>
             </div>
-            <span className={cn('text-[11px]', showKeypad ? 'text-[#8b5cf6] font-semibold' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[11px]', showKeypad ? 'text-[#D4A574] font-semibold' : 'text-[#94a3b8]')}>
               Keypad
             </span>
           </button>

@@ -34,7 +34,7 @@ export function ExpandableText({
   maxLines = 4,
   className,
   style,
-  linkColor = '#8b5cf6',
+  linkColor = '#D4A574',
   renderContent,
 }: ExpandableTextProps) {
   const [expanded, setExpanded] = useState(false)
@@ -96,7 +96,7 @@ export function ExpandableText({
             'inline cursor-pointer select-none font-semibold',
             'bg-transparent border-none p-0 m-0',
             'hover:underline focus-visible:outline-none',
-            'focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50',
+            'focus-visible:ring-2 focus-visible:ring-[#D4A574]/50',
             'focus-visible:ring-offset-1 rounded-sm ml-0.5'
           )}
           style={{ color: linkColor, fontSize: 'inherit', lineHeight: 'inherit' }}

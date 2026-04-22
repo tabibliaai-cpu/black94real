@@ -20,8 +20,8 @@ function classifyLead(lead: Lead): FilterTab {
 const LEAD_STATUS_COLORS: Record<string, string> = {
   New: 'bg-blue-500/15 text-blue-400',
   Contacted: 'bg-yellow-500/15 text-yellow-400',
-  Qualified: 'bg-purple-500/15 text-purple-400',
-  Converted: 'bg-[#8b5cf6]/15 text-[#8b5cf6]',
+  Qualified: 'bg-[#D4A574]/15 text-[#D4A574]',
+  Converted: 'bg-[#D4A574]/15 text-[#D4A574]',
   Lost: 'bg-red-500/15 text-red-400',
 }
 
@@ -52,7 +52,7 @@ export function CrmLeadsView() {
           </button>
           <button
             onClick={() => toast.info('Lead creation form coming soon — use CRM dashboard to manage leads')}
-            className="px-3 py-1.5 rounded-full bg-[#8b5cf6] text-black text-[13px] font-bold hover:bg-[#7c3aed] transition-colors"
+            className="px-3 py-1.5 rounded-full bg-[#D4A574] text-black text-[13px] font-bold hover:bg-[#B8895C] transition-colors"
           >
             + Add Lead
           </button>
@@ -68,7 +68,7 @@ export function CrmLeadsView() {
             className={cn(
               'px-3 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors',
               activeTab === tab
-                ? 'bg-[#8b5cf6] text-black'
+                ? 'bg-[#D4A574] text-black'
                 : 'bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1]'
             )}
           >
@@ -86,7 +86,7 @@ export function CrmLeadsView() {
           <div key={lead.id} className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
             <div className="flex items-start gap-3">
               {/* Avatar */}
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[14px] text-[#8b5cf6] font-bold shrink-0">
+              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[14px] text-[#D4A574] font-bold shrink-0">
                 {lead.name[0]}
               </div>
               {/* Info */}

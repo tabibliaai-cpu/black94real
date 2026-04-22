@@ -587,9 +587,9 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               className={cn(
                 'h-1.5 rounded-full transition-all duration-300',
                 step === i + 1
-                  ? 'w-6 bg-[#8b5cf6]'
+                  ? 'w-6 bg-[#D4A574]'
                   : i + 1 < step
-                    ? 'w-3 bg-[#8b5cf6]/50'
+                    ? 'w-3 bg-[#D4A574]/50'
                     : 'w-3 bg-white/20',
               )}
               layout
@@ -643,7 +643,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             className={cn(
               'w-full py-4 rounded-2xl text-white font-semibold text-base transition-all duration-200',
               canProceed
-                ? 'bg-[#8b5cf6] shadow-lg shadow-[#8b5cf6]/25'
+                ? 'bg-[#D4A574] shadow-lg shadow-[#D4A574]/25'
                 : 'bg-white/[0.08] text-white/30 cursor-not-allowed',
             )}
           >
@@ -683,7 +683,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               className={cn(
                 'flex flex-col items-start rounded-2xl p-4 text-left transition-all duration-200',
                 selected === fmt.value
-                  ? 'border border-[#8b5cf6] bg-[#8b5cf6]/10'
+                  ? 'border border-[#D4A574] bg-[#D4A574]/10'
                   : 'border border-white/[0.08] bg-white/[0.04]',
               )}
             >
@@ -722,14 +722,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               className={cn(
                 'relative flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-sm font-medium transition-colors shrink-0',
                 selected === lang.code
-                  ? 'bg-[#8b5cf6] text-white'
+                  ? 'bg-[#D4A574] text-white'
                   : 'bg-white/[0.06] text-white/60',
               )}
             >
               {selected === lang.code && (
                 <motion.div
                   layoutId="lang-pill"
-                  className="absolute inset-0 bg-[#8b5cf6] rounded-full"
+                  className="absolute inset-0 bg-[#D4A574] rounded-full"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
@@ -822,7 +822,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               className={cn(
                 'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all',
                 textFontSize === size
-                  ? 'bg-[#8b5cf6] text-white'
+                  ? 'bg-[#D4A574] text-white'
                   : 'bg-white/[0.06] text-white/50',
               )}
             >
@@ -858,7 +858,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             onClick={() => setTextPollEnabled(!textPollEnabled)}
             className={cn(
               'w-12 h-7 rounded-full relative transition-colors duration-200',
-              textPollEnabled ? 'bg-[#8b5cf6]' : 'bg-white/20',
+              textPollEnabled ? 'bg-[#D4A574]' : 'bg-white/20',
             )}
           >
             <motion.div
@@ -886,7 +886,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                       value={opt.text}
                       onChange={(e) => updateTextPollOption(i, e.target.value)}
                       placeholder={`Option ${i + 1}`}
-                      className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                      className="flex-1 bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#D4A574]/50 transition-colors"
                     />
                     {pollOptions.length > 2 && (
                       <button
@@ -927,7 +927,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           ).map((h, i) => (
             <motion.div
               key={i}
-              className="w-[5px] rounded-full bg-[#8b5cf6]"
+              className="w-[5px] rounded-full bg-[#D4A574]"
               animate={{
                 height: `${Math.max(4, h)}%`,
               }}
@@ -1014,7 +1014,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             </button>
             <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-[#8b5cf6] rounded-full"
+                className="h-full bg-[#D4A574] rounded-full"
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
                 transition={{ duration: recordingTime, ease: 'linear' }}
@@ -1034,7 +1034,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               onClick={() => setAutoCaption(!autoCaption)}
               className={cn(
                 'w-12 h-7 rounded-full relative transition-colors duration-200',
-                autoCaption ? 'bg-[#8b5cf6]' : 'bg-white/20',
+                autoCaption ? 'bg-[#D4A574]' : 'bg-white/20',
               )}
             >
               <motion.div
@@ -1058,7 +1058,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     className={cn(
                       'shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all',
                       voiceCaptionLang === lang.code
-                        ? 'bg-[#8b5cf6] text-white'
+                        ? 'bg-[#D4A574] text-white'
                         : 'bg-white/[0.06] text-white/50',
                     )}
                   >
@@ -1095,7 +1095,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   onClick={() => selectThread(thread.id)}
                   className="flex items-center gap-3 rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[#8b5cf6]/20 flex items-center justify-center text-[#8b5cf6] font-bold text-sm shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-[#D4A574]/20 flex items-center justify-center text-[#D4A574] font-bold text-sm shrink-0">
                     {thread.cardCount}
                   </div>
                   <div className="min-w-0">
@@ -1146,13 +1146,13 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   >
                     {/* Card number */}
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-[#8b5cf6] text-xs font-bold">
+                      <span className="text-[#D4A574] text-xs font-bold">
                         Card {i + 1}
                       </span>
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => startEditCard(i)}
-                          className="text-white/40 hover:text-[#8b5cf6] transition-colors text-xs font-medium"
+                          className="text-white/40 hover:text-[#D4A574] transition-colors text-xs font-medium"
                         >
                           Edit
                         </button>
@@ -1169,7 +1169,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                       <textarea
                         value={editingCardText}
                         onChange={(e) => setEditingCardText(e.target.value)}
-                        className="w-full bg-white/[0.06] rounded-lg p-2.5 text-sm text-white outline-none resize-none border border-[#8b5cf6]/30"
+                        className="w-full bg-white/[0.06] rounded-lg p-2.5 text-sm text-white outline-none resize-none border border-[#D4A574]/30"
                         rows={4}
                         autoFocus
                       />
@@ -1183,7 +1183,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                       <div className="flex gap-2 mt-2">
                         <button
                           onClick={saveEditCard}
-                          className="flex-1 py-1.5 rounded-lg bg-[#8b5cf6] text-white text-xs font-medium"
+                          className="flex-1 py-1.5 rounded-lg bg-[#D4A574] text-white text-xs font-medium"
                         >
                           Save
                         </button>
@@ -1209,7 +1209,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     const thread = MOCK_THREADS.find((t) => t.id === selectedThread)
                     if (thread) setThreadCards([...thread.cards])
                   }}
-                  className="mt-3 text-[#8b5cf6] text-sm font-medium"
+                  className="mt-3 text-[#D4A574] text-sm font-medium"
                 >
                   Reset cards
                 </button>
@@ -1261,14 +1261,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   value={opt.text}
                   onChange={(e) => updatePollOption(i, e.target.value)}
                   placeholder={`Option ${i + 1}`}
-                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                  className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-3.5 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#D4A574]/50 transition-colors"
                 />
                 {/* Mock percentage bar */}
                 {opt.text.trim() && (
                   <motion.div
                     initial={{ width: '0%' }}
                     animate={{ width: `${mockPercentages[i] || 0}%` }}
-                    className="absolute inset-0 bg-[#8b5cf6]/15 rounded-xl pointer-events-none"
+                    className="absolute inset-0 bg-[#D4A574]/15 rounded-xl pointer-events-none"
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                   />
                 )}
@@ -1322,7 +1322,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                   setPollReactionEmojis((prev) => [...prev, random])
                 }
               }}
-              className="w-10 h-10 rounded-lg bg-[#8b5cf6]/20 flex items-center justify-center text-[#8b5cf6] text-lg font-bold hover:bg-[#8b5cf6]/30 transition-colors"
+              className="w-10 h-10 rounded-lg bg-[#D4A574]/20 flex items-center justify-center text-[#D4A574] text-lg font-bold hover:bg-[#D4A574]/30 transition-colors"
             >
               +
             </button>
@@ -1349,11 +1349,11 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                         initial={{ width: '0%' }}
                         animate={{ width: `${pct}%` }}
                         transition={{ duration: 0.6, ease: 'easeOut', delay: i * 0.1 }}
-                        className="absolute inset-0 bg-[#8b5cf6]/20 rounded-xl"
+                        className="absolute inset-0 bg-[#D4A574]/20 rounded-xl"
                       />
                       <div className="relative flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
                         <span className="text-white text-sm">{opt.text}</span>
-                        <span className="text-[#8b5cf6] text-sm font-bold tabular-nums">
+                        <span className="text-[#D4A574] text-sm font-bold tabular-nums">
                           {pct}%
                         </span>
                       </div>
@@ -1516,7 +1516,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                     <span className="text-3xl">{selectedMatchData.team1Flag}</span>
                     <div>
                       <p className="text-white font-bold">{selectedMatchData.team1}</p>
-                      <p className="text-[#8b5cf6] font-mono text-lg font-bold">{selectedMatchData.team1Score}</p>
+                      <p className="text-[#D4A574] font-mono text-lg font-bold">{selectedMatchData.team1Score}</p>
                     </div>
                   </div>
                   <span className="text-white/20 text-xs">vs</span>
@@ -1543,7 +1543,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 value={cricketCommentary}
                 onChange={(e) => setCricketCommentary(e.target.value)}
                 placeholder="What do you think about this match?"
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none resize-none text-sm focus:border-[#8b5cf6]/50 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none resize-none text-sm focus:border-[#D4A574]/50 transition-colors"
                 rows={3}
               />
             </div>
@@ -1560,7 +1560,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                       <p className="text-white/50 text-xs mt-1">{selectedMatchData.team1}</p>
                     </div>
                     <div>
-                      <p className="text-[#8b5cf6] font-mono font-bold text-sm">
+                      <p className="text-[#D4A574] font-mono font-bold text-sm">
                         {selectedMatchData.team1Score}
                       </p>
                       <p className="text-white/30 text-[10px]">vs</p>
@@ -1603,7 +1603,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               value={feedUrl}
               onChange={(e) => setFeedUrl(e.target.value)}
               placeholder="https://example.com/post/..."
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#8b5cf6]/50 transition-colors pr-12"
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#D4A574]/50 transition-colors pr-12"
             />
             {feedUrl.trim() && (
               <motion.button
@@ -1626,7 +1626,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             value={feedCaption}
             onChange={(e) => setFeedCaption(e.target.value)}
             placeholder="What do you think about this?"
-            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none resize-none focus:border-[#8b5cf6]/50 transition-colors"
+            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none resize-none focus:border-[#D4A574]/50 transition-colors"
             rows={3}
           />
         </div>
@@ -1638,7 +1638,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             animate={{ opacity: 1, y: 0 }}
             className="rounded-2xl bg-white/[0.04] border border-white/[0.08] overflow-hidden"
           >
-            <div className="h-32 bg-gradient-to-br from-[#8b5cf6]/30 to-[#6366f1]/20 flex items-center justify-center">
+            <div className="h-32 bg-gradient-to-br from-[#D4A574]/30 to-[#6366f1]/20 flex items-center justify-center">
               <span className="text-4xl">📰</span>
             </div>
             <div className="p-4">
@@ -1688,7 +1688,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 className={cn(
                   'relative flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap text-sm font-medium transition-all shrink-0',
                   aud === opt.value
-                    ? 'bg-[#8b5cf6] text-white'
+                    ? 'bg-[#D4A574] text-white'
                     : 'bg-white/[0.06] text-white/60',
                 )}
               >
@@ -1712,21 +1712,21 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 className={cn(
                   'flex items-center gap-3 rounded-xl p-4 text-left transition-all',
                   exp === opt.value
-                    ? 'bg-[#8b5cf6]/10 border border-[#8b5cf6]/50'
+                    ? 'bg-[#D4A574]/10 border border-[#D4A574]/50'
                     : 'bg-white/[0.04] border border-white/[0.08]',
                 )}
               >
                 <div
                   className={cn(
                     'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors',
-                    exp === opt.value ? 'border-[#8b5cf6]' : 'border-white/20',
+                    exp === opt.value ? 'border-[#D4A574]' : 'border-white/20',
                   )}
                 >
                   {exp === opt.value && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]"
+                      className="w-2.5 h-2.5 rounded-full bg-[#D4A574]"
                     />
                   )}
                 </div>
@@ -1758,21 +1758,21 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 className={cn(
                   'flex items-center gap-3 rounded-xl p-4 text-left transition-all',
                   reg === opt.value
-                    ? 'bg-[#8b5cf6]/10 border border-[#8b5cf6]/50'
+                    ? 'bg-[#D4A574]/10 border border-[#D4A574]/50'
                     : 'bg-white/[0.04] border border-white/[0.08]',
                 )}
               >
                 <div
                   className={cn(
                     'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors',
-                    reg === opt.value ? 'border-[#8b5cf6]' : 'border-white/20',
+                    reg === opt.value ? 'border-[#D4A574]' : 'border-white/20',
                   )}
                 >
                   {reg === opt.value && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]"
+                      className="w-2.5 h-2.5 rounded-full bg-[#D4A574]"
                     />
                   )}
                 </div>
@@ -1846,7 +1846,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             {/* Story summary */}
             <div className="w-full rounded-2xl bg-white/[0.04] border border-white/[0.08] p-5">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/20 flex items-center justify-center text-xl">
+                <div className="w-12 h-12 rounded-xl bg-[#D4A574]/20 flex items-center justify-center text-xl">
                   {FORMAT_OPTIONS.find((f) => f.value === format)?.icon}
                 </div>
                 <div>
@@ -1884,7 +1884,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
                 'w-full py-4 rounded-2xl text-white font-semibold text-base transition-all relative overflow-hidden',
                 pub
                   ? 'bg-white/[0.08] text-white/30 cursor-wait'
-                  : 'bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] shadow-lg shadow-[#8b5cf6]/25',
+                  : 'bg-gradient-to-r from-[#D4A574] to-[#6366f1] shadow-lg shadow-[#D4A574]/25',
               )}
             >
               {pub && (

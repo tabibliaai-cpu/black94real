@@ -29,7 +29,7 @@ export function ExploreView() {
     <div>
       {/* Search bar */}
       <div className="px-4 pt-3 pb-2">
-        <div className="flex items-center gap-3 bg-white/[0.06] rounded-full px-4 py-2.5 border border-white/[0.08] focus-within:border-[#8b5cf6]/50 transition-all">
+        <div className="flex items-center gap-3 bg-white/[0.06] rounded-full px-4 py-2.5 border border-white/[0.08] focus-within:border-[#D4A574]/50 transition-all">
           <svg className="w-5 h-5 text-[#94a3b8] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <circle cx="11" cy="11" r="7" />
             <path d="M21 21l-4.35-4.35" strokeLinecap="round" />

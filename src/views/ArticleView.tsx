@@ -237,7 +237,7 @@ export function ArticleView() {
                 className={cn(
                   'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold transition-colors',
                   factCheck.status === 'Verified'
-                    ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] hover:bg-[#8b5cf6]/20'
+                    ? 'bg-[#D4A574]/10 text-[#D4A574] hover:bg-[#D4A574]/20'
                     : factCheck.status === 'Not Verified'
                     ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
                     : 'bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20'
@@ -307,7 +307,7 @@ export function ArticleView() {
             className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
             aria-label="Comment"
           >
-            <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#D4A574] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
             </svg>
             <span className="text-[12px] font-semibold text-[#94a3b8]">{commentCount}</span>
@@ -319,7 +319,7 @@ export function ArticleView() {
             className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
             aria-label="Share"
           >
-            <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#8b5cf6] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#D4A574] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <circle cx="18" cy="5" r="3" />
               <circle cx="6" cy="12" r="3" />
               <circle cx="18" cy="19" r="3" />
@@ -337,7 +337,7 @@ export function ArticleView() {
             <svg
               className={cn(
                 'w-[22px] h-[22px] transition-colors',
-                bookmarked ? 'text-[#8b5cf6]' : 'text-[#94a3b8] group-hover:text-[#8b5cf6]'
+                bookmarked ? 'text-[#D4A574]' : 'text-[#94a3b8] group-hover:text-[#D4A574]'
               )}
               viewBox="0 0 24 24"
               fill={bookmarked ? 'currentColor' : 'none'}

@@ -115,22 +115,23 @@ export function PremiumDashboardView() {
   }
 
   return (
-    <div className="max-w-[600px] mx-auto px-4 pt-4 pb-28 space-y-6">
+    <div className="max-w-[640px] mx-auto px-5 pt-6 pb-28 space-y-5">
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('feed')} className="p-2 -ml-2 rounded-full hover:bg-white/[0.07] transition-colors">
           <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <h1 className="text-xl font-black text-white">Dashboard</h1>
+        <h1 className="text-xl font-black text-white tracking-tight">Dashboard</h1>
       </div>
 
       {/* ─── Profile Card ─── */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-5">
-        <div className="flex items-center gap-4">
+      <div className="rounded-2xl border border-white/[0.08] p-5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#D4A574]/[0.06] to-transparent pointer-events-none" />
+        <div className="relative flex items-center gap-4">
           {user?.profileImage ? (
-            <img src={user.profileImage} alt={user.displayName || 'User'} className="w-14 h-14 rounded-full object-cover ring-2 ring-white/[0.1]" />
+            <img src={user.profileImage} alt={user.displayName || 'User'} className="w-14 h-14 rounded-full object-cover ring-2 ring-[#D4A574]/40" />
           ) : (
-            <div className="w-14 h-14 rounded-full bg-white/[0.1] flex items-center justify-center text-white font-black text-xl">
+            <div className="w-14 h-14 rounded-full bg-[#D4A574]/15 flex items-center justify-center text-[#D4A574] font-black text-xl">
               {user?.displayName?.[0]?.toUpperCase() || 'U'}
             </div>
           )}
@@ -142,7 +143,7 @@ export function PremiumDashboardView() {
             <div className="flex items-center gap-2 mt-1">
               <span className={cn(
                 'text-[12px] font-bold px-2.5 py-0.5 rounded-full',
-                isPremium ? 'bg-[#ffd700]/15 text-[#ffd700]' : 'bg-white/[0.08] text-[#71767b]'
+                isPremium ? 'bg-[#D4A574]/15 text-[#D4A574]' : 'bg-white/[0.08] text-[#71767b]'
               )}>
                 {isPremium ? (isBusiness ? 'Business' : 'Premium') : 'Free Plan'}
               </span>
@@ -154,33 +155,37 @@ export function PremiumDashboardView() {
 
       {/* ─── Upgrade Card ─── */}
       {!isBusiness && (
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center">
-              <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </span>
-            <div>
-              <p className="text-[15px] font-bold text-white">Upgrade to Business</p>
-              <p className="text-[13px] text-[#71767b]">Store, products & commerce</p>
+        <div className="rounded-2xl border border-[#D4A574]/20 p-5 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#D4A574]/[0.08] to-transparent pointer-events-none" />
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="w-10 h-10 rounded-xl bg-[#D4A574]/10 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              </span>
+              <div>
+                <p className="text-[15px] font-bold text-white">Upgrade to Business</p>
+                <p className="text-[13px] text-[#71767b]">Store, products & commerce</p>
+              </div>
             </div>
+            <p className="text-[13px] text-[#71767b] mb-4 leading-relaxed">
+              Enable your store, sell products, manage orders and shipping partners. Start with a <span className="text-[#D4A574] font-semibold">30-day free trial</span>.
+            </p>
+            <button
+              onClick={handleUpgradeToBusiness}
+              disabled={upgrading}
+              className="w-full py-3.5 rounded-full bg-[#D4A574] text-black font-bold text-[15px] active:scale-[0.97] transition-all disabled:opacity-50 hover:bg-[#E8C4A0] shadow-[0_2px_16px_rgba(212,165,116,0.35)]"
+            >
+              {upgrading ? 'Upgrading...' : 'Start Free Trial'}
+            </button>
           </div>
-          <p className="text-[13px] text-[#71767b] mb-4 leading-relaxed">
-            Enable your store, sell products, manage orders and shipping partners. Start with a <span className="text-[#e7e9ea] font-semibold">30-day free trial</span>.
-          </p>
-          <button
-            onClick={handleUpgradeToBusiness}
-            disabled={upgrading}
-            className="w-full py-3.5 rounded-full bg-white text-black font-bold text-[15px] active:scale-[0.97] transition-all disabled:opacity-50 hover:bg-white/90"
-          >
-            {upgrading ? 'Upgrading...' : 'Start Free Trial'}
-          </button>
         </div>
       )}
 
       {/* ─── Business Active Card ─── */}
       {isBusiness && (
         <div className="space-y-3">
-          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-5 flex items-center gap-4">
+          <div className="rounded-2xl border border-white/[0.08] p-5 flex items-center gap-4 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00ba7c]/[0.06] to-transparent pointer-events-none" />
             <span className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center">
               <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </span>
@@ -191,7 +196,7 @@ export function PremiumDashboardView() {
             <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#00ba7c]/15 text-[#00ba7c]">Active</span>
           </div>
           {trial && (
-            <div className={cn('mx-0 p-4 rounded-2xl border', trial.isActive ? (trial.daysRemaining <= 7 ? 'bg-amber-500/5 border-amber-500/20' : 'bg-white/[0.02] border-white/[0.06]') : 'bg-red-500/5 border-red-500/20')}>
+            <div className={cn('relative p-4 rounded-2xl border overflow-hidden', trial.isActive ? (trial.daysRemaining <= 7 ? 'bg-amber-500/5 border-amber-500/20' : 'bg-white/[0.02] border-white/[0.06]') : 'bg-red-500/5 border-red-500/20')}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <svg className={cn('w-4 h-4', trial.isActive ? (trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#e7e9ea]') : 'text-red-400')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -222,7 +227,7 @@ export function PremiumDashboardView() {
       )}
 
       {/* ─── Sections ─── */}
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="Messaging & Privacy" />
         <MenuRow
           icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>}
@@ -238,7 +243,7 @@ export function PremiumDashboardView() {
         />
       </div>
 
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="Content" />
         <MenuRow
           icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>}
@@ -252,7 +257,7 @@ export function PremiumDashboardView() {
         />
       </div>
 
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="Monetization" />
         <MenuRow
           icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
@@ -268,7 +273,7 @@ export function PremiumDashboardView() {
         />
       </div>
 
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="Store & Commerce" />
         {isBusiness && (
           <>
@@ -281,14 +286,14 @@ export function PremiumDashboardView() {
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>} label="Cart" onClick={() => navigate('cart')} />
       </div>
 
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="Business & Advertising" />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>} label="Business Dashboard" onClick={() => navigate('business-dashboard')} />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>} label="Ad Manager" onClick={() => navigate('ads-manager')} />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>} label="Create Ad" onClick={() => navigate('create-ad')} />
       </div>
 
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="AI CRM" />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>} label="Leads" onClick={() => navigate('crm-leads')} />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>} label="Deals" onClick={() => navigate('crm-deals')} />
@@ -296,14 +301,14 @@ export function PremiumDashboardView() {
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>} label="Analytics" onClick={() => navigate('crm-analytics')} />
       </div>
 
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="Team" />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>} label="Salary" onClick={() => navigate('salary')} />
         <MenuRow icon={<svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>} label="Performance" onClick={() => navigate('performance')} />
       </div>
 
       {/* ─── App Settings ─── */}
-      <div className="border-t border-white/[0.06] pt-5 space-y-5">
+      <div className="border-t border-white/[0.06] pt-6 space-y-4">
         <SectionHeader label="App" />
         <button
           onClick={toggleDarkMode}

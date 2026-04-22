@@ -61,7 +61,7 @@ const USER_CACHE_KEY = 'black94_user_cache'
 function ViewLoader() {
   return (
     <div className="flex items-center justify-center h-[40vh]">
-      <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
     </div>
   )
 }
@@ -122,9 +122,9 @@ function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }
         </button>
         <p className="mt-6 text-[11px] text-[#64748b] text-center leading-relaxed">
           By signing in, you agree to our{' '}
-          <a href="/terms-of-service.html" target="_blank" rel="noopener noreferrer" className="text-[#8b5cf6] hover:text-[#a78bfa] underline underline-offset-2">Terms of Service</a>
+          <a href="/terms-of-service.html" target="_blank" rel="noopener noreferrer" className="text-[#D4A574] hover:text-[#a78bfa] underline underline-offset-2">Terms of Service</a>
           {' '}and{' '}
-          <a href="/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="text-[#8b5cf6] hover:text-[#a78bfa] underline underline-offset-2">Privacy Policy</a>.
+          <a href="/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="text-[#D4A574] hover:text-[#a78bfa] underline underline-offset-2">Privacy Policy</a>.
         </p>
       </div>
     </div>

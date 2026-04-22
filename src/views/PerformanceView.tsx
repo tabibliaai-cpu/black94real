@@ -23,7 +23,7 @@ function ScoreRing({ score, size = 140 }: { score: number; size?: number }) {
   const offset = circumference - progress
 
   const color =
-    score >= 70 ? '#8b5cf6' : score >= 40 ? '#ffd700' : '#ef4444'
+    score >= 70 ? '#D4A574' : score >= 40 ? '#ffd700' : '#ef4444'
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
@@ -67,7 +67,7 @@ function ScoreRing({ score, size = 140 }: { score: number; size?: number }) {
 // ── Status Badge ──────────────────────────────────────────────
 function StatusBadge({ status }: { status: CampaignPerformance['status'] }) {
   const config = {
-    active: { label: 'Active', cls: 'bg-[#8b5cf6]/10 text-[#8b5cf6] border-[#8b5cf6]/20' },
+    active: { label: 'Active', cls: 'bg-[#D4A574]/10 text-[#D4A574] border-[#D4A574]/20' },
     paused: { label: 'Paused', cls: 'bg-[#ffd700]/10 text-[#ffd700] border-[#ffd700]/20' },
     completed: { label: 'Completed', cls: 'bg-white/[0.06] text-[#94a3b8] border-white/[0.08]' },
   }
@@ -115,7 +115,7 @@ function CampaignCard({ campaign }: { campaign: CampaignPerformance }) {
               'h-full rounded-full transition-all duration-700',
               utilization >= 90
                 ? 'bg-gradient-to-r from-[#ffd700] to-[#f59e0b]'
-                : 'bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed]'
+                : 'bg-gradient-to-r from-[#D4A574] to-[#B8895C]'
             )}
             style={{ width: `${utilization}%` }}
           />
@@ -133,7 +133,7 @@ function MetricRow({ label, value, highlight }: { label: string; value: string; 
       <p
         className={cn(
           'text-[14px] font-medium',
-          highlight ? 'text-[#8b5cf6]' : 'text-[#e7e9ea]'
+          highlight ? 'text-[#D4A574]' : 'text-[#e7e9ea]'
         )}
       >
         {value}
@@ -151,14 +151,14 @@ function ChannelBar({ channel, maxImpressions }: { channel: ChannelPerformance; 
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <p className="text-[14px] font-medium text-[#e7e9ea]">{channel.channel}</p>
-        <p className="text-[12px] text-[#8b5cf6] font-medium">{channel.ctr}% CTR</p>
+        <p className="text-[12px] text-[#D4A574] font-medium">{channel.ctr}% CTR</p>
       </div>
       {/* Impressions bar */}
       <div className="flex items-center gap-2">
         <span className="text-[11px] text-[#64748b] w-14 shrink-0">Imp.</span>
         <div className="flex-1 h-2.5 rounded-full bg-white/[0.04] overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-[#8b5cf6]/70 to-[#8b5cf6] transition-all duration-700"
+            className="h-full rounded-full bg-gradient-to-r from-[#D4A574]/70 to-[#D4A574] transition-all duration-700"
             style={{ width: `${impPct}%` }}
           />
         </div>
@@ -195,7 +195,7 @@ function ABTestCard({ test }: { test: ABTest }) {
       <div className="flex items-center justify-between">
         <p className="text-[14px] font-semibold text-[#e7e9ea]">{test.name}</p>
         {test.winner && (
-          <span className="text-[12px] font-medium text-[#8b5cf6]">
+          <span className="text-[12px] font-medium text-[#D4A574]">
             Variant {test.winner} winning
           </span>
         )}
@@ -207,14 +207,14 @@ function ABTestCard({ test }: { test: ABTest }) {
           className={cn(
             'rounded-xl border p-3 space-y-2 transition-colors',
             test.winner === 'A'
-              ? 'bg-[#8b5cf6]/5 border-[#8b5cf6]/30'
+              ? 'bg-[#D4A574]/5 border-[#D4A574]/30'
               : 'bg-white/[0.02] border-white/[0.06]'
           )}
         >
           <div className="flex items-center justify-between">
             <span className="text-[13px] font-semibold text-[#e7e9ea]">Variant A</span>
             {test.winner === 'A' && (
-              <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4 h-4 text-[#D4A574]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
               </svg>
             )}
@@ -229,7 +229,7 @@ function ABTestCard({ test }: { test: ABTest }) {
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Conversions</p>
-            <p className="text-[13px] text-[#8b5cf6] font-medium">{formatNumber(test.variantA.conversions)} <span className="text-[#64748b] font-normal">({ctrA.toFixed(1)}%)</span></p>
+            <p className="text-[13px] text-[#D4A574] font-medium">{formatNumber(test.variantA.conversions)} <span className="text-[#64748b] font-normal">({ctrA.toFixed(1)}%)</span></p>
           </div>
         </div>
 
@@ -238,14 +238,14 @@ function ABTestCard({ test }: { test: ABTest }) {
           className={cn(
             'rounded-xl border p-3 space-y-2 transition-colors',
             test.winner === 'B'
-              ? 'bg-[#8b5cf6]/5 border-[#8b5cf6]/30'
+              ? 'bg-[#D4A574]/5 border-[#D4A574]/30'
               : 'bg-white/[0.02] border-white/[0.06]'
           )}
         >
           <div className="flex items-center justify-between">
             <span className="text-[13px] font-semibold text-[#e7e9ea]">Variant B</span>
             {test.winner === 'B' && (
-              <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4 h-4 text-[#D4A574]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
               </svg>
             )}
@@ -260,7 +260,7 @@ function ABTestCard({ test }: { test: ABTest }) {
           </div>
           <div className="space-y-1">
             <p className="text-[11px] text-[#64748b]">Conversions</p>
-            <p className="text-[13px] text-[#8b5cf6] font-medium">{formatNumber(test.variantB.conversions)} <span className="text-[#64748b] font-normal">({ctrB.toFixed(1)}%)</span></p>
+            <p className="text-[13px] text-[#D4A574] font-medium">{formatNumber(test.variantB.conversions)} <span className="text-[#64748b] font-normal">({ctrB.toFixed(1)}%)</span></p>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ function ABTestCard({ test }: { test: ABTest }) {
 // ── AI Suggestion Item ────────────────────────────────────────
 function SuggestionItem({ suggestion, onApply }: { suggestion: AISuggestion; onApply: () => void }) {
   const impactConfig = {
-    high: { label: 'High Impact', cls: 'bg-[#8b5cf6]/10 text-[#8b5cf6]' },
+    high: { label: 'High Impact', cls: 'bg-[#D4A574]/10 text-[#D4A574]' },
     medium: { label: 'Medium', cls: 'bg-[#ffd700]/10 text-[#ffd700]' },
     low: { label: 'Low', cls: 'bg-white/[0.06] text-[#94a3b8]' },
   }
@@ -279,8 +279,8 @@ function SuggestionItem({ suggestion, onApply }: { suggestion: AISuggestion; onA
 
   return (
     <div className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-      <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center shrink-0 mt-0.5">
-        <svg className="w-4 h-4 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <div className="w-8 h-8 rounded-lg bg-[#D4A574]/10 flex items-center justify-center shrink-0 mt-0.5">
+        <svg className="w-4 h-4 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2a7 7 0 017 7c0 3-2 5-4 6.5V18H9v-2.5C7 14 5 12 5 9a7 7 0 017-7z" />
           <path d="M9 18h6M10 22h4" />
         </svg>
@@ -295,7 +295,7 @@ function SuggestionItem({ suggestion, onApply }: { suggestion: AISuggestion; onA
         <p className="text-[13px] text-[#e7e9ea] leading-relaxed">{suggestion.text}</p>
         <button
           onClick={onApply}
-          className="mt-2 px-3 py-1 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] text-[12px] font-semibold hover:bg-[#8b5cf6]/20 transition-colors"
+          className="mt-2 px-3 py-1 rounded-lg bg-[#D4A574]/10 text-[#D4A574] text-[12px] font-semibold hover:bg-[#D4A574]/20 transition-colors"
         >
           Apply
         </button>
@@ -374,7 +374,7 @@ export function PerformanceView() {
       {/* ── Channel Performance ─────────────────────────── */}
       <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-4">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 20V10M12 20V4M6 20v-6" />
           </svg>
           <h2 className="text-[15px] font-semibold text-[#e7e9ea]">Channel Performance</h2>
@@ -391,7 +391,7 @@ export function PerformanceView() {
         </div>
         <div className="flex items-center gap-4 pt-2 border-t border-white/[0.06]">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-[#8b5cf6]/70 to-[#8b5cf6]" />
+            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-[#D4A574]/70 to-[#D4A574]" />
             <span className="text-[11px] text-[#64748b]">Impressions</span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -404,7 +404,7 @@ export function PerformanceView() {
       {/* ── A/B Test Results ────────────────────────────── */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 3H5a2 2 0 00-2 2v3M21 8V5a2 2 0 00-2-2h-3M3 16v3a2 2 0 002 2h3M16 21h3a2 2 0 002-2v-3" />
           </svg>
           <h2 className="text-[15px] font-semibold text-[#e7e9ea]">A/B Test Results</h2>
@@ -425,12 +425,12 @@ export function PerformanceView() {
       {/* ── AI Optimization Suggestions ─────────────────── */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2a7 7 0 017 7c0 3-2 5-4 6.5V18H9v-2.5C7 14 5 12 5 9a7 7 0 017-7z" />
             <path d="M9 18h6M10 22h4" />
           </svg>
           <h2 className="text-[15px] font-semibold text-[#e7e9ea]">AI Optimization</h2>
-          <span className="px-2 py-0.5 rounded-full bg-[#8b5cf6]/10 text-[#8b5cf6] text-[11px] font-medium">
+          <span className="px-2 py-0.5 rounded-full bg-[#D4A574]/10 text-[#D4A574] text-[11px] font-medium">
             Smart
           </span>
         </div>

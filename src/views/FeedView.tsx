@@ -331,7 +331,7 @@ export function FeedView() {
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#8b5cf6] rounded-full animate-tab-indicator" />
+                <div className="absolute bottom-0 inset-x-6 h-1 bg-[#D4A574] rounded-full animate-tab-indicator" />
               )}
             </button>
           ))}
@@ -341,7 +341,7 @@ export function FeedView() {
       {/* Refreshing indicator */}
       {refreshing && (
         <div className="flex items-center justify-center py-2">
-          <div className="w-5 h-5 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+          <div className="w-5 h-5 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
         </div>
       )}
 

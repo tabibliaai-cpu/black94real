@@ -54,7 +54,7 @@ export function AdsManagerView() {
         <h1 className="text-xl font-bold text-[#e7e9ea]">Ad Manager</h1>
         <button
           onClick={() => navigate('create-ad')}
-          className="px-3 py-1.5 rounded-full bg-[#8b5cf6] text-black text-[13px] font-bold hover:bg-[#7c3aed] transition-colors"
+          className="px-3 py-1.5 rounded-full bg-[#D4A574] text-black text-[13px] font-bold hover:bg-[#B8895C] transition-colors"
         >
           + Create Ad
         </button>
@@ -63,10 +63,10 @@ export function AdsManagerView() {
       {/* Stats Overview */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: 'Total Impressions', value: formatNumber(totalImpressions), icon: '👁', gradient: 'from-[#8b5cf6]/10 to-transparent', trend: '+12.5%' },
+          { label: 'Total Impressions', value: formatNumber(totalImpressions), icon: '👁', gradient: 'from-[#D4A574]/10 to-transparent', trend: '+12.5%' },
           { label: 'Total Clicks', value: formatNumber(totalClicks), icon: '👆', gradient: 'from-[#ffd700]/10 to-transparent', sub: `CTR ${overallCTR}%` },
           { label: 'Total Spend', value: formatCurrency(totalSpend), icon: '💰', gradient: 'from-orange-500/10 to-transparent' },
-          { label: 'Conversions', value: formatNumber(totalConversions), icon: '🎯', gradient: 'from-purple-500/10 to-transparent' },
+          { label: 'Conversions', value: formatNumber(totalConversions), icon: '🎯', gradient: 'from-[#D4A574]/10 to-transparent' },
         ].map((stat) => (
           <div key={stat.label} className={cn('rounded-xl bg-gradient-to-br p-4 border border-white/[0.06]', stat.gradient)}>
             <div className="flex items-center gap-1.5 mb-2">
@@ -75,7 +75,7 @@ export function AdsManagerView() {
             </div>
             <p className="text-xl font-bold text-[#e7e9ea]">{stat.value}</p>
             {(stat.trend || stat.sub) && (
-              <p className="text-[12px] text-[#8b5cf6] mt-1">{stat.trend || stat.sub}</p>
+              <p className="text-[12px] text-[#D4A574] mt-1">{stat.trend || stat.sub}</p>
             )}
           </div>
         ))}
@@ -146,7 +146,7 @@ export function AdsManagerView() {
                           'px-3 py-1 rounded-full text-[12px] font-semibold transition-colors',
                           campaign.status === 'Active'
                             ? 'bg-yellow-500/15 text-yellow-400 hover:bg-yellow-500/25'
-                            : 'bg-[#8b5cf6]/15 text-[#8b5cf6] hover:bg-[#8b5cf6]/25'
+                            : 'bg-[#D4A574]/15 text-[#D4A574] hover:bg-[#D4A574]/25'
                         )}
                       >
                         {campaign.status === 'Active' ? 'Pause' : 'Resume'}

@@ -58,7 +58,7 @@ function AdCard({ ad }: { ad: SponsoredAd }) {
       {/* Brand header */}
       <div className="flex items-center justify-between px-3.5 py-2.5">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[12px] text-[#8b5cf6] font-bold border border-white/[0.08]">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[12px] text-[#D4A574] font-bold border border-white/[0.08]">
             {ad.brandInitial}
           </div>
           <div>
@@ -173,16 +173,16 @@ function ChatAdsPanel() {
       {/* Ads Stats Bar */}
       <div className="shrink-0 px-5 py-3 flex items-center justify-between border-b border-white/[0.06] bg-[#000000]/60 backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20">
-            <svg className="w-3.5 h-3.5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D4A574]/10 border border-[#D4A574]/20">
+            <svg className="w-3.5 h-3.5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
             </svg>
-            <span className="text-[12px] font-bold text-[#8b5cf6]">{ads.length} ads</span>
+            <span className="text-[12px] font-bold text-[#D4A574]">{ads.length} ads</span>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#8b5cf6]/15 to-[#7c3aed]/15 border border-[#8b5cf6]/20">
-          <span className="text-[12px] text-[#8b5cf6] font-semibold">Earned</span>
-          <span className="text-[13px] font-bold text-[#8b5cf6]">{totalEarned}</span>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D4A574]/15 to-[#B8895C]/15 border border-[#D4A574]/20">
+          <span className="text-[12px] text-[#D4A574] font-semibold">Earned</span>
+          <span className="text-[13px] font-bold text-[#D4A574]">{totalEarned}</span>
         </div>
       </div>
 
@@ -211,7 +211,7 @@ function ChatAdsPanel() {
 
         {visibleCount < ads.length && (
           <div className="flex justify-center py-4">
-            <div className="w-5 h-5 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
           </div>
         )}
       </div>
@@ -373,13 +373,13 @@ export function ChatListView() {
           )}
         >
           <div className="flex items-center justify-center gap-2">
-            <svg className={cn('w-[18px] h-[18px]', activeTab === 'chat' ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'chat' ? 2.2 : 1.8}>
+            <svg className={cn('w-[18px] h-[18px]', activeTab === 'chat' ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'chat' ? 2.2 : 1.8}>
               <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             Chats
           </div>
           {activeTab === 'chat' && (
-            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#8b5cf6] rounded-full animate-tab-indicator" />
+            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#D4A574] rounded-full animate-tab-indicator" />
           )}
         </button>
         <button
@@ -390,7 +390,7 @@ export function ChatListView() {
           )}
         >
           <div className="flex items-center justify-center gap-2">
-            <svg className={cn('w-[18px] h-[18px]', activeTab === 'ads' ? 'text-[#8b5cf6]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'ads' ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+            <svg className={cn('w-[18px] h-[18px]', activeTab === 'ads' ? 'text-[#D4A574]' : 'text-[#94a3b8]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={activeTab === 'ads' ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
               <line x1="1" y1="10" x2="23" y2="10"/>
             </svg>
@@ -398,14 +398,14 @@ export function ChatListView() {
             <span className={cn(
               'text-[10px] px-1.5 py-0.5 rounded-full font-bold',
               activeTab === 'ads'
-                ? 'bg-[#8b5cf6]/20 text-[#8b5cf6]'
+                ? 'bg-[#D4A574]/20 text-[#D4A574]'
                 : 'bg-white/[0.06] text-[#64748b]'
             )}>
               NEW
             </span>
           </div>
           {activeTab === 'ads' && (
-            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#8b5cf6] rounded-full animate-tab-indicator" />
+            <div className="absolute bottom-0 inset-x-8 h-[3px] bg-[#D4A574] rounded-full animate-tab-indicator" />
           )}
         </button>
       </div>
@@ -453,7 +453,7 @@ export function ChatListView() {
                         badge={(chat.otherUser as any)?.badge}
                       />
                       {chat.unreadCount > 0 && (
-                        <div className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#8b5cf6] flex items-center justify-center">
+                        <div className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#D4A574] flex items-center justify-center">
                           <span className="text-[10px] font-bold text-black">{chat.unreadCount}</span>
                         </div>
                       )}
@@ -785,7 +785,7 @@ export function ChatRoomView() {
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
         {loading ? (
           <div className="flex justify-center py-8">
-            <div className="w-5 h-5 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
           </div>
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -799,7 +799,7 @@ export function ChatRoomView() {
                 <div
                   className={cn(
                     'max-w-[75%] px-4 py-3 rounded-2xl text-[15px] leading-relaxed',
-                    isMine ? 'bg-[#8b5cf6] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
+                    isMine ? 'bg-[#D4A574] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
                   )}
                 >
                   {msg.messageType === 'image' && msg.mediaUrl ? (
@@ -850,7 +850,7 @@ export function ChatRoomView() {
           <button
             onClick={handleSendImage}
             disabled={sending}
-            className="px-4 py-2 rounded-xl bg-[#8b5cf6] text-black text-[14px] font-bold hover:bg-[#7c3aed] transition-colors disabled:opacity-50"
+            className="px-4 py-2 rounded-xl bg-[#D4A574] text-black text-[14px] font-bold hover:bg-[#B8895C] transition-colors disabled:opacity-50"
           >
             {sending ? 'Sending...' : 'Send'}
           </button>

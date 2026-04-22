@@ -194,7 +194,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
               className={cn(
                 'px-5 py-1.5 rounded-full text-[15px] font-bold transition-all',
                 (text.trim() || imagePreview) && !sending && !overLimit
-                  ? 'bg-[#8b5cf6] text-black hover:bg-[#7c3aed]'
+                  ? 'bg-[#D4A574] text-black hover:bg-[#B8895C]'
                   : 'bg-white/[0.08] text-[#64748b] cursor-not-allowed'
               )}
             >
@@ -236,7 +236,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
             {/* Compressing indicator */}
             {compressing && (
               <div className="flex items-center gap-2 mt-2">
-                <div className="w-4 h-4 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
                 <span className="text-[13px] text-[#94a3b8]">Optimizing image...</span>
               </div>
             )}
@@ -270,7 +270,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                 {/* Filter toggle */}
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-1.5 text-[13px] text-[#8b5cf6] font-medium hover:underline"
+                  className="flex items-center gap-1.5 text-[13px] text-[#D4A574] font-medium hover:underline"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" strokeLinecap="round" />
@@ -292,7 +292,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                           className={cn(
                             'w-[52px] h-[52px] rounded-lg overflow-hidden border-2 transition-all',
                             selectedFilter.id === f.id
-                              ? 'border-[#8b5cf6] scale-105 shadow-lg shadow-[#8b5cf6]/20'
+                              ? 'border-[#D4A574] scale-105 shadow-lg shadow-[#D4A574]/20'
                               : 'border-transparent opacity-75 hover:opacity-100'
                           )}
                         >
@@ -306,7 +306,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                         </div>
                         <span className={cn(
                           'text-[9px] max-w-[52px] truncate',
-                          selectedFilter.id === f.id ? 'text-[#8b5cf6] font-bold' : 'text-[#94a3b8]'
+                          selectedFilter.id === f.id ? 'text-[#D4A574] font-bold' : 'text-[#94a3b8]'
                         )}>
                           {f.name}
                         </span>
@@ -339,9 +339,9 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={compressing}
-                  className="p-2 rounded-full hover:bg-[#8b5cf6]/10 transition-colors disabled:opacity-50"
+                  className="p-2 rounded-full hover:bg-[#D4A574]/10 transition-colors disabled:opacity-50"
                 >
-                  <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                  <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <rect x="3" y="3" width="18" height="18" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <circle cx="8.5" cy="8.5" r="1.5"/>
                     <path d="M21 15l-5-5L5 21" strokeLinecap="round" strokeLinejoin="round"/>
@@ -356,10 +356,10 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                 />
 
                 {/* GIF */}
-                <button className="p-2 rounded-full hover:bg-[#8b5cf6]/10 transition-colors">
-                  <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <button className="p-2 rounded-full hover:bg-[#D4A574]/10 transition-colors">
+                  <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <rect x="2" y="4" width="20" height="16" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <text x="12" y="15" textAnchor="middle" fill="#8b5cf6" fontSize="7" fontWeight="bold" fontFamily="sans-serif">GIF</text>
+                    <text x="12" y="15" textAnchor="middle" fill="#D4A574" fontSize="7" fontWeight="bold" fontFamily="sans-serif">GIF</text>
                   </svg>
                 </button>
 
@@ -368,10 +368,10 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                   onClick={() => setShowEmoji(!showEmoji)}
                   className={cn(
                     'p-2 rounded-full transition-colors',
-                    showEmoji ? 'bg-[#8b5cf6]/20' : 'hover:bg-[#8b5cf6]/10'
+                    showEmoji ? 'bg-[#D4A574]/20' : 'hover:bg-[#D4A574]/10'
                   )}
                 >
-                  <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                  <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <circle cx="12" cy="12" r="10"/>
                     <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>

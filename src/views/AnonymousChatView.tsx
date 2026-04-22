@@ -90,9 +90,9 @@ function LobbyScreen() {
     <div className="min-h-full flex flex-col relative overflow-hidden bg-[#000000]">
       {/* Gradient mesh background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#8b5cf6]/[0.06] blur-[100px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#D4A574]/[0.06] blur-[100px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#1d9bf0]/[0.04] blur-[80px]" />
-        <div className="absolute top-[40%] left-[50%] w-[40%] h-[40%] rounded-full bg-[#8b5cf6]/[0.03] blur-[60px] -translate-x-1/2" />
+        <div className="absolute top-[40%] left-[50%] w-[40%] h-[40%] rounded-full bg-[#D4A574]/[0.03] blur-[60px] -translate-x-1/2" />
       </div>
 
       {/* Back button */}
@@ -114,14 +114,14 @@ function LobbyScreen() {
 
           {/* Logo area */}
           <div className="relative mb-6">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#8b5cf6]/20 to-[#1d9bf0]/10 border border-[#8b5cf6]/15 flex items-center justify-center backdrop-blur-xl">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#D4A574]/20 to-[#1d9bf0]/10 border border-[#D4A574]/15 flex items-center justify-center backdrop-blur-xl">
               <MaskIcon className={cn(
-                'w-12 h-12 text-[#8b5cf6] transition-all duration-700',
+                'w-12 h-12 text-[#D4A574] transition-all duration-700',
                 started ? 'scale-90 opacity-60' : 'scale-100 opacity-100'
               )} />
             </div>
             {started && (
-              <div className="absolute -inset-2 rounded-3xl border border-[#8b5cf6]/20 animate-pulse-soft" />
+              <div className="absolute -inset-2 rounded-3xl border border-[#D4A574]/20 animate-pulse-soft" />
             )}
           </div>
 
@@ -136,8 +136,8 @@ function LobbyScreen() {
           {/* Identity badge */}
           {myAlias && (
             <div className="mb-8 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-              <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse-soft" />
-              <span className="text-[13px] text-[#8b5cf6] font-mono tracking-wide">{myAlias}</span>
+              <div className="w-2 h-2 rounded-full bg-[#D4A574] animate-pulse-soft" />
+              <span className="text-[13px] text-[#D4A574] font-mono tracking-wide">{myAlias}</span>
             </div>
           )}
 
@@ -146,14 +146,14 @@ function LobbyScreen() {
             <div className="flex flex-col items-center gap-4 w-full animate-fade-in">
               <div className="flex items-center gap-2.5">
                 <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574] animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574] animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574] animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
                 <span className="text-[14px] text-[#e7e9ea] font-medium">Finding someone...</span>
               </div>
               <div className="w-56 h-[3px] rounded-full bg-white/[0.06] overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[#8b5cf6] to-[#1d9bf0] rounded-full animate-matching-progress" />
+                <div className="h-full bg-gradient-to-r from-[#D4A574] to-[#1d9bf0] rounded-full animate-matching-progress" />
               </div>
               {showIcebreaker && (
                 <div className="w-full px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] animate-slide-up">
@@ -415,8 +415,8 @@ function AnonChatRoom() {
             </svg>
           </button>
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6]/20 to-[#1d9bf0]/10 border border-white/[0.08] flex items-center justify-center">
-              <MaskIcon className="w-4.5 h-4.5 text-[#8b5cf6]" />
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#D4A574]/20 to-[#1d9bf0]/10 border border-white/[0.08] flex items-center justify-center">
+              <MaskIcon className="w-4.5 h-4.5 text-[#D4A574]" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -461,7 +461,7 @@ function AnonChatRoom() {
         {isMatching && (
           <div className="flex flex-col items-center justify-center h-full gap-5">
             <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
-              <MaskIcon className="w-10 h-10 text-[#8b5cf6]/50 animate-pulse-soft" />
+              <MaskIcon className="w-10 h-10 text-[#D4A574]/50 animate-pulse-soft" />
             </div>
             <div className="flex items-center gap-1.5">
               <div className="typing-dot" />
@@ -498,7 +498,7 @@ function AnonChatRoom() {
               <div key={msg.id} className={cn('flex flex-col', msg.isMine ? 'items-end' : 'items-start')}>
                 <span className={cn(
                   'text-[11px] mb-1.5 ml-1 font-mono tracking-wide',
-                  msg.isMine ? 'text-[#8b5cf6]/50' : 'text-[#71767b]'
+                  msg.isMine ? 'text-[#D4A574]/50' : 'text-[#71767b]'
                 )}>
                   {msg.isMine ? myAlias : msg.senderAlias}
                 </span>
@@ -519,7 +519,7 @@ function AnonChatRoom() {
             <div key={msg.id} className={cn('flex flex-col', msg.isMine ? 'items-end' : 'items-start')}>
               <span className={cn(
                 'text-[11px] mb-1.5 ml-1 font-mono tracking-wide',
-                msg.isMine ? 'text-[#8b5cf6]/50' : 'text-[#71767b]'
+                msg.isMine ? 'text-[#D4A574]/50' : 'text-[#71767b]'
               )}>
                 {msg.isMine ? myAlias : msg.senderAlias}
               </span>
@@ -662,7 +662,7 @@ function AnonChatRoom() {
                   <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
                 </svg>
               </button>
-              <button onClick={handleSendImage} className="w-9 h-9 rounded-full flex items-center justify-center bg-[#8b5cf6] text-black shrink-0 active:scale-90 transition-transform" style={{ minHeight: 0, minWidth: 0 }}>
+              <button onClick={handleSendImage} className="w-9 h-9 rounded-full flex items-center justify-center bg-[#D4A574] text-black shrink-0 active:scale-90 transition-transform" style={{ minHeight: 0, minWidth: 0 }}>
                 <svg className="w-[16px] h-[16px]" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                 </svg>

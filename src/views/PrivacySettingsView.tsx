@@ -17,7 +17,7 @@ function Toggle({ checked, onToggle, disabled }: { checked: boolean; onToggle: (
       disabled={disabled}
       className={cn(
         'w-11 h-6 rounded-full transition-colors relative shrink-0',
-        checked ? 'bg-[#8b5cf6]' : 'bg-white/[0.15]',
+        checked ? 'bg-[#D4A574]' : 'bg-white/[0.15]',
         disabled && 'opacity-50 cursor-not-allowed'
       )}
     >
@@ -51,7 +51,7 @@ function SegmentedControl<T extends string>({
           className={cn(
             'flex-1 px-3 py-[6px] rounded-full text-[13px] font-semibold transition-all duration-300',
             value === opt.value
-              ? 'bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black shadow-md shadow-[#8b5cf6]/20'
+              ? 'bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black shadow-md shadow-[#D4A574]/20'
               : 'text-[#94a3b8] hover:text-[#c0c0c0]'
           )}
         >
@@ -195,8 +195,8 @@ export function PrivacySettingsView() {
         {/* Name Visibility */}
         <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#D4A574]/10 flex items-center justify-center">
+              <svg className="w-[18px] h-[18px] text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
@@ -215,10 +215,10 @@ export function PrivacySettingsView() {
             />
           </div>
           <div className="flex items-center gap-2 ml-12">
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'public' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'public' ? 'bg-[#D4A574]/15 text-[#D4A574]' : 'text-[#94a3b8]')}>
               Public
             </span>
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'private' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', nameVisibility === 'private' ? 'bg-[#D4A574]/15 text-[#D4A574]' : 'text-[#94a3b8]')}>
               Private
             </span>
           </div>
@@ -227,8 +227,8 @@ export function PrivacySettingsView() {
         {/* DM Permission */}
         <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#D4A574]/10 flex items-center justify-center">
+              <svg className="w-[18px] h-[18px] text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
               </svg>
             </div>
@@ -257,8 +257,8 @@ export function PrivacySettingsView() {
         {/* Search Visibility */}
         <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
-              <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#D4A574]/10 flex items-center justify-center">
+              <svg className="w-[18px] h-[18px] text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
               </svg>
@@ -277,10 +277,10 @@ export function PrivacySettingsView() {
             />
           </div>
           <div className="flex items-center gap-2 ml-12">
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'public' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'public' ? 'bg-[#D4A574]/15 text-[#D4A574]' : 'text-[#94a3b8]')}>
               Public
             </span>
-            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'private' ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' : 'text-[#94a3b8]')}>
+            <span className={cn('text-[12px] font-medium px-2.5 py-1 rounded-full', searchVisibility === 'private' ? 'bg-[#D4A574]/15 text-[#D4A574]' : 'text-[#94a3b8]')}>
               Private
             </span>
           </div>
@@ -290,8 +290,8 @@ export function PrivacySettingsView() {
         {isCreatorOrPersonal && (
           <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#8b5cf6]/10 flex items-center justify-center">
-                <svg className="w-[18px] h-[18px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-9 h-9 rounded-full bg-[#D4A574]/10 flex items-center justify-center">
+                <svg className="w-[18px] h-[18px] text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="1" x2="12" y2="23" />
                   <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                 </svg>
@@ -311,7 +311,7 @@ export function PrivacySettingsView() {
               <div className="ml-12 animate-fade-in">
                 <label className="text-[13px] text-[#94a3b8] mb-1.5 block">Chat price</label>
                 <div className="flex items-center gap-2">
-                  <span className="text-[15px] font-bold text-[#8b5cf6]">₹</span>
+                  <span className="text-[15px] font-bold text-[#D4A574]">₹</span>
                   <input
                     type="number"
                     min={1}
@@ -319,12 +319,12 @@ export function PrivacySettingsView() {
                     value={paidChatPrice}
                     onChange={(e) => setPaidChatPrice(e.target.value)}
                     onBlur={handlePaidChatPrice}
-                    className="w-28 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[15px] text-[#e7e9ea] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                    className="w-28 bg-transparent border border-white/[0.08] rounded-lg px-3 py-2 text-[15px] text-[#e7e9ea] outline-none focus:border-[#D4A574]/50 transition-colors"
                   />
                   <button
                     onClick={handlePaidChatPrice}
                     disabled={saving}
-                    className="px-3 py-2 rounded-lg text-[13px] font-bold bg-[#8b5cf6]/15 text-[#8b5cf6] hover:bg-[#8b5cf6]/25 transition-colors disabled:opacity-50"
+                    className="px-3 py-2 rounded-lg text-[13px] font-bold bg-[#D4A574]/15 text-[#D4A574] hover:bg-[#D4A574]/25 transition-colors disabled:opacity-50"
                   >
                     Save
                   </button>
@@ -362,7 +362,7 @@ export function PrivacySettingsView() {
         {/* Saving indicator */}
         {saving && (
           <div className="flex items-center justify-center gap-2 animate-fade-in">
-            <div className="w-4 h-4 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
             <span className="text-[13px] text-[#94a3b8]">Saving...</span>
           </div>
         )}

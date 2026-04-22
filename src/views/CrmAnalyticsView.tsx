@@ -46,17 +46,17 @@ export function CrmAnalyticsView() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: 'Total Revenue', value: '—', gradient: 'from-[#8b5cf6]/10 to-transparent', change: '' },
+          { label: 'Total Revenue', value: '—', gradient: 'from-[#D4A574]/10 to-transparent', change: '' },
           { label: 'Total Leads', value: '0', gradient: 'from-blue-500/10 to-transparent', change: '' },
           { label: 'Conversion Rate', value: '0%', gradient: 'from-[#ffd700]/10 to-transparent', change: '' },
-          { label: 'Avg Deal Size', value: '—', gradient: 'from-purple-500/10 to-transparent', change: '' },
+          { label: 'Avg Deal Size', value: '—', gradient: 'from-[#D4A574]/10 to-transparent', change: '' },
           { label: 'Customer LTV', value: '—', gradient: 'from-orange-500/10 to-transparent', change: '' },
           { label: 'Active Customers', value: '0', gradient: 'from-cyan-500/10 to-transparent', change: '' },
         ].map((kpi) => (
           <div key={kpi.label} className={cn('rounded-xl bg-gradient-to-br p-4 border border-white/[0.06]', kpi.gradient)}>
             <p className="text-[12px] text-[#94a3b8] font-medium">{kpi.label}</p>
             <p className="text-xl font-bold text-[#e7e9ea] mt-1">{kpi.value}</p>
-            {kpi.change && <p className="text-[11px] text-[#8b5cf6] mt-0.5">{kpi.change} ↑</p>}
+            {kpi.change && <p className="text-[11px] text-[#D4A574] mt-0.5">{kpi.change} ↑</p>}
           </div>
         ))}
       </div>
@@ -114,10 +114,10 @@ export function CrmAnalyticsView() {
       </div>
 
       {/* AI Recommendations */}
-      <div className="rounded-xl bg-gradient-to-br from-[#1a1a2a] to-[#110f1a] border border-purple-500/20 p-4">
+      <div className="rounded-xl bg-gradient-to-br from-[#1a1a2a] to-[#110f1a] border border-[#D4A574]/20 p-4">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">🧠</span>
-          <h3 className="text-sm font-semibold text-purple-300">AI Recommendations</h3>
+          <h3 className="text-sm font-semibold text-[#E8C4A0]">AI Recommendations</h3>
         </div>
         <div className="space-y-3">
           {AI_RECOMMENDATIONS.length === 0 ? (
@@ -127,7 +127,7 @@ export function CrmAnalyticsView() {
           ) : (
             AI_RECOMMENDATIONS.map((rec, i) => (
               <div key={i} className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574] mt-1.5 shrink-0" />
                 <p className="text-[13px] text-[#c0c0c0] leading-relaxed">{rec}</p>
               </div>
             ))

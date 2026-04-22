@@ -19,7 +19,7 @@ const STATUS_LABELS: Record<string, string> = {
 const STATUS_COLORS: Record<string, string> = {
   pending: 'bg-yellow-500',
   confirmed: 'bg-blue-500',
-  processing: 'bg-purple-500',
+  processing: 'bg-[#D4A574]',
   shipped: 'bg-cyan-500',
   delivered: 'bg-green-500',
   cancelled: 'bg-red-500',
@@ -29,7 +29,7 @@ const STATUS_COLORS: Record<string, string> = {
 const STATUS_TEXT_COLORS: Record<string, string> = {
   pending: 'text-yellow-400',
   confirmed: 'text-blue-400',
-  processing: 'text-purple-400',
+  processing: 'text-[#D4A574]',
   shipped: 'text-cyan-400',
   delivered: 'text-green-400',
   cancelled: 'text-red-400',
@@ -64,15 +64,15 @@ function OrderTimeline({ order }: { order: ShopOrder }) {
             <div key={step} className="relative mb-6 last:mb-0">
               {/* Vertical line */}
               {!isLast && (
-                <div className={`absolute left-[-21px] top-5 w-0.5 h-full ${isCompleted ? 'bg-[#8b5cf6]' : 'bg-white/[0.08]'}`} />
+                <div className={`absolute left-[-21px] top-5 w-0.5 h-full ${isCompleted ? 'bg-[#D4A574]' : 'bg-white/[0.08]'}`} />
               )}
 
               {/* Dot */}
               <div className={`absolute left-[-25px] top-1 w-3 h-3 rounded-full border-2 transition-all ${
                 isCompleted
-                  ? 'bg-[#8b5cf6] border-[#8b5cf6]'
+                  ? 'bg-[#D4A574] border-[#D4A574]'
                   : isCurrent
-                    ? 'border-[#8b5cf6] bg-[#000000]'
+                    ? 'border-[#D4A574] bg-[#000000]'
                     : 'border-[#64748b] bg-[#000000]'
               }`} />
 
@@ -129,7 +129,7 @@ export function OrderTrackingView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-53px-50px)]">
-        <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
       </div>
     )
   }
@@ -147,7 +147,7 @@ export function OrderTrackingView() {
         <p className="text-[14px] text-[#94a3b8] mb-6">Your order history will appear here</p>
         <button
           onClick={() => useAppStore.getState().navigate('store')}
-          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px]"
+          className="px-8 py-3 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px]"
         >
           Start Shopping
         </button>
@@ -174,7 +174,7 @@ export function OrderTrackingView() {
                 onClick={() => setSelectedOrder(o)}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${
                   selectedOrder?.id === o.id
-                    ? 'bg-[#8b5cf6] text-black'
+                    ? 'bg-[#D4A574] text-black'
                     : 'bg-white/[0.06] text-[#94a3b8] hover:bg-white/[0.1]'
                 }`}
               >
@@ -228,7 +228,7 @@ export function OrderTrackingView() {
             </div>
             <div className="flex justify-between text-[15px] font-bold pt-1">
               <span className="text-[#e7e9ea]">Total</span>
-              <span className="text-[#8b5cf6]">₹{order.total.toLocaleString()}</span>
+              <span className="text-[#D4A574]">₹{order.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -250,7 +250,7 @@ export function OrderTrackingView() {
           <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
             <h3 className="text-[14px] font-bold text-[#e7e9ea] mb-2">Tracking</h3>
             <p className="text-[13px] text-[#94a3b8]">Partner: {order.trackingPartner || 'N/A'}</p>
-            <p className="text-[13px] text-[#8b5cf6] font-mono">{order.trackingNumber}</p>
+            <p className="text-[13px] text-[#D4A574] font-mono">{order.trackingNumber}</p>
           </div>
         )}
       </div>

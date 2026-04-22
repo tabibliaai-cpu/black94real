@@ -131,7 +131,7 @@ export function CheckoutView() {
           {STEPS.map((s, i) => (
             <div key={s} className="flex items-center gap-2 flex-1">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold transition-all ${
-                i <= step ? 'bg-[#8b5cf6] text-black' : 'bg-white/[0.06] text-[#94a3b8]'
+                i <= step ? 'bg-[#D4A574] text-black' : 'bg-white/[0.06] text-[#94a3b8]'
               }`}>
                 {i < step ? (
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
@@ -143,7 +143,7 @@ export function CheckoutView() {
                 {s}
               </span>
               {i < STEPS.length - 1 && (
-                <div className={`flex-1 h-0.5 rounded-full ${i < step ? 'bg-[#8b5cf6]' : 'bg-white/[0.06]'}`} />
+                <div className={`flex-1 h-0.5 rounded-full ${i < step ? 'bg-[#D4A574]' : 'bg-white/[0.06]'}`} />
               )}
             </div>
           ))}
@@ -172,7 +172,7 @@ export function CheckoutView() {
                   value={address[field.key]}
                   onChange={(e) => setAddress((prev) => ({ ...prev, [field.key]: e.target.value }))}
                   placeholder={field.placeholder}
-                  className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#8b5cf6]/50 transition-colors"
+                  className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#D4A574]/50 transition-colors"
                 />
               </div>
             ))}
@@ -195,16 +195,16 @@ export function CheckoutView() {
                   }}
                   className={`w-full p-4 rounded-xl border transition-all text-left ${
                     isSelected
-                      ? 'border-[#8b5cf6] bg-[#8b5cf6]/5'
+                      ? 'border-[#D4A574] bg-[#D4A574]/5'
                       : 'border-white/[0.06] bg-[#000000] hover:border-white/[0.12]'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isSelected ? 'border-[#8b5cf6]' : 'border-[#64748b]'
+                        isSelected ? 'border-[#D4A574]' : 'border-[#64748b]'
                       }`}>
-                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]" />}
+                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-[#D4A574]" />}
                       </div>
                       <div>
                         <p className="text-[14px] font-semibold text-[#e7e9ea]">{partner.name}</p>
@@ -214,7 +214,7 @@ export function CheckoutView() {
                         </p>
                       </div>
                     </div>
-                    <span className="text-[15px] font-bold text-[#8b5cf6]">
+                    <span className="text-[15px] font-bold text-[#D4A574]">
                       {cost === 0 ? 'FREE' : `₹${cost}`}
                     </span>
                   </div>
@@ -233,7 +233,7 @@ export function CheckoutView() {
             <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping To</h3>
-                <button onClick={() => setStep(0)} className="text-[12px] text-[#8b5cf6]">Edit</button>
+                <button onClick={() => setStep(0)} className="text-[12px] text-[#D4A574]">Edit</button>
               </div>
               <p className="text-[14px] text-[#e7e9ea] font-medium">{address.name}</p>
               <p className="text-[13px] text-[#94a3b8]">{address.line1}</p>
@@ -246,7 +246,7 @@ export function CheckoutView() {
             <div className="p-4 rounded-xl bg-[#000000] border border-white/[0.06]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-[13px] font-semibold text-[#94a3b8] uppercase tracking-wider">Shipping</h3>
-                <button onClick={() => setStep(1)} className="text-[12px] text-[#8b5cf6]">Edit</button>
+                <button onClick={() => setStep(1)} className="text-[12px] text-[#D4A574]">Edit</button>
               </div>
               <p className="text-[14px] text-[#e7e9ea] font-medium">{selectedPartner?.name}</p>
               <p className="text-[13px] text-[#94a3b8]">Estimated: {selectedPartner?.estimatedDays} days</p>
@@ -287,7 +287,7 @@ export function CheckoutView() {
               </div>
               <div className="border-t border-white/[0.06] pt-2 flex justify-between">
                 <span className="text-[16px] font-bold text-[#e7e9ea]">Total</span>
-                <span className="text-[20px] font-bold text-[#8b5cf6]">₹{total.toLocaleString()}</span>
+                <span className="text-[20px] font-bold text-[#D4A574]">₹{total.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -308,7 +308,7 @@ export function CheckoutView() {
           {step < 2 ? (
             <button
               onClick={handleNext}
-              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all"
+              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20 active:scale-[0.98] transition-all"
             >
               Continue
             </button>
@@ -316,7 +316,7 @@ export function CheckoutView() {
             <button
               onClick={handlePlaceOrder}
               disabled={placing}
-              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-bold text-[15px] shadow-lg shadow-[#8b5cf6]/20 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="flex-1 py-3.5 rounded-full bg-gradient-to-r from-[#D4A574] to-[#B8895C] text-black font-bold text-[15px] shadow-lg shadow-[#D4A574]/20 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {placing ? (
                 <span className="flex items-center justify-center gap-2">

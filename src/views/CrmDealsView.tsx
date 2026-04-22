@@ -57,7 +57,7 @@ export function CrmDealsView() {
               }])
               toast.success(`Deal "${name.trim()}" created`)
             }}
-            className="px-3 py-1.5 rounded-full bg-[#8b5cf6] text-black text-[13px] font-bold hover:bg-[#7c3aed] transition-colors"
+            className="px-3 py-1.5 rounded-full bg-[#D4A574] text-black text-[13px] font-bold hover:bg-[#B8895C] transition-colors"
           >
             + New Deal
           </button>
@@ -74,11 +74,11 @@ export function CrmDealsView() {
               {/* Column Header */}
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className={cn('w-2.5 h-2.5 rounded-full', stage === 'New' ? 'bg-blue-400' : stage === 'Contacted' ? 'bg-yellow-400' : stage === 'Proposal' ? 'bg-purple-400' : stage === 'Negotiation' ? 'bg-orange-400' : stage === 'Won' ? 'bg-[#8b5cf6]' : 'bg-red-400')} />
+                  <span className={cn('w-2.5 h-2.5 rounded-full', stage === 'New' ? 'bg-blue-400' : stage === 'Contacted' ? 'bg-yellow-400' : stage === 'Proposal' ? 'bg-[#D4A574]' : stage === 'Negotiation' ? 'bg-orange-400' : stage === 'Won' ? 'bg-[#D4A574]' : 'bg-red-400')} />
                   <h3 className="text-[13px] font-semibold text-[#e7e9ea]">{stage}</h3>
                   <span className="text-[11px] text-[#64748b] bg-white/[0.06] px-1.5 py-0.5 rounded-full">{stageDeals.length}</span>
                 </div>
-                <span className="text-[11px] text-[#8b5cf6] font-semibold">{formatCurrency(stageValue)}</span>
+                <span className="text-[11px] text-[#D4A574] font-semibold">{formatCurrency(stageValue)}</span>
               </div>
 
               {/* Cards */}
@@ -86,7 +86,7 @@ export function CrmDealsView() {
                 {stageDeals.map((deal) => (
                   <div key={deal.id} className="rounded-xl bg-[#000000] border border-white/[0.06] p-3">
                     <h4 className="text-[14px] font-semibold text-[#e7e9ea] leading-snug">{deal.name}</h4>
-                    <p className="text-[16px] font-bold text-[#8b5cf6] mt-1">{formatCurrency(deal.value)}</p>
+                    <p className="text-[16px] font-bold text-[#D4A574] mt-1">{formatCurrency(deal.value)}</p>
                     <p className="text-[12px] text-[#94a3b8] mt-1.5">{deal.contactName}</p>
                     <p className="text-[11px] text-[#64748b] mt-1">{daysSince(deal.createdAt)}d in stage</p>
 

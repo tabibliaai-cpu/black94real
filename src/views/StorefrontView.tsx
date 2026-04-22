@@ -62,7 +62,7 @@ export function StorefrontView() {
   return (
     <div className="min-h-[calc(100vh-53px-50px)] pb-24">
       {/* Cover */}
-      <div className="relative h-32 bg-gradient-to-br from-[#8b5cf6]/30 via-[#110f1a] to-[#1a1a2e]">
+      <div className="relative h-32 bg-gradient-to-br from-[#D4A574]/30 via-[#110f1a] to-[#1a1a2e]">
         <div className="absolute inset-0 bg-[#000000]/30" />
         <button
           onClick={() => navigate('store')}
@@ -81,7 +81,7 @@ export function StorefrontView() {
             {businessImage ? (
               <img src={businessImage} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-[#D4A574] to-[#B8895C] flex items-center justify-center">
                 <span className="text-2xl font-bold text-black">{businessName[0]?.toUpperCase()}</span>
               </div>
             )}
@@ -89,7 +89,7 @@ export function StorefrontView() {
           <div className="pb-1">
             <div className="flex items-center gap-1.5">
               <h1 className="text-[18px] font-bold text-[#e7e9ea]">{businessName}</h1>
-              <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
@@ -104,7 +104,7 @@ export function StorefrontView() {
             <p className="text-[11px] text-[#94a3b8]">Products</p>
           </div>
           <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3 text-center">
-            <p className="text-[18px] font-bold text-[#8b5cf6]">{totalSold}</p>
+            <p className="text-[18px] font-bold text-[#D4A574]">{totalSold}</p>
             <p className="text-[11px] text-[#94a3b8]">Sales</p>
           </div>
           <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3 text-center">
@@ -120,7 +120,7 @@ export function StorefrontView() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin mb-3" />
+            <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin mb-3" />
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-16">
@@ -136,14 +136,14 @@ export function StorefrontView() {
 
         {loadingMore && (
           <div className="flex justify-center py-8">
-            <div className="w-6 h-6 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
           </div>
         )}
 
         {hasMore && !loading && (
           <button
             onClick={loadMore}
-            className="w-full py-3 mt-4 rounded-full bg-white/[0.06] text-[14px] font-semibold text-[#8b5cf6] hover:bg-white/[0.1] transition-colors"
+            className="w-full py-3 mt-4 rounded-full bg-white/[0.06] text-[14px] font-semibold text-[#D4A574] hover:bg-white/[0.1] transition-colors"
           >
             Load More
           </button>

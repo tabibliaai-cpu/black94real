@@ -52,7 +52,7 @@ export function MyStoreView() {
   const statusColors: Record<string, string> = {
     pending: 'bg-yellow-500/15 text-yellow-400',
     confirmed: 'bg-blue-500/15 text-blue-400',
-    processing: 'bg-purple-500/15 text-purple-400',
+    processing: 'bg-[#D4A574]/15 text-[#D4A574]',
     shipped: 'bg-cyan-500/15 text-cyan-400',
     delivered: 'bg-green-500/15 text-green-400',
     cancelled: 'bg-red-500/15 text-red-400',
@@ -64,8 +64,8 @@ export function MyStoreView() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 px-4 mt-3">
         <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-3.5 text-center">
-          <div className="w-9 h-9 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center mx-auto mb-2">
-            <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+          <div className="w-9 h-9 rounded-lg bg-[#D4A574]/10 flex items-center justify-center mx-auto mb-2">
+            <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 01-8 0" />
@@ -103,7 +103,7 @@ export function MyStoreView() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2 rounded-full text-[13px] font-semibold capitalize transition-all ${
-              activeTab === tab ? 'bg-[#8b5cf6] text-black shadow-md' : 'text-[#94a3b8] hover:text-[#e7e9ea]'
+              activeTab === tab ? 'bg-[#D4A574] text-black shadow-md' : 'text-[#94a3b8] hover:text-[#e7e9ea]'
             }`}
           >
             {tab} ({tab === 'products' ? products.length : orders.length})
@@ -115,7 +115,7 @@ export function MyStoreView() {
       <div className="mt-4 px-4">
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#8b5cf6]/30 border-t-[#8b5cf6] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#D4A574]/30 border-t-[#D4A574] rounded-full animate-spin" />
           </div>
         ) : activeTab === 'products' ? (
           <div className="space-y-2">
@@ -124,7 +124,7 @@ export function MyStoreView() {
                 <p className="text-[14px] text-[#94a3b8] mb-4">No products yet</p>
                 <button
                   onClick={() => navigate('add-product')}
-                  className="px-6 py-2.5 rounded-full bg-[#8b5cf6] text-black font-bold text-sm"
+                  className="px-6 py-2.5 rounded-full bg-[#D4A574] text-black font-bold text-sm"
                 >
                   Add Your First Product
                 </button>
@@ -141,7 +141,7 @@ export function MyStoreView() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[14px] font-semibold text-[#e7e9ea] line-clamp-1">{product.name}</p>
-                    <p className="text-[13px] font-semibold text-[#8b5cf6]">₹{product.price.toLocaleString()}</p>
+                    <p className="text-[13px] font-semibold text-[#D4A574]">₹{product.price.toLocaleString()}</p>
                     <p className="text-[11px] text-[#94a3b8]">{product.stock} in stock • {product.soldCount} sold</p>
                   </div>
                   <div className="flex gap-1">
@@ -192,7 +192,7 @@ export function MyStoreView() {
                     </div>
                     <p className="text-[13px] text-[#e7e9ea] line-clamp-1">{order.buyerName}</p>
                     <p className="text-[12px] text-[#94a3b8]">{items.map((i) => i.productName).join(', ')}</p>
-                    <p className="text-[14px] font-bold text-[#8b5cf6] mt-1">₹{order.total.toLocaleString()}</p>
+                    <p className="text-[14px] font-bold text-[#D4A574] mt-1">₹{order.total.toLocaleString()}</p>
                   </button>
                 )
               })
@@ -204,7 +204,7 @@ export function MyStoreView() {
       {/* FAB: Add Product */}
       <button
         onClick={() => navigate('add-product')}
-        className="fixed bottom-[68px] right-4 z-20 w-14 h-14 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#8b5cf6]/30 hover:scale-110 active:scale-90 transition-all"
+        className="fixed bottom-[68px] right-4 z-20 w-14 h-14 rounded-full bg-gradient-to-br from-[#D4A574] to-[#B8895C] flex items-center justify-center shadow-lg shadow-[#D4A574]/30 hover:scale-110 active:scale-90 transition-all"
       >
         <svg className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
           <path d="M12 5v14M5 12h14" />

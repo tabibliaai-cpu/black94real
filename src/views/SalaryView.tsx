@@ -83,7 +83,7 @@ export function SalaryView() {
             className={cn(
               'shrink-0 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200',
               selectedMonth === idx
-                ? 'bg-[#8b5cf6] text-black'
+                ? 'bg-[#D4A574] text-black'
                 : 'bg-white/[0.04] text-[#94a3b8] hover:bg-white/[0.08] hover:text-[#e7e9ea]'
             )}
           >
@@ -126,8 +126,8 @@ export function SalaryView() {
                   className="w-full text-left p-4"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-11 h-11 rounded-full bg-[#8b5cf6]/15 flex items-center justify-center shrink-0">
-                      <span className="text-[14px] font-bold text-[#8b5cf6]">
+                    <div className="w-11 h-11 rounded-full bg-[#D4A574]/15 flex items-center justify-center shrink-0">
+                      <span className="text-[14px] font-bold text-[#D4A574]">
                         {member.avatar}
                       </span>
                     </div>
@@ -141,7 +141,7 @@ export function SalaryView() {
                             className={cn(
                               'px-2 py-0.5 rounded-full text-[11px] font-medium',
                               member.paymentStatus === 'paid'
-                                ? 'bg-[#8b5cf6]/10 text-[#8b5cf6]'
+                                ? 'bg-[#D4A574]/10 text-[#D4A574]'
                                 : 'bg-[#ffd700]/10 text-[#ffd700]'
                             )}
                           >
@@ -185,7 +185,7 @@ export function SalaryView() {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-[12px] text-[#94a3b8] font-semibold">Total</span>
-                          <span className="text-[13px] text-[#8b5cf6] font-bold">
+                          <span className="text-[13px] text-[#D4A574] font-bold">
                             {formatCurrency(total)}
                           </span>
                         </div>
@@ -213,7 +213,7 @@ export function SalaryView() {
                             </div>
                             <div className="flex items-center gap-3 shrink-0 ml-3">
                               <span className="text-[12px] text-[#94a3b8]">{comm.percentage}%</span>
-                              <span className="text-[13px] text-[#8b5cf6] font-medium w-16 text-right">
+                              <span className="text-[13px] text-[#D4A574] font-medium w-16 text-right">
                                 {formatCurrency(comm.amount)}
                               </span>
                             </div>
@@ -258,7 +258,7 @@ export function SalaryView() {
                       {member.paymentStatus === 'pending' && (
                         <button
                           onClick={() => handleMarkPaid(member.id, member.name)}
-                          className="px-4 py-1.5 rounded-lg bg-[#8b5cf6] text-black text-[13px] font-semibold hover:bg-[#7c3aed] transition-colors active:scale-[0.97]"
+                          className="px-4 py-1.5 rounded-lg bg-[#D4A574] text-black text-[13px] font-semibold hover:bg-[#B8895C] transition-colors active:scale-[0.97]"
                         >
                           Mark as Paid
                         </button>
@@ -276,7 +276,7 @@ export function SalaryView() {
       {/* ── Payroll Summary ─────────────────────────────── */}
       <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-3">
         <div className="flex items-center gap-2 mb-1">
-          <svg className="w-5 h-5 text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="18" rx="2" />
             <path d="M2 9h20" />
             <path d="M2 15h20" />
@@ -304,14 +304,14 @@ export function SalaryView() {
           </div>
           <div className="flex items-center justify-between py-2.5 border-t border-white/[0.06]">
             <span className="text-[15px] font-bold text-[#e7e9ea]">Grand Total</span>
-            <span className="text-[18px] font-bold text-[#8b5cf6]">
+            <span className="text-[18px] font-bold text-[#D4A574]">
               {formatCurrency(summary.grandTotal)}
             </span>
           </div>
         </div>
         <button
           onClick={handleProcessPayroll}
-          className="w-full py-2.5 rounded-xl bg-[#8b5cf6] text-black text-[15px] font-bold hover:bg-[#7c3aed] active:scale-[0.98] transition-all duration-200"
+          className="w-full py-2.5 rounded-xl bg-[#D4A574] text-black text-[15px] font-bold hover:bg-[#B8895C] active:scale-[0.98] transition-all duration-200"
         >
           Process Payroll
         </button>

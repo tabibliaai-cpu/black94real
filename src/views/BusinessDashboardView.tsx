@@ -5,10 +5,10 @@ import { cn } from '@/lib/utils'
 import { formatCurrency, type Lead } from '@/lib/crm'
 
 const QUICK_ACTIONS = [
-  { label: 'Manage Ads', view: 'ads-manager' as const, icon: '📢', color: 'from-[#8b5cf6]/10 to-transparent' },
+  { label: 'Manage Ads', view: 'ads-manager' as const, icon: '📢', color: 'from-[#D4A574]/10 to-transparent' },
   { label: 'View Leads', view: 'crm-leads' as const, icon: '👥', color: 'from-blue-500/10 to-transparent' },
   { label: 'Affiliate Badges', view: 'affiliates' as const, icon: '🏆', color: 'from-[#ffd700]/10 to-transparent' },
-  { label: 'Create Campaign', view: 'create-ad' as const, icon: '🚀', color: 'from-purple-500/10 to-transparent' },
+  { label: 'Create Campaign', view: 'create-ad' as const, icon: '🚀', color: 'from-[#D4A574]/10 to-transparent' },
 ]
 
 const AI_INSIGHTS: string[] = []
@@ -32,9 +32,9 @@ export function BusinessDashboardView() {
       </div>
 
       {/* Greeting */}
-      <div className="rounded-xl bg-gradient-to-br from-[#8b5cf6]/10 via-[#110f1a] to-[#ffd700]/5 border border-white/[0.06] p-4">
+      <div className="rounded-xl bg-gradient-to-br from-[#D4A574]/10 via-[#110f1a] to-[#ffd700]/5 border border-white/[0.06] p-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-black font-bold text-lg">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4A574] to-[#B8895C] flex items-center justify-center text-black font-bold text-lg">
             {username[0]?.toUpperCase()}
           </div>
           <div>
@@ -51,7 +51,7 @@ export function BusinessDashboardView() {
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: 'Total Revenue', value: '—', icon: '💵', gradient: 'from-[#8b5cf6]/10 to-transparent' },
+          { label: 'Total Revenue', value: '—', icon: '💵', gradient: 'from-[#D4A574]/10 to-transparent' },
           { label: 'Active Leads', value: '0', icon: '🎯', gradient: 'from-blue-500/10 to-transparent' },
           { label: 'Conversion Rate', value: '0%', icon: '📈', gradient: 'from-[#ffd700]/10 to-transparent' },
           { label: 'Satisfaction', value: '—', icon: '⭐', gradient: 'from-orange-500/10 to-transparent' },
@@ -105,7 +105,7 @@ export function BusinessDashboardView() {
       <div className="rounded-xl bg-[#000000] border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-[#e7e9ea]">Recent Leads</h3>
-          <button onClick={() => navigate('crm-leads')} className="text-[12px] text-[#8b5cf6] font-semibold">View all</button>
+          <button onClick={() => navigate('crm-leads')} className="text-[12px] text-[#D4A574] font-semibold">View all</button>
         </div>
         <div className="space-y-3">
           {recentLeads.length === 0 ? (
@@ -118,7 +118,7 @@ export function BusinessDashboardView() {
           ) : (
             recentLeads.map((lead) => (
               <div key={lead.id} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[13px] text-[#8b5cf6] font-bold shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center text-[13px] text-[#D4A574] font-bold shrink-0">
                   {lead.name[0]}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ export function BusinessDashboardView() {
                 </div>
                 <div className={cn(
                   'text-[12px] font-bold px-2 py-0.5 rounded-full shrink-0',
-                  lead.aiScore > 80 ? 'bg-[#8b5cf6]/15 text-[#8b5cf6]' :
+                  lead.aiScore > 80 ? 'bg-[#D4A574]/15 text-[#D4A574]' :
                   lead.aiScore >= 50 ? 'bg-[#ffd700]/15 text-[#ffd700]' :
                   'bg-red-500/15 text-red-400'
                 )}>
@@ -140,10 +140,10 @@ export function BusinessDashboardView() {
       </div>
 
       {/* AI Insights */}
-      <div className="rounded-xl bg-gradient-to-br from-[#1a1a2a] to-[#110f1a] border border-purple-500/20 p-4">
+      <div className="rounded-xl bg-gradient-to-br from-[#1a1a2a] to-[#110f1a] border border-[#D4A574]/20 p-4">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">🧠</span>
-          <h3 className="text-sm font-semibold text-purple-300">AI Insights</h3>
+          <h3 className="text-sm font-semibold text-[#E8C4A0]">AI Insights</h3>
         </div>
         <div className="space-y-3">
           {AI_INSIGHTS.length === 0 ? (
@@ -153,7 +153,7 @@ export function BusinessDashboardView() {
           ) : (
             AI_INSIGHTS.map((insight, i) => (
               <div key={i} className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[#D4A574] mt-1.5 shrink-0" />
                 <p className="text-[13px] text-[#c0c0c0] leading-relaxed">{insight}</p>
               </div>
             ))

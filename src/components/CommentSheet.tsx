@@ -344,8 +344,8 @@ export function CommentSheet({
         <div className="flex items-center justify-between max-w-[440px] px-2 py-1.5 border-b border-white/[0.06] shrink-0">
           {/* Reply */}
           <button className="flex items-center gap-1 group">
-            <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-              <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+              <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
               </svg>
             </div>
@@ -381,8 +381,8 @@ export function CommentSheet({
 
           {/* Views */}
           <button className="flex items-center gap-1 group">
-            <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-              <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+              <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
                 <polyline points="17 6 23 6 23 12"/>
               </svg>
@@ -393,13 +393,13 @@ export function CommentSheet({
           {/* Bookmark */}
           <div className="flex items-center">
             <button className="group" onClick={handleBookmark}>
-              <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+              <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
                 {isBookmarked ? (
-                  <svg className={cn('w-[18px] h-[18px] text-[#8b5cf6]', bookmarkAnim && 'animate-bookmark-pop')} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                  <svg className={cn('w-[18px] h-[18px] text-[#D4A574]', bookmarkAnim && 'animate-bookmark-pop')} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
                   </svg>
                 ) : (
-                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
                   </svg>
                 )}
@@ -450,8 +450,8 @@ export function CommentSheet({
                   <div className="flex items-center gap-6 mt-1.5 -ml-2">
                     {/* Reply */}
                     <button className="flex items-center gap-1 group">
-                      <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                        <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                      <div className="p-2 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+                        <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                           <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
                         </svg>
                       </div>
@@ -497,8 +497,8 @@ export function CommentSheet({
 
                     {/* Views */}
                     <button className="flex items-center gap-1 group">
-                      <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                        <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                      <div className="p-2 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+                        <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
                           <polyline points="17 6 23 6 23 12"/>
                         </svg>
@@ -510,13 +510,13 @@ export function CommentSheet({
                       onClick={() => handleBookmarkComment(comment.id)}
                       className="flex items-center gap-1 group"
                     >
-                      <div className="p-2 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+                      <div className="p-2 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
                         {bookmarkMap[comment.id] ? (
-                          <svg className="w-[16px] h-[16px] text-[#8b5cf6]" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                          <svg className="w-[16px] h-[16px] text-[#D4A574]" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                             <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
                           </svg>
                         ) : (
-                          <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                          <svg className="w-[16px] h-[16px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                             <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
                           </svg>
                         )}
@@ -531,7 +531,7 @@ export function CommentSheet({
           {/* Sending indicator */}
           {sending && (
             <div className="flex items-center gap-2 py-3 animate-fade-in">
-              <div className="w-2 h-2 rounded-full bg-[#8b5cf6] animate-pulse-soft" />
+              <div className="w-2 h-2 rounded-full bg-[#D4A574] animate-pulse-soft" />
               <span className="text-[13px] text-[#64748b]">Posting...</span>
             </div>
           )}
@@ -552,7 +552,7 @@ export function CommentSheet({
             </div>
 
             {/* Input */}
-            <div className="flex-1 bg-[#18181b] rounded-2xl border border-white/[0.08] focus-within:border-[#8b5cf6]/40 transition-all px-4 py-2.5">
+            <div className="flex-1 bg-[#18181b] rounded-2xl border border-white/[0.08] focus-within:border-[#D4A574]/40 transition-all px-4 py-2.5">
               <input
                 ref={inputRef}
                 type="text"
@@ -571,7 +571,7 @@ export function CommentSheet({
               className={cn(
                 'w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 mb-0.5',
                 newComment.trim()
-                  ? 'bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] text-black shadow-md hover:scale-[1.05] active:scale-90'
+                  ? 'bg-gradient-to-br from-[#D4A574] to-[#B8895C] text-black shadow-md hover:scale-[1.05] active:scale-90'
                   : 'bg-white/[0.06] text-[#64748b]'
               )}
             >

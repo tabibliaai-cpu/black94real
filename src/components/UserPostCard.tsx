@@ -77,10 +77,10 @@ function highlightContent(text?: string) {
   const parts = text.split(/(#\w+|@\w+)/g)
   return parts.map((part, i) => {
     if (part.startsWith('#')) {
-      return <span key={i} className="text-[#8b5cf6] hover:underline cursor-pointer">{part}</span>
+      return <span key={i} className="text-[#D4A574] hover:underline cursor-pointer">{part}</span>
     }
     if (part.startsWith('@')) {
-      return <span key={i} className="text-[#8b5cf6] hover:underline cursor-pointer">{part}</span>
+      return <span key={i} className="text-[#D4A574] hover:underline cursor-pointer">{part}</span>
     }
     return <span key={i}>{part}</span>
   })
@@ -290,7 +290,7 @@ export function UserPostCard({
                 <span className={cn(
                   'inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full shrink-0',
                   trendingLabel === 'viral' && 'bg-[#f4212e]/10 text-[#f4212e]',
-                  trendingLabel === 'trending' && 'bg-[#8b5cf6]/10 text-[#8b5cf6]',
+                  trendingLabel === 'trending' && 'bg-[#D4A574]/10 text-[#D4A574]',
                   trendingLabel === 'rising' && 'bg-[#00ba7c]/10 text-[#00ba7c]',
                 )}>
                   {trendingLabel === 'viral' && (
@@ -350,13 +350,13 @@ export function UserPostCard({
                 className="flex items-center gap-1 group"
                 onClick={(e) => { e.stopPropagation(); handleComment() }}
               >
-                <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
                 {commentCount > 0 && (
-                  <span className="text-[13px] text-[#94a3b8] group-hover:text-[#8b5cf6]">{formatCount(commentCount)}</span>
+                  <span className="text-[13px] text-[#94a3b8] group-hover:text-[#D4A574]">{formatCount(commentCount)}</span>
                 )}
               </button>
 
@@ -419,8 +419,8 @@ export function UserPostCard({
 
               {/* Views */}
               <button className="flex items-center gap-1 group">
-                <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+                  <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
                     <polyline points="17 6 23 6 23 12"/>
                   </svg>
@@ -435,10 +435,10 @@ export function UserPostCard({
                   className="group"
                   onClick={(e) => { e.stopPropagation(); handleBookmark() }}
                 >
-                  <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
+                  <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
                     {isBookmarked ? (
                       <svg
-                        className={cn('w-[18px] h-[18px] text-[#8b5cf6]', bookmarkAnim && 'animate-bookmark-pop')}
+                        className={cn('w-[18px] h-[18px] text-[#D4A574]', bookmarkAnim && 'animate-bookmark-pop')}
                         viewBox="0 0 24 24"
                         fill="currentColor"
                         stroke="currentColor"
@@ -447,7 +447,7 @@ export function UserPostCard({
                         <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ) : (
-                      <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
                       </svg>
                     )}
@@ -460,8 +460,8 @@ export function UserPostCard({
                   className="group"
                   onClick={(e) => { e.stopPropagation(); setShareMenuOpen(!shareMenuOpen) }}
                 >
-                  <div className="p-2.5 rounded-full group-hover:bg-[#8b5cf6]/10 transition-colors">
-                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#8b5cf6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                  <div className="p-2.5 rounded-full group-hover:bg-[#D4A574]/10 transition-colors">
+                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#D4A574]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                       <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" strokeLinecap="round" strokeLinejoin="round"/>
                       <polyline points="16 6 12 2 8 6" strokeLinecap="round" strokeLinejoin="round"/>
                       <line x1="12" y1="2" x2="12" y2="15" strokeLinecap="round" strokeLinejoin="round"/>
