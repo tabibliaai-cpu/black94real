@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react'
 import { useAppStore, type AppView, type User as StoreUser } from '@/stores/app'
 import { auth, authReady, signIn, signOutUser, onAuthStateChanged, requestNotificationPermission, saveFCMToken, setupFCMListener } from '@/lib/firebase'
-import { createUserFromGoogle, fetchNotifications, markNotificationRead } from '@/lib/db'
+import { createUserFromGoogle, fetchNotifications, markNotificationRead, ensureE2EKeyPair } from '@/lib/db'
 import { onSnapshot, collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { type User as FirebaseUser } from 'firebase/auth'
@@ -342,6 +342,10 @@ export default function Black94App() {
           try { localStorage.setItem(USER_CACHE_KEY, JSON.stringify(storeUser)) } catch {}
         }
         console.log('[Auth] Logged in:', storeUser.username)
+        // Ensure E2E encryption keypair exists (fire-and-forget, non-blocking)
+        ensureE2EKeyPair(fbUser.uid).catch((err) => {
+          console.warn('[Auth] E2E key setup failed (non-critical):', err)
+        })
       } catch (err) {
         console.error('[Auth] createUserFromGoogle failed:', err)
         setBusyRef.current(false)

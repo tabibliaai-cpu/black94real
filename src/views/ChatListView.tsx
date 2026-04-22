@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/stores/app'
-import { getUser, sendMessage, fetchChats } from '@/lib/db'
+import { getUser, sendMessage, fetchChats, ensureE2EKeyPair } from '@/lib/db'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import type { Chat, Message } from '@/lib/db'
 import { useDualPaneChat, type SponsoredAd } from '@/stores/dualPaneChat'
 import { toast } from 'sonner'
 import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import { getOrCreateKeyPair, encryptMessage, decryptMessage, isEncrypted } from '@/lib/crypto'
 import Picker from '@emoji-mart/react'
 import emojiData from '@emoji-mart/data'
 import { XChatInputBar } from '@/components/XChatInputBar'
@@ -522,6 +523,46 @@ export function ChatRoomView() {
   const [otherUser, setOtherUser] = useState<{ displayName: string; profileImage: string; username: string; isVerified: boolean; badge: string } | null>(null)
   const [chatLoading, setChatLoading] = useState(false)
 
+  // ── E2E Encryption Keys ──
+  const [myPrivateKey, setMyPrivateKey] = useState<Uint8Array | null>(null)
+  const [otherPublicKey, setOtherPublicKey] = useState<string | null>(null)
+
+  // Initialize E2E keys when both user IDs are known
+  useEffect(() => {
+    if (!user?.id || !otherId) return
+    let dead = false
+
+    const initKeys = async () => {
+      try {
+        // 1. Get or create our own keypair + publish public key to Firestore
+        const { publicKey: myPub, privateKey: myPriv } = await getOrCreateKeyPair(user.id)
+        if (dead) return
+        setMyPrivateKey(myPriv)
+
+        // 2. Publish public key to Firestore (idempotent)
+        await ensureE2EKeyPair(user.id).catch(() => {})
+        if (dead) return
+
+        // 3. Fetch the other user's profile to get their public key
+        const otherProfile = await getUser(otherId)
+        if (dead) return
+
+        if (otherProfile?.publicKey) {
+          setOtherPublicKey(otherProfile.publicKey)
+          console.log('[E2E] Keys ready for chat')
+        } else {
+          // Other user hasn't logged in since E2E was added — no encryption possible
+          console.warn('[E2E] Other user has no public key yet — messages will be plaintext until they log in')
+        }
+      } catch (err) {
+        console.error('[E2E] Key initialization failed:', err)
+      }
+    }
+
+    initKeys()
+    return () => { dead = true }
+  }, [user?.id, otherId])
+
   useEffect(() => {
     if (!chatId || !user) return
     setChatLoading(true)
@@ -549,14 +590,14 @@ export function ChatRoomView() {
     }).catch(() => setChatLoading(false))
   }, [chatId, user])
 
-  // Real-time message listener
+  // Real-time message listener with E2E decryption
   useEffect(() => {
     if (!chatId) return
     setLoading(true)
     const messagesRef = collection(db, 'chats', chatId, 'messages')
     const q = query(messagesRef)
-    const unsub = onSnapshot(q, (snap: any) => {
-      const msgs = snap.docs.map((doc: any) => {
+    const unsub = onSnapshot(q, async (snap: any) => {
+      const rawMsgs = snap.docs.map((doc: any) => {
         const d = doc.data()
         return {
           id: doc.id,
@@ -570,18 +611,35 @@ export function ChatRoomView() {
           createdAt: tsToISO(d.createdAt),
         } as Message
       })
+
+      // Decrypt messages if E2E keys are available
+      if (myPrivateKey && otherPublicKey) {
+        for (const msg of rawMsgs) {
+          if (msg.messageType === 'text' && msg.content && isEncrypted(msg.content)) {
+            // Determine whose public key to use for decryption
+            // If I sent the message, decrypt with my key + their key
+            // If they sent it, decrypt with my key + their key (same shared secret)
+            const decrypted = await decryptMessage(msg.content, myPrivateKey, otherPublicKey)
+            if (decrypted !== null) {
+              msg.content = decrypted
+            }
+            // If decryption returns null, keep the raw content (fallback for legacy messages)
+          }
+        }
+      }
+
       // Sort chronologically (oldest first)
-      msgs.sort((a: Message, b: Message) => {
+      rawMsgs.sort((a: Message, b: Message) => {
         return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       })
-      setMessages(msgs)
+      setMessages(rawMsgs)
       setLoading(false)
     }, (err: any) => {
       console.error('[ChatRoom] onSnapshot error:', err)
       setLoading(false)
     })
     return () => unsub()
-  }, [chatId])
+  }, [chatId, myPrivateKey, otherPublicKey])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -591,9 +649,15 @@ export function ChatRoomView() {
     if (!text.trim() || !user || !chatId || sending || !otherId) return
     setSending(true)
     try {
-      await sendMessage(chatId, user.id, otherId, text.trim())
+      // Encrypt message if E2E keys are available
+      let contentToSend = text.trim()
+      if (myPrivateKey && otherPublicKey) {
+        contentToSend = await encryptMessage(contentToSend, myPrivateKey, otherPublicKey)
+      }
+      await sendMessage(chatId, user.id, otherId, contentToSend)
       try {
         const chatRef = doc(db, 'chats', chatId)
+        // lastMessage preview stays plaintext for chat list display (non-sensitive snippet)
         await updateDoc(chatRef, {
           lastMessage: {
             senderId: user.id,
@@ -612,7 +676,7 @@ export function ChatRoomView() {
     } finally {
       setSending(false)
     }
-  }, [text, user, chatId, sending, otherId])
+  }, [text, user, chatId, sending, otherId, myPrivateKey, otherPublicKey])
 
   const handleSendImage = useCallback(async () => {
     if (!imagePreview || !user || !chatId || sending || !otherId) return

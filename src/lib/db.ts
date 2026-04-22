@@ -24,6 +24,7 @@ import {
   DocumentData,
   type User as FirebaseUser,
 } from 'firebase/firestore';
+import { getOrCreateKeyPair } from './crypto';
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
@@ -45,6 +46,7 @@ export interface Black94User {
   searchVisibility: 'public' | 'private';
   paidChatEnabled: boolean;
   paidChatPrice: number;
+  publicKey: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -151,6 +153,7 @@ function docToBlack94User(docSnap: DocumentSnapshot<DocumentData>): Black94User 
     searchVisibility: d.searchVisibility ?? 'public',
     paidChatEnabled: d.paidChatEnabled ?? false,
     paidChatPrice: d.paidChatPrice ?? 0,
+    publicKey: d.publicKey ?? '',
     createdAt: tsToISO(d.createdAt),
     updatedAt: tsToISO(d.updatedAt),
   };
@@ -286,6 +289,7 @@ export async function createUserFromGoogle(user: FirebaseUser): Promise<Black94U
     searchVisibility: 'public',
     paidChatEnabled: false,
     paidChatPrice: 0,
+    publicKey: '',
     createdAt: now,
     updatedAt: now,
   };
@@ -315,6 +319,28 @@ export async function createUserFromGoogle(user: FirebaseUser): Promise<Black94U
   });
 
   return userData;
+}
+
+/**
+ * Ensure the current user has an E2E encryption keypair.
+ * - Generates a new X25519 keypair if none exists (stored in IndexedDB)
+ * - Publishes the public key to the user's Firestore profile
+ * - Called on login / app init — safe to call multiple times (idempotent)
+ * Returns the public key base64 string.
+ */
+export async function ensureE2EKeyPair(userId: string): Promise<string> {
+  const { publicKeyBase64 } = await getOrCreateKeyPair(userId);
+
+  // Check if public key is already in Firestore
+  const userRef = doc(db, 'users', userId);
+  const snap = await getDoc(userRef);
+  if (snap.exists() && snap.data()?.publicKey === publicKeyBase64) {
+    return publicKeyBase64; // Already up to date
+  }
+
+  // Publish public key to Firestore
+  await updateDoc(userRef, { publicKey: publicKeyBase64 });
+  return publicKeyBase64;
 }
 
 export async function getUser(uid: string): Promise<Black94User | null> {
