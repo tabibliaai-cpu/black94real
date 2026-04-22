@@ -17,6 +17,7 @@
  *
  * Message format stored in Firestore:
  *   content: base64(nonce + ciphertext)  — 24 byte nonce prepended
+ *   encrypted: true  — definitive flag, no heuristic detection needed
  *
  * Security guarantees:
  * - Firestore only sees ciphertext — completely unreadable without the shared key
@@ -129,14 +130,14 @@ export async function encryptMessage(
  * @param encryptedBase64 - base64-encoded: nonce(24 bytes) + ciphertext
  * @param myPrivateKey - Recipient's private key (from IndexedDB)
  * @param theirPublicKeyBase64 - Sender's public key (from Firestore, base64)
- * @returns The decrypted plaintext string
- * @throws If decryption fails (wrong keys, tampered data, etc.)
+ * @returns The decrypted plaintext string, or null if decryption fails
+ *   (e.g., wrong keys, tampered data, legacy plaintext message)
  */
 export async function decryptMessage(
   encryptedBase64: string,
   myPrivateKey: Uint8Array,
   theirPublicKeyBase64: string,
-): Promise<string> {
+): Promise<string | null> {
   await initCrypto()
 
   try {
@@ -159,23 +160,8 @@ export async function decryptMessage(
     return sodium.to_string(plaintext)
   } catch (err) {
     // Decryption failure = wrong keys or corrupted data
-    // Return a placeholder so the UI doesn't crash
+    // Return null so caller can fall back gracefully (e.g., legacy messages)
     console.warn('[E2E] Decryption failed — message may be from before encryption or keys mismatch:', err)
     return null
   }
-}
-
-/**
- * Check if a string looks like a base64-encoded encrypted message
- * (as opposed to plaintext). Encrypted messages are always base64 of
- * 24+24+content bytes, so they're always fairly long base64 strings.
- */
-export function isEncrypted(content: string): boolean {
-  if (!content) return false
-  // Encrypted messages are base64 of nonce(24) + mac(16) + ciphertext
-  // Minimum length: empty string encrypted = 24 + 16 = 40 bytes → ~56 chars base64
-  // Plaintext messages are just normal text — won't be pure base64
-  if (content.length < 44) return false
-  // Quick check: valid base64 chars only, ends with possible padding
-  return /^[A-Za-z0-9+/]+=*$/.test(content) && content.length % 4 === 0
 }

@@ -326,21 +326,38 @@ export async function createUserFromGoogle(user: FirebaseUser): Promise<Black94U
  * - Generates a new X25519 keypair if none exists (stored in IndexedDB)
  * - Publishes the public key to the user's Firestore profile
  * - Called on login / app init — safe to call multiple times (idempotent)
+ * - BUG 6 FIX: Deduplicates concurrent calls with a promise cache
  * Returns the public key base64 string.
  */
+const e2eInitCache = new Map<string, Promise<string>>()
+
 export async function ensureE2EKeyPair(userId: string): Promise<string> {
-  const { publicKeyBase64 } = await getOrCreateKeyPair(userId);
+  // Deduplicate: if already in-flight, return the same promise
+  const cached = e2eInitCache.get(userId)
+  if (cached) return cached
 
-  // Check if public key is already in Firestore
-  const userRef = doc(db, 'users', userId);
-  const snap = await getDoc(userRef);
-  if (snap.exists() && snap.data()?.publicKey === publicKeyBase64) {
-    return publicKeyBase64; // Already up to date
-  }
+  const promise = (async () => {
+    try {
+      const { publicKeyBase64 } = await getOrCreateKeyPair(userId);
 
-  // Publish public key to Firestore
-  await updateDoc(userRef, { publicKey: publicKeyBase64 });
-  return publicKeyBase64;
+      // Check if public key is already in Firestore
+      const userRef = doc(db, 'users', userId);
+      const snap = await getDoc(userRef);
+      if (snap.exists() && snap.data()?.publicKey === publicKeyBase64) {
+        return publicKeyBase64; // Already up to date
+      }
+
+      // Publish public key to Firestore
+      await updateDoc(userRef, { publicKey: publicKeyBase64 });
+      return publicKeyBase64;
+    } finally {
+      // Clear cache when done so future calls re-execute (e.g., after key rotation)
+      e2eInitCache.delete(userId);
+    }
+  })();
+
+  e2eInitCache.set(userId, promise);
+  return promise;
 }
 
 export async function getUser(uid: string): Promise<Black94User | null> {
@@ -688,6 +705,7 @@ export async function sendMessage(
   senderId: string,
   receiverId: string,
   content: string,
+  encrypted: boolean = false,
 ): Promise<Message> {
   const messageRef = await addDoc(collection(db, 'chats', chatId, 'messages'), {
     chatId,
@@ -697,6 +715,7 @@ export async function sendMessage(
     messageType: 'text' as const,
     mediaUrl: null,
     status: 'sent' as const,
+    encrypted,
     createdAt: serverTimestamp(),
   });
 

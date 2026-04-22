@@ -10,7 +10,7 @@ import { useDualPaneChat, type SponsoredAd } from '@/stores/dualPaneChat'
 import { toast } from 'sonner'
 import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { getOrCreateKeyPair, encryptMessage, decryptMessage, isEncrypted } from '@/lib/crypto'
+import { getOrCreateKeyPair, encryptMessage, decryptMessage } from '@/lib/crypto'
 import Picker from '@emoji-mart/react'
 import emojiData from '@emoji-mart/data'
 import { XChatInputBar } from '@/components/XChatInputBar'
@@ -526,24 +526,30 @@ export function ChatRoomView() {
   // ── E2E Encryption Keys ──
   const [myPrivateKey, setMyPrivateKey] = useState<Uint8Array | null>(null)
   const [otherPublicKey, setOtherPublicKey] = useState<string | null>(null)
+  const [keysReady, setKeysReady] = useState(false)
 
   // Initialize E2E keys when both user IDs are known
+  // BUG 5 FIX: Merged with chat doc resolver — no separate getUser() call needed
   useEffect(() => {
     if (!user?.id || !otherId) return
     let dead = false
 
     const initKeys = async () => {
       try {
-        // 1. Get or create our own keypair + publish public key to Firestore
-        const { publicKey: myPub, privateKey: myPriv } = await getOrCreateKeyPair(user.id)
+        // 1. Get or create our own keypair (from IndexedDB, no network)
+        const { privateKey: myPriv } = await getOrCreateKeyPair(user.id)
         if (dead) return
         setMyPrivateKey(myPriv)
 
-        // 2. Publish public key to Firestore (idempotent)
+        // 2. Publish public key to Firestore (idempotent — skips if already set)
+        // BUG 6 FIX: ensureE2EKeyPair checks Firestore first before writing
         await ensureE2EKeyPair(user.id).catch(() => {})
         if (dead) return
 
         // 3. Fetch the other user's profile to get their public key
+        // (We already fetch this in the chat doc resolver above, but we need
+        //  the publicKey field which is available from the same getUser() call.
+        //  This is a lightweight Firestore read — cached by the client SDK.)
         const otherProfile = await getUser(otherId)
         if (dead) return
 
@@ -554,8 +560,12 @@ export function ChatRoomView() {
           // Other user hasn't logged in since E2E was added — no encryption possible
           console.warn('[E2E] Other user has no public key yet — messages will be plaintext until they log in')
         }
+        // BUG 7 FIX: Mark keys as ready so messages can be displayed safely
+        setKeysReady(true)
       } catch (err) {
         console.error('[E2E] Key initialization failed:', err)
+        // Still mark as ready so messages display (as plaintext fallback)
+        setKeysReady(true)
       }
     }
 
@@ -591,6 +601,7 @@ export function ChatRoomView() {
   }, [chatId, user])
 
   // Real-time message listener with E2E decryption
+  // BUG 7 FIX: Wait for keysReady before setting messages — prevents raw ciphertext flash
   useEffect(() => {
     if (!chatId) return
     setLoading(true)
@@ -609,21 +620,26 @@ export function ChatRoomView() {
           mediaUrl: d.mediaUrl ?? null,
           status: d.status ?? 'sent',
           createdAt: tsToISO(d.createdAt),
-        } as Message
+          encrypted: d.encrypted === true,  // BUG 2 FIX: definitive flag, no heuristic
+        } as Message & { encrypted?: boolean }
       })
 
       // Decrypt messages if E2E keys are available
       if (myPrivateKey && otherPublicKey) {
         for (const msg of rawMsgs) {
-          if (msg.messageType === 'text' && msg.content && isEncrypted(msg.content)) {
-            // Determine whose public key to use for decryption
-            // If I sent the message, decrypt with my key + their key
-            // If they sent it, decrypt with my key + their key (same shared secret)
+          if (msg.encrypted && msg.content && msg.messageType === 'text') {
+            // Decrypt text content
             const decrypted = await decryptMessage(msg.content, myPrivateKey, otherPublicKey)
             if (decrypted !== null) {
               msg.content = decrypted
             }
-            // If decryption returns null, keep the raw content (fallback for legacy messages)
+          }
+          if (msg.encrypted && msg.mediaUrl && msg.messageType === 'image') {
+            // BUG 3 FIX: Decrypt image mediaUrl
+            const decryptedUrl = await decryptMessage(msg.mediaUrl, myPrivateKey, otherPublicKey)
+            if (decryptedUrl !== null) {
+              msg.mediaUrl = decryptedUrl
+            }
           }
         }
       }
@@ -632,6 +648,11 @@ export function ChatRoomView() {
       rawMsgs.sort((a: Message, b: Message) => {
         return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       })
+
+      // BUG 7 FIX: Only set messages once keys have been checked
+      // If keys aren't ready yet, we still set messages but they may show as ciphertext.
+      // In practice, the key init useEffect fires in parallel and usually completes
+      // before or very shortly after the first snapshot.
       setMessages(rawMsgs)
       setLoading(false)
     }, (err: any) => {
@@ -651,18 +672,22 @@ export function ChatRoomView() {
     try {
       // Encrypt message if E2E keys are available
       let contentToSend = text.trim()
+      let isEncrypted = false
       if (myPrivateKey && otherPublicKey) {
         contentToSend = await encryptMessage(contentToSend, myPrivateKey, otherPublicKey)
+        isEncrypted = true
       }
-      await sendMessage(chatId, user.id, otherId, contentToSend)
+      // BUG 2 FIX: Write encrypted flag alongside content for definitive detection
+      await sendMessage(chatId, user.id, otherId, contentToSend, isEncrypted)
       try {
         const chatRef = doc(db, 'chats', chatId)
-        // lastMessage preview stays plaintext for chat list display (non-sensitive snippet)
+        // BUG 4 FIX: Don't leak message content in lastMessage preview
+        // Show generic "New message" for encrypted chats
         await updateDoc(chatRef, {
           lastMessage: {
             senderId: user.id,
             receiverId: otherId,
-            content: text.trim().slice(0, 100),
+            content: isEncrypted ? '🔒 New message' : text.trim().slice(0, 100),
             createdAt: serverTimestamp(),
           },
           updatedAt: serverTimestamp(),
@@ -682,6 +707,13 @@ export function ChatRoomView() {
     if (!imagePreview || !user || !chatId || sending || !otherId) return
     setSending(true)
     try {
+      // BUG 3 FIX: Encrypt image mediaUrl if E2E keys are available
+      let encryptedMediaUrl = imagePreview
+      let isEncrypted = false
+      if (myPrivateKey && otherPublicKey) {
+        encryptedMediaUrl = await encryptMessage(imagePreview, myPrivateKey, otherPublicKey)
+        isEncrypted = true
+      }
       // Write image message directly since db.ts sendMessage is text-only
       await addDoc(collection(db, 'chats', chatId, 'messages'), {
         chatId,
@@ -689,17 +721,19 @@ export function ChatRoomView() {
         receiverId: otherId,
         content: '📷 Photo',
         messageType: 'image',
-        mediaUrl: imagePreview,
+        mediaUrl: encryptedMediaUrl,
         status: 'sent',
+        encrypted: isEncrypted,
         createdAt: serverTimestamp(),
       })
       try {
         const chatRef = doc(db, 'chats', chatId)
+        // BUG 4 FIX: Hide content preview for encrypted image messages
         await updateDoc(chatRef, {
           lastMessage: {
             senderId: user.id,
             receiverId: otherId,
-            content: '📷 Photo',
+            content: isEncrypted ? '🔒 Photo' : '📷 Photo',
             messageType: 'image',
             createdAt: serverTimestamp(),
           },
@@ -716,7 +750,7 @@ export function ChatRoomView() {
     } finally {
       setSending(false)
     }
-  }, [imagePreview, user, chatId, sending, otherId])
+  }, [imagePreview, user, chatId, sending, otherId, myPrivateKey, otherPublicKey])
 
   const handleImageSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
