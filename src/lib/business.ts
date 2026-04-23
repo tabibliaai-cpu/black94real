@@ -95,19 +95,19 @@ export interface BusinessTrial {
   daysRemaining: number
 }
 
-// ── Data placeholders ──────────────────────────────────────
+// ── Default data arrays (populated from server) ──────────────────────────────
 
-export const sampleAffiliates: Affiliate[] = []
+export const affiliatesData: Affiliate[] = []
 
-export const sampleTeamMembers: TeamMember[] = []
+export const teamMembersData: TeamMember[] = []
 
-export const sampleCampaignPerformance: CampaignPerformance[] = []
+export const campaignPerformanceData: CampaignPerformance[] = []
 
-export const sampleChannelPerformance: ChannelPerformance[] = []
+export const channelPerformanceData: ChannelPerformance[] = []
 
-export const sampleABTests: ABTest[] = []
+export const abTestsData: ABTest[] = []
 
-export const sampleAISuggestions: AISuggestion[] = []
+export const aiSuggestionsData: AISuggestion[] = []
 
 // ── Utility Functions ────────────────────────────────────────
 

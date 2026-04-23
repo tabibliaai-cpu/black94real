@@ -161,14 +161,6 @@ export interface ChatAd {
   createdAt: string
 }
 
-export interface AnonymousMessage {
-  id: string
-  roomId: string
-  nickname: string
-  content: string
-  createdAt: string
-}
-
 interface AppState {
   // Auth
   token: string | null

@@ -89,7 +89,7 @@ export function AffiliatesView() {
   }
 
   const handlePurchase = () => {
-    // Payment integration
+    toast.info('Payment gateway integration is being set up. Please check back soon.')
   }
 
   return (
@@ -335,15 +335,14 @@ export function AffiliatesView() {
           </div>
 
           <button
-            disabled
             onClick={handlePurchase}
-            className="w-full py-2.5 rounded-xl bg-[#FFFFFF] text-black text-[15px] font-bold opacity-50 cursor-not-allowed"
+            className="w-full py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.15] text-[#e7e9ea] text-[15px] font-bold"
           >
-            Purchase
+            Purchase Badges
           </button>
 
           <p className="text-[12px] text-[#64748b] text-center">
-            Badges will be added to your account immediately after payment
+            Payment gateway integration in progress
           </p>
         </div>
       )}

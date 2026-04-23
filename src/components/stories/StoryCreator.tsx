@@ -62,8 +62,8 @@ const EXPIRY_OPTIONS: { value: StoryExpiry; label: string }[] = [
 
 const REGION_OPTIONS = [
   { value: 'all_india', label: 'All India' },
-  { value: 'state', label: 'My state (Telangana)' },
-  { value: 'city', label: 'My city (Hyderabad)' },
+  { value: 'state', label: 'My state' },
+  { value: 'city', label: 'My city' },
 ]
 
 // ---------------------------------------------------------------------------

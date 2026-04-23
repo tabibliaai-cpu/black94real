@@ -106,4 +106,4 @@ export interface BillingEntry {
   status: 'paid' | 'pending'
 }
 
-export const sampleBillingHistory: BillingEntry[] = []
+export const billingHistoryData: BillingEntry[] = []

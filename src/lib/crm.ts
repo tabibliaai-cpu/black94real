@@ -64,7 +64,7 @@ export interface CrmAnalytics {
   activeCustomers: number
 }
 
-/* ── Data placeholders ──────────────────────────────────────────────────── */
+/* ── Data (populated from server) ──────────────────────────────────────────────────── */
 
 export const leadsData: Lead[] = []
 

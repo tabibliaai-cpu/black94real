@@ -196,7 +196,7 @@ export const FESTIVAL_TEMPLATES: FestivalTemplate[] = [
 // Story groups (populated from server)
 // ---------------------------------------------------------------------------
 
-export const storyGroupsPlaceholder: StoryGroup[] = []
+export const storyGroupsData: StoryGroup[] = []
 
 // ---------------------------------------------------------------------------
 // Trending Topics (10 per tab)
@@ -216,16 +216,16 @@ export const TRENDING_FOR_YOU: TrendingTopic[] = [
 ]
 
 export const TRENDING_YOUR_REGION: TrendingTopic[] = [
-  { id: 'tt_tr_01', tag: '#HyderabadRains', state: 'Telangana', stateFlag: '🇮🇳', count: 45600 },
-  { id: 'tt_tr_02', tag: '#TeluguMovies', state: 'Telangana', stateFlag: '🇮🇳', count: 89200 },
-  { id: 'tt_tr_03', tag: '#BiryaniFest', state: 'Telangana', stateFlag: '🇮🇳', count: 32100 },
-  { id: 'tt_tr_04', tag: '#TechHub', state: 'Telangana', stateFlag: '🇮🇳', count: 28400 },
-  { id: 'tt_tr_05', tag: '#Golconda', state: 'Telangana', stateFlag: '🇮🇳', count: 15700 },
-  { id: 'tt_tr_06', tag: '#HITEC', state: 'Telangana', stateFlag: '🇮🇳', count: 12300 },
-  { id: 'tt_tr_07', tag: '#Charminar', state: 'Telangana', stateFlag: '🇮🇳', count: 18900 },
-  { id: 'tt_tr_08', tag: '#TSJobs', state: 'Telangana', stateFlag: '🇮🇳', count: 34700 },
-  { id: 'tt_tr_09', tag: '#RamojiFilmCity', state: 'Telangana', stateFlag: '🇮🇳', count: 22100 },
-  { id: 'tt_tr_10', tag: '#HyderabadFood', state: 'Telangana', stateFlag: '🇮🇳', count: 27800 },
+  { id: 'tt_tr_01', tag: '#LocalNews', state: 'Your Region', stateFlag: 'IN', count: 45600 },
+  { id: 'tt_tr_02', tag: '#RegionalUpdates', state: 'Your Region', stateFlag: 'IN', count: 89200 },
+  { id: 'tt_tr_03', tag: '#FoodFestival', state: 'Your Region', stateFlag: 'IN', count: 32100 },
+  { id: 'tt_tr_04', tag: '#TechCommunity', state: 'Your Region', stateFlag: 'IN', count: 28400 },
+  { id: 'tt_tr_05', tag: '#CityLife', state: 'Your Region', stateFlag: 'IN', count: 15700 },
+  { id: 'tt_tr_06', tag: '#JobsNearby', state: 'Your Region', stateFlag: 'IN', count: 12300 },
+  { id: 'tt_tr_07', tag: '#WeekendEvents', state: 'Your Region', stateFlag: 'IN', count: 18900 },
+  { id: 'tt_tr_08', tag: '#EducationUpdate', state: 'Your Region', stateFlag: 'IN', count: 34700 },
+  { id: 'tt_tr_09', tag: '#SportsUpdate', state: 'Your Region', stateFlag: 'IN', count: 22100 },
+  { id: 'tt_tr_10', tag: '#WeatherAlert', state: 'Your Region', stateFlag: 'IN', count: 27800 },
 ]
 
 // ---------------------------------------------------------------------------
@@ -305,11 +305,11 @@ export function formatCount(n: number): string {
 }
 
 /**
- * Returns the default detected state for the current user.
- * In a real app this would use geolocation or IP-based detection.
+ * Returns a user-friendly region name.
+ * In production this would use geolocation or IP-based detection.
  */
 export function getStateName(): string {
-  return 'Telangana'
+  return 'India'
 }
 
 /**

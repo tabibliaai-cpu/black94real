@@ -113,15 +113,15 @@ interface DualPaneState {
   reset: () => void
 }
 
-/* ── Chat messages placeholder ──────────────────────────────────────────── */
+/* ── Default data (populated from server) ──────────────────────────────────────────── */
 
 const INITIAL_MESSAGES: Record<string, ChatMsg[]> = {}
 
-/* ── Chat list placeholder ──────────────────────────────────────────── */
+/* ── Chat list (populated from server) ──────────────────────────────────────────── */
 
 const INITIAL_CHAT_LIST: ChatListItem[] = []
 
-/* ── Sponsored ads placeholder ──────────────────────────────────── */
+/* ── Sponsored ads (populated from server) ──────────────────────────────────── */
 
 const SPONSORED_ADS: SponsoredAd[] = []
 

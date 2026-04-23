@@ -706,11 +706,25 @@ function SettingsSection() {
   }, [user])
 
   const handleSave = async () => {
+    if (!user?.id) {
+      toast.error('Please sign in to save settings')
+      return
+    }
     setSaving(true)
-    // Simulate save — in production, save to Firestore stores/{businessId}
-    await new Promise((r) => setTimeout(r, 800))
-    toast.success('Store settings saved!')
-    setSaving(false)
+    try {
+      const { doc, setDoc, serverTimestamp } = await import('firebase/firestore')
+      const { db } = await import('@/lib/firebase')
+      await setDoc(doc(db, 'stores', user.id), {
+        ...settings,
+        businessId: user.id,
+        updatedAt: serverTimestamp(),
+      }, { merge: true })
+      toast.success('Store settings saved!')
+    } catch (err: any) {
+      toast.error('Failed to save: ' + (err?.message || 'Unknown error'))
+    } finally {
+      setSaving(false)
+    }
   }
 
   const toggleSetting = (key: keyof StoreSettings) => {

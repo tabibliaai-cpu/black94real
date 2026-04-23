@@ -122,17 +122,16 @@ function CurrentPlanBanner() {
         </span>
       </div>
 
-      <p className="text-[13px] text-[#94a3b8] mb-4">
-        Next billing: May 18, 2026
-      </p>
-
-      <button
-        disabled
-        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#e7e9ea] opacity-50 cursor-not-allowed"
-      >
-        <ManageIcon className="w-4 h-4" />
-        Manage Subscription
-      </button>
+      {plan.id !== 'free' && (
+        <p className="text-[13px] text-[#94a3b8] mb-4">
+          You are on the <span className="text-[#e7e9ea] font-medium">{plan.name}</span>. {plan.price > 0 ? `Billed at ${plan.currency}${plan.price} per ${plan.billingCycle}.` : 'Enjoy all free features.'}
+        </p>
+      )}
+      {plan.id === 'free' && (
+        <p className="text-[13px] text-[#94a3b8] mb-4">
+          Upgrade to unlock premium features like verification, articles, and more.
+        </p>
+      )}
     </div>
   )
 }
@@ -197,9 +196,9 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
     }
   }
 
+  // Upgrade is handled via trial flow (handleStartTrial) below.
   const handleUpgrade = () => {
     if (isCurrent) return
-    toast.success(`Upgrade to ${plan.name} initiated!`)
   }
 
   return (
@@ -253,7 +252,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
             !isCurrent && !canUpgrade && 'bg-white/[0.04] text-[#64748b] cursor-not-allowed'
           )}
         >
-          {isCurrent ? 'Current Plan' : canUpgrade ? 'Upgrade' : 'Unavailable'}
+          {isCurrent ? 'Current Plan' : canUpgrade ? 'Get Started' : 'Unavailable'}
         </button>
         {!isCurrent && canUpgrade && plan.price > 0 && (
           <button
@@ -265,7 +264,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
               trialLoading && 'opacity-50 cursor-not-allowed'
             )}
           >
-            {trialLoading ? 'Activating...' : `Start ${plan.id === 'pro' ? '7-day' : '7-day'} Free Trial`}
+            {trialLoading ? 'Activating...' : `Start Free Trial`}
           </button>
         )}
       </div>
@@ -407,10 +406,10 @@ function BillingHistory() {
         <div className="flex items-center justify-center py-10">
           <div className="text-center">
             <div className="w-14 h-14 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">🧾</span>
+              <ReceiptIcon className="w-6 h-6 text-[#94a3b8]" />
             </div>
             <p className="text-[15px] text-[#e7e9ea] font-medium">No billing history</p>
-            <p className="text-[13px] text-[#94a3b8] mt-1">Invoices will appear here after your first payment</p>
+            <p className="text-[13px] text-[#94a3b8] mt-1">Transaction history will appear here</p>
           </div>
         </div>
       </div>

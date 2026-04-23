@@ -73,7 +73,7 @@ export function PremiumDashboardView() {
   const [trial, setTrial] = useState<BusinessTrial | null>(null)
 
   const isBusiness = user?.role === 'business' || user?.accountType === 'business'
-  const isPremium = user?.subscription === 'premium' || user?.subscription === 'business'
+  const isPremium = user?.subscription === 'pro' || user?.subscription === 'gold'
 
   useEffect(() => {
     if (!user?.id || !isBusiness) return
@@ -200,8 +200,11 @@ export function PremiumDashboardView() {
                   : 'Your free trial has ended. Subscribe to continue.'}
               </p>
               {!trial.isActive && (
-                <button className="w-full mt-2 py-2 rounded-full bg-white text-black font-bold text-[12px] active:scale-[0.98] transition-all">
-                  Subscribe Now
+                <button
+                  className="w-full mt-2 py-2 rounded-full bg-white text-black font-bold text-[12px] active:scale-[0.98] transition-all"
+                  onClick={() => navigate('subscriptions')}
+                >
+                  View Plans
                 </button>
               )}
             </div>
@@ -245,7 +248,7 @@ export function PremiumDashboardView() {
         <MenuRow
           icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
           label="Subscriptions"
-          badge={user?.subscription === 'premium' ? 'Pro' : user?.subscription === 'business' ? 'Gold' : 'Free'}
+          badge={user?.subscription === 'pro' ? 'Pro' : user?.subscription === 'gold' ? 'Gold' : 'Free'}
           onClick={() => navigate('subscriptions')}
         />
         <MenuRow
