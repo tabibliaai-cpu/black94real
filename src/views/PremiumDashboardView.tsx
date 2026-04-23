@@ -46,9 +46,6 @@ export function PremiumDashboardView() {
             <span className="text-[12px] font-semibold px-2.5 py-1 rounded-full bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/20">
               {isBusiness ? 'Business' : 'Personal'}
             </span>
-            <span className="text-[12px] font-semibold px-2.5 py-1 rounded-full bg-white/[0.04] text-white/50 border border-white/[0.08]">
-              Free Forever
-            </span>
           </div>
         </div>
 

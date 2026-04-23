@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'black94-v4';
+const CACHE_NAME = 'black94-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

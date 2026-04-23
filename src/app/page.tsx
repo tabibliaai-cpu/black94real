@@ -34,7 +34,6 @@ const CrmLeadsView = lazy(() => import('@/views/CrmLeadsView').then(m => ({ defa
 const CrmDealsView = lazy(() => import('@/views/CrmDealsView').then(m => ({ default: m.CrmDealsView })))
 const CrmOrdersView = lazy(() => import('@/views/CrmOrdersView').then(m => ({ default: m.CrmOrdersView })))
 const CrmAnalyticsView = lazy(() => import('@/views/CrmAnalyticsView').then(m => ({ default: m.CrmAnalyticsView })))
-const SubscriptionsView = lazy(() => import('@/views/SubscriptionsView').then(m => ({ default: m.SubscriptionsView })))
 const PrivacySettingsView = lazy(() => import('@/views/PrivacySettingsView').then(m => ({ default: m.PrivacySettingsView })))
 const ShareProfileView = lazy(() => import('@/views/ShareProfileView').then(m => ({ default: m.ShareProfileView })))
 const WriteArticleView = lazy(() => import('@/views/WriteArticleView').then(m => ({ default: m.WriteArticleView })))
@@ -177,7 +176,6 @@ function ViewRouter() {
     stories: <StoriesView />,
     'dual-pane-chat': <MessagesView />,
     'audio-call': <AudioCallView />,
-    'subscriptions': <SubscriptionsView />,
     'business-dashboard': <BusinessDashboardView />,
     'premium-dashboard': <PremiumDashboardView />,
     'ads-manager': <AdsManagerView />,
@@ -500,7 +498,6 @@ export default function Black94App() {
     settings: 'Edit Profile',
     explore: 'Explore',
     stories: 'Stories',
-    'subscriptions': 'Free Forever',
     'business-dashboard': 'Business',
     'premium-dashboard': 'Dashboard',
     'ads-manager': 'Ad Manager',
