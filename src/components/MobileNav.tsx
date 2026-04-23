@@ -2,6 +2,14 @@
 
 import { cn } from '@/lib/utils'
 import { useAppStore, type AppView } from '@/stores/app'
+import {
+  House,
+  Search,
+  Bell,
+  MessageCircle,
+  Radio,
+  Ghost,
+} from 'lucide-react'
 
 interface MobileNavProps {
   currentView: AppView
@@ -13,69 +21,62 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     view: 'feed',
     label: 'Home',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" strokeLinecap="round" strokeLinejoin="round" />
-        {active && <path d="M9 21V12h6v9" strokeLinecap="round" strokeLinejoin="round" />}
-      </svg>
+      <House
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
+        strokeWidth={active ? 2.4 : 1.8}
+        fill={active ? 'currentColor' : 'none'}
+      />
     ),
   },
   {
     view: 'search',
     label: 'Search',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
-        <circle cx="11" cy="11" r="7" />
-        <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
-      </svg>
+      <Search
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
+        strokeWidth={active ? 2.4 : 1.8}
+      />
     ),
   },
   {
     view: 'chat',
     label: 'Chat',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
-        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <MessageCircle
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
+        strokeWidth={active ? 2.4 : 1.8}
+      />
     ),
   },
   {
     view: 'notifications',
     label: 'Alerts',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.4 : 2}>
-        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M13.73 21a2 2 0 01-3.46 0" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <Bell
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
+        strokeWidth={active ? 2.4 : 1.8}
+      />
     ),
   },
   {
     view: 'stories',
     label: 'Stories',
     icon: (active) => (
-      <div className="relative w-[24px] h-[24px]">
-        <div className={cn(
-          'w-[24px] h-[24px] rounded-full',
-          active ? 'ring-[2.5px] ring-[#FFFFFF]' : 'ring-[2px] ring-[#d1d5db]'
-        )} />
-        <div className="absolute inset-[4px] rounded-full bg-[#000000]" />
-        <div className="absolute inset-[4px] rounded-full bg-[#000000] flex items-center justify-center">
-          <svg className={cn('w-2.5 h-2.5', active ? 'text-[#FFFFFF]' : 'text-[#d1d5db]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
-            <circle cx="12" cy="12" r="5" />
-          </svg>
-        </div>
-      </div>
+      <Radio
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
+        strokeWidth={active ? 2.4 : 1.8}
+      />
     ),
   },
   {
     view: 'anonymous-chat',
     label: 'Anon',
     icon: (active) => (
-      <svg className={cn('w-[24px] h-[24px]', active ? 'text-[#FFFFFF]' : 'text-[#d1d5db]')} viewBox="0 0 64 64" fill="currentColor">
-        <ellipse cx="32" cy="26" rx="14" ry="16" />
-        <path d="M18 38c0 0-3 6 2 14h24c5-8 2-14 2-14l-3.5 3.5-3.5-3.5-3.5 3.5-3.5-3.5-3.5 3.5-3.5-3.5z" />
-        <circle cx="26" cy="22" r="2" fill="black" />
-        <circle cx="38" cy="22" r="2" fill="black" />
-      </svg>
+      <Ghost
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#FFFFFF]' : 'text-[#d1d5db]')}
+        strokeWidth={active ? 2.4 : 1.8}
+        fill={active ? 'currentColor' : 'none'}
+      />
     ),
   },
 ]

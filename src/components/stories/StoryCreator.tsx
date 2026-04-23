@@ -66,73 +66,6 @@ const REGION_OPTIONS = [
   { value: 'city', label: 'My city (Hyderabad)' },
 ]
 
-const MOCK_THREADS = [
-  {
-    id: 'mt_1',
-    title: '5 thoughts on startup culture',
-    cardCount: 5,
-    cards: [
-      '1/5 — Startups romanticise failure, but nobody talks about the toll it takes on mental health.',
-      '2/5 — The "hustle culture" narrative is toxic. Consistency beats intensity every time.',
-      '3/5 — Most successful founders I know work 6-7 focused hours, not 16-hour days.',
-      '4/5 — Your first idea is almost never the one that works. Speed of iteration > perfection.',
-      '5/5 — The best startups solve problems their founders personally experienced deeply.',
-    ],
-  },
-  {
-    id: 'mt_2',
-    title: 'My India travel diary (8 places)',
-    cardCount: 8,
-    cards: [
-      'Varanasi — The spiritual capital hit different at sunrise on the Ganges.',
-      'Jaipur — Hawa Mahal at golden hour is something else entirely.',
-      'Kerala backwaters — Houseboat life is the most peaceful experience.',
-      'Leh-Ladakh — Pangong Tso lake at 4,350m altitude is surreal.',
-      'Rishikesh — Yoga and the Ganges combo is unbeatable.',
-      'Goa — Not just beaches — Old Goa churches are stunning.',
-      'Hampi — Boulders and ruins make it look like another planet.',
-      'Mumbai — The city that never sleeps truly lives up to the hype.',
-    ],
-  },
-  {
-    id: 'mt_3',
-    title: 'Book recommendations 2025',
-    cardCount: 3,
-    cards: [
-      '"Thinking, Fast and Slow" by Kahneman — Changed how I see decision-making.',
-      '"The Almanack of Naval Ravikant" — Wealth and happiness decoded.',
-      '"Sapiens" by Yuval Noah Harari — Rewired my understanding of civilisation.',
-    ],
-  },
-]
-
-const MOCK_MATCHES = [
-  {
-    id: 'match_1',
-    team1: 'IND',
-    team2: 'AUS',
-    team1Flag: '🇮🇳',
-    team2Flag: '🇦🇺',
-    team1Score: '287/4',
-    team2Score: '265',
-    overs: '42.3',
-    venue: 'Eden Gardens, Kolkata',
-    status: 'LIVE',
-  },
-  {
-    id: 'match_2',
-    team1: 'ENG',
-    team2: 'SA',
-    team1Flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-    team2Flag: '🇿🇦',
-    team1Score: '198/6',
-    team2Score: '201/3',
-    overs: '38.2',
-    venue: 'Wankhede, Mumbai',
-    status: 'LIVE',
-  },
-]
-
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -187,29 +120,38 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
     return new Promise<void>((resolve) => {
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
         const recorder = mediaRecorderRef.current
-        const originalOnStop = recorder.onstop
-        recorder.onstop = (e) => {
+        recorder.onstop = () => {
           const blob = new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' })
           audioBlobRef.current = blob
           setHasRecorded(true)
-          if (originalOnStop) originalOnStop.call(recorder, e)
+          // Clean up AFTER recorder fully stopped
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach((t) => t.stop())
+            streamRef.current = null
+          }
+          if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+            audioContextRef.current.close()
+            audioContextRef.current = null
+          }
+          analyserRef.current = null
+          setIsRecording(false)
           resolve()
         }
         recorder.stop()
       } else {
+        // Not recording, just clean up
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach((t) => t.stop())
+          streamRef.current = null
+        }
+        if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+          audioContextRef.current.close()
+          audioContextRef.current = null
+        }
+        analyserRef.current = null
+        setIsRecording(false)
         resolve()
       }
-
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((t) => t.stop())
-        streamRef.current = null
-      }
-      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-        audioContextRef.current.close()
-        audioContextRef.current = null
-      }
-      analyserRef.current = null
-      setIsRecording(false)
     })
   }, [])
 
@@ -245,12 +187,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
         if (e.data.size > 0) audioChunksRef.current.push(e.data)
       }
 
-      recorder.onstop = () => {
-        const blob = new Blob(audioChunksRef.current, { type: mimeType })
-        audioBlobRef.current = blob
-        setHasRecorded(true)
-      }
-
       recorder.start(1000)
       setIsRecording(true)
       setRecordingTime(0)
@@ -269,7 +205,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   }
 
   // Thread format state
-  const [selectedThread, setSelectedThread] = useState<string | null>(null)
+  const [threadTitle, setThreadTitle] = useState('')
   const [threadCards, setThreadCards] = useState<string[]>([])
   const [editingCardIndex, setEditingCardIndex] = useState<number | null>(null)
   const [editingCardText, setEditingCardText] = useState('')
@@ -289,18 +225,18 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   const [festivalMessage, setFestivalMessage] = useState('')
 
   // Cricket format state
-  const [selectedMatch, setSelectedMatch] = useState<string | null>(null)
+  const [cricketTeam1, setCricketTeam1] = useState('')
+  const [cricketTeam2, setCricketTeam2] = useState('')
+  const [cricketTeam1Score, setCricketTeam1Score] = useState('')
+  const [cricketTeam2Score, setCricketTeam2Score] = useState('')
+  const [cricketOvers, setCricketOvers] = useState('')
+  const [cricketVenue, setCricketVenue] = useState('')
+  const [cricketStatus, setCricketStatus] = useState<'live' | 'completed' | 'upcoming'>('live')
   const [cricketCommentary, setCricketCommentary] = useState('')
 
   // Feed format state
   const [feedUrl, setFeedUrl] = useState('')
   const [feedCaption, setFeedCaption] = useState('')
-
-  // ---- Derived ----
-  const selectedMatchData = useMemo(
-    () => MOCK_MATCHES.find((m) => m.id === selectedMatch),
-    [selectedMatch],
-  )
 
   // ---- Effects ----
 
@@ -367,7 +303,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       setRecordingTime(0)
       setVoiceWaveform([])
       setHasRecorded(false)
-      setSelectedThread(null)
+      setThreadTitle('')
       setThreadCards([])
       setEditingCardIndex(null)
       setStandalonePollQuestion('')
@@ -379,7 +315,13 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       ])
       setSelectedFestival(null)
       setFestivalMessage('')
-      setSelectedMatch(null)
+      setCricketTeam1('')
+      setCricketTeam2('')
+      setCricketTeam1Score('')
+      setCricketTeam2Score('')
+      setCricketOvers('')
+      setCricketVenue('')
+      setCricketStatus('live')
       setCricketCommentary('')
       setFeedUrl('')
       setFeedCaption('')
@@ -408,13 +350,13 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       case 'voice':
         return hasRecorded
       case 'thread':
-        return selectedThread !== null && threadCards.length > 0
+        return threadTitle.trim().length > 0 && threadCards.some((c) => c.trim().length > 0)
       case 'poll':
         return standalonePollQuestion.trim().length > 0 && standalonePollOptions.some((o) => o.text.trim().length > 0)
       case 'festival':
         return selectedFestival !== null && festivalMessage.trim().length > 0
       case 'cricket':
-        return selectedMatch !== null && cricketCommentary.trim().length > 0
+        return cricketTeam1.trim().length > 0 && cricketTeam2.trim().length > 0
       case 'feed':
         return feedUrl.trim().length > 0
       default:
@@ -451,11 +393,15 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           voiceWaveform: voiceWaveform.length > 0 ? voiceWaveform : Array.from({ length: 20 }, () => Math.floor(Math.random() * 80 + 20)),
           voiceDuration: recordingTime,
         }
-      case 'thread':
+      case 'thread': {
+        const numberedCards = threadCards
+          .filter((c) => c.trim())
+          .map((c, i) => `${i + 1}/${threadCards.filter((cc) => cc.trim()).length} — ${c.trim()}`)
         return {
           ...base,
-          content: threadCards.join('\n---\n'),
+          content: numberedCards.join('\n---\n'),
         }
+      }
       case 'poll':
         return {
           ...base,
@@ -470,24 +416,20 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           content: festivalMessage,
           festivalTemplate: selectedFestival,
         }
-      case 'cricket': {
-        const match = selectedMatchData
+      case 'cricket':
         return {
           ...base,
-          content: cricketCommentary,
-          cricketData: match
-            ? {
-                team1: match.team1,
-                team2: match.team2,
-                team1Score: match.team1Score,
-                team2Score: match.team2Score,
-                overs: match.overs,
-                venue: match.venue,
-                status: match.status,
-              }
-            : undefined,
+          content: cricketCommentary || `${cricketTeam1} vs ${cricketTeam2}`,
+          cricketData: {
+            team1: cricketTeam1.trim(),
+            team2: cricketTeam2.trim(),
+            team1Score: cricketTeam1Score.trim() || '0/0',
+            team2Score: cricketTeam2Score.trim() || '0/0',
+            overs: cricketOvers.trim() || '0.0',
+            venue: cricketVenue.trim() || 'TBD',
+            status: cricketStatus,
+          },
         }
-      }
       case 'feed':
         return {
           ...base,
@@ -566,8 +508,16 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
         firestoreData.festivalTemplate = story.festivalTemplate as Parameters<typeof createStory>[1]['festivalTemplate']
         firestoreData.mediaUrl = story.festivalTemplate.gradient
       }
-      if (format === 'cricket' && story.cricketData) {
-        firestoreData.cricketData = story.cricketData as Parameters<typeof createStory>[1]['cricketData']
+      if (format === 'cricket') {
+        firestoreData.cricketData = {
+          team1: cricketTeam1.trim(),
+          team2: cricketTeam2.trim(),
+          team1Score: cricketTeam1Score.trim() || '0/0',
+          team2Score: cricketTeam2Score.trim() || '0/0',
+          overs: cricketOvers.trim() || '0.0',
+          venue: cricketVenue.trim() || 'TBD',
+          status: cricketStatus,
+        }
       }
       if (format === 'feed') {
         firestoreData.mediaUrl = feedUrl
@@ -602,16 +552,9 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
   // ---- Thread helpers ----
 
-  const selectThread = useCallback(
-    (threadId: string) => {
-      const thread = MOCK_THREADS.find((t) => t.id === threadId)
-      if (thread) {
-        setSelectedThread(threadId)
-        setThreadCards([...thread.cards])
-      }
-    },
-    [],
-  )
+  const addThreadCard = useCallback(() => {
+    setThreadCards((prev) => [...prev, ''])
+  }, [])
 
   const removeThreadCard = useCallback((index: number) => {
     setThreadCards((prev) => prev.filter((_, i) => i !== index))
@@ -980,129 +923,102 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   function ThreadCanvas() {
     return (
       <div className="pt-2 pb-20 flex flex-col gap-4">
-        {!selectedThread ? (
-          <>
-            <h3 className="text-lg font-bold text-white">Your recent threads</h3>
-            <p className="text-white/40 text-sm">Select a thread to convert into a story series</p>
-            <div className="flex flex-col gap-3 mt-2">
-              {MOCK_THREADS.map((thread, i) => (
-                <motion.button
-                  key={thread.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => selectThread(thread.id)}
-                  className="flex items-center gap-3 rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left hover:border-[#00f0ff]/20 transition-colors"
-                >
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shrink-0"
-                    style={{ background: 'rgba(0,240,255,0.15)', color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}
-                  >
-                    {thread.cardCount}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-white font-semibold text-sm truncate">{thread.title}</p>
-                    <p className="text-white/40 text-xs">{thread.cardCount} cards</p>
-                  </div>
-                  <svg className="w-4 h-4 text-white/30 shrink-0 ml-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M9 5l7 7-7 7" />
-                  </svg>
-                </motion.button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white">
-                {MOCK_THREADS.find((t) => t.id === selectedThread)?.title}
-              </h3>
-              <button
-                onClick={() => { setSelectedThread(null); setThreadCards([]) }}
-                className="text-white/40 text-xs hover:text-[#00f0ff] transition-colors"
+        <div>
+          <label className="text-white/40 text-xs mb-2 block">Thread Title</label>
+          <input
+            type="text"
+            value={threadTitle}
+            onChange={(e) => setThreadTitle(e.target.value)}
+            placeholder="Give your thread a title..."
+            className="w-full bg-transparent text-white text-xl font-bold placeholder:text-white/20 outline-none"
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <h3 className="text-white/60 text-sm font-medium">
+            Thread Cards ({threadCards.length})
+          </h3>
+          <motion.button
+            whileTap={{ scale: 0.92 }}
+            onClick={addThreadCard}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] hover:bg-[#00f0ff]/20"
+          >
+            <span className="text-sm">+</span> Add Card
+          </motion.button>
+        </div>
+
+        {threadCards.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {threadCards.map((card, i) => (
+              <motion.div
+                key={`card-${i}`}
+                layout
+                className={cn(
+                  'rounded-2xl bg-white/[0.04] border p-4 transition-colors',
+                  editingCardIndex === i ? 'border-[#00f0ff]/50 shadow-[0_0_12px_rgba(0,240,255,0.15)]' : 'border-white/[0.08]',
+                )}
               >
-                Change thread
-              </button>
-            </div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold" style={{ color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' }}>
+                    Card {i + 1}/{threadCards.length}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => startEditCard(i)} className="text-white/40 hover:text-[#00f0ff] transition-colors text-xs font-medium">
+                      Edit
+                    </button>
+                    <button onClick={() => removeThreadCard(i)} className="w-6 h-6 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors text-xs">
+                      ×
+                    </button>
+                  </div>
+                </div>
 
-            {threadCards.length > 0 && (
-              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory">
-                {threadCards.map((card, i) => (
-                  <motion.div
-                    key={`${selectedThread}-${i}`}
-                    layout
-                    className={cn(
-                      'relative shrink-0 w-64 rounded-2xl bg-white/[0.04] border p-4 snap-start transition-colors',
-                      editingCardIndex === i ? 'border-[#00f0ff]/50 shadow-[0_0_12px_rgba(0,240,255,0.15)]' : 'border-white/[0.08]',
-                    )}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold" style={{ color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' }}>
-                        Card {i + 1}
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <button onClick={() => startEditCard(i)} className="text-white/40 hover:text-[#00f0ff] transition-colors text-xs font-medium">
-                          Edit
-                        </button>
-                        <button onClick={() => removeThreadCard(i)} className="w-6 h-6 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors text-xs">
-                          ×
-                        </button>
-                      </div>
+                {editingCardIndex === i ? (
+                  <>
+                    <textarea
+                      value={editingCardText}
+                      onChange={(e) => setEditingCardText(e.target.value)}
+                      className="w-full bg-white/[0.06] rounded-lg p-2.5 text-sm text-white outline-none resize-none border border-[#00f0ff]/30 focus:border-[#00f0ff]/60"
+                      rows={4}
+                      autoFocus
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={saveEditCard}
+                        className="flex-1 py-1.5 rounded-lg text-white text-xs font-medium"
+                        style={{ background: 'linear-gradient(135deg, #00f0ff 0%, #00b8d4 100%)' }}
+                      >
+                        Save
+                      </button>
+                      <button onClick={() => setEditingCardIndex(null)} className="flex-1 py-1.5 rounded-lg bg-white/[0.06] text-white/60 text-xs font-medium">
+                        Cancel
+                      </button>
                     </div>
+                  </>
+                ) : (
+                  <p className="text-white/70 text-sm leading-relaxed">{card || 'Empty card — tap Edit to add content'}</p>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <span className="text-4xl mb-3">🧵</span>
+            <p className="text-white/40 text-sm">Start building your thread</p>
+            <p className="text-white/25 text-xs mt-1">Add cards to create a multi-slide story</p>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={addThreadCard}
+              className="mt-4 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] hover:bg-[#00f0ff]/20"
+            >
+              <span className="text-base">+</span> Add First Card
+            </motion.button>
+          </div>
+        )}
 
-                    {editingCardIndex === i ? (
-                      <textarea
-                        value={editingCardText}
-                        onChange={(e) => setEditingCardText(e.target.value)}
-                        className="w-full bg-white/[0.06] rounded-lg p-2.5 text-sm text-white outline-none resize-none border border-[#00f0ff]/30 focus:border-[#00f0ff]/60"
-                        rows={4}
-                        autoFocus
-                      />
-                    ) : (
-                      <p className="text-white/70 text-sm leading-relaxed line-clamp-5">{card}</p>
-                    )}
-
-                    {editingCardIndex === i && (
-                      <div className="flex gap-2 mt-2">
-                        <button
-                          onClick={saveEditCard}
-                          className="flex-1 py-1.5 rounded-lg text-white text-xs font-medium"
-                          style={{ background: 'linear-gradient(135deg, #00f0ff 0%, #00b8d4 100%)' }}
-                        >
-                          Save
-                        </button>
-                        <button onClick={() => setEditingCardIndex(null)} className="flex-1 py-1.5 rounded-lg bg-white/[0.06] text-white/60 text-xs font-medium">
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            )}
-
-            {threadCards.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-10 text-center">
-                <span className="text-4xl mb-3">🗑️</span>
-                <p className="text-white/40 text-sm">All cards removed</p>
-                <button
-                  onClick={() => {
-                    const thread = MOCK_THREADS.find((t) => t.id === selectedThread)
-                    if (thread) setThreadCards([...thread.cards])
-                  }}
-                  className="mt-3 text-sm font-medium"
-                  style={{ color: '#00f0ff', textShadow: '0 0 6px rgba(0,240,255,0.3)' }}
-                >
-                  Reset cards
-                </button>
-              </div>
-            )}
-
-            <p className="text-white/30 text-xs text-center">
-              Swipe to preview all cards · {threadCards.length} card{threadCards.length !== 1 ? 's' : ''} selected
-            </p>
-          </>
+        {threadCards.length > 0 && (
+          <p className="text-white/30 text-xs text-center">
+            Each card becomes one story slide · {threadCards.filter((c) => c.trim()).length} card{threadCards.filter((c) => c.trim()).length !== 1 ? 's' : ''} with content
+          </p>
         )}
       </div>
     )
@@ -1288,114 +1204,158 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   // ---- CRICKET ----
   function CricketCanvas() {
     return (
-      <div className="pt-2 pb-20 flex flex-col gap-5">
-        {!selectedMatch ? (
-          <>
-            <h3 className="text-lg font-bold text-white">Live Matches</h3>
-            <p className="text-white/40 text-sm">Select a match to add your take</p>
-            <div className="flex flex-col gap-3 mt-2">
-              {MOCK_MATCHES.map((match, i) => (
-                <motion.button
-                  key={match.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setSelectedMatch(match.id)}
-                  className="rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left hover:border-[#00f0ff]/20 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 animate-pulse">{match.status}</span>
-                    <span className="text-white/30 text-xs">{match.venue}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">{match.team1Flag}</span>
-                      <div>
-                        <p className="text-white font-bold text-sm">{match.team1}</p>
-                        <p className="text-white/60 text-xs">{match.team1Score}/{match.overs} ov</p>
-                      </div>
-                    </div>
-                    <span className="text-white/20 text-xs font-bold">VS</span>
-                    <div className="flex items-center gap-2">
-                      <div className="text-right">
-                        <p className="text-white font-bold text-sm">{match.team2}</p>
-                        <p className="text-white/60 text-xs">{match.team2Score}</p>
-                      </div>
-                      <span className="text-2xl">{match.team2Flag}</span>
-                    </div>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            {selectedMatchData && (
-              <div className="rounded-2xl bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border border-[#00f0ff]/20 p-5 shadow-[0_0_16px_rgba(0,240,255,0.1)]">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 animate-pulse">{selectedMatchData.status}</span>
-                  <span className="text-white/30 text-xs">{selectedMatchData.venue}</span>
-                </div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-3xl">{selectedMatchData.team1Flag}</span>
-                    <div>
-                      <p className="text-white font-bold">{selectedMatchData.team1}</p>
-                      <p className="font-mono text-lg font-bold" style={{ color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}>{selectedMatchData.team1Score}</p>
-                    </div>
-                  </div>
-                  <span className="text-white/20 text-xs">vs</span>
-                  <div className="flex items-center gap-2.5">
-                    <div className="text-right">
-                      <p className="text-white font-bold">{selectedMatchData.team2}</p>
-                      <p className="text-white/60 font-mono text-lg">{selectedMatchData.team2Score}</p>
-                    </div>
-                    <span className="text-3xl">{selectedMatchData.team2Flag}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-white/30 text-xs">Overs:</span>
-                  <span className="text-white/70 text-xs font-mono">{selectedMatchData.overs}</span>
-                </div>
-              </div>
-            )}
+      <div className="pt-2 pb-20 flex flex-col gap-4">
+        <h3 className="text-lg font-bold text-white">Match Details</h3>
+        <p className="text-white/40 text-sm">Enter the match info to create a cricket story</p>
 
-            <div>
-              <label className="text-white/40 text-xs mb-2 block">Add your take</label>
-              <textarea
-                value={cricketCommentary}
-                onChange={(e) => setCricketCommentary(e.target.value)}
-                placeholder="What do you think about this match?"
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none resize-none text-sm focus:border-[#00f0ff]/50 transition-colors"
-                rows={3}
+        {/* Status toggle */}
+        <div className="flex items-center gap-2">
+          {(['live', 'upcoming', 'completed'] as const).map((s) => (
+            <motion.button
+              key={s}
+              whileTap={{ scale: 0.92 }}
+              onClick={() => setCricketStatus(s)}
+              className={cn(
+                'px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border',
+                cricketStatus === s
+                  ? s === 'live'
+                    ? 'border-red-400 bg-red-500/15 text-red-400 shadow-[0_0_8px_rgba(239,68,68,0.25)]'
+                    : s === 'upcoming'
+                      ? 'border-yellow-400 bg-yellow-500/15 text-yellow-400 shadow-[0_0_8px_rgba(234,179,8,0.25)]'
+                      : 'border-green-400 bg-green-500/15 text-green-400 shadow-[0_0_8px_rgba(34,197,94,0.25)]'
+                  : 'border-white/[0.08] bg-white/[0.04] text-white/50',
+              )}
+            >
+              {s === 'live' && '🔴 '}
+              {s === 'upcoming' && '🟡 '}
+              {s === 'completed' && '🟢 '}
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Teams */}
+        <div className="rounded-2xl bg-white/[0.04] border border-white/[0.08] p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1">
+              <label className="text-white/30 text-xs mb-1 block">Team 1</label>
+              <input
+                type="text"
+                value={cricketTeam1}
+                onChange={(e) => setCricketTeam1(e.target.value.toUpperCase())}
+                placeholder="IND"
+                maxLength={5}
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 text-white font-bold text-lg placeholder:text-white/20 outline-none focus:border-[#00f0ff]/50 transition-colors"
               />
             </div>
+            <span className="text-white/20 text-xs font-bold px-3 mt-4">VS</span>
+            <div className="flex-1">
+              <label className="text-white/30 text-xs mb-1 block text-right">Team 2</label>
+              <input
+                type="text"
+                value={cricketTeam2}
+                onChange={(e) => setCricketTeam2(e.target.value.toUpperCase())}
+                placeholder="AUS"
+                maxLength={5}
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 text-white font-bold text-lg placeholder:text-white/20 outline-none focus:border-[#00f0ff]/50 transition-colors text-right"
+              />
+            </div>
+          </div>
 
-            {cricketCommentary.trim() && selectedMatchData && (
-              <div className="rounded-2xl overflow-hidden border border-[#00f0ff]/15">
-                <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-5 flex flex-col items-center justify-center min-h-[200px]">
-                  <div className="flex items-center gap-6 mb-4">
-                    <div className="text-center">
-                      <span className="text-3xl">{selectedMatchData.team1Flag}</span>
-                      <p className="text-white/50 text-xs mt-1">{selectedMatchData.team1}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono font-bold text-sm" style={{ color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}>{selectedMatchData.team1Score}</p>
-                      <p className="text-white/30 text-[10px]">vs</p>
-                      <p className="text-white/60 font-mono font-bold text-sm">{selectedMatchData.team2Score}</p>
-                    </div>
-                    <div className="text-center">
-                      <span className="text-3xl">{selectedMatchData.team2Flag}</span>
-                      <p className="text-white/50 text-xs mt-1">{selectedMatchData.team2}</p>
-                    </div>
-                  </div>
-                  <div className="w-16 h-[1px] bg-[#00f0ff]/20 mb-4" />
-                  <p className="text-white text-sm text-center font-medium leading-relaxed px-2">&ldquo;{cricketCommentary}&rdquo;</p>
+          {/* Scores */}
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex-1">
+              <label className="text-white/30 text-xs mb-1 block">Score</label>
+              <input
+                type="text"
+                value={cricketTeam1Score}
+                onChange={(e) => setCricketTeam1Score(e.target.value)}
+                placeholder="287/4"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 text-white font-mono text-sm placeholder:text-white/20 outline-none focus:border-[#00f0ff]/50 transition-colors"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="text-white/30 text-xs mb-1 block text-right">Score</label>
+              <input
+                type="text"
+                value={cricketTeam2Score}
+                onChange={(e) => setCricketTeam2Score(e.target.value)}
+                placeholder="265"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 text-white font-mono text-sm placeholder:text-white/20 outline-none focus:border-[#00f0ff]/50 transition-colors text-right"
+              />
+            </div>
+          </div>
+
+          {/* Overs + Venue */}
+          <div className="flex items-end gap-3">
+            <div className="w-24">
+              <label className="text-white/30 text-xs mb-1 block">Overs</label>
+              <input
+                type="text"
+                value={cricketOvers}
+                onChange={(e) => setCricketOvers(e.target.value)}
+                placeholder="42.3"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 text-white font-mono text-sm placeholder:text-white/20 outline-none focus:border-[#00f0ff]/50 transition-colors"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="text-white/30 text-xs mb-1 block">Venue</label>
+              <input
+                type="text"
+                value={cricketVenue}
+                onChange={(e) => setCricketVenue(e.target.value)}
+                placeholder="Eden Gardens, Kolkata"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/20 outline-none focus:border-[#00f0ff]/50 transition-colors"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Commentary */}
+        <div>
+          <label className="text-white/40 text-xs mb-2 block">Your take (optional)</label>
+          <textarea
+            value={cricketCommentary}
+            onChange={(e) => setCricketCommentary(e.target.value)}
+            placeholder="What do you think about this match?"
+            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none resize-none text-sm focus:border-[#00f0ff]/50 transition-colors"
+            rows={3}
+          />
+        </div>
+
+        {/* Preview */}
+        {cricketTeam1.trim() && cricketTeam2.trim() && (
+          <div className="rounded-2xl overflow-hidden border border-[#00f0ff]/15">
+            <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-5 flex flex-col items-center justify-center min-h-[180px]">
+              {cricketStatus === 'live' && (
+                <div className="flex items-center gap-1.5 mb-3">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                  </span>
+                  <span className="text-xs font-bold text-red-400 tracking-wider">LIVE</span>
+                </div>
+              )}
+              <div className="flex items-center gap-6 mb-4">
+                <div className="text-center">
+                  <p className="text-white font-bold text-sm">{cricketTeam1}</p>
+                  <p className="font-mono text-lg font-bold" style={{ color: '#00f0ff', textShadow: '0 0 8px rgba(0,240,255,0.4)' }}>{cricketTeam1Score || '0/0'}</p>
+                </div>
+                <div>
+                  <p className="text-white/30 text-[10px]">vs</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-white font-bold text-sm">{cricketTeam2}</p>
+                  <p className="text-white/60 font-mono text-lg">{cricketTeam2Score || '0/0'}</p>
                 </div>
               </div>
-            )}
-          </>
+              <div className="w-16 h-[1px] bg-[#00f0ff]/20 mb-3" />
+              {cricketVenue && <p className="text-white/30 text-xs">{cricketVenue} · {cricketOvers || '0.0'} ov</p>}
+              {cricketCommentary.trim() && (
+                <p className="text-white text-sm text-center font-medium leading-relaxed px-2 mt-2">&ldquo;{cricketCommentary}&rdquo;</p>
+              )}
+            </div>
+          </div>
         )}
       </div>
     )
