@@ -43,7 +43,7 @@ export interface SponsoredAd {
   timestamp: number
 }
 
-export interface MockChatItem {
+export interface SampleChatItem {
   id: string
   name: string
   initial: string
@@ -53,7 +53,7 @@ export interface MockChatItem {
   lastMessageTime: number
   unreadCount: number
   verified: boolean
-  isMock: true
+  isSample: true
 }
 
 export type ChatView = 'list' | 'room' | 'settings'
@@ -72,8 +72,8 @@ interface DualPaneState {
   setChatView: (view: ChatView) => void
   selectChat: (chatId: string | null) => void
 
-  /* ── Mock Chat List ──────────────────────────── */
-  mockChatList: MockChatItem[]
+  /* ── Sample Chat List ──────────────────────────── */
+  sampleChatList: SampleChatItem[]
   nuclearBlocked: Record<string, boolean>
   toggleNuclearBlock: (chatId: string) => void
   mutedChats: Record<string, boolean>
@@ -115,10 +115,10 @@ interface DualPaneState {
   reset: () => void
 }
 
-/* ── Mock chat messages ──────────────────────────────────────────── */
+/* ── Sample chat messages ──────────────────────────────────────────── */
 
-const MOCK_MESSAGES: Record<string, ChatMsg[]> = {
-  'mock_sarah': [
+const SAMPLE_MESSAGES: Record<string, ChatMsg[]> = {
+  'sample_sarah': [
     { id: 'm1', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Hey! Are you coming to the event tonight?', timestamp: Date.now() - 3600000 * 2, isMine: false, read: true, reactions: [{ emoji: '🔥', count: 2, reacted: false }] },
     { id: 'm2', senderId: 'me', senderName: 'You', content: 'Yes! Definitely. What time does it start?', timestamp: Date.now() - 3600000 * 1.9, isMine: true, read: true, reactions: [] },
     { id: 'm3', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Doors open at 7pm, main act at 8. I got us VIP spots 🎉', timestamp: Date.now() - 3600000 * 1.8, isMine: false, read: true, reactions: [{ emoji: '❤️', count: 1, reacted: true }, { emoji: '🎉', count: 3, reacted: true }] },
@@ -129,34 +129,34 @@ const MOCK_MESSAGES: Record<string, ChatMsg[]> = {
     { id: 'm8', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Also did you see the new drop on Black94? Someone posted about the after-party', timestamp: Date.now() - 600000, isMine: false, read: true, reactions: [{ emoji: '👀', count: 1, reacted: false }] },
     { id: 'm9', senderId: 'me', senderName: 'You', content: 'No I missed that! Send me the link?', timestamp: Date.now() - 300000, isMine: true, read: true, reactions: [] },
   ],
-  'mock_mike': [
+  'sample_mike': [
     { id: 'mm1', senderId: 'user_b', senderName: 'Mike Dev', content: 'The API endpoint is ready for testing 🚀', timestamp: Date.now() - 7200000, isMine: false, read: true, reactions: [{ emoji: '🚀', count: 1, reacted: true }] },
     { id: 'mm2', senderId: 'me', senderName: 'You', content: 'Nice! Deploying to staging now.', timestamp: Date.now() - 6800000, isMine: true, read: true, reactions: [] },
     { id: 'mm3', senderId: 'user_b', senderName: 'Mike Dev', content: 'I found a bug in the auth middleware. Sending PR now.', timestamp: Date.now() - 3600000, isMine: false, read: true, reactions: [] },
     { id: 'mm4', senderId: 'me', senderName: 'You', content: 'Good catch. I will review it after lunch.', timestamp: Date.now() - 2400000, isMine: true, read: true, reactions: [{ emoji: '👍', count: 1, reacted: false }] },
     { id: 'mm5', senderId: 'user_b', senderName: 'Mike Dev', content: 'Sounds good. Also the client wants to add push notifications.', timestamp: Date.now() - 900000, isMine: false, read: true, reactions: [] },
   ],
-  'mock_alex': [
+  'sample_alex': [
     { id: 'am1', senderId: 'user_c', senderName: 'Alex Rivera', content: 'Just shipped the new design system! Check it out ✨', timestamp: Date.now() - 86400000, isMine: false, read: true, reactions: [{ emoji: '✨', count: 2, reacted: true }] },
     { id: 'am2', senderId: 'me', senderName: 'You', content: 'The dark mode variants look insane!', timestamp: Date.now() - 82800000, isMine: true, read: true, reactions: [] },
     { id: 'am3', senderId: 'user_c', senderName: 'Alex Rivera', content: 'Thanks! Spent 3 days on the color tokens alone lol', timestamp: Date.now() - 80000000, isMine: false, read: true, reactions: [{ emoji: '😂', count: 2, reacted: false }] },
     { id: 'am4', senderId: 'user_c', senderName: 'Alex Rivera', content: 'Want to collab on the motion design for the onboarding flow?', timestamp: Date.now() - 43200000, isMine: false, read: false, reactions: [] },
   ],
-  'mock_priya': [
+  'sample_priya': [
     { id: 'pm1', senderId: 'me', senderName: 'You', content: 'How was the conference?', timestamp: Date.now() - 172800000, isMine: true, read: true, reactions: [] },
     { id: 'pm2', senderId: 'user_d', senderName: 'Priya Sharma', content: 'Amazing! Met so many people from the AI community 🤖', timestamp: Date.now() - 170000000, isMine: false, read: true, reactions: [{ emoji: '🤖', count: 1, reacted: false }] },
     { id: 'pm3', senderId: 'user_d', senderName: 'Priya Sharma', content: 'There was this talk on RAG pipelines that blew my mind', timestamp: Date.now() - 168000000, isMine: false, read: true, reactions: [] },
     { id: 'pm4', senderId: 'me', senderName: 'You', content: 'Share the recording!', timestamp: Date.now() - 86400000, isMine: true, read: true, reactions: [] },
     { id: 'pm5', senderId: 'user_d', senderName: 'Priya Sharma', content: 'Will do! Also I started a new open source project. Want to contribute? 🛠️', timestamp: Date.now() - 7200000, isMine: false, read: false, reactions: [] },
   ],
-  'mock_jordan': [
+  'sample_jordan': [
     { id: 'jm1', senderId: 'user_e', senderName: 'Jordan Lee', content: 'Bro the gym session was brutal today 💪', timestamp: Date.now() - 5400000, isMine: false, read: true, reactions: [{ emoji: '💪', count: 2, reacted: true }] },
     { id: 'jm2', senderId: 'me', senderName: 'You', content: 'New PR on deadlift?', timestamp: Date.now() - 4800000, isMine: true, read: true, reactions: [] },
     { id: 'jm3', senderId: 'user_e', senderName: 'Jordan Lee', content: 'Hit 405lbs! Finally broke the 4 plate barrier 🏆', timestamp: Date.now() - 4200000, isMine: false, read: true, reactions: [{ emoji: '🏆', count: 3, reacted: true }] },
     { id: 'jm4', senderId: 'me', senderName: 'You', content: 'That is legendary. We need to celebrate', timestamp: Date.now() - 3600000, isMine: true, read: true, reactions: [] },
     { id: 'jm5', senderId: 'user_e', senderName: 'Jordan Lee', content: "Let's hit the new ramen spot this weekend", timestamp: Date.now() - 1200000, isMine: false, read: false, reactions: [] },
   ],
-  'mock_zara': [
+  'sample_zara': [
     { id: 'zm1', senderId: 'user_f', senderName: 'Zara Kim', content: 'The marketing report is ready. Impressive growth numbers! 📈', timestamp: Date.now() - 259200000, isMine: false, read: true, reactions: [{ emoji: '📈', count: 1, reacted: false }] },
     { id: 'zm2', senderId: 'me', senderName: 'You', content: 'Great work! What is the CTR looking like?', timestamp: Date.now() - 250000000, isMine: true, read: true, reactions: [] },
     { id: 'zm3', senderId: 'user_f', senderName: 'Zara Kim', content: 'Up 340% from last quarter. The new ad creatives are performing really well.', timestamp: Date.now() - 240000000, isMine: false, read: true, reactions: [{ emoji: '🔥', count: 2, reacted: true }] },
@@ -165,11 +165,11 @@ const MOCK_MESSAGES: Record<string, ChatMsg[]> = {
   ],
 }
 
-/* ── Mock chat list data ──────────────────────────────────────────── */
+/* ── Sample chat list data ──────────────────────────────────────────── */
 
-const MOCK_CHAT_LIST: MockChatItem[] = [
+const SAMPLE_CHAT_LIST: SampleChatItem[] = [
   {
-    id: 'mock_sarah',
+    id: 'sample_sarah',
     name: 'Sarah Chen',
     initial: 'S',
     color: '#FFFFFF',
@@ -178,10 +178,10 @@ const MOCK_CHAT_LIST: MockChatItem[] = [
     lastMessageTime: Date.now() - 300000,
     unreadCount: 2,
     verified: true,
-    isMock: true,
+    isSample: true,
   },
   {
-    id: 'mock_mike',
+    id: 'sample_mike',
     name: 'Mike Dev',
     initial: 'M',
     color: '#9CA3AF',
@@ -190,10 +190,10 @@ const MOCK_CHAT_LIST: MockChatItem[] = [
     lastMessageTime: Date.now() - 900000,
     unreadCount: 1,
     verified: false,
-    isMock: true,
+    isSample: true,
   },
   {
-    id: 'mock_alex',
+    id: 'sample_alex',
     name: 'Alex Rivera',
     initial: 'A',
     color: '#f59e0b',
@@ -202,10 +202,10 @@ const MOCK_CHAT_LIST: MockChatItem[] = [
     lastMessageTime: Date.now() - 43200000,
     unreadCount: 1,
     verified: true,
-    isMock: true,
+    isSample: true,
   },
   {
-    id: 'mock_jordan',
+    id: 'sample_jordan',
     name: 'Jordan Lee',
     initial: 'J',
     color: '#ef4444',
@@ -214,10 +214,10 @@ const MOCK_CHAT_LIST: MockChatItem[] = [
     lastMessageTime: Date.now() - 1200000,
     unreadCount: 0,
     verified: false,
-    isMock: true,
+    isSample: true,
   },
   {
-    id: 'mock_priya',
+    id: 'sample_priya',
     name: 'Priya Sharma',
     initial: 'P',
     color: '#FFFFFF',
@@ -226,10 +226,10 @@ const MOCK_CHAT_LIST: MockChatItem[] = [
     lastMessageTime: Date.now() - 7200000,
     unreadCount: 3,
     verified: true,
-    isMock: true,
+    isSample: true,
   },
   {
-    id: 'mock_zara',
+    id: 'sample_zara',
     name: 'Zara Kim',
     initial: 'Z',
     color: '#2a7fff',
@@ -238,13 +238,13 @@ const MOCK_CHAT_LIST: MockChatItem[] = [
     lastMessageTime: Date.now() - 14400000,
     unreadCount: 0,
     verified: false,
-    isMock: true,
+    isSample: true,
   },
 ]
 
-/* ── Mock sponsored ads ──────────────────────────────────────────── */
+/* ── Sponsored ads ──────────────────────────────────────────── */
 
-const MOCK_ADS: SponsoredAd[] = [
+const SPONSORED_ADS: SponsoredAd[] = [
   {
     id: 'ad1', brandName: 'Nike', brandInitial: 'N', verified: true,
     headline: 'Just Do It — New Collection',
@@ -356,15 +356,15 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   setChatView: (view) => set({ chatView: view }),
   selectChat: (chatId) => {
     if (chatId) {
-      const msgs = MOCK_MESSAGES[chatId] || MOCK_MESSAGES['mock_sarah']!
+      const msgs = SAMPLE_MESSAGES[chatId] || SAMPLE_MESSAGES['sample_sarah']!
       set({ selectedChatId: chatId, chatView: 'room', messages: msgs })
     } else {
       set({ selectedChatId: null, chatView: 'list' })
     }
   },
 
-  /* ── Mock Chat List ──────────────────────────── */
-  mockChatList: MOCK_CHAT_LIST,
+  /* ── Sample Chat List ──────────────────────────── */
+  sampleChatList: SAMPLE_CHAT_LIST,
   nuclearBlocked: {},
   toggleNuclearBlock: (chatId) => set((s) => ({
     nuclearBlocked: { ...s.nuclearBlocked, [chatId]: !s.nuclearBlocked[chatId] },
@@ -375,7 +375,7 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   })),
 
   /* ── Chat Messages ────────────────────────────── */
-  messages: MOCK_MESSAGES['mock_sarah']!,
+  messages: SAMPLE_MESSAGES['sample_sarah']!,
   setMessages: (msgs) => set({ messages: msgs }),
   addMessage: (msg) => set((s) => ({ messages: [...s.messages, msg] })),
   typing: false,
@@ -422,10 +422,10 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   setReplyTo: (msg) => set({ replyTo: msg }),
 
   /* ── Sponsored Ads ───────────────────────────── */
-  ads: MOCK_ADS,
+  ads: SPONSORED_ADS,
   loadMoreAds: () => {
     const { ads } = get()
-    if (ads.length >= MOCK_ADS.length + EXTRA_ADS.length) return
+    if (ads.length >= SPONSORED_ADS.length + EXTRA_ADS.length) return
     const nextBatch = EXTRA_ADS.slice(0, 4)
     set((s) => ({
       ads: [...s.ads, ...nextBatch.filter((a) => !s.ads.find((ea) => ea.id === a.id))],
@@ -497,10 +497,10 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
     mobileAdsOpen: false,
     selectedChatId: null,
     chatView: 'list' as ChatView,
-    messages: MOCK_MESSAGES['mock_sarah']!,
+    messages: SAMPLE_MESSAGES['sample_sarah']!,
     typing: false,
     replyTo: null,
-    ads: MOCK_ADS,
+    ads: SPONSORED_ADS,
     likedAds: new Set(),
     savedAds: new Set(),
     totalEarned: 0,

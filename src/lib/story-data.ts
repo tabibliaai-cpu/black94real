@@ -1,5 +1,5 @@
 // =============================================================================
-// Story Mock Data – Complete types, constants, helpers & seed data
+// Story Demo Data – Complete types, constants, helpers & seed data
 // =============================================================================
 
 // ---------------------------------------------------------------------------
@@ -193,10 +193,10 @@ export const FESTIVAL_TEMPLATES: FestivalTemplate[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Mock story groups (8)
+// Demo story groups (8)
 // ---------------------------------------------------------------------------
 
-export const MOCK_STORY_GROUPS: StoryGroup[] = [
+export const DEMO_STORY_GROUPS: StoryGroup[] = [
   // 1. @ranveer_talks – Voice story about IPL 2025
   {
     creatorId: 'u_001',

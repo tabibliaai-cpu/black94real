@@ -254,7 +254,7 @@ export function UserPostCard({
         {showHeart && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
             <svg
-              className="w-24 h-24 text-[#f91880] animate-heart-burst"
+              className="w-24 h-24 text-[#f43f5e] animate-heart-burst"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -266,11 +266,11 @@ export function UserPostCard({
         {/* Repost indicator */}
         {isReposted && (
           <div className="flex items-center gap-1.5 ml-10 mb-0.5">
-            <svg className="w-[14px] h-[14px] text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-[14px] h-[14px] text-[#10b981]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polyline points="23 4 23 10 17 10"/>
               <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
             </svg>
-            <span className="text-[12px] font-bold text-[#00ba7c]">You shared</span>
+            <span className="text-[12px] font-bold text-[#10b981]">You shared</span>
           </div>
         )}
 
@@ -306,7 +306,7 @@ export function UserPostCard({
                   'inline-flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full shrink-0',
                   trendingLabel === 'viral' && 'bg-[#f4212e]/10 text-[#f4212e]',
                   trendingLabel === 'trending' && 'bg-[#FFFFFF]/10 text-[#FFFFFF]',
-                  trendingLabel === 'rising' && 'bg-[#00ba7c]/10 text-[#00ba7c]',
+                  trendingLabel === 'rising' && 'bg-[#10b981]/10 text-[#10b981]',
                 )}>
                   {trendingLabel === 'viral' && (
                     <svg className="w-[10px] h-[10px]" viewBox="0 0 24 24" fill="currentColor"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
@@ -390,11 +390,11 @@ export function UserPostCard({
                 className="flex items-center gap-1 group"
                 onClick={(e) => { e.stopPropagation(); handleRepost() }}
               >
-                <div className="p-2.5 rounded-full group-hover:bg-[#00ba7c]/10 transition-colors">
+                <div className="p-2.5 rounded-full group-hover:bg-[#10b981]/10 transition-colors">
                   <svg
                     className={cn(
                       'w-[18px] h-[18px] transition-colors',
-                      isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8] group-hover:text-[#00ba7c]',
+                      isReposted ? 'text-[#10b981]' : 'text-[#94a3b8] group-hover:text-[#10b981]',
                       repostAnim && 'animate-like-bounce'
                     )}
                     viewBox="0 0 24 24"
@@ -409,7 +409,7 @@ export function UserPostCard({
                   </svg>
                 </div>
                 {repostCount > 0 && (
-                  <span className={cn('text-[13px]', isReposted ? 'text-[#00ba7c]' : 'text-[#94a3b8] group-hover:text-[#00ba7c]')}>
+                  <span className={cn('text-[13px]', isReposted ? 'text-[#10b981]' : 'text-[#94a3b8] group-hover:text-[#10b981]')}>
                     {formatCount(repostCount)}
                   </span>
                 )}
@@ -420,23 +420,23 @@ export function UserPostCard({
                 className="flex items-center gap-1 group"
                 onClick={(e) => { e.stopPropagation(); handleLike() }}
               >
-                <div className="p-2.5 rounded-full group-hover:bg-[#f91880]/10 transition-colors">
+                <div className="p-2.5 rounded-full group-hover:bg-[#f43f5e]/10 transition-colors">
                   {isLiked ? (
                     <svg
-                      className={cn('w-[18px] h-[18px] text-[#f91880]', likeAnim && 'animate-like-bounce')}
+                      className={cn('w-[18px] h-[18px] text-[#f43f5e]', likeAnim && 'animate-like-bounce')}
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                     </svg>
                   ) : (
-                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#f91880]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                    <svg className="w-[18px] h-[18px] text-[#94a3b8] group-hover:text-[#f43f5e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                     </svg>
                   )}
                 </div>
                 {likeCount > 0 && (
-                  <span className={cn('text-[13px]', isLiked ? 'text-[#f91880]' : 'text-[#94a3b8] group-hover:text-[#f91880]')}>
+                  <span className={cn('text-[13px]', isLiked ? 'text-[#f43f5e]' : 'text-[#94a3b8] group-hover:text-[#f43f5e]')}>
                     {formatCount(likeCount)}
                   </span>
                 )}

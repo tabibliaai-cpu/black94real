@@ -265,7 +265,7 @@ function MessageBubble({
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/[0.08] transition-colors"
           title="React"
         >
-          <svg className="w-3.5 h-3.5 text-[#f91880]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-[#f43f5e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
           </svg>
         </button>
@@ -467,7 +467,7 @@ function PrivateChatPanel() {
         onChange={setText}
         onSend={handleSend}
         inputRef={inputRef as React.RefObject<HTMLInputElement>}
-        placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'Start a message'}
+        placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'Type a message'}
       />
     </div>
   )
@@ -543,7 +543,7 @@ function AdCard({ ad }: { ad: ReturnType<typeof useDualPaneChat.getState>['ads']
             onClick={() => likeAd(ad.id)}
             className={cn(
               'flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] transition-all duration-200',
-              ad.liked ? 'bg-[#f91880]/15 text-[#f91880]' : 'text-[#94a3b8] hover:bg-white/[0.06]'
+              ad.liked ? 'bg-[#f43f5e]/15 text-[#f43f5e]' : 'text-[#94a3b8] hover:bg-white/[0.06]'
             )}
           >
             <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill={ad.liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2}>

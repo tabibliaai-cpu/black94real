@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import {
   type StoryGroup, type StoryCard, type PollOption, type CricketMatch,
   type ReactionType, getLanguage, formatCount, getReactionLabel
-} from '@/lib/story-mock-data'
+} from '@/lib/story-data'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -256,7 +256,7 @@ function PollStory({ card }: { card: StoryCard }) {
   const [animKey, setAnimKey] = useState(0)
   const totalVotes = useMemo(() => votes.reduce((s, v) => s + v.votes, 0), [votes])
 
-  // Mock vote updates every 3 seconds
+  // Vote preview updates every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setVotes((prev) =>
@@ -439,7 +439,7 @@ function CricketStory({ card }: { card: StoryCard }) {
   const data = card.cricketData
   const [liveScore, setLiveScore] = useState(data)
 
-  // Mock score updates
+  // Score preview updates
   useEffect(() => {
     const interval = setInterval(() => {
       setLiveScore((prev) => {

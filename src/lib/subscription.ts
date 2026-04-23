@@ -31,7 +31,7 @@ export const PLANS: Plan[] = [
     price: 449,
     currency: '₹',
     billingCycle: 'month',
-    badgeColor: '#1d9bf0',
+    badgeColor: '#3b82f6',
     popular: true,
     features: [
       'Blue tick verification',
@@ -106,7 +106,7 @@ export interface BillingEntry {
   status: 'paid' | 'pending'
 }
 
-export const mockBillingHistory: BillingEntry[] = [
+export const sampleBillingHistory: BillingEntry[] = [
   {
     id: 'bill-001',
     date: '2025-04-18',

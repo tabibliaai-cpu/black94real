@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════
-// Business mock data & utility functions for Black94
+// Business sample data & utility functions for Black94
 // ═══════════════════════════════════════════════════════════════
 
 export interface Affiliate {
@@ -95,8 +95,8 @@ export interface BusinessTrial {
   daysRemaining: number
 }
 
-// ── Mock Affiliates ──────────────────────────────────────────
-export const mockAffiliates: Affiliate[] = [
+// ── Sample Affiliates ──────────────────────────────────────────
+export const sampleAffiliates: Affiliate[] = [
   {
     id: 'aff-001',
     name: 'Priya Sharma',
@@ -126,8 +126,8 @@ export const mockAffiliates: Affiliate[] = [
   },
 ]
 
-// ── Mock Team Members ────────────────────────────────────────
-export const mockTeamMembers: TeamMember[] = [
+// ── Sample Team Members ────────────────────────────────────────
+export const sampleTeamMembers: TeamMember[] = [
   {
     id: 'tm-001',
     name: 'Priya Sharma',
@@ -197,8 +197,8 @@ export const mockTeamMembers: TeamMember[] = [
   },
 ]
 
-// ── Mock Campaign Performance ────────────────────────────────
-export const mockCampaignPerformance: CampaignPerformance[] = [
+// ── Sample Campaign Performance ────────────────────────────────
+export const sampleCampaignPerformance: CampaignPerformance[] = [
   {
     id: 'camp-001',
     name: 'Summer Product Launch',
@@ -249,15 +249,15 @@ export const mockCampaignPerformance: CampaignPerformance[] = [
   },
 ]
 
-// ── Mock Channel Performance ─────────────────────────────────
-export const mockChannelPerformance: ChannelPerformance[] = [
+// ── Sample Channel Performance ─────────────────────────────────
+export const sampleChannelPerformance: ChannelPerformance[] = [
   { channel: 'Feed Ads', impressions: 412000, clicks: 22660, ctr: 5.5 },
   { channel: 'Comment Ads', impressions: 198000, clicks: 13986, ctr: 7.07 },
   { channel: 'Profile Ads', impressions: 352600, clicks: 11283, ctr: 3.2 },
 ]
 
-// ── Mock A/B Tests ───────────────────────────────────────────
-export const mockABTests: ABTest[] = [
+// ── Sample A/B Tests ───────────────────────────────────────────
+export const sampleABTests: ABTest[] = [
   {
     id: 'ab-001',
     name: 'Hero Image — Product vs Lifestyle',
@@ -274,8 +274,8 @@ export const mockABTests: ABTest[] = [
   },
 ]
 
-// ── Mock AI Suggestions ──────────────────────────────────────
-export const mockAISuggestions: AISuggestion[] = [
+// ── Sample AI Suggestions ──────────────────────────────────────
+export const sampleAISuggestions: AISuggestion[] = [
   {
     id: 'ai-001',
     text: 'Increase bid for 25-34 age group by 15% — this segment has the highest conversion rate at 8.2%.',

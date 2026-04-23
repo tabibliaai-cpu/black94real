@@ -179,7 +179,7 @@ export function PremiumDashboardView() {
               <p className="text-[14px] font-bold text-white">Business Account</p>
               <p className="text-[12px] text-[#71767b]">Store & commerce enabled</p>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#00ba7c]/15 text-[#00ba7c]">Active</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#10b981]/15 text-[#10b981]">Active</span>
           </div>
           {trial && (
             <div className={cn('p-3 rounded-xl border', trial.isActive ? (trial.daysRemaining <= 7 ? 'border-amber-500/20' : 'border-white/[0.06]') : 'border-red-500/20')}>

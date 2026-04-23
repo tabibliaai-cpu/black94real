@@ -67,7 +67,7 @@ function genAlias(): string {
 
 function genColor(): string {
   const colors = [
-    '#FFFFFF', '#2a7fff', '#06b6d4', '#f59e0b', '#f91880',
+    '#FFFFFF', '#2a7fff', '#06b6d4', '#f59e0b', '#f43f5e',
     '#FFFFFF', '#ef4444', '#10b981', '#ec4899', '#6366f1',
     '#14b8a6', '#f97316', '#84cc16', '#a78bfa', '#fb7185',
   ]

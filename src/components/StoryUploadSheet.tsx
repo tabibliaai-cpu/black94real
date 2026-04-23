@@ -198,12 +198,12 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                   {IMAGE_FILTERS.map((f) => (
                     <button key={f.id} onClick={() => setSelectedFilter(f)} className="shrink-0">
                       <div className={`w-[44px] h-[58px] rounded-lg overflow-hidden border-[1.5px] transition-all
-                        ${selectedFilter.id === f.id ? 'border-[#1d9bf0] scale-105' : 'border-transparent opacity-70 hover:opacity-100'}`}>
+                        ${selectedFilter.id === f.id ? 'border-[#3b82f6] scale-105' : 'border-transparent opacity-70 hover:opacity-100'}`}>
                         <img src={previewUrl} alt={f.name} className="w-full h-full object-cover"
                           style={f.css !== 'none' ? { filter: f.css } : undefined} draggable={false} />
                       </div>
                       <p className={`text-[9px] mt-0.5 text-center truncate w-[44px]
-                        ${selectedFilter.id === f.id ? 'text-[#1d9bf0] font-bold' : 'text-white/30'}`}>{f.name}</p>
+                        ${selectedFilter.id === f.id ? 'text-[#3b82f6] font-bold' : 'text-white/30'}`}>{f.name}</p>
                     </button>
                   ))}
                 </div>
@@ -215,14 +215,14 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
                   placeholder="Add a caption…" maxLength={200} rows={1}
                   className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2
                              text-[14px] text-[#e7e9ea] placeholder-white/25 resize-none
-                             focus:outline-none focus:border-[#1d9bf0]/40 transition-colors" />
+                             focus:outline-none focus:border-[#3b82f6]/40 transition-colors" />
                 <p className="text-[11px] text-white/20 mt-0.5 text-right">{caption.length}/200</p>
               </div>
 
               <button onClick={() => {
                 if (previewUrl) URL.revokeObjectURL(previewUrl)
                 setPreviewUrl(null); setSelectedFile(null); setSelectedFilter(IMAGE_FILTERS[0])
-              }} className="text-[13px] text-[#1d9bf0] font-medium hover:underline">
+              }} className="text-[13px] text-[#3b82f6] font-medium hover:underline">
                 Change photo
               </button>
             </div>
@@ -232,7 +232,7 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
           <button onClick={handleShare} disabled={!previewUrl || uploading}
             className={`w-full py-2.5 rounded-full text-[14px] font-bold transition-all flex items-center justify-center gap-2
               ${previewUrl && !uploading
-                ? 'bg-[#1d9bf0] text-white hover:bg-[#1a8cd8] active:scale-[0.98]'
+                ? 'bg-[#3b82f6] text-white hover:bg-[#2563eb] active:scale-[0.98]'
                 : 'bg-white/[0.06] text-white/25 cursor-not-allowed'}`}>
             {uploading && <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
             {statusText}

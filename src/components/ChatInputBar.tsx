@@ -4,18 +4,18 @@ import { useCallback, useEffect, useRef, useState, type ChangeEvent, type Keyboa
 import { cn } from '@/lib/utils'
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   ChatInputBar — Messages / DM Input Bar
+   ChatInputBar — Message Input Component
 
-   Design spec:
+   Layout:
    ┌─────────────────────────────────────────────────────────────────────────┐
-   │  Border-top: 0.5px #2f3336                                            │
+   │  Border-top: 0.5px border                                              │
    │  Background: #000000                                                   │
    │                                                                        │
    │   ┌─────────────────────────────────────────────────┐  ┌───┐           │
    │   │ 😊  GIF  [ Type a message               ] 📎  │  │ ➤ │           │
    │   └─────────────────────────────────────────────────┘  └───┘           │
-   │   pill: bg-[#202327], rounded-full                                     │
-   │   send: outside pill, #1d9bf0 when active, #2f3336 when idle           │
+   │   pill: rounded-full input area                                         │
+   │   send: active when text is present                                     │
    │   height: ~56px, safe-area inset bottom                                │
    └─────────────────────────────────────────────────────────────────────────┘
    ═══════════════════════════════════════════════════════════════════════════════ */
@@ -104,7 +104,7 @@ export function ChatInputBar({
       className={cn(
         'shrink-0 bg-black',
         /* Thin top border */
-        'border-t border-[#2f3336]',
+        'border-t border-[#374151]',
         /* Safe area for notched phones / keyboards */
         'pb-[env(safe-area-inset-bottom,0px)]',
       )}
@@ -115,12 +115,12 @@ export function ChatInputBar({
         <div
           className={cn(
             'flex-1 flex items-center gap-0.5',
-            'bg-[#202327]',
+            'bg-[#1f2937]',
             'rounded-full',
             'pl-1.5 pr-2 py-1',
             /* Subtle focus glow */
             'transition-shadow duration-200',
-            'focus-within:shadow-[0_0_0_1px_rgba(29,155,240,0.35)]',
+            'focus-within:shadow-[0_0_0_1px_rgba(59,130,246,0.35)]',
           )}
         >
           {/* ── Emoji button ── */}
@@ -133,7 +133,7 @@ export function ChatInputBar({
               'w-[34px] h-[34px] rounded-full',
               'transition-colors duration-150',
               emojiActive
-                ? 'text-[#1d9bf0]'
+                ? 'text-[#3b82f6]'
                 : 'text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/[0.07]',
             )}
             aria-label="Emoji"
@@ -234,8 +234,8 @@ export function ChatInputBar({
             'w-[36px] h-[36px] rounded-full',
             'transition-all duration-200 ease-in-out',
             isActive && !disabled
-              ? 'text-[#1d9bf0] hover:bg-[#1d9bf0]/10 active:scale-[0.88]'
-              : 'text-[#2f3336] cursor-default',
+              ? 'text-[#3b82f6] hover:bg-[#3b82f6]/10 active:scale-[0.88]'
+              : 'text-[#374151] cursor-default',
           )}
           aria-label="Send"
         >

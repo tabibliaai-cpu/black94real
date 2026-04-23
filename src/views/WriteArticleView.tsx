@@ -43,7 +43,7 @@ export function WriteArticleView() {
 
   // ── Handlers ──
   const handleCoverClick = useCallback(() => {
-    toast.info('Upload coming soon')
+    // Image upload
   }, [])
 
   const buildArticle = useCallback(

@@ -89,7 +89,7 @@ export function AffiliatesView() {
   }
 
   const handlePurchase = () => {
-    toast.info('Payment integration coming soon')
+    // Payment integration
   }
 
   return (

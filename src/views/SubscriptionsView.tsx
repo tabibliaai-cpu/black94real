@@ -88,7 +88,7 @@ function CurrentPlanBanner() {
 
   const badgeColorMap: Record<string, string> = {
     free: 'bg-[#94a3b8]/20 text-[#94a3b8] border-[#94a3b8]/30',
-    pro: 'bg-[#1d9bf0]/15 text-[#1d9bf0] border-[#1d9bf0]/30',
+    pro: 'bg-[#3b82f6]/15 text-[#3b82f6] border-[#3b82f6]/30',
     gold: 'bg-[#ffd700]/15 text-[#ffd700] border-[#ffd700]/30',
   }
 
@@ -108,7 +108,7 @@ function CurrentPlanBanner() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {plan.id === 'gold' && <CrownIcon className="w-5 h-5 text-[#ffd700]" />}
-          {plan.id === 'pro' && <StarIcon className="w-5 h-5 text-[#1d9bf0]" />}
+          {plan.id === 'pro' && <StarIcon className="w-5 h-5 text-[#3b82f6]" />}
           {plan.id === 'free' && <LightningIcon className="w-5 h-5 text-[#94a3b8]" />}
           <span className="text-[15px] font-semibold text-[#e7e9ea]">Current Plan</span>
         </div>
@@ -128,7 +128,6 @@ function CurrentPlanBanner() {
 
       <button
         disabled
-        onClick={() => toast.info('Subscription management coming soon!')}
         className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#e7e9ea] opacity-50 cursor-not-allowed"
       >
         <ManageIcon className="w-4 h-4" />
@@ -150,7 +149,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
 
   const borderColor: Record<string, string> = {
     free: 'border-white/[0.08]',
-    pro: 'border-[#1d9bf0]/30',
+    pro: 'border-[#3b82f6]/30',
     gold: 'border-[#ffd700]/30',
   }
 
@@ -213,7 +212,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       )}
     >
       {plan.popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-[3px] rounded-full bg-[#1d9bf0] text-[11px] font-bold text-white uppercase tracking-wider">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-[3px] rounded-full bg-[#3b82f6] text-[11px] font-bold text-white uppercase tracking-wider">
           Popular
         </div>
       )}
@@ -221,7 +220,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       {/* Plan icon */}
       <div className="mb-4">
         {plan.id === 'gold' && <CrownIcon className="w-8 h-8 text-[#ffd700]" />}
-        {plan.id === 'pro' && <StarIcon className="w-8 h-8 text-[#1d9bf0]" />}
+        {plan.id === 'pro' && <StarIcon className="w-8 h-8 text-[#3b82f6]" />}
         {plan.id === 'free' && <LightningIcon className="w-8 h-8 text-[#94a3b8]" />}
       </div>
 
@@ -278,7 +277,7 @@ function PricingCard({ plan, currentSubscription }: { plan: Plan; currentSubscri
       <ul className="space-y-2.5">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-2.5">
-            <CheckIcon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', plan.id === 'gold' ? 'text-[#ffd700]' : plan.id === 'pro' ? 'text-[#1d9bf0]' : 'text-[#94a3b8]')} />
+            <CheckIcon className={cn('w-4 h-4 mt-0.5 flex-shrink-0', plan.id === 'gold' ? 'text-[#ffd700]' : plan.id === 'pro' ? 'text-[#3b82f6]' : 'text-[#94a3b8]')} />
             <span className="text-[13px] text-[#c0c0c0] leading-snug">{feature}</span>
           </li>
         ))}
@@ -309,7 +308,7 @@ function FeatureComparisonTable() {
             <tr className="border-b border-white/[0.06]">
               <th className="text-left text-[13px] font-semibold text-[#94a3b8] px-5 py-3">Feature</th>
               <th className="text-center text-[13px] font-semibold text-[#94a3b8] px-3 py-3 w-20">Free</th>
-              <th className="text-center text-[13px] font-semibold text-[#1d9bf0] px-3 py-3 w-20">Premium</th>
+              <th className="text-center text-[13px] font-semibold text-[#3b82f6] px-3 py-3 w-20">Premium</th>
               <th className="text-center text-[13px] font-semibold text-[#ffd700] px-3 py-3 w-20">Business</th>
             </tr>
           </thead>
@@ -327,7 +326,7 @@ function FeatureComparisonTable() {
                   <FeatureCell active={row.free} highlight={currentSub === 'free'} />
                 </td>
                 <td className="text-center px-3 py-3">
-                  <FeatureCell active={row.pro} highlight={currentSub === 'pro'} accentColor="#1d9bf0" />
+                  <FeatureCell active={row.pro} highlight={currentSub === 'pro'} accentColor="#3b82f6" />
                 </td>
                 <td className="text-center px-3 py-3">
                   <FeatureCell active={row.gold} highlight={currentSub === 'gold'} accentColor="#ffd700" />

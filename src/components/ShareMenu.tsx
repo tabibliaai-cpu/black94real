@@ -106,7 +106,7 @@ export function ShareMenu({
       label: isReposted ? 'Undo Repost' : 'Repost',
       sublabel: isReposted ? 'Remove from your profile' : 'Share on your timeline',
       onClick: () => { onRepost(); onClose() },
-      color: isReposted ? '#00ba7c' : '#e7e9ea',
+      color: isReposted ? '#10b981' : '#e7e9ea',
     },
     {
       icon: (
@@ -133,7 +133,7 @@ export function ShareMenu({
     },
     {
       icon: copied ? (
-        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="#00ba7c" strokeWidth={2}>
+        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth={2}>
           <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       ) : (
@@ -145,7 +145,7 @@ export function ShareMenu({
       label: copied ? 'Copied!' : 'Copy Link',
       sublabel: copied ? 'Link copied to clipboard' : 'Copy post link to clipboard',
       onClick: handleCopyLink,
-      color: copied ? '#00ba7c' : '#e7e9ea',
+      color: copied ? '#10b981' : '#e7e9ea',
     },
     {
       icon: (
@@ -214,7 +214,7 @@ export function RepostToast({ show, message }: { show: boolean; message: string 
 
   return (
     <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[95] animate-toast-in">
-      <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#00ba7c] text-black shadow-lg shadow-[#00ba7c]/20">
+      <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#10b981] text-black shadow-lg shadow-[#10b981]/20">
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
           <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>

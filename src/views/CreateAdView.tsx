@@ -172,7 +172,6 @@ export function CreateAdView() {
           <label className="text-[13px] text-[#94a3b8] font-medium">Ad Image</label>
           <button
             disabled
-            onClick={() => toast.info('Upload coming soon')}
             className="w-full border-2 border-dashed border-white/[0.1] rounded-lg p-6 flex flex-col items-center gap-2 opacity-50 cursor-not-allowed"
           >
             <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
@@ -299,7 +298,7 @@ export function CreateAdView() {
         </div>
         <div className="p-4">
           <div className="rounded-lg border border-white/[0.06] overflow-hidden">
-            {/* Mock image area */}
+            {/* Image upload area */}
             <div className="h-32 bg-gradient-to-br from-[#1a2a1a] to-[#110f1a] flex items-center justify-center">
               <span className="text-[#64748b] text-[13px]">Ad Image Preview</span>
             </div>

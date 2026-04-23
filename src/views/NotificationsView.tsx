@@ -9,13 +9,13 @@ import type { Black94Notification } from '@/lib/db'
 function notifIcon(type: string) {
   switch (type) {
     case 'like':
-      return <svg className="w-[18px] h-[18px] text-[#f91880]" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      return <svg className="w-[18px] h-[18px] text-[#f43f5e]" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
     case 'follow':
       return <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="currentColor"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
     case 'comment':
       return <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    case 'repost':
-      return <svg className="w-[18px] h-[18px] text-[#00ba7c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M17 1l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/><path d="M7 23l-4-4 4-4" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    case 'share':
+      return <svg className="w-[18px] h-[18px] text-[#10b981]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M17 1l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 11V9a4 4 0 014-4h14" strokeLinecap="round" strokeLinejoin="round"/><path d="M7 23l-4-4 4-4" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 13v2a4 4 0 01-4 4H3" strokeLinecap="round" strokeLinejoin="round"/></svg>
     default:
       return <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01" strokeLinecap="round" strokeLinejoin="round"/></svg>
   }
@@ -82,7 +82,7 @@ export function NotificationsView() {
             </svg>
           </div>
           <h3 className="text-lg font-bold text-[#e7e9ea] mb-1">Nothing to see here — yet</h3>
-          <p className="text-[15px] text-[#94a3b8]">Likes, reposts, and follows will show up here.</p>
+          <p className="text-[15px] text-[#94a3b8]">Likes, shares, and follows will show up here.</p>
         </div>
       ) : (
         <div>

@@ -91,7 +91,7 @@ function LobbyScreen() {
       {/* Gradient mesh background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#FFFFFF]/[0.06] blur-[100px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#1d9bf0]/[0.04] blur-[80px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#3b82f6]/[0.04] blur-[80px]" />
         <div className="absolute top-[40%] left-[50%] w-[40%] h-[40%] rounded-full bg-[#FFFFFF]/[0.03] blur-[60px] -translate-x-1/2" />
       </div>
 
@@ -114,7 +114,7 @@ function LobbyScreen() {
 
           {/* Logo area */}
           <div className="relative mb-6">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FFFFFF]/20 to-[#1d9bf0]/10 border border-[#FFFFFF]/15 flex items-center justify-center backdrop-blur-xl">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FFFFFF]/20 to-[#3b82f6]/10 border border-[#FFFFFF]/15 flex items-center justify-center backdrop-blur-xl">
               <MaskIcon className={cn(
                 'w-12 h-12 text-[#FFFFFF] transition-all duration-700',
                 started ? 'scale-90 opacity-60' : 'scale-100 opacity-100'
@@ -153,7 +153,7 @@ function LobbyScreen() {
                 <span className="text-[14px] text-[#e7e9ea] font-medium">Finding someone...</span>
               </div>
               <div className="w-56 h-[3px] rounded-full bg-white/[0.06] overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[#FFFFFF] to-[#1d9bf0] rounded-full animate-matching-progress" />
+                <div className="h-full bg-gradient-to-r from-[#FFFFFF] to-[#3b82f6] rounded-full animate-matching-progress" />
               </div>
               {showIcebreaker && (
                 <div className="w-full px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] animate-slide-up">
@@ -415,7 +415,7 @@ function AnonChatRoom() {
             </svg>
           </button>
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFFFFF]/20 to-[#1d9bf0]/10 border border-white/[0.08] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFFFFF]/20 to-[#3b82f6]/10 border border-white/[0.08] flex items-center justify-center">
               <MaskIcon className="w-4.5 h-4.5 text-[#FFFFFF]" />
             </div>
             <div>
@@ -424,7 +424,7 @@ function AnonChatRoom() {
                   {isConnected ? room.strangerAlias : isMatching ? 'Searching...' : 'Disconnected'}
                 </span>
                 {isConnected && (
-                  <div className="w-2 h-2 rounded-full bg-[#00ba7c]" />
+                  <div className="w-2 h-2 rounded-full bg-[#10b981]" />
                 )}
               </div>
               <span className="text-[12px] text-[#71767b]">
@@ -558,7 +558,7 @@ function AnonChatRoom() {
         {isDisconnected && (
           <div className="flex flex-col items-center gap-4 pt-10 animate-fade-in">
             <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
-              <MaskIcon className="w-8 h-8 text-[#2f3336]" />
+              <MaskIcon className="w-8 h-8 text-[#374151]" />
             </div>
             <p className="text-[14px] text-[#94a3b8] text-center">
               Stranger has disconnected

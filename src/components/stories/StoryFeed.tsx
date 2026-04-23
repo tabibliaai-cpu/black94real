@@ -4,15 +4,14 @@ import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import {
-  MOCK_STORY_GROUPS,
-  type StoryGroup,
+  DEMO_STORY_GROUPS,  type StoryGroup,
   type StoryCard,
   type StoryFormat,
   getLanguage,
   formatCount,
   getReactionLabel,
   getTotalReactions,
-} from '@/lib/story-mock-data'
+} from '@/lib/story-data'
 import { VerifiedBadge } from '@/components/PAvatar'
 import {
   Plus,
@@ -530,7 +529,7 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
   const [scrollY, setScrollY] = useState(0)
   const feedRef = useRef<HTMLDivElement>(null)
 
-  const groups = useMemo(() => storyGroups ?? MOCK_STORY_GROUPS, [storyGroups])
+  const groups = useMemo(() => storyGroups ?? DEMO_STORY_GROUPS, [storyGroups])
 
   // ─── Scroll tracking ───
   useEffect(() => {

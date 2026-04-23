@@ -257,7 +257,7 @@ export function SettingsView() {
   const usernameStatusColor: Record<string, string> = {
     idle: 'text-[#64748b]',
     checking: 'text-[#71767b]',
-    available: 'text-[#00ba7c]',
+    available: 'text-[#10b981]',
     taken: 'text-red-400',
     invalid: 'text-[#71767b]',
     current: 'text-[#64748b]',
@@ -273,7 +273,7 @@ export function SettingsView() {
   const usernameBorderClass: Record<string, string> = {
     idle: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
     checking: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
-    available: 'border-[#00ba7c]/40 focus-within:border-[#00ba7c]/70',
+    available: 'border-[#10b981]/40 focus-within:border-[#10b981]/70',
     taken: 'border-red-400/40 focus-within:border-red-400/70',
     invalid: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
     current: 'border-white/[0.08] focus-within:border-[#FFFFFF]/50',
@@ -331,7 +331,7 @@ export function SettingsView() {
           <PAvatar src={displayProfileImage} name={user?.displayName} size={80} className="ring-4 ring-black" />
           <button
             onClick={() => profileInputRef.current?.click()}
-            className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#1d9bf0] flex items-center justify-center shadow-lg hover:bg-[#1a8cd8] transition-colors"
+            className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#3b82f6] flex items-center justify-center shadow-lg hover:bg-[#2563eb] transition-colors"
             disabled={uploadingProfile}
           >
             {uploadingProfile ? (
@@ -358,7 +358,7 @@ export function SettingsView() {
           <p className="text-[14px] text-[#94a3b8]">@{user?.username}</p>
           <button
             onClick={() => profileInputRef.current?.click()}
-            className="mt-2 text-[14px] text-[#1d9bf0] font-semibold hover:text-[#1a8cd8] transition-colors"
+            className="mt-2 text-[14px] text-[#3b82f6] font-semibold hover:text-[#2563eb] transition-colors"
             disabled={uploadingProfile}
           >
             {uploadingProfile ? 'Uploading...' : 'Change photo'}
@@ -397,7 +397,7 @@ export function SettingsView() {
               placeholder="username"
             />
             {usernameStatus === 'available' && (
-              <svg className="w-[18px] h-[18px] text-[#00ba7c] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[18px] h-[18px] text-[#10b981] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             )}
@@ -455,7 +455,7 @@ export function SettingsView() {
         disabled={saving || saved || usernameStatus === 'taken' || usernameStatus === 'checking'}
         className={cn(
           'w-full py-3 rounded-full text-[15px] font-bold transition-all flex items-center justify-center gap-2',
-          saved && 'bg-[#00ba7c] text-white',
+          saved && 'bg-[#10b981] text-white',
           !saved && saving && 'bg-white/[0.08] text-[#64748b]',
           !saved && !saving && usernameStatus !== 'taken' && usernameStatus !== 'checking' && 'bg-[#e7e9ea] text-black hover:bg-gray-200 active:scale-[0.98]',
           !saved && !saving && (usernameStatus === 'taken' || usernameStatus === 'checking') && 'bg-white/[0.08] text-[#64748b]'

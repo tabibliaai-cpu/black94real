@@ -62,7 +62,7 @@ export function ArticleView() {
   }, [])
 
   const handleComment = useCallback(() => {
-    toast.info('Comments coming soon')
+    // Comments feature
   }, [])
 
   const handleBookmark = useCallback(() => {

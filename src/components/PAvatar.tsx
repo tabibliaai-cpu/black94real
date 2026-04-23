@@ -21,7 +21,7 @@ function getInitials(name: string | null | undefined): string {
 
 function resolveBadgeColor(badge?: string): string {
   if (badge === 'gold') return '#ffd700'
-  if (badge === 'pro' || badge === 'blue') return '#1d9bf0'
+  if (badge === 'pro' || badge === 'blue') return '#3b82f6'
   return '#FFFFFF' // default rose gold for generic verified
 }
 

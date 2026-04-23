@@ -154,7 +154,6 @@ export function AdsManagerView() {
                     )}
                     <button
                       disabled
-                      onClick={() => toast.info('Edit feature coming soon')}
                       className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#e7e9ea] opacity-50 cursor-not-allowed"
                     >
                       Edit

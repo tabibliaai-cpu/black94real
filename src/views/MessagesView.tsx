@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
-import { useDualPaneChat, type ChatMsg, type MessageReaction, type MockChatItem } from '@/stores/dualPaneChat'
+import { useDualPaneChat, type ChatMsg, type MessageReaction, type SampleChatItem } from '@/stores/dualPaneChat'
 import { useAppStore } from '@/stores/app'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { getUser } from '@/lib/db'
@@ -266,7 +266,7 @@ function MessageBubble({
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/[0.08] transition-colors"
           title="React"
         >
-          <svg className="w-3.5 h-3.5 text-[#f91880]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-[#f43f5e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
           </svg>
         </button>
@@ -566,7 +566,7 @@ function ChatSettingsSheet({
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function ChatRoomView() {
-  const { messages, addMessage, typing, setTyping, replyTo, setReplyTo, selectedChatId, selectChat, setChatView, mockChatList, nuclearBlocked } = useDualPaneChat()
+  const { messages, addMessage, typing, setTyping, replyTo, setReplyTo, selectedChatId, selectChat, setChatView, sampleChatList, nuclearBlocked } = useDualPaneChat()
   const navigate = useAppStore((s) => s.navigate)
   const [text, setText] = useState('')
   const [reactionPicker, setReactionPicker] = useState<{
@@ -579,7 +579,7 @@ function ChatRoomView() {
   const inputRef = useRef<HTMLInputElement>(null)
   const headerMenuRef = useRef<HTMLDivElement>(null)
 
-  const chatPartner = mockChatList.find((c) => c.id === selectedChatId) || mockChatList[0]
+  const chatPartner = sampleChatList.find((c) => c.id === selectedChatId) || sampleChatList[0]
   const isBlocked = nuclearBlocked[selectedChatId ?? ''] ?? false
 
   useEffect(() => {
@@ -743,8 +743,7 @@ function ChatRoomView() {
           {/* Video Call */}
           <button
             disabled
-            onClick={() => toast.info('Video call coming soon')}
-            className="w-9 h-9 rounded-full flex items-center justify-center opacity-50 cursor-not-allowed"
+              className="w-9 h-9 rounded-full flex items-center justify-center opacity-50 cursor-not-allowed"
           >
             <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
@@ -838,7 +837,7 @@ function ChatRoomView() {
         onChange={setText}
         onSend={handleSend}
         inputRef={inputRef as React.RefObject<HTMLInputElement>}
-        placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'Start a message'}
+        placeholder={replyTo ? `Replying to ${replyTo.isMine ? 'yourself' : replyTo.senderName}...` : 'Type a message'}
       />
 
       {/* ─── Chat Settings Sheet ─── */}
@@ -859,7 +858,7 @@ function ChatRoomView() {
 
 function ChatListView() {
   const user = useAppStore((s) => s.user)
-  const { mockChatList, selectChat, nuclearBlocked, mutedChats } = useDualPaneChat()
+  const { sampleChatList, selectChat, nuclearBlocked, mutedChats } = useDualPaneChat()
   const [fbChats, setFbChats] = useState<FbChat[]>([])
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -941,7 +940,7 @@ function ChatListView() {
     }
   }, [user])
 
-  const filteredMock = mockChatList.filter((c) =>
+  const filteredSample = sampleChatList.filter((c) =>
     c.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
@@ -956,7 +955,6 @@ function ChatListView() {
         <h2 className="text-xl font-bold text-[#e7e9ea]">Messages</h2>
         <button
           disabled
-          onClick={() => toast.info('New chat — coming soon')}
           className="w-9 h-9 rounded-full flex items-center justify-center opacity-50 cursor-not-allowed"
           aria-label="Compose new message"
         >
@@ -991,13 +989,13 @@ function ChatListView() {
 
       {/* ─── Chat List ─── */}
       <div className="flex-1 overflow-y-auto no-scrollbar">
-        {/* Mock conversations */}
+        {/* Sample conversations */}
         <div className="py-1">
           <div className="px-4 py-2">
             <span className="text-[12px] font-bold text-[#64748b] uppercase tracking-wider">Recent</span>
           </div>
 
-          {filteredMock.map((chat) => {
+          {filteredSample.map((chat) => {
             const isBlocked = nuclearBlocked[chat.id] ?? false
             const isMuted = mutedChats[chat.id] ?? false
 
@@ -1117,7 +1115,7 @@ function ChatListView() {
           ))}
 
           {/* Empty state */}
-          {filteredMock.length === 0 && filteredFb.length === 0 && (
+          {filteredSample.length === 0 && filteredFb.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
               <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
                 <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>

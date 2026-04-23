@@ -52,7 +52,6 @@ export function CrmLeadsView() {
           </button>
           <button
             disabled
-            onClick={() => toast.info('Lead creation form coming soon — use CRM dashboard to manage leads')}
             className="px-3 py-1.5 rounded-full bg-[#FFFFFF] text-black text-[13px] font-bold opacity-50 cursor-not-allowed"
           >
             + Add Lead
@@ -118,7 +117,6 @@ export function CrmLeadsView() {
               <span className="text-[11px] text-[#64748b]">Last activity: {lead.updatedAt}</span>
               <button
                 disabled
-                onClick={() => toast.info('Lead detail view coming soon')}
                 className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#e7e9ea] opacity-50 cursor-not-allowed"
               >
                 View

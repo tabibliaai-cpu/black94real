@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   CRM & Ads — Mock Data & Utilities
+   CRM & Ads — Sample Data & Utilities
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export interface Lead {
@@ -64,9 +64,9 @@ export interface CrmAnalytics {
   activeCustomers: number
 }
 
-/* ── Mock Leads ─────────────────────────────────────────────────────────── */
+/* ── Sample Leads ─────────────────────────────────────────────────────────── */
 
-export const mockLeads: Lead[] = [
+export const sampleLeads: Lead[] = [
   {
     id: 'L001', businessId: 'B001', name: 'Arjun Mehta', email: 'arjun.mehta@gmail.com',
     phone: '+91 98765 43210', source: 'Ad', aiScore: 92, status: 'Qualified',
@@ -109,9 +109,9 @@ export const mockLeads: Lead[] = [
   },
 ]
 
-/* ── Mock Deals ─────────────────────────────────────────────────────────── */
+/* ── Sample Deals ─────────────────────────────────────────────────────────── */
 
-export const mockDeals: Deal[] = [
+export const sampleDeals: Deal[] = [
   { id: 'D001', name: 'Annual Subscription – Mehta Corp', value: 120000, contactName: 'Arjun Mehta', stage: 'Proposal', createdAt: '2025-01-15', updatedAt: '2025-01-22' },
   { id: 'D002', name: 'Enterprise Setup – TechFlow', value: 350000, contactName: 'Sneha Kulkarni', stage: 'Won', createdAt: '2025-01-10', updatedAt: '2025-01-25' },
   { id: 'D003', name: 'Basic Plan – QuickServe', value: 24000, contactName: 'Priya Sharma', stage: 'Contacted', createdAt: '2025-01-18', updatedAt: '2025-01-22' },
@@ -121,9 +121,9 @@ export const mockDeals: Deal[] = [
   { id: 'D007', name: 'Team Plan – EduFirst', value: 72000, contactName: 'Kavita Nair', stage: 'New', createdAt: '2025-01-24', updatedAt: '2025-01-24' },
 ]
 
-/* ── Mock Orders ────────────────────────────────────────────────────────── */
+/* ── Sample Orders ────────────────────────────────────────────────────────── */
 
-export const mockOrders: Order[] = [
+export const sampleOrders: Order[] = [
   { id: 'ORD-2401', customerName: 'Arjun Mehta', product: 'Premium Plan (Annual)', amount: 120000, status: 'Delivered', date: '2025-01-15' },
   { id: 'ORD-2402', customerName: 'Sneha Kulkarni', product: 'Enterprise Setup', amount: 350000, status: 'Shipped', date: '2025-01-18' },
   { id: 'ORD-2403', customerName: 'Priya Sharma', product: 'Basic Plan', amount: 24000, status: 'Processing', date: '2025-01-20' },
@@ -133,9 +133,9 @@ export const mockOrders: Order[] = [
   { id: 'ORD-2407', customerName: 'Kavita Nair', product: 'Team Plan', amount: 72000, status: 'Shipped', date: '2025-01-25' },
 ]
 
-/* ── Mock Ad Campaigns ──────────────────────────────────────────────────── */
+/* ── Sample Ad Campaigns ──────────────────────────────────────────────────── */
 
-export const mockAdCampaigns: AdCampaign[] = [
+export const sampleAdCampaigns: AdCampaign[] = [
   {
     id: 'AD001', name: 'Diwali Sale 2025', headline: 'Grand Diwali Offers!', description: 'Up to 60% off on all plans this Diwali season.',
     ctaText: 'Shop Now', ctaUrl: 'https://black94.in/diwali', budget: 50000, duration: 14,
@@ -168,9 +168,9 @@ export const mockAdCampaigns: AdCampaign[] = [
   },
 ]
 
-/* ── Mock Analytics ─────────────────────────────────────────────────────── */
+/* ── Sample Analytics ─────────────────────────────────────────────────────── */
 
-export const mockAnalytics: CrmAnalytics = {
+export const sampleAnalytics: CrmAnalytics = {
   totalRevenue: 626000,
   totalLeads: 8,
   conversionRate: 12.5,

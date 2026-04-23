@@ -5,12 +5,12 @@ import { AnimatePresence } from 'framer-motion'
 import StoryFeed from '@/components/stories/StoryFeed'
 import StoryCreator from '@/components/stories/StoryCreator'
 import StoryViewer from '@/components/stories/StoryViewer'
-import { MOCK_STORY_GROUPS, type StoryGroup, type StoryCard } from '@/lib/story-mock-data'
+import { DEMO_STORY_GROUPS, type StoryGroup, type StoryCard } from '@/lib/story-data'
 import { fetchStories, type Story as FirestoreStory } from '@/lib/db'
 import { useAppStore } from '@/stores/app'
 
 export function StoriesView() {
-  const [storyGroups, setStoryGroups] = useState<StoryGroup[]>(MOCK_STORY_GROUPS)
+  const [storyGroups, setStoryGroups] = useState<StoryGroup[]>(DEMO_STORY_GROUPS)
   const [viewingGroupId, setViewingGroupId] = useState<string | null>(null)
   const [creatorOpen, setCreatorOpen] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -93,12 +93,12 @@ export function StoriesView() {
         },
       }))
 
-      // Dedup: use Firestore data for authors that exist there, mock for the rest
+      // Dedup: use Firestore data for authors that exist there, demo data for the rest
       const firestoreAuthorIds = new Set(firestoreGroups.map(g => g.creatorId))
-      const mockOnly = MOCK_STORY_GROUPS.filter(g => !firestoreAuthorIds.has(g.creatorId))
-      setStoryGroups([...firestoreGroups, ...mockOnly])
+      const demoOnly = DEMO_STORY_GROUPS.filter(g => !firestoreAuthorIds.has(g.creatorId))
+      setStoryGroups([...firestoreGroups, ...demoOnly])
     } catch (err) {
-      console.warn('Failed to load stories from Firestore, using mock data:', err)
+      console.warn('Failed to load stories from Firestore, using demo data:', err)
     } finally {
       setLoading(false)
       fetchInProgressRef.current = false

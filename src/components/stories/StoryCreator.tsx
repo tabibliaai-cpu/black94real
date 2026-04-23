@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { LANGUAGES, FESTIVAL_TEMPLATES, type StoryFormat, type Language, type StoryAudience, type StoryExpiry, type StoryCard, type PollOption, type FestivalTemplate } from '@/lib/story-mock-data'
+import { LANGUAGES, FESTIVAL_TEMPLATES, type StoryFormat, type Language, type StoryAudience, type StoryExpiry, type StoryCard, type PollOption, type FestivalTemplate } from '@/lib/story-data'
 import confetti from 'canvas-confetti'
 import { toast } from 'sonner'
 import { useAppStore } from '@/stores/app'
@@ -239,7 +239,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   const [feedCaption, setFeedCaption] = useState('')
 
   // ---- Poll preview percentages (moved to parent level for stability) ----
-  const mockPercentages = useMemo(() => {
+  const previewPercentages = useMemo(() => {
     const total = standalonePollOptions.reduce(
       (sum, o) => sum + (o.text.trim() ? Math.floor(Math.random() * 80 + 20) : 0),
       0,
@@ -1057,7 +1057,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               {opt.text.trim() && (
                 <motion.div
                   initial={{ width: '0%' }}
-                  animate={{ width: `${mockPercentages[i] || 0}%` }}
+                  animate={{ width: `${previewPercentages[i] || 0}%` }}
                   className="absolute inset-0 rounded-xl pointer-events-none"
                   style={{ background: 'rgba(0,240,255,0.1)' }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -1065,7 +1065,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
               )}
             </div>
             <span className="text-white/30 text-xs w-10 text-right tabular-nums">
-              {opt.text.trim() ? `${mockPercentages[i]}%` : ''}
+              {opt.text.trim() ? `${previewPercentages[i]}%` : ''}
             </span>
             {standalonePollOptions.length > 2 && (
               <button onClick={() => removePollOption(i)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.06] text-white/40 hover:text-red-400 transition-colors text-lg">
@@ -1114,7 +1114,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           <p className="text-white font-bold text-base mb-4">{standalonePollQuestion || 'Your question here'}</p>
           <div className="flex flex-col gap-2">
             {standalonePollOptions.filter((o) => o.text.trim()).map((opt) => {
-              const pct = mockPercentages[standalonePollOptions.indexOf(opt)] || 0
+              const pct = previewPercentages[standalonePollOptions.indexOf(opt)] || 0
               return (
                 <div key={opt.id} className="relative">
                   <motion.div

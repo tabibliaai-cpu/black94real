@@ -314,7 +314,7 @@ export async function togglePostRepost(postId: string, userId: string): Promise<
             actorUsername: actor?.username || '',
             actorProfileImage: actor?.profileImage || '',
             postId,
-            message: 'reposted your post',
+            message: 'shared your post',
           });
         }
       } catch (e) {

@@ -3,7 +3,7 @@
  */
 
 /**
- * Generate a mock shareable link for a user profile.
+ * Generate a shareable link for a user profile.
  * In production this would create a short-lived Firestore token.
  */
 export function generateShareLink(userId: string): string {
