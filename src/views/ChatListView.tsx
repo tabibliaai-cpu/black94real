@@ -8,7 +8,7 @@ import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import type { Chat, Message } from '@/lib/db'
 import { useDualPaneChat, type SponsoredAd } from '@/stores/dualPaneChat'
 import { toast } from 'sonner'
-import { onSnapshot, collection, query, where, orderBy, doc, getDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore'
+import { onSnapshot, collection, query, where, orderBy, doc, getDoc, getDocs, updateDoc, addDoc, deleteDoc, writeBatch, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { getOrCreateKeyPair, encryptMessage, decryptMessage } from '@/lib/crypto'
 import Picker from '@emoji-mart/react'
@@ -231,6 +231,7 @@ export function ChatListView() {
   const [chats, setChats] = useState<Chat[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'chat' | 'ads'>('chat')
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Firestore Timestamp → ISO string helper
   const tsToISO = (value: unknown): string => {
@@ -357,6 +358,15 @@ export function ChatListView() {
     }
   }, [user, enrichChatList])
 
+  // Filtered chats based on search query
+  const filteredChats = useMemo(() => {
+    if (!searchQuery.trim()) return chats
+    const q = searchQuery.toLowerCase()
+    return chats.filter((chat) =>
+      chat.otherUser?.displayName?.toLowerCase().includes(q)
+    )
+  }, [chats, searchQuery])
+
   // Stop loading indicator once we have chats
   useEffect(() => {
     if (chats.length > 0) setLoading(false)
@@ -415,6 +425,20 @@ export function ChatListView() {
       <div className="flex-1 overflow-hidden">
         {activeTab === 'chat' ? (
           <div className="h-full overflow-y-auto">
+            {/* Search bar */}
+            <div className="mx-4 mt-3 mb-2 relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search chats..."
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 pl-10 text-[14px] text-[#e7e9ea] placeholder:text-[#64748b] outline-none focus:border-[#3b82f6]/50 transition-colors"
+              />
+            </div>
             {loading ? (
               <div className="space-y-1">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -426,6 +450,17 @@ export function ChatListView() {
                     </div>
                   </div>
                 ))}
+              </div>
+            ) : filteredChats.length === 0 && searchQuery.trim() ? (
+              <div className="flex flex-col items-center justify-center py-28 px-8 text-center">
+                <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-[#e7e9ea] mb-1">No results</h3>
+                <p className="text-[15px] text-[#94a3b8]">No chats found matching "{searchQuery}".</p>
               </div>
             ) : chats.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-28 px-8 text-center">
@@ -439,7 +474,7 @@ export function ChatListView() {
               </div>
             ) : (
               <div>
-                {chats.map((chat) => (
+                {filteredChats.map((chat) => (
                   <button
                     key={chat.id}
                     onClick={() => navigate('chat-room', { chatId: chat.id })}
@@ -502,6 +537,9 @@ export function ChatRoomView() {
   const [loading, setLoading] = useState(true)
   const [showEmoji, setShowEmoji] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [showMenu, setShowMenu] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const chatId = viewParams?.chatId
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -804,6 +842,30 @@ export function ChatRoomView() {
     setShowEmoji(false)
   }
 
+  const handleDeleteChat = useCallback(async () => {
+    if (!chatId || !user) return
+    setDeleting(true)
+    try {
+      // Delete all messages in the chat
+      const messagesRef = collection(db, 'chats', chatId, 'messages')
+      const messagesSnap = await getDocs(messagesRef)
+      if (!messagesSnap.empty) {
+        const batch = writeBatch(db)
+        messagesSnap.docs.forEach((d: any) => batch.delete(d.ref))
+        await batch.commit()
+      }
+      // Delete the chat document
+      await deleteDoc(doc(db, 'chats', chatId))
+      toast.success('Chat deleted')
+      navigate('chat')
+    } catch (err) {
+      console.error('Delete chat failed:', err)
+      toast.error('Failed to delete chat')
+    } finally {
+      setDeleting(false)
+    }
+  }, [chatId, user, navigate])
+
   const handleSend = useCallback(() => {
     if (imagePreview) {
       handleSendImage()
@@ -867,17 +929,64 @@ export function ChatRoomView() {
             <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
           </svg>
         </button>
-        <button
-          onClick={undefined}
-          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
-          aria-label="Video call"
-        >
-          <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="23 7 16 12 23 17 23 7" />
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-          </svg>
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+            aria-label="More options"
+          >
+            <svg className="w-5 h-5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="1.5"/>
+              <circle cx="12" cy="12" r="1.5"/>
+              <circle cx="12" cy="19" r="1.5"/>
+            </svg>
+          </button>
+          {showMenu && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
+              <div className="absolute right-0 top-full mt-1 z-20 w-48 rounded-xl bg-[#1d1d1f] border border-white/[0.08] shadow-xl overflow-hidden animate-fade-in">
+                <button
+                  onClick={() => { setShowMenu(false); setShowDeleteDialog(true) }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
+                >
+                  <svg className="w-[18px] h-[18px] text-[#f43f5e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                  </svg>
+                  <span className="text-[14px] text-[#f43f5e] font-medium">Delete Chat</span>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+
+      {/* Delete confirmation dialog */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#1d1d1f] border border-white/[0.08] rounded-2xl p-6 mx-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Delete Chat</h3>
+            <p className="text-[14px] text-[#94a3b8] mb-6 leading-relaxed">
+              Are you sure you want to delete this chat? This will permanently remove all messages and cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteDialog(false)}
+                className="flex-1 py-2.5 rounded-xl bg-white/[0.06] text-[14px] font-semibold text-[#e7e9ea] hover:bg-white/[0.1] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteChat}
+                disabled={deleting}
+                className="flex-1 py-2.5 rounded-xl bg-[#f43f5e] text-[14px] font-semibold text-white hover:bg-[#e11d48] transition-colors disabled:opacity-50"
+              >
+                {deleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
