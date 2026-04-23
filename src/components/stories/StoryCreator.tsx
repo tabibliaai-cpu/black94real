@@ -181,6 +181,93 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
 
   const user = useAppStore((s) => s.user)
 
+  // ---- Voice helpers (defined early to avoid TDZ in useEffect) ----
+
+  const stopRecording = useCallback((): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        const recorder = mediaRecorderRef.current
+        const originalOnStop = recorder.onstop
+        recorder.onstop = (e) => {
+          const blob = new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' })
+          audioBlobRef.current = blob
+          setHasRecorded(true)
+          if (originalOnStop) originalOnStop.call(recorder, e)
+          resolve()
+        }
+        recorder.stop()
+      } else {
+        resolve()
+      }
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop())
+        streamRef.current = null
+      }
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close()
+        audioContextRef.current = null
+      }
+      analyserRef.current = null
+      setIsRecording(false)
+    })
+  }, [])
+
+  // Keep a stable ref so the useEffect timer can call stop without TDZ
+  const stopRecordingRef = useRef(stopRecording)
+  stopRecordingRef.current = stopRecording
+
+  const toggleRecording = useCallback(async () => {
+    if (isRecording) {
+      await stopRecording()
+      return
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      streamRef.current = stream
+
+      const audioCtx = new AudioContext()
+      audioContextRef.current = audioCtx
+      const source = audioCtx.createMediaStreamSource(stream)
+      const analyser = audioCtx.createAnalyser()
+      analyser.fftSize = 128
+      source.connect(analyser)
+      analyserRef.current = analyser
+
+      audioChunksRef.current = []
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : 'audio/webm'
+      const recorder = new MediaRecorder(stream, { mimeType })
+      mediaRecorderRef.current = recorder
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data)
+      }
+
+      recorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: mimeType })
+        audioBlobRef.current = blob
+        setHasRecorded(true)
+      }
+
+      recorder.start(1000)
+      setIsRecording(true)
+      setRecordingTime(0)
+      setHasRecorded(false)
+      setVoiceWaveform([])
+    } catch (err) {
+      console.error('Microphone access denied:', err)
+      toast.error('Microphone access denied. Please allow microphone permission.')
+    }
+  }, [isRecording, stopRecording])
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0')
+    const s = (seconds % 60).toString().padStart(2, '0')
+    return `${m}:${s}`
+  }
+
   // Thread format state
   const [selectedThread, setSelectedThread] = useState<string | null>(null)
   const [threadCards, setThreadCards] = useState<string[]>([])
@@ -223,8 +310,8 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       recordingInterval.current = setInterval(() => {
         setRecordingTime((t) => {
           if (t >= 60) {
-            // Fire-and-forget: stopRecording returns a Promise but we're in a setState callback
-            stopRecording()
+            // Use ref to avoid TDZ — fire-and-forget in setState callback
+            stopRecordingRef.current()
             return 60
           }
           return t + 1
@@ -252,7 +339,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       if (recordingInterval.current) clearInterval(recordingInterval.current)
       if (waveformInterval.current) clearInterval(waveformInterval.current)
     }
-  }, [isRecording, stopRecording])
+  }, [isRecording])
 
   // Reset on close
   useEffect(() => {
@@ -511,97 +598,6 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
       setPublishing(false)
       toast.error('Failed to publish story. Please try again.')
     }
-  }
-
-  // ---- Voice helpers ----
-
-  const stopRecording = useCallback((): Promise<void> => {
-    return new Promise<void>((resolve) => {
-      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-        const recorder = mediaRecorderRef.current
-        const originalOnStop = recorder.onstop
-        recorder.onstop = (e) => {
-          // Create blob from accumulated chunks
-          const blob = new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' })
-          audioBlobRef.current = blob
-          setHasRecorded(true)
-          // Also call any original handler if exists
-          if (originalOnStop) originalOnStop.call(recorder, e)
-          resolve()
-        }
-        recorder.stop()
-      } else {
-        resolve()
-      }
-
-      // Clean up stream and audio context
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((t) => t.stop())
-        streamRef.current = null
-      }
-      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-        audioContextRef.current.close()
-        audioContextRef.current = null
-      }
-      analyserRef.current = null
-      setIsRecording(false)
-    })
-  }, [])
-
-  const toggleRecording = useCallback(async () => {
-    if (isRecording) {
-      await stopRecording()
-      return
-    }
-    try {
-      // Request microphone permission
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      streamRef.current = stream
-
-      // Set up audio analyser for real waveform
-      const audioCtx = new AudioContext()
-      audioContextRef.current = audioCtx
-      const source = audioCtx.createMediaStreamSource(stream)
-      const analyser = audioCtx.createAnalyser()
-      analyser.fftSize = 128
-      source.connect(analyser)
-      analyserRef.current = analyser
-
-      // Set up MediaRecorder
-      audioChunksRef.current = []
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-        ? 'audio/webm;codecs=opus'
-        : 'audio/webm'
-      const recorder = new MediaRecorder(stream, { mimeType })
-      mediaRecorderRef.current = recorder
-
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) audioChunksRef.current.push(e.data)
-      }
-
-      recorder.onstop = () => {
-        const blob = new Blob(audioChunksRef.current, { type: mimeType })
-        audioBlobRef.current = blob
-        setHasRecorded(true)
-      }
-
-      recorder.start(1000) // Collect data every second
-      setIsRecording(true)
-      setRecordingTime(0)
-      setHasRecorded(false)
-      setVoiceWaveform([])
-    } catch (err) {
-      console.error('Microphone access denied:', err)
-      toast.error('Microphone access denied. Please allow microphone permission.')
-    }
-  }, [isRecording, stopRecording])
-
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, '0')
-    const s = (seconds % 60).toString().padStart(2, '0')
-    return `${m}:${s}`
   }
 
   // ---- Thread helpers ----
