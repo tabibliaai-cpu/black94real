@@ -77,14 +77,6 @@ export interface StoryGroup {
   reactions: Record<ReactionType, number>
 }
 
-export interface TrendingTopic {
-  id: string
-  tag: string
-  state: string
-  stateFlag: string
-  count: number
-}
-
 // ---------------------------------------------------------------------------
 // Language options
 // ---------------------------------------------------------------------------
@@ -196,37 +188,13 @@ export const FESTIVAL_TEMPLATES: FestivalTemplate[] = [
 // Story groups (populated from server)
 // ---------------------------------------------------------------------------
 
-export const storyGroupsData: StoryGroup[] = []
+// Story groups are loaded from Firestore at runtime.
 
 // ---------------------------------------------------------------------------
-// Trending Topics (10 per tab)
+// Trending Topics
 // ---------------------------------------------------------------------------
 
-export const TRENDING_FOR_YOU: TrendingTopic[] = [
-  { id: 'tt_fy_01', tag: '#IPL2025', state: 'Pan-India', stateFlag: '🇮🇳', count: 234000 },
-  { id: 'tt_fy_02', tag: '#AGI', state: 'Global', stateFlag: '🌍', count: 189000 },
-  { id: 'tt_fy_03', tag: '#INDvsAUS', state: 'Pan-India', stateFlag: '🇮🇳', count: 312000 },
-  { id: 'tt_fy_04', tag: '#JamesWebb', state: 'Global', stateFlag: '🌍', count: 487000 },
-  { id: 'tt_fy_05', tag: '#NationalDogDay', state: 'Pan-India', stateFlag: '🇮🇳', count: 98000 },
-  { id: 'tt_fy_06', tag: '#Article370', state: 'Pan-India', stateFlag: '🇮🇳', count: 156000 },
-  { id: 'tt_fy_07', tag: '#StartupIndia', state: 'Pan-India', stateFlag: '🇮🇳', count: 74000 },
-  { id: 'tt_fy_08', tag: '#Olympics2028', state: 'Global', stateFlag: '🌍', count: 124000 },
-  { id: 'tt_fy_09', tag: '#Budget2026', state: 'Pan-India', stateFlag: '🇮🇳', count: 203000 },
-  { id: 'tt_fy_10', tag: '#AIinEducation', state: 'Global', stateFlag: '🌍', count: 67000 },
-]
-
-export const TRENDING_YOUR_REGION: TrendingTopic[] = [
-  { id: 'tt_tr_01', tag: '#LocalNews', state: 'Your Region', stateFlag: 'IN', count: 45600 },
-  { id: 'tt_tr_02', tag: '#RegionalUpdates', state: 'Your Region', stateFlag: 'IN', count: 89200 },
-  { id: 'tt_tr_03', tag: '#FoodFestival', state: 'Your Region', stateFlag: 'IN', count: 32100 },
-  { id: 'tt_tr_04', tag: '#TechCommunity', state: 'Your Region', stateFlag: 'IN', count: 28400 },
-  { id: 'tt_tr_05', tag: '#CityLife', state: 'Your Region', stateFlag: 'IN', count: 15700 },
-  { id: 'tt_tr_06', tag: '#JobsNearby', state: 'Your Region', stateFlag: 'IN', count: 12300 },
-  { id: 'tt_tr_07', tag: '#WeekendEvents', state: 'Your Region', stateFlag: 'IN', count: 18900 },
-  { id: 'tt_tr_08', tag: '#EducationUpdate', state: 'Your Region', stateFlag: 'IN', count: 34700 },
-  { id: 'tt_tr_09', tag: '#SportsUpdate', state: 'Your Region', stateFlag: 'IN', count: 22100 },
-  { id: 'tt_tr_10', tag: '#WeatherAlert', state: 'Your Region', stateFlag: 'IN', count: 27800 },
-]
+// Trending topics are loaded from Firestore at runtime.
 
 // ---------------------------------------------------------------------------
 // Audience options
@@ -302,14 +270,6 @@ export function formatCount(n: number): string {
     return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K'
   }
   return n.toString()
-}
-
-/**
- * Returns a user-friendly region name.
- * In production this would use geolocation or IP-based detection.
- */
-export function getStateName(): string {
-  return 'India'
 }
 
 /**

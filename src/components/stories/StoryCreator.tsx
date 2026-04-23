@@ -238,15 +238,14 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
   const [feedUrl, setFeedUrl] = useState('')
   const [feedCaption, setFeedCaption] = useState('')
 
-  // ---- Poll preview percentages (moved to parent level for stability) ----
+  // ---- Poll preview (shows equal distribution before voting) ----
   const previewPercentages = useMemo(() => {
-    const total = standalonePollOptions.reduce(
-      (sum, o) => sum + (o.text.trim() ? Math.floor(Math.random() * 80 + 20) : 0),
-      0,
-    )
-    if (total === 0) return standalonePollOptions.map(() => 0)
-    return standalonePollOptions.map((o) =>
-      o.text.trim() ? Math.round((Math.floor(Math.random() * 80 + 20) / total) * 100) : 0,
+    const filled = standalonePollOptions.filter((o) => o.text.trim()).length
+    if (filled === 0) return standalonePollOptions.map(() => 0)
+    const each = Math.floor(100 / filled)
+    const remainder = 100 - each * filled
+    return standalonePollOptions.map((o, i) =>
+      o.text.trim() ? each + (i < remainder ? 1 : 0) : 0
     )
   }, [standalonePollOptions])
 
@@ -418,7 +417,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
           content: standalonePollQuestion,
           pollOptions: standalonePollOptions
             .filter((o) => o.text.trim())
-            .map((o) => ({ ...o, percentage: Math.floor(Math.random() * 40 + 10) })),
+            .map((o) => ({ ...o, percentage: 0, votes: 0 })),
         }
       case 'festival':
         return {

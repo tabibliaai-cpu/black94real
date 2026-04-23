@@ -39,8 +39,6 @@ interface HeartAnimation {
 const STORY_DURATION_MS = 6000
 const VOICE_TICK_MS = 100
 const LONG_PRESS_MS = 500
-const CRICKET_UPDATE_MS = 30000
-const POLL_UPDATE_MS = 3000
 
 const POLL_COLORS = ['#FFFFFF', '#3b82f6', '#06b6d4', '#f59e0b']
 
@@ -256,20 +254,6 @@ function PollStory({ card }: { card: StoryCard }) {
   const [animKey, setAnimKey] = useState(0)
   const totalVotes = useMemo(() => votes.reduce((s, v) => s + v.votes, 0), [votes])
 
-  // Vote preview updates every 3 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVotes((prev) =>
-        prev.map((v) => ({
-          ...v,
-          votes: v.votes + Math.floor(Math.random() * 50) + 5,
-        }))
-      )
-      setAnimKey((k) => k + 1)
-    }, POLL_UPDATE_MS)
-    return () => clearInterval(interval)
-  }, [])
-
   const handleVote = (id: string) => {
     if (userVoted) return
     setUserVoted(id)
@@ -438,33 +422,6 @@ function ThreadStory({ card, group }: { card: StoryCard; group: StoryGroup }) {
 function CricketStory({ card }: { card: StoryCard }) {
   const data = card.cricketData
   const [liveScore, setLiveScore] = useState(data)
-
-  // Score preview updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveScore((prev) => {
-        const runs = Math.floor(Math.random() * 12)
-        const wickets = Math.random() < 0.2 ? 1 : 0
-        const oversParts = prev.overs.split('.')
-        let balls = parseInt(oversParts[1] ?? '0', 10) + 1
-        let newOvers = parseInt(oversParts[0], 10)
-        if (balls >= 6) {
-          balls = 0
-          newOvers += 1
-        }
-        const currentRuns = parseInt(prev.team1Score.split('/')[0], 10)
-        const currentWickets = prev.team1Score.includes('/')
-          ? parseInt(prev.team1Score.split('/')[1], 10)
-          : 0
-        return {
-          ...prev,
-          team1Score: `${currentRuns + runs}/${Math.min(currentWickets + wickets, 10)}`,
-          overs: `${newOvers}.${balls}`,
-        }
-      })
-    }, CRICKET_UPDATE_MS)
-    return () => clearInterval(interval)
-  }, [])
 
   if (!liveScore) return null
 
@@ -701,9 +658,8 @@ function CreatorProfileOverlay({
           </p>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Followers', value: formatCount(group.viewCount * 3) },
               { label: 'Stories', value: group.stories.length.toString() },
               { label: 'Views', value: formatCount(group.viewCount) },
             ].map((stat) => (
