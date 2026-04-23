@@ -26,7 +26,6 @@ export function useEngagementEngine(enabled = true) {
     try {
       const result = await runRecalculationCycle()
       if (result.notificationsEmitted.length > 0) {
-        console.log(`[engagement] ${result.notificationsEmitted.length} notification events fired`)
         // Write engagement notification events to Firestore
         for (const evt of result.notificationsEmitted) {
           try {

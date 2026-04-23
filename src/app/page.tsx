@@ -282,7 +282,6 @@ export default function Black94App() {
       if (cached) {
         const parsed = JSON.parse(cached)
         if (parsed?.id) {
-          console.log('[Auth] Restoring from cache:', parsed.username)
           useAppStore.getState().setUser(parsed)
           useAppStore.getState().setToken(parsed.id)
           setScreenRef.current('app')
@@ -345,7 +344,6 @@ export default function Black94App() {
     const handleUser = async (fbUser: FirebaseUser) => {
       if (dead) return
       try {
-        console.log('[Auth] Processing:', fbUser.uid, fbUser.email)
         const dbUser = await createUserFromGoogle(fbUser)
         if (dead) return
         const storeUser = toStoreUser(fbUser, dbUser)
@@ -357,7 +355,6 @@ export default function Black94App() {
         if (typeof window !== 'undefined') {
           try { localStorage.setItem(USER_CACHE_KEY, JSON.stringify(storeUser)) } catch {}
         }
-        console.log('[Auth] Logged in:', storeUser.username)
         // Ensure E2E encryption keypair exists (fire-and-forget, non-blocking)
         ensureE2EKeyPair(fbUser.uid).catch((err) => {
           console.warn('[Auth] E2E key setup failed (non-critical):', err)
@@ -375,7 +372,6 @@ export default function Black94App() {
         if (dead) return
         if (fbUser) handleUser(fbUser)
         else {
-          console.log('[Auth] No user — showing login')
           try { localStorage.removeItem(USER_CACHE_KEY) } catch {}
           setScreenRef.current('login')
         }
@@ -389,10 +385,8 @@ export default function Black94App() {
   const handleSignIn = useCallback(async () => {
     setBusy(true)
     try {
-      console.log('[Auth] Opening popup...')
       const result = await signIn()
       if (result.user) {
-        console.log('[Auth] Popup succeeded:', result.user.uid)
         setScreen('loading')
         const dbUser = await createUserFromGoogle(result.user)
         const storeUser = toStoreUser(result.user, dbUser)

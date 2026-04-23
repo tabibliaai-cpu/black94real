@@ -101,12 +101,10 @@ export async function togglePostLike(postId: string, userId: string): Promise<bo
 
   try {
     const likeSnap = await getDoc(likeRef);
-    console.log(`[social] togglePostLike: doc ${docId} exists=${likeSnap.exists()}`);
 
     if (likeSnap.exists()) {
       // Unlike
       await deleteDoc(likeRef);
-      console.log(`[social] togglePostLike: deleted like doc`);
       try {
         await updateDoc(postRef, { likeCount: increment(-1) });
       } catch (countErr) {
@@ -116,7 +114,6 @@ export async function togglePostLike(postId: string, userId: string): Promise<bo
     } else {
       // Like
       await setDoc(likeRef, { postId, userId, createdAt: serverTimestamp() });
-      console.log(`[social] togglePostLike: created like doc`);
       try {
         await updateDoc(postRef, { likeCount: increment(1) });
       } catch (countErr) {
@@ -169,7 +166,6 @@ export async function addPostComment(
   authorData: { username: string; displayName: string; profileImage: string; isVerified?: boolean; badge?: string },
 ): Promise<CommentData> {
   try {
-    console.log(`[social] addPostComment: postId=${postId}, userId=${userId}`);
     const commentRef = await addDoc(collection(db, COMMENTS_COL), {
       postId,
       authorId: userId,
@@ -181,7 +177,6 @@ export async function addPostComment(
       content,
       createdAt: serverTimestamp(),
     });
-    console.log(`[social] addPostComment: created comment ${commentRef.id}`);
 
     // Try to update comment count on parent post (non-critical)
     try {
@@ -235,7 +230,6 @@ export async function addPostComment(
 }
 
 export async function fetchPostComments(postId: string): Promise<CommentData[]> {
-  console.log(`[social] fetchPostComments: postId=${postId}`);
   try {
     const q = query(
       collection(db, COMMENTS_COL),
@@ -243,7 +237,6 @@ export async function fetchPostComments(postId: string): Promise<CommentData[]> 
       firestoreLimit(50),
     );
     const snap = await getDocs(q);
-    console.log(`[social] fetchPostComments: found ${snap.size} comments`);
 
     return snap.docs
       .map((docSnap) => {
@@ -280,11 +273,9 @@ export async function togglePostRepost(postId: string, userId: string): Promise<
 
   try {
     const repostSnap = await getDoc(repostRef);
-    console.log(`[social] togglePostRepost: doc ${docId} exists=${repostSnap.exists()}`);
 
     if (repostSnap.exists()) {
       await deleteDoc(repostRef);
-      console.log(`[social] togglePostRepost: deleted repost doc`);
       try {
         await updateDoc(postRef, { repostCount: increment(-1) });
       } catch (countErr) {
@@ -293,7 +284,6 @@ export async function togglePostRepost(postId: string, userId: string): Promise<
       return false;
     } else {
       await setDoc(repostRef, { postId, userId, createdAt: serverTimestamp() });
-      console.log(`[social] togglePostRepost: created repost doc`);
       try {
         await updateDoc(postRef, { repostCount: increment(1) });
       } catch (countErr) {
@@ -345,7 +335,6 @@ export async function togglePostBookmark(postId: string, userId: string): Promis
 
   try {
     const bookmarkSnap = await getDoc(bookmarkRef);
-    console.log(`[social] togglePostBookmark: doc ${docId} exists=${bookmarkSnap.exists()}`);
 
     if (bookmarkSnap.exists()) {
       await deleteDoc(bookmarkRef);

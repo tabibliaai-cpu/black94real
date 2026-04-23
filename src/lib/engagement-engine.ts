@@ -503,7 +503,6 @@ async function processPost(
 
 export async function runRecalculationCycle(): Promise<RecalculationResult> {
   const t0 = Date.now()
-  console.log('[engagement] ▸ Recalculation cycle starting…')
 
   const result: RecalculationResult = {
     postsProcessed:       0,
@@ -515,7 +514,6 @@ export async function runRecalculationCycle(): Promise<RecalculationResult> {
   try {
     // ── 1. Fetch all recent posts ────────────────────────────────────────
     const posts = await fetchRecentPosts()
-    console.log(`[engagement]   ${posts.length} recent posts fetched`)
 
     // ── 2. Process in batches of BATCH_SIZE ──────────────────────────────
     for (let offset = 0; offset < posts.length; offset += BATCH_SIZE) {
@@ -542,9 +540,6 @@ export async function runRecalculationCycle(): Promise<RecalculationResult> {
         else result.notificationsEmitted.push(...notifications)
       }
 
-      console.log(
-        `[engagement]   ${Math.min(offset + BATCH_SIZE, posts.length)}/${posts.length} processed`,
-      )
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
@@ -553,14 +548,6 @@ export async function runRecalculationCycle(): Promise<RecalculationResult> {
   }
 
   result.durationMs = Date.now() - t0
-
-  console.log(
-    `[engagement] ✓ Cycle complete — ` +
-    `${result.postsProcessed} posts, ` +
-    `${result.notificationsEmitted.length} notifications, ` +
-    `${result.errors.length} errors, ` +
-    `${result.durationMs}ms`,
-  )
 
   return result
 }

@@ -599,7 +599,7 @@ export function ChatRoomView() {
 
         if (otherProfile?.publicKey) {
           setOtherPublicKey(otherProfile.publicKey)
-          console.log('[E2E] Keys ready for chat')
+
         } else {
           // Other user hasn't logged in since E2E was added — no encryption possible
           console.warn('[E2E] Other user has no public key yet — messages will be plaintext until they log in')

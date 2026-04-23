@@ -73,8 +73,6 @@ export async function createStory(params: {
   mediaUrl: string;
   caption: string;
 }): Promise<Story> {
-  console.log('[stories-db] createStory → userId:', params.userId, 'base64 size:', Math.round(params.mediaUrl.length / 1024), 'KB');
-
   const now = new Date();
   const expiresAt = twentyFourHoursFromNow();
 
@@ -90,8 +88,6 @@ export async function createStory(params: {
     expiresAt: Timestamp.fromDate(expiresAt),
   });
 
-  console.log('[stories-db] Firestore write ✅ → storyId:', ref.id);
-
   return {
     id: ref.id,
     ...params,
@@ -106,13 +102,9 @@ export async function createStory(params: {
  * Sorts client-side.
  */
 export async function fetchStoryGroups(): Promise<StoryGroup[]> {
-  console.log('[stories-db] fetchStoryGroups → fetching…');
-
   const snap = await getDocs(
     query(collection(db, 'stories'), firestoreLimit(200))
   );
-  console.log('[stories-db] fetchStoryGroups → raw docs:', snap.docs.length);
-
   const now = Date.now();
   const groupMap = new Map<string, StoryGroup>();
 
@@ -157,7 +149,6 @@ export async function fetchStoryGroups(): Promise<StoryGroup[]> {
       (a, b) => new Date(b.latestCreatedAt).getTime() - new Date(a.latestCreatedAt).getTime()
     );
 
-  console.log('[stories-db] fetchStoryGroups ✅ → groups:', groups.length);
   return groups;
 }
 
@@ -167,8 +158,6 @@ export async function fetchStoryGroups(): Promise<StoryGroup[]> {
  * Sorts client-side.
  */
 export async function fetchUserStories(userId: string): Promise<Story[]> {
-  console.log('[stories-db] fetchUserStories → userId:', userId);
-
   // Simple query: where userId == X only — single-field index, always works
   const snap = await getDocs(
     query(
@@ -198,7 +187,6 @@ export async function fetchUserStories(userId: string): Promise<Story[]> {
     .filter((s) => new Date(s.expiresAt).getTime() > now)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-  console.log('[stories-db] fetchUserStories ✅ →', stories.length, 'stories');
   return stories;
 }
 

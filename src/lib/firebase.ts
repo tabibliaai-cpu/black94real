@@ -96,7 +96,6 @@ export async function setupFCMListener(): Promise<void> {
     }
 
     onMessage(messagingInstance, (payload) => {
-      console.log('[FCM] Foreground message:', payload);
       const { title, body } = payload.notification || {};
       if (title && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then((registration) => {
@@ -122,7 +121,6 @@ export async function saveFCMToken(userId: string, token: string): Promise<void>
       tokens: arrayUnion(token),
       updatedAt: serverTimestamp(),
     }, { merge: true });
-    console.log('[FCM] Token saved for user:', userId);
   } catch (err) {
     console.warn('[FCM] Failed to save token:', err);
   }

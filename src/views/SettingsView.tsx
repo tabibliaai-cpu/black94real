@@ -199,7 +199,7 @@ export function SettingsView() {
     setSaved(false)
     try {
       // Save display name, bio, website
-      await updateUser(user.id, { displayName, bio })
+      await updateUser(user.id, { displayName, bio, website })
 
       // Save username if changed
       if (trimmed && trimmed.length >= 3 && trimmed !== user.username?.toLowerCase()) {

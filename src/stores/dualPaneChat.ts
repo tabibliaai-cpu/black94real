@@ -81,6 +81,7 @@ interface DualPaneState {
   messages: ChatMsg[]
   setMessages: (msgs: ChatMsg[]) => void
   addMessage: (msg: ChatMsg) => void
+  clearMessages: () => void
   typing: boolean
   setTyping: (t: boolean) => void
 
@@ -149,6 +150,7 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   messages: [],
   setMessages: (msgs) => set({ messages: msgs }),
   addMessage: (msg) => set((s) => ({ messages: [...s.messages, msg] })),
+  clearMessages: () => set({ messages: [], replyTo: null }),
   typing: false,
   setTyping: (t) => set({ typing: t }),
 

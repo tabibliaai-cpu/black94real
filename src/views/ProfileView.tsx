@@ -319,7 +319,15 @@ export function ProfileView() {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'store' ? (
+      {activeTab === 'replies' ? (
+        <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
+          <p className="text-[15px] text-[#94a3b8]">No replies yet</p>
+        </div>
+      ) : activeTab === 'likes' ? (
+        <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
+          <p className="text-[15px] text-[#94a3b8]">No liked posts yet</p>
+        </div>
+      ) : activeTab === 'store' ? (
         <>
           {productsLoading ? (
             <div className="grid grid-cols-2 gap-3 p-5">

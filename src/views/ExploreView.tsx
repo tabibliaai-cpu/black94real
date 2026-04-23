@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useAppStore } from '@/stores/app'
-import { useAppStore as useAppStore2 } from '@/stores/app'
 
 const CATEGORIES = [
   { id: 'trending', label: 'Trending', icon: '🔥' },
@@ -15,7 +14,7 @@ const CATEGORIES = [
 
 export function ExploreView() {
   const navigate = useAppStore((s) => s.navigate)
-  const user = useAppStore2((s) => s.user)
+  const user = useAppStore((s) => s.user)
   const [activeCategory, setActiveCategory] = useState('trending')
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -50,7 +49,12 @@ export function ExploreView() {
         {CATEGORIES.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => {
+              setActiveCategory(cat.id)
+              if (cat.id !== 'trending') {
+                navigate('search')
+              }
+            }}
             className={`px-4 py-1.5 rounded-full text-[14px] font-medium whitespace-nowrap transition-colors ${
               activeCategory === cat.id
                 ? 'bg-[#e7e9ea] text-black'

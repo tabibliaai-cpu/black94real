@@ -90,7 +90,6 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
     try {
       setStep('compressing')
       base64 = await compressStoryImage(selectedFile, selectedFilter.css)
-      console.log('[StoryUpload] Compressed →', Math.round(base64.length / 1024), 'KB')
     } catch (err) {
       console.error('[StoryUpload] Compression FAILED:', err)
       setUploading(false)
@@ -111,7 +110,6 @@ export function StoryUploadSheet({ open, onClose, onStoryUploaded }: StoryUpload
         mediaUrl: base64,
         caption: caption.trim(),
       })
-      console.log('[StoryUpload] Upload ✅')
     } catch (err) {
       console.error('[StoryUpload] Upload FAILED:', err)
       setUploading(false)
