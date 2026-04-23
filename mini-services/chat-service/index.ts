@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 // ==================== Configuration ====================
 
-const JWT_SECRET = 'nexus-platform-secret-key-2024';
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-chat-service-secret';
 const PORT = 3003;
 
 // ==================== Types ====================

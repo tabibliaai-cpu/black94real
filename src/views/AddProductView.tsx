@@ -225,7 +225,7 @@ export function AddProductView() {
             <textarea
               value={form.images}
               onChange={(e) => setForm((f) => ({ ...f, images: e.target.value }))}
-              placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+              placeholder="https://your-image-url.jpg"
               rows={2}
               className="w-full bg-transparent border border-white/[0.08] rounded-lg px-4 py-2.5 text-[15px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors resize-none"
             />

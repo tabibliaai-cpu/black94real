@@ -14,6 +14,7 @@ import { getOrCreateKeyPair, encryptMessage, decryptMessage } from '@/lib/crypto
 import Picker from '@emoji-mart/react'
 import emojiData from '@emoji-mart/data'
 import { ChatInputBar } from '@/components/ChatInputBar'
+import { ChatSettingsSheet } from '@/components/ChatSettingsSheet'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -538,8 +539,13 @@ export function ChatRoomView() {
   const [showEmoji, setShowEmoji] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [showMenu, setShowMenu] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<Message[]>([])
+  const [searchIndex, setSearchIndex] = useState(0)
   const chatId = viewParams?.chatId
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
@@ -874,6 +880,50 @@ export function ChatRoomView() {
     }
   }, [imagePreview, handleSendImage, handleSendText])
 
+  // ── Search in Chat ──
+  const filteredMessages = useMemo(() => {
+    if (!searchOpen || !searchQuery.trim()) return messages
+    const q = searchQuery.toLowerCase()
+    return messages.filter((msg) =>
+      msg.messageType === 'text' && msg.content.toLowerCase().includes(q)
+    )
+  }, [messages, searchOpen, searchQuery])
+
+  // Navigate search results
+  useEffect(() => {
+    if (!searchOpen || filteredMessages.length === 0) return
+    const targetMsg = filteredMessages[searchIndex]
+    if (!targetMsg) return
+    const el = document.getElementById(`msg-${targetMsg.id}`)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      el.classList.add('ring-2', 'ring-[#FFFFFF]/30', 'rounded-2xl')
+      setTimeout(() => el.classList.remove('ring-2', 'ring-[#FFFFFF]/30', 'rounded-2xl'), 2000)
+    }
+  }, [searchIndex, searchOpen, filteredMessages])
+
+  const handleSearchPrev = useCallback(() => {
+    setSearchIndex((i) => (i > 0 ? i - 1 : filteredMessages.length - 1))
+  }, [filteredMessages.length])
+
+  const handleSearchNext = useCallback(() => {
+    setSearchIndex((i) => (i < filteredMessages.length - 1 ? i + 1 : 0))
+  }, [filteredMessages.length])
+
+  const handleOpenSearch = useCallback(() => {
+    setSearchOpen(true)
+    setSearchQuery('')
+    setSearchIndex(0)
+    setTimeout(() => document.getElementById('chat-search-input')?.focus(), 100)
+  }, [])
+
+  const handleCloseSearch = useCallback(() => {
+    setSearchOpen(false)
+    setSearchQuery('')
+    setSearchResults([])
+    setSearchIndex(0)
+  }, [])
+
   return (
     <div
       className="flex flex-col bg-black animate-fade-in"
@@ -929,6 +979,17 @@ export function ChatRoomView() {
             <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
           </svg>
         </button>
+        {/* Search button */}
+        <button
+          onClick={handleOpenSearch}
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+          aria-label="Search in chat"
+        >
+          <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
@@ -945,6 +1006,25 @@ export function ChatRoomView() {
             <>
               <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
               <div className="absolute right-0 top-full mt-1 z-20 w-48 rounded-xl bg-[#1d1d1f] border border-white/[0.08] shadow-xl overflow-hidden animate-fade-in">
+                <button
+                  onClick={() => { setShowMenu(false); handleOpenSearch() }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
+                >
+                  <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                  </svg>
+                  <span className="text-[14px] text-[#e7e9ea] font-medium">Search</span>
+                </button>
+                <button
+                  onClick={() => { setShowMenu(false); setShowSettings(true) }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
+                >
+                  <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+                  </svg>
+                  <span className="text-[14px] text-[#e7e9ea] font-medium">Settings</span>
+                </button>
                 <button
                   onClick={() => { setShowMenu(false); setShowDeleteDialog(true) }}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.06] transition-colors"
@@ -988,6 +1068,44 @@ export function ChatRoomView() {
         </div>
       )}
 
+      {/* Search bar */}
+      {searchOpen && (
+        <div className="shrink-0 px-4 py-2 border-b border-white/[0.06] bg-[#000000] flex items-center gap-2">
+          <button onClick={handleCloseSearch} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors shrink-0">
+            <svg className="w-4 h-4 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <input
+            id="chat-search-input"
+            type="text"
+            value={searchQuery}
+            onChange={(e) => { setSearchQuery(e.target.value); setSearchIndex(0) }}
+            placeholder="Search messages..."
+            className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-[14px] text-[#e7e9ea] placeholder:text-[#64748b] outline-none focus:border-[#3b82f6]/50 transition-colors"
+          />
+          {searchQuery.trim() && (
+            <span className="text-[12px] text-[#94a3b8] shrink-0">
+              {filteredMessages.length > 0 ? `${searchIndex + 1}/${filteredMessages.length}` : 'No results'}
+            </span>
+          )}
+          {filteredMessages.length > 1 && (
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button onClick={handleSearchPrev} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors">
+                <svg className="w-3.5 h-3.5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 15l-6-6-6 6"/>
+                </svg>
+              </button>
+              <button onClick={handleSearchNext} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors">
+                <svg className="w-3.5 h-3.5 text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
         {loading ? (
@@ -999,10 +1117,12 @@ export function ChatRoomView() {
             <p className="text-[15px] text-[#94a3b8]">No messages yet. Say hello!</p>
           </div>
         ) : (
-          messages.map((msg) => {
+          (searchOpen && searchQuery.trim() ? filteredMessages : messages).map((msg) => {
             const isMine = msg.senderId === user?.id
+            const isSearchMatch = searchOpen && searchQuery.trim() && msg.messageType === 'text' && msg.content.toLowerCase().includes(searchQuery.toLowerCase())
+            const isCurrentResult = searchOpen && filteredMessages[searchIndex]?.id === msg.id
             return (
-              <div key={msg.id} className={cn('flex', isMine ? 'justify-end' : 'justify-start')}>
+              <div key={msg.id} id={`msg-${msg.id}`} className={cn('flex transition-all duration-300', isMine ? 'justify-end' : 'justify-start', isCurrentResult && 'ring-2 ring-[#FFFFFF]/30 rounded-2xl')}>
                 <div
                   className={cn(
                     'max-w-[75%] px-3 py-2 rounded-2xl text-[15px] leading-relaxed',
@@ -1086,6 +1206,27 @@ export function ChatRoomView() {
         className="hidden"
         onChange={handleImageSelect}
       />
+
+      {/* Chat Settings Sheet */}
+      {showSettings && otherUser && user && (
+        <ChatSettingsSheet
+          open={showSettings}
+          onClose={() => setShowSettings(false)}
+          user={{
+            id: otherId || '',
+            displayName: otherUser.displayName,
+            username: otherUser.username,
+            profileImage: otherUser.profileImage,
+            isVerified: otherUser.isVerified,
+            badge: otherUser.badge,
+          }}
+          chatId={chatId || ''}
+          currentUserId={user.id}
+          onSearch={handleOpenSearch}
+          onDeleteChat={() => { setShowSettings(false); navigate('chat') }}
+          onClearChat={() => setMessages([])}
+        />
+      )}
     </div>
   )
 }

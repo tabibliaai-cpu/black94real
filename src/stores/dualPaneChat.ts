@@ -113,20 +113,6 @@ interface DualPaneState {
   reset: () => void
 }
 
-/* ── Default data (populated from server) ──────────────────────────────────────────── */
-
-const INITIAL_MESSAGES: Record<string, ChatMsg[]> = {}
-
-/* ── Chat list (populated from server) ──────────────────────────────────────────── */
-
-const INITIAL_CHAT_LIST: ChatListItem[] = []
-
-/* ── Sponsored ads (populated from server) ──────────────────────────────────── */
-
-const SPONSORED_ADS: SponsoredAd[] = []
-
-const EXTRA_ADS: SponsoredAd[] = []
-
 /* ════════════════════════════════════════════════════════════════════ */
 
 export const useDualPaneChat = create<DualPaneState>((set, get) => ({
@@ -209,12 +195,7 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   /* ── Sponsored Ads ───────────────────────────── */
   ads: [],
   loadMoreAds: () => {
-    const { ads } = get()
-    if (ads.length >= SPONSORED_ADS.length + EXTRA_ADS.length) return
-    const nextBatch = EXTRA_ADS.slice(0, 4)
-    set((s) => ({
-      ads: [...s.ads, ...nextBatch.filter((a) => !s.ads.find((ea) => ea.id === a.id))],
-    }))
+    // Ads are populated from the server — no local mock data to load
   },
   likedAds: new Set(),
   savedAds: new Set(),

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { toast } from 'sonner'
+import { doc, updateDoc, deleteDoc, getDocs, collection, writeBatch, addDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
 /* ── Types ────────────────────────────────────────────────────────────── */
 
@@ -12,22 +14,24 @@ interface ChatUser {
   displayName: string
   username: string
   profileImage: string
+  isVerified?: boolean
+  badge?: string
 }
 
 interface ChatSettingsSheetProps {
   open: boolean
   onClose: () => void
   user: ChatUser
+  chatId: string
+  currentUserId: string
   /** Initial mute state — pass from parent to persist across sheet open/close */
   initialMuted?: boolean
-  /** Called when the user triggers nuclear block */
-  onNuclearBlock?: () => void
-  /** Called when mute is toggled */
-  onMuteToggle?: (muted: boolean) => void
-  /** Called when clear chat is triggered */
+  /** Called when search should be opened in chat */
+  onSearch?: () => void
+  /** Called after chat is deleted */
+  onDeleteChat?: () => void
+  /** Called after chat is cleared */
   onClearChat?: () => void
-  /** Called when report is triggered */
-  onReport?: () => void
 }
 
 /* ── Menu row component ───────────────────────────────────────────────── */
@@ -92,17 +96,23 @@ export function ChatSettingsSheet({
   open,
   onClose,
   user,
+  chatId,
+  currentUserId,
   initialMuted = false,
-  onNuclearBlock,
-  onMuteToggle,
+  onSearch,
+  onDeleteChat,
   onClearChat,
-  onReport,
 }: ChatSettingsSheetProps) {
   const [muted, setMuted] = useState(initialMuted)
   const [showNuclearDialog, setShowNuclearDialog] = useState(false)
   const [nuclearConfirmed, setNuclearConfirmed] = useState(false)
   const [showClearDialog, setShowClearDialog] = useState(false)
+  const [clearing, setClearing] = useState(false)
   const [showReportDialog, setShowReportDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [reporting, setReporting] = useState(false)
+  const [blocking, setBlocking] = useState(false)
 
   // Sync muted state when sheet reopens with different initial value
   useEffect(() => {
@@ -111,30 +121,138 @@ export function ChatSettingsSheet({
 
   if (!open) return null
 
-  const handleMuteToggle = () => {
+  const handleMuteToggle = async () => {
     const next = !muted
     setMuted(next)
-    onMuteToggle?.(next)
-    toast.success(next ? 'Notifications muted' : 'Notifications unmuted')
+    try {
+      await updateDoc(doc(db, 'chats', chatId), {
+        [`mutedBy.${currentUserId}`]: next,
+        updatedAt: serverTimestamp(),
+      })
+      toast.success(next ? 'Notifications muted' : 'Notifications unmuted')
+    } catch (err) {
+      console.error('Failed to toggle mute:', err)
+      setMuted(!next)
+      toast.error('Failed to update mute setting')
+    }
   }
 
-  const handleNuclearBlock = () => {
+  const handleNuclearBlock = async () => {
     setShowNuclearDialog(false)
     setNuclearConfirmed(false)
-    onNuclearBlock?.()
-    toast.success('Chat data has been permanently deleted.')
+    setBlocking(true)
+    try {
+      // Block the other user — store block in a 'blocks' collection
+      const blockRef = doc(db, 'blocks', `${currentUserId}_${user.id}`)
+      await updateDoc(doc(db, 'blocks', `${currentUserId}_${user.id}`), {
+        blockerId: currentUserId,
+        blockedId: user.id,
+        chatId,
+        createdAt: serverTimestamp(),
+      }).catch(async () => {
+        // Document doesn't exist yet, create it
+        const { setDoc } = await import('firebase/firestore')
+        await setDoc(blockRef, {
+          blockerId: currentUserId,
+          blockedId: user.id,
+          chatId,
+          createdAt: serverTimestamp(),
+        })
+      })
+
+      // Delete all messages
+      const messagesRef = collection(db, 'chats', chatId, 'messages')
+      const messagesSnap = await getDocs(messagesRef)
+      if (!messagesSnap.empty) {
+        const batch = writeBatch(db)
+        messagesSnap.docs.forEach((d) => batch.delete(d.ref))
+        await batch.commit()
+      }
+      // Delete chat doc
+      await deleteDoc(doc(db, 'chats', chatId))
+      toast.success('Chat data has been permanently deleted.')
+      onDeleteChat?.()
+    } catch (err) {
+      console.error('Nuclear block failed:', err)
+      toast.error('Failed to block user')
+    } finally {
+      setBlocking(false)
+    }
   }
 
-  const handleClearChat = () => {
+  const handleClearChat = async () => {
     setShowClearDialog(false)
-    onClearChat?.()
-    toast.success('Chat cleared.')
+    setClearing(true)
+    try {
+      // Delete all messages in the chat (but keep the chat document)
+      const messagesRef = collection(db, 'chats', chatId, 'messages')
+      const messagesSnap = await getDocs(messagesRef)
+      if (!messagesSnap.empty) {
+        const batch = writeBatch(db)
+        messagesSnap.docs.forEach((d) => batch.delete(d.ref))
+        await batch.commit()
+      }
+      // Reset lastMessage
+      await updateDoc(doc(db, 'chats', chatId), {
+        lastMessage: null,
+        updatedAt: serverTimestamp(),
+      })
+      toast.success('Chat cleared.')
+      onClearChat?.()
+      onClose()
+    } catch (err) {
+      console.error('Clear chat failed:', err)
+      toast.error('Failed to clear chat')
+    } finally {
+      setClearing(false)
+    }
   }
 
-  const handleReport = () => {
+  const handleDeleteChat = async () => {
+    setShowDeleteDialog(false)
+    setDeleting(true)
+    try {
+      // Delete all messages
+      const messagesRef = collection(db, 'chats', chatId, 'messages')
+      const messagesSnap = await getDocs(messagesRef)
+      if (!messagesSnap.empty) {
+        const batch = writeBatch(db)
+        messagesSnap.docs.forEach((d) => batch.delete(d.ref))
+        await batch.commit()
+      }
+      // Delete the chat document entirely
+      await deleteDoc(doc(db, 'chats', chatId))
+      toast.success('Chat deleted')
+      onDeleteChat?.()
+    } catch (err) {
+      console.error('Delete chat failed:', err)
+      toast.error('Failed to delete chat')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const handleReport = async () => {
     setShowReportDialog(false)
-    onReport?.()
-    toast.success('Report submitted. We\'ll review it shortly.')
+    setReporting(true)
+    try {
+      await addDoc(collection(db, 'reports'), {
+        reporterId: currentUserId,
+        reportedUserId: user.id,
+        reportedUsername: user.username,
+        reportedDisplayName: user.displayName,
+        chatId,
+        reason: 'inappropriate',
+        status: 'pending',
+        createdAt: serverTimestamp(),
+      })
+      toast.success('Report submitted. We\'ll review it shortly.')
+    } catch (err) {
+      console.error('Report failed:', err)
+      toast.error('Failed to submit report')
+    } finally {
+      setReporting(false)
+    }
   }
 
   return (
@@ -193,17 +311,16 @@ export function ChatSettingsSheet({
             {/* Divider */}
             <div className="border-t border-white/[0.06] my-2" />
 
-            {/* Nuclear Block */}
+            {/* Search in Chat */}
             <MenuRow
               icon={
-                <svg className="w-[18px] h-[18px] text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M4.93 4.93l14.14 14.14" />
+                <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-4.35-4.35" />
                 </svg>
               }
-              label="Nuclear Block"
-              labelColor="text-red-400"
-              onClick={() => setShowNuclearDialog(true)}
+              label="Search in Chat"
+              onClick={() => { onSearch?.(); onClose() }}
             />
 
             {/* Mute toggle */}
@@ -219,21 +336,21 @@ export function ChatSettingsSheet({
               onClick={handleMuteToggle}
             />
 
-            {/* Search in Chat (disabled) */}
+            {/* Encryption info */}
             <MenuRow
               icon={
-                <svg className="w-[18px] h-[18px] text-[#94a3b8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="M21 21l-4.35-4.35" />
+                <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
               }
-              label="Search in Chat"
-              disabled
+              label="Encryption"
+              labelColor="text-[#FFFFFF]"
               trailing={
-                <span className="text-[12px] text-[#64748b] px-2 py-0.5 rounded-full bg-white/[0.04]">
-                  Soon
+                <span className="text-[12px] text-[#FFFFFF] px-2 py-0.5 rounded-full bg-[#FFFFFF]/10">
+                  E2E
                 </span>
               }
+              disabled
             />
 
             {/* Divider */}
@@ -249,6 +366,32 @@ export function ChatSettingsSheet({
               }
               label="Clear Chat"
               onClick={() => setShowClearDialog(true)}
+            />
+
+            {/* Delete Chat */}
+            <MenuRow
+              icon={
+                <svg className="w-[18px] h-[18px] text-[#f43f5e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                </svg>
+              }
+              label="Delete Chat"
+              labelColor="text-[#f43f5e]"
+              onClick={() => setShowDeleteDialog(true)}
+            />
+
+            {/* Nuclear Block */}
+            <MenuRow
+              icon={
+                <svg className="w-[18px] h-[18px] text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M4.93 4.93l14.14 14.14" />
+                </svg>
+              }
+              label="Nuclear Block"
+              labelColor="text-red-400"
+              onClick={() => setShowNuclearDialog(true)}
             />
 
             {/* Report */}
@@ -287,7 +430,7 @@ export function ChatSettingsSheet({
             </div>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-4">
               This will <span className="text-red-400 font-semibold">permanently delete all chat data</span> with{' '}
-              <span className="text-[#e7e9ea] font-medium">@{user.username}</span>. This cannot be undone.
+              <span className="text-[#e7e9ea] font-medium">@{user.username}</span> and block them. This cannot be undone.
             </p>
             <label className="flex items-start gap-2.5 mb-5 cursor-pointer group">
               <input
@@ -309,7 +452,7 @@ export function ChatSettingsSheet({
               </button>
               <button
                 onClick={handleNuclearBlock}
-                disabled={!nuclearConfirmed}
+                disabled={!nuclearConfirmed || blocking}
                 className={cn(
                   'flex-1 py-2.5 rounded-full text-[14px] font-bold transition-colors',
                   nuclearConfirmed
@@ -317,7 +460,7 @@ export function ChatSettingsSheet({
                     : 'bg-white/[0.06] text-[#64748b] cursor-not-allowed'
                 )}
               >
-                Delete
+                {blocking ? 'Blocking...' : 'Block & Delete'}
               </button>
             </div>
           </div>
@@ -335,7 +478,7 @@ export function ChatSettingsSheet({
             <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Clear Chat</h3>
             <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
               Are you sure you want to clear all messages with{' '}
-              <span className="text-[#e7e9ea] font-medium">@{user.username}</span>? This will remove messages from your view.
+              <span className="text-[#e7e9ea] font-medium">@{user.username}</span>? This will remove all messages from your view. The chat will remain visible in your list.
             </p>
             <div className="flex gap-3">
               <button
@@ -346,9 +489,42 @@ export function ChatSettingsSheet({
               </button>
               <button
                 onClick={handleClearChat}
-                className="flex-1 py-2.5 rounded-full bg-[#e7e9ea] text-black text-[14px] font-bold hover:bg-gray-200 transition-colors"
+                disabled={clearing}
+                className="flex-1 py-2.5 rounded-full bg-[#e7e9ea] text-black text-[14px] font-bold hover:bg-gray-200 transition-colors disabled:opacity-50"
               >
-                Clear
+                {clearing ? 'Clearing...' : 'Clear'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Delete Chat Confirmation Dialog ──────────────────────────────── */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center px-6">
+          <div
+            className="absolute inset-0 bg-[#000000]/70 backdrop-blur-sm animate-fade-in"
+            onClick={() => setShowDeleteDialog(false)}
+          />
+          <div className="relative bg-[#000000] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
+            <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Delete Chat</h3>
+            <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
+              Are you sure you want to delete this chat with{' '}
+              <span className="text-[#e7e9ea] font-medium">@{user.username}</span>? This will permanently remove the entire conversation and cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteDialog(false)}
+                className="flex-1 py-2.5 rounded-full border border-white/[0.12] text-[14px] font-bold text-[#e7e9ea] hover:bg-white/[0.04] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteChat}
+                disabled={deleting}
+                className="flex-1 py-2.5 rounded-full bg-[#f43f5e] text-white text-[14px] font-bold hover:bg-[#e11d48] transition-colors disabled:opacity-50"
+              >
+                {deleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>
@@ -364,9 +540,18 @@ export function ChatSettingsSheet({
           />
           <div className="relative bg-[#000000] border border-white/[0.08] rounded-2xl p-6 max-w-sm w-full animate-fade-in shadow-2xl">
             <h3 className="text-lg font-bold text-[#e7e9ea] mb-2">Report @{user.username}</h3>
-            <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-5">
+            <p className="text-[14px] text-[#94a3b8] leading-relaxed mb-4">
               Report this user for violating community guidelines? Our team will review this report and take appropriate action.
             </p>
+            {/* Report reason selection */}
+            <div className="space-y-2 mb-5">
+              {['Harassment or bullying', 'Spam or fake account', 'Inappropriate content', 'Other'].map((reason) => (
+                <label key={reason} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-white/[0.06] hover:bg-white/[0.04] transition-colors cursor-pointer">
+                  <input type="radio" name="report-reason" value={reason} defaultChecked={reason === 'Inappropriate content'} className="accent-red-500" />
+                  <span className="text-[13px] text-[#e7e9ea]">{reason}</span>
+                </label>
+              ))}
+            </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowReportDialog(false)}
@@ -376,9 +561,10 @@ export function ChatSettingsSheet({
               </button>
               <button
                 onClick={handleReport}
-                className="flex-1 py-2.5 rounded-full bg-red-500 text-white text-[14px] font-bold hover:bg-red-600 transition-colors"
+                disabled={reporting}
+                className="flex-1 py-2.5 rounded-full bg-red-500 text-white text-[14px] font-bold hover:bg-red-600 transition-colors disabled:opacity-50"
               >
-                Report
+                {reporting ? 'Submitting...' : 'Report'}
               </button>
             </div>
           </div>

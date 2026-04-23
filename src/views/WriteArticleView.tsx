@@ -259,7 +259,7 @@ export function WriteArticleView() {
                   type="url"
                   value={factCheckUrl}
                   onChange={(e) => setFactCheckUrl(e.target.value)}
-                  placeholder="https://example.com/source"
+                  placeholder="https://your-source-url"
                   className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 text-[14px] text-[#e7e9ea] placeholder-[#64748b] outline-none focus:border-[#FFFFFF]/50 transition-colors"
                 />
               </div>

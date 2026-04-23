@@ -74,12 +74,6 @@ function genColor(): string {
   return randItem(colors)
 }
 
-/* ── Response pool ─────────────────────────────────────────────────────── */
-const STRANGER_RESPONSES: string[] = []
-
-/* ── Icebreakers ──────────────────────────────────────────────────── */
-const ICEBREAKERS: string[] = []
-
 let msgCounter = 0
 
 export const useAnonChat = create<AnonChatState>((set, get) => ({
