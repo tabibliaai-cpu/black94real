@@ -10,7 +10,6 @@ interface ShareMenuProps {
   onQuote: () => void
   isReposted?: boolean
   anchorRef?: HTMLButtonElement | null
-  postCaption?: string
   postId?: string
 }
 
@@ -21,7 +20,6 @@ export function ShareMenu({
   onQuote,
   isReposted = false,
   anchorRef,
-  postCaption,
   postId,
 }: ShareMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
@@ -76,21 +74,6 @@ export function ShareMenu({
     }
   }, [onClose])
 
-  const handleShareNative = useCallback(async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Black94 Post',
-          text: postCaption || 'Check out this post on Black94!',
-          url: `https://black94.web.app`,
-        })
-      } catch { /* user cancelled */ }
-    } else {
-      handleCopyLink()
-    }
-    onClose()
-  }, [postCaption, onClose, handleCopyLink])
-
   if (!open) return null
 
   const menuItems = [
@@ -132,22 +115,6 @@ export function ShareMenu({
       color: '#e7e9ea',
     },
     {
-      icon: copied ? (
-        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth={2}>
-          <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ) : (
-        <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-          <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ),
-      label: copied ? 'Copied!' : 'Copy Link',
-      sublabel: copied ? 'Link copied to clipboard' : 'Copy post link to clipboard',
-      onClick: handleCopyLink,
-      color: copied ? '#10b981' : '#e7e9ea',
-    },
-    {
       icon: (
         <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
           <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -155,10 +122,10 @@ export function ShareMenu({
           <line x1="12" y1="2" x2="12" y2="15" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       ),
-      label: 'Share via...',
-      sublabel: 'Share on other platforms',
-      onClick: handleShareNative,
-      color: '#e7e9ea',
+      label: 'Copy Link',
+      sublabel: copied ? 'Link copied to clipboard' : 'Copy post link to clipboard',
+      onClick: handleCopyLink,
+      color: copied ? '#10b981' : '#e7e9ea',
     },
   ]
 

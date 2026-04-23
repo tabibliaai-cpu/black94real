@@ -230,16 +230,14 @@ export function ArticleView() {
           {/* Fact Check Badge */}
           {factCheck && (
             <div className="mb-6">
-              <a
-                href={factCheck.url || '#'}
-                rel="noopener noreferrer"
+              <span
                 className={cn(
-                  'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold transition-colors',
+                  'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold',
                   factCheck.status === 'Verified'
-                    ? 'bg-[#FFFFFF]/10 text-[#FFFFFF] hover:bg-[#FFFFFF]/20'
+                    ? 'bg-[#FFFFFF]/10 text-[#FFFFFF]'
                     : factCheck.status === 'Not Verified'
-                    ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
-                    : 'bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20'
+                    ? 'bg-red-500/10 text-red-400'
+                    : 'bg-yellow-500/10 text-yellow-400'
                 )}
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
@@ -247,14 +245,7 @@ export function ArticleView() {
                   <path d="M22 4L12 14.01l-3-3" />
                 </svg>
                 {factCheck.status}
-                {factCheck.url && (
-                  <svg className="w-3 h-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M15 3h6v6" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10 14L21 3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </a>
+              </span>
             </div>
           )}
 

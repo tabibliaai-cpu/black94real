@@ -1,15 +1,16 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'black94-v2';
+const CACHE_NAME = 'black94-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/offline.html',
   '/manifest.json',
   '/logo.png',
   '/logo.svg',
 ];
 
-// Install: cache app shell
+// Install: cache app shell + offline page
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -71,7 +72,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Navigation requests: network-first with cache fallback
+  // Navigation requests: network-first with offline fallback page
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -83,8 +84,9 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          return caches.match('/index.html').then((cached) => {
-            return cached || caches.match('/');
+          // Show the offline page instead of a broken screen
+          return caches.match('/offline.html').then((cached) => {
+            return cached || caches.match('/index.html');
           });
         })
     );

@@ -62,52 +62,21 @@ function QRCodePlaceholder({ seed }: { seed: string }) {
 
 /* ── Share icons row ──────────────────────────────────────────────────── */
 
-const shareTargets = [
-  { label: 'WhatsApp', color: '#25D366', icon: 'M' },
-  { label: 'Telegram', color: '#0088cc', icon: 'T' },
-  { label: 'Share', color: '#FFFFFF', icon: 'S' },
-  { label: 'Copy', color: '#FFFFFF', icon: 'C' },
-]
-
 function ShareRow({ shareUrl, onCopy }: { shareUrl: string; onCopy: () => void }) {
-  const handleShare = (platform: string) => {
-    const encodedUrl = encodeURIComponent(shareUrl)
-    const text = encodeURIComponent('Check out my profile on Black94!')
-    let url = ''
-    switch (platform) {
-      case 'WhatsApp':
-        url = `https://wa.me/?text=${text}%20${encodedUrl}`
-        break
-      case 'Telegram':
-        url = `https://t.me/share/url?url=${encodedUrl}&text=${text}`
-        break
-      case 'Share':
-        if (navigator.share) {
-          navigator.share({ title: 'Check out my profile on Black94!', url: shareUrl }).catch(() => {})
-        } else {
-          onCopy()
-        }
-        return
-    }
-    if (url) onCopy()
-  }
   return (
     <div className="flex items-center justify-center gap-4 py-2">
-      {shareTargets.map((target) => (
-        <button
-          key={target.label}
-          onClick={target.label === 'Copy' ? onCopy : () => handleShare(target.label)}
-          className="flex flex-col items-center gap-1.5 group"
+      <button
+        onClick={onCopy}
+        className="flex flex-col items-center gap-1.5 group"
+      >
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center text-[15px] font-bold text-white transition-transform group-hover:scale-110 group-active:scale-95"
+          style={{ backgroundColor: '#FFFFFF' }}
         >
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-[15px] font-bold text-white transition-transform group-hover:scale-110 group-active:scale-95"
-            style={{ backgroundColor: target.color }}
-          >
-            {target.icon}
-          </div>
-          <span className="text-[11px] text-[#94a3b8]">{target.label}</span>
-        </button>
-      ))}
+          C
+        </div>
+        <span className="text-[11px] text-[#94a3b8]">Copy</span>
+      </button>
     </div>
   )
 }

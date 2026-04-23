@@ -89,7 +89,7 @@ export function AffiliatesView() {
   }
 
   const handlePurchase = () => {
-    toast.info('Payment gateway integration is being set up. Please check back soon.')
+    toast.info('Badge purchase is currently unavailable. Try again later.')
   }
 
   return (
@@ -342,7 +342,7 @@ export function AffiliatesView() {
           </button>
 
           <p className="text-[12px] text-[#64748b] text-center">
-            Payment gateway integration in progress
+            Complete your Business plan setup to purchase badges
           </p>
         </div>
       )}

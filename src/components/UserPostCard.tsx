@@ -564,7 +564,6 @@ export function UserPostCard({
         onQuote={handleQuote}
         isReposted={isReposted}
         anchorRef={shareBtnRef.current}
-        postCaption={post.caption}
         postId={post.id}
       />
 

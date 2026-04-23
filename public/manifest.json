@@ -37,25 +37,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "shortcuts": [
-    {
-      "name": "Messages",
-      "short_name": "Chat",
-      "url": "/#/chat",
-      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Notifications",
-      "short_name": "Alerts",
-      "url": "/#/notifications",
-      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "New Post",
-      "short_name": "Post",
-      "url": "/#/feed",
-      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
-    }
   ]
 }
