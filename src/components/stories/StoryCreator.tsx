@@ -1364,7 +1364,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             type="url"
             value={feedUrl}
             onChange={(e) => setFeedUrl(e.target.value)}
-            placeholder="https://example.com/post/..."
+            placeholder="https://black94.web.app/post/..."
             className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-[#00f0ff]/50 transition-colors pr-12"
           />
           {feedUrl.trim() && (

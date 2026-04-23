@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black94_background">#000000</color>
+    <color name="black94_primary">#3b82f6</color>
+    <color name="black94_splash_bg">#000000</color>
+    <string name="app_name">Black94</string>
+    <style name="Theme.Black94" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#3b82f6</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:windowBackground">#000000</item>
+    </style>
+    <style name="Theme.Black94.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#000000</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.Black94</item>
+    </style>
+</resources>

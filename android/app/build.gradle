@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.black94.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.black94.app"
+        minSdk 21
+        targetSdk 35
+        versionCode 7
+        versionName "1.7.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../keystore/black94-release.jks')
+            storePassword 'Black94Release2026!'
+            keyAlias 'black94'
+            keyPassword 'Black94Release2026!'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+}

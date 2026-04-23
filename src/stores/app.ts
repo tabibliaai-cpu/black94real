@@ -10,6 +10,7 @@ export type AppView =
   | 'storefront' | 'product-detail' | 'cart' | 'checkout'
   | 'my-store' | 'add-product' | 'order-tracking' | 'business-orders'
   | 'store-dashboard' | 'audio-call'
+  | 'privacy-settings' | 'salary' | 'performance'
 
 export type AccountType = 'personal' | 'creator' | 'professional' | 'business'
 

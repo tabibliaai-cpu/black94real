@@ -1,0 +1,12 @@
+R_DEF: Internal format may change without notice
+local
+color black94_background
+color black94_primary
+color black94_splash_bg
+drawable ic_launcher_foreground
+layout activity_splash
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style Theme.Black94
+style Theme.Black94.Splash
