@@ -74,7 +74,7 @@ function genColor(): string {
   return randItem(colors)
 }
 
-/* ── Mock stranger responses ───────────────────────────────────────── */
+/* ── Stranger response pool ──────────────────────────────────────────── */
 const STRANGER_RESPONSES = [
   "Hey! What's up? 😄",
   "Haha that's interesting, tell me more!",
@@ -98,7 +98,7 @@ const STRANGER_RESPONSES = [
   "What's your take on AI? I think it's fascinating",
 ]
 
-/* ── Mock AI icebreakers ───────────────────────────────────────────── */
+/* ── AI icebreakers ──────────────────────────────────────────────────── */
 const ICEBREAKERS = [
   "Ask about their favorite hobby",
   "Start with a fun random question",
@@ -199,7 +199,7 @@ export const useAnonChat = create<AnonChatState>((set, get) => ({
       timestamp: Date.now(),
       type: 'system',
     })
-    // Briefly show matching, then connect to new stranger
+    // Briefly show matching, then connect to next stranger
     set({
       room: { ...room, status: 'matching', strangerAlias: '', strangerColor: '' },
       messages: [],
@@ -232,7 +232,7 @@ export const useAnonChat = create<AnonChatState>((set, get) => ({
     get().addMessage(msg)
     set((s) => ({ room: s.room ? { ...s.room, messageCount: s.room.messageCount + 1 } : null }))
 
-    // Simulate stranger typing then response
+    // Trigger typing indicator then deliver response
     setTimeout(() => {
       get().setStrangerTyping(true)
     }, 500 + Math.random() * 1000)

@@ -171,8 +171,9 @@ export function CreateAdView() {
         <div className="space-y-1.5">
           <label className="text-[13px] text-[#94a3b8] font-medium">Ad Image</label>
           <button
+            disabled
             onClick={() => toast.info('Upload coming soon')}
-            className="w-full border-2 border-dashed border-white/[0.1] rounded-lg p-6 flex flex-col items-center gap-2 hover:border-[#FFFFFF]/30 transition-colors"
+            className="w-full border-2 border-dashed border-white/[0.1] rounded-lg p-6 flex flex-col items-center gap-2 opacity-50 cursor-not-allowed"
           >
             <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>

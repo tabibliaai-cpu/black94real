@@ -10,7 +10,7 @@ import type { Chat as FbChat } from '@/lib/db'
 import { onSnapshot, collection, query, where } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { toast } from 'sonner'
-import { XChatInputBar } from '@/components/XChatInputBar'
+import { ChatInputBar } from '@/components/ChatInputBar'
 
 /* ── Helper: Firestore Timestamp → ISO string ──────────────────────────── */
 function tsToISO(value: unknown): string {
@@ -742,8 +742,9 @@ function ChatRoomView() {
           </button>
           {/* Video Call */}
           <button
+            disabled
             onClick={() => toast.info('Video call coming soon')}
-            className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center opacity-50 cursor-not-allowed"
           >
             <svg className="w-[18px] h-[18px] text-[#e7e9ea]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
@@ -831,8 +832,8 @@ function ChatRoomView() {
       {/* ─── Reply Context Bar ─── */}
       <ReplyBar />
 
-      {/* ─── Input Bar (X-style) ─── */}
-      <XChatInputBar
+      {/* ─── Input Bar ─── */}
+      <ChatInputBar
         value={text}
         onChange={setText}
         onSend={handleSend}
@@ -954,8 +955,9 @@ function ChatListView() {
       <div className="shrink-0 px-4 pt-3 pb-2 flex items-center justify-between">
         <h2 className="text-xl font-bold text-[#e7e9ea]">Messages</h2>
         <button
+          disabled
           onClick={() => toast.info('New chat — coming soon')}
-          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+          className="w-9 h-9 rounded-full flex items-center justify-center opacity-50 cursor-not-allowed"
           aria-label="Compose new message"
         >
           <svg className="w-5 h-5 text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

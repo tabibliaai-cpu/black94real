@@ -753,8 +753,8 @@ function ShareSheet({
           <div className="grid grid-cols-4 gap-4 mb-6">
             <ShareOption
               icon="🟢"
-              label="WhatsApp Status"
-              message="Shared to WhatsApp Status!"
+              label="Status"
+              message="Shared successfully!"
               onClose={onClose}
             />
             <ShareOption
@@ -764,20 +764,20 @@ function ShareSheet({
               onClose={onClose}
             />
             <ShareOption
-              icon="🐦"
-              label="Twitter"
-              message="Opening Twitter..."
+              icon="↗️"
+              label="Share"
+              message="Opening share..."
               onClose={onClose}
             />
             <ShareOption
               icon="📱"
-              label="Instagram"
-              message="Opening Instagram..."
+              label="Photos"
+              message="Opening Photos..."
               onClose={onClose}
             />
           </div>
           <div className="space-y-2">
-            {['Facebook', 'Telegram', 'More...'].map((platform) => (
+            {['More'].map((platform) => (
               <button
                 key={platform}
                 onClick={onClose}

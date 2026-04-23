@@ -270,7 +270,7 @@ export function UserPostCard({
               <polyline points="23 4 23 10 17 10"/>
               <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
             </svg>
-            <span className="text-[12px] font-bold text-[#00ba7c]">You reposted</span>
+            <span className="text-[12px] font-bold text-[#00ba7c]">You shared</span>
           </div>
         )}
 

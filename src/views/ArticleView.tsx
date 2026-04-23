@@ -303,8 +303,9 @@ export function ArticleView() {
 
           {/* Comment */}
           <button
+            disabled
             onClick={handleComment}
-            className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
+            className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-xl opacity-50 cursor-not-allowed"
             aria-label="Comment"
           >
             <svg className="w-[22px] h-[22px] text-[#94a3b8] group-hover:text-[#FFFFFF] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

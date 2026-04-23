@@ -22,8 +22,8 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     label: 'Home',
     icon: (active) => (
       <House
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
-        strokeWidth={active ? 2.4 : 1.8}
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
+        strokeWidth={active ? 2.4 : 2.2}
         fill={active ? 'currentColor' : 'none'}
       />
     ),
@@ -33,8 +33,8 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     label: 'Search',
     icon: (active) => (
       <Search
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
-        strokeWidth={active ? 2.4 : 1.8}
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
+        strokeWidth={active ? 2.4 : 2.2}
       />
     ),
   },
@@ -43,8 +43,8 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     label: 'Chat',
     icon: (active) => (
       <MessageCircle
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
-        strokeWidth={active ? 2.4 : 1.8}
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
+        strokeWidth={active ? 2.4 : 2.2}
       />
     ),
   },
@@ -53,8 +53,8 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     label: 'Alerts',
     icon: (active) => (
       <Bell
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
-        strokeWidth={active ? 2.4 : 1.8}
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
+        strokeWidth={active ? 2.4 : 2.2}
       />
     ),
   },
@@ -63,8 +63,8 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     label: 'Stories',
     icon: (active) => (
       <Radio
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#e7e9ea]' : 'text-[#d1d5db]')}
-        strokeWidth={active ? 2.4 : 1.8}
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
+        strokeWidth={active ? 2.4 : 2.2}
       />
     ),
   },
@@ -73,8 +73,8 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
     label: 'Anon',
     icon: (active) => (
       <Ghost
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#FFFFFF]' : 'text-[#d1d5db]')}
-        strokeWidth={active ? 2.4 : 1.8}
+        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
+        strokeWidth={active ? 2.4 : 2.2}
         fill={active ? 'currentColor' : 'none'}
       />
     ),

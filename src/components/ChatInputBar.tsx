@@ -4,15 +4,15 @@ import { useCallback, useEffect, useRef, useState, type ChangeEvent, type Keyboa
 import { cn } from '@/lib/utils'
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   XChatInputBar — Pixel-perfect X (2026) Messages / DM Input Bar
+   ChatInputBar — Messages / DM Input Bar
 
-   Design spec (match X app exactly):
+   Design spec:
    ┌─────────────────────────────────────────────────────────────────────────┐
    │  Border-top: 0.5px #2f3336                                            │
    │  Background: #000000                                                   │
    │                                                                        │
    │   ┌─────────────────────────────────────────────────┐  ┌───┐           │
-   │   │ 😊  GIF  [ Start a message             ] 📎  │  │ ➤ │           │
+   │   │ 😊  GIF  [ Type a message               ] 📎  │  │ ➤ │           │
    │   └─────────────────────────────────────────────────┘  └───┘           │
    │   pill: bg-[#202327], rounded-full                                     │
    │   send: outside pill, #1d9bf0 when active, #2f3336 when idle           │
@@ -20,14 +20,14 @@ import { cn } from '@/lib/utils'
    └─────────────────────────────────────────────────────────────────────────┘
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-export interface XChatInputBarProps {
+export interface ChatInputBarProps {
   /** Current text value */
   value: string
   /** Called on every keystroke */
   onChange: (value: string) => void
   /** Called when user presses Enter (or taps send) */
   onSend: () => void
-  /** Placeholder text (default: "Start a message") */
+  /** Placeholder text (default: "Type a message") */
   placeholder?: string
   /** Disable the input entirely */
   disabled?: boolean
@@ -49,11 +49,11 @@ export interface XChatInputBarProps {
   onAttachClick?: () => void
 }
 
-export function XChatInputBar({
+export function ChatInputBar({
   value,
   onChange,
   onSend,
-  placeholder = 'Start a message',
+  placeholder = 'Type a message',
   disabled = false,
   inputRef,
   canSend,
@@ -63,7 +63,7 @@ export function XChatInputBar({
   emojiActive = false,
   onGifClick,
   onAttachClick,
-}: XChatInputBarProps) {
+}: ChatInputBarProps) {
   const hasText = value.trim().length > 0
   const isActive = hasText || !!canSend
   const localRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null)
@@ -103,7 +103,7 @@ export function XChatInputBar({
     <div
       className={cn(
         'shrink-0 bg-black',
-        /* Thin top border — exactly like X */
+        /* Thin top border */
         'border-t border-[#2f3336]',
         /* Safe area for notched phones / keyboards */
         'pb-[env(safe-area-inset-bottom,0px)]',
@@ -224,7 +224,7 @@ export function XChatInputBar({
           )}
         </div>
 
-        {/* ══════════ Send Button (outside pill, X-style arrow) ══════════ */}
+        {/* ══════════ Send Button (outside pill, arrow style) ══════════ */}
         <button
           type="button"
           onClick={isActive ? onSend : undefined}

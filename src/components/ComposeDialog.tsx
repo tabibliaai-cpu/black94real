@@ -228,7 +228,7 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
                   }
                 }, 0)
               }}
-              placeholder="What is happening?!"
+              placeholder="What's on your mind?"
               className="w-full bg-transparent text-[#e7e9ea] text-[17px] placeholder-[#64748b] resize-none outline-none min-h-[110px] leading-relaxed"
               autoFocus
             />

@@ -445,7 +445,7 @@ export async function updateUsername(uid: string, newUsername: string): Promise<
 /**
  * Batch-update ALL posts by a user with their latest profile data.
  * This ensures feed consistency — posts always show the author's current
- * avatar, badge, and verification status (same pattern as X/Twitter).
+ * avatar, badge, and verification status (fan-out on profile write).
  */
 export async function updateAuthorDataInPosts(
   uid: string,

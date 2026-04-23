@@ -335,8 +335,9 @@ export function AffiliatesView() {
           </div>
 
           <button
+            disabled
             onClick={handlePurchase}
-            className="w-full py-2.5 rounded-xl bg-[#FFFFFF] text-black text-[15px] font-bold hover:bg-[#D1D5DB] active:scale-[0.98] transition-all duration-200"
+            className="w-full py-2.5 rounded-xl bg-[#FFFFFF] text-black text-[15px] font-bold opacity-50 cursor-not-allowed"
           >
             Purchase
           </button>

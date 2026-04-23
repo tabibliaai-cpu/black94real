@@ -127,8 +127,9 @@ function CurrentPlanBanner() {
       </p>
 
       <button
+        disabled
         onClick={() => toast.info('Subscription management coming soon!')}
-        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#e7e9ea] hover:bg-white/[0.1] transition-all duration-200 active:scale-[0.97]"
+        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] text-[14px] font-medium text-[#e7e9ea] opacity-50 cursor-not-allowed"
       >
         <ManageIcon className="w-4 h-4" />
         Manage Subscription

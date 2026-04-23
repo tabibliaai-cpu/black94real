@@ -65,7 +65,7 @@ function QRCodePlaceholder({ seed }: { seed: string }) {
 const shareTargets = [
   { label: 'WhatsApp', color: '#25D366', icon: 'M' },
   { label: 'Telegram', color: '#0088cc', icon: 'T' },
-  { label: 'Twitter', color: '#1DA1F2', icon: 'X' },
+  { label: 'Share', color: '#FFFFFF', icon: 'S' },
   { label: 'Copy', color: '#FFFFFF', icon: 'C' },
 ]
 
@@ -81,9 +81,13 @@ function ShareRow({ shareUrl, onCopy }: { shareUrl: string; onCopy: () => void }
       case 'Telegram':
         url = `https://t.me/share/url?url=${encodedUrl}&text=${text}`
         break
-      case 'Twitter':
-        url = `https://twitter.com/intent/tweet?text=${text}&url=${encodedUrl}`
-        break
+      case 'Share':
+        if (navigator.share) {
+          navigator.share({ title: 'Check out my profile on Black94!', url: shareUrl }).catch(() => {})
+        } else {
+          onCopy()
+        }
+        return
     }
     if (url) window.open(url, '_blank', 'noopener,noreferrer')
   }

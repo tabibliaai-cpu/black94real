@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { useAnonChat, type AnonMessage } from '@/stores/anonymousChat'
 import { useAppStore } from '@/stores/app'
-import { XChatInputBar } from '@/components/XChatInputBar'
+import { ChatInputBar } from '@/components/ChatInputBar'
 
 /* ── ICEBREAKERS ───────────────────────────────────────────────────── */
 const ICEBREAKERS = [
@@ -674,7 +674,7 @@ function AnonChatRoom() {
         {/* ═══════════════════════════════════════════════════════════════
            STICKY INPUT BAR — always at absolute bottom
            ═══════════════════════════════════════════════════════════════ */}
-        <XChatInputBar
+        <ChatInputBar
           value={input}
           onChange={setInput}
           onSend={handleSend}

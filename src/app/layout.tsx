@@ -15,19 +15,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://black94.web.app'),
   title: "Black94",
   description: "The future of social media. Connect, share, and grow.",
   keywords: ["social media", "business platform", "AI", "messaging", "CRM"],
   icons: {
     icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
+  openGraph: {
+    title: "Black94",
+    description: "The future of social media. Connect, share, and grow.",
+    url: "https://black94.web.app",
+    siteName: "Black94",
+    type: "website",
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#000000" },

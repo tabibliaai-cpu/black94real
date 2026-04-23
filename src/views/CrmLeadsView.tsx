@@ -51,8 +51,9 @@ export function CrmLeadsView() {
             </svg>
           </button>
           <button
+            disabled
             onClick={() => toast.info('Lead creation form coming soon — use CRM dashboard to manage leads')}
-            className="px-3 py-1.5 rounded-full bg-[#FFFFFF] text-black text-[13px] font-bold hover:bg-[#D1D5DB] transition-colors"
+            className="px-3 py-1.5 rounded-full bg-[#FFFFFF] text-black text-[13px] font-bold opacity-50 cursor-not-allowed"
           >
             + Add Lead
           </button>
@@ -116,8 +117,9 @@ export function CrmLeadsView() {
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.04]">
               <span className="text-[11px] text-[#64748b]">Last activity: {lead.updatedAt}</span>
               <button
+                disabled
                 onClick={() => toast.info('Lead detail view coming soon')}
-                className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#e7e9ea] hover:bg-white/[0.1] transition-colors"
+                className="px-3 py-1 rounded-full text-[12px] font-semibold bg-white/[0.06] text-[#e7e9ea] opacity-50 cursor-not-allowed"
               >
                 View
               </button>

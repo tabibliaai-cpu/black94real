@@ -42,7 +42,7 @@ function FeedSkeleton() {
 
 /* ── Feed Tabs ───────────────────────────────────────────────────────── */
 
-const TABS = ['For you', 'Following'] as const
+const TABS = ['Discover', 'Network'] as const
 type Tab = (typeof TABS)[number]
 
 /* ── Feed View ───────────────────────────────────────────────────────── */
@@ -52,7 +52,7 @@ export function FeedView() {
   const navigate = useAppStore((s) => s.navigate)
   const setComposeOpen = useAppStore((s) => s.setComposeOpen)
 
-  const [activeTab, setActiveTab] = useState<Tab>('For you')
+  const [activeTab, setActiveTab] = useState<Tab>('Discover')
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -159,9 +159,9 @@ export function FeedView() {
       if (reset) setLoading(true)
       else setLoadingMore(true)
 
-      // For "For you" tab: try ranked feed first, fall back to chronological
+      // For "Discover" tab: try ranked feed first, fall back to chronological
       let fetchedPosts: any[] = []
-      if (reset && activeTab === 'For you') {
+      if (reset && activeTab === 'Discover') {
         try {
           const ranked = await fetchRankedFeedPosts(20)
           if (ranked.length > 0) {
@@ -432,7 +432,7 @@ export function FeedView() {
           {/* End of feed */}
           {allLoaded && posts.length > 0 && (
             <div className="border-t border-white/[0.06] py-12 text-center">
-              <p className="text-[15px] text-[#94a3b8]">You&apos;re caught up</p>
+              <p className="text-[15px] text-[#94a3b8]">You&apos;re all caught up</p>
             </div>
           )}
         </div>

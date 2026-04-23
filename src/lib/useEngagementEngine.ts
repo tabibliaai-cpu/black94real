@@ -73,7 +73,7 @@ export function useEngagementEngine(enabled = true) {
 }
 
 /**
- * Fetch the ranked feed for "For you" tab.
+ * Fetch the ranked feed for "Discover" tab.
  * Falls back to chronological if engagement scores don't exist yet.
  */
 export async function fetchRankedFeedPosts(limitCount = 20): Promise<RankedPost[]> {

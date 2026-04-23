@@ -146,8 +146,9 @@ export function WriteArticleView() {
       <div className="max-w-2xl mx-auto px-4 pt-6 pb-32">
         {/* Cover Image */}
         <button
+          disabled
           onClick={handleCoverClick}
-          className="w-full relative group mb-6 rounded-2xl overflow-hidden border border-dashed border-white/[0.12] hover:border-[#FFFFFF]/40 transition-colors"
+          className="w-full relative group mb-6 rounded-2xl overflow-hidden border border-dashed border-white/[0.12] opacity-50 cursor-not-allowed"
           style={{ aspectRatio: '16/9' }}
         >
           {coverImage ? (

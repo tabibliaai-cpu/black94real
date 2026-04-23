@@ -65,7 +65,7 @@ export function ExploreView() {
       {/* Trending */}
       <div className="border-t border-b border-white/[0.06]">
         <div className="flex items-center justify-between px-4 py-2">
-          <h3 className="text-xl font-bold text-[#e7e9ea]">Trends for you</h3>
+          <h3 className="text-xl font-bold text-[#e7e9ea]">Trending Now</h3>
         </div>
         <div className="flex flex-col items-center justify-center py-12 text-center px-8">
           <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-3">

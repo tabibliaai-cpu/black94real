@@ -223,7 +223,7 @@ export function SettingsView() {
 
         // CRITICAL: Batch-update ALL posts by this user with latest profile data
         // This ensures feed/profile consistency — avatar, badge, name always match
-        // (same pattern X/Twitter uses — fan-out on profile write)
+        // (same pattern used by major platforms — fan-out on profile write)
         updateAuthorDataInPosts(user.id, {
           authorProfileImage: updatedUser.profileImage,
           authorIsVerified: updatedUser.isVerified,

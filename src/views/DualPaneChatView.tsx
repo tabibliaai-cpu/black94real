@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { useDualPaneChat, type ChatMsg, type MessageReaction } from '@/stores/dualPaneChat'
 import { useAppStore } from '@/stores/app'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
-import { XChatInputBar } from '@/components/XChatInputBar'
+import { ChatInputBar } from '@/components/ChatInputBar'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -461,8 +461,8 @@ function PrivateChatPanel() {
       {/* ─── Reply Context Bar ─── */}
       <ReplyBar />
 
-      {/* ─── Input Bar (X-style) ─── */}
-      <XChatInputBar
+      {/* ─── Input Bar ─── */}
+      <ChatInputBar
         value={text}
         onChange={setText}
         onSend={handleSend}

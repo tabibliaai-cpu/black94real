@@ -9,6 +9,8 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const isDev = process.env.NODE_ENV !== 'production'
+
   useEffect(() => {
     console.error('[ERROR BOUNDARY]', error)
   }, [error])
@@ -26,24 +28,35 @@ export default function Error({
     }}>
       <div style={{ maxWidth: 600, width: '100%' }}>
         <h2 style={{ fontSize: 20, marginBottom: 16, color: '#ff6b6b' }}>
-          Runtime Error
+          {isDev ? 'Runtime Error' : 'Something went wrong'}
         </h2>
-        <pre style={{
-          background: '#1a1a2e',
-          borderRadius: 12,
-          padding: 16,
-          overflow: 'auto',
-          fontSize: 13,
-          lineHeight: 1.5,
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          marginBottom: 16,
-          color: '#e0e0e0',
-        }}>
-          {error.message}
-          {'\n\n'}
-          {error.stack}
-        </pre>
+        {isDev ? (
+          <pre style={{
+            background: '#1a1a2e',
+            borderRadius: 12,
+            padding: 16,
+            overflow: 'auto',
+            fontSize: 13,
+            lineHeight: 1.5,
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            marginBottom: 16,
+            color: '#e0e0e0',
+          }}>
+            {error.message}
+            {'\n\n'}
+            {error.stack}
+          </pre>
+        ) : (
+          <p style={{
+            fontSize: 14,
+            lineHeight: 1.6,
+            marginBottom: 16,
+            color: '#e0e0e0',
+          }}>
+            Something went wrong. Please try again.
+          </p>
+        )}
         <button
           onClick={reset}
           style={{

@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'nexus-platform-secret-key-2024';
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'development' ? 'dev-secret-do-not-use-in-production' : '');
+if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);

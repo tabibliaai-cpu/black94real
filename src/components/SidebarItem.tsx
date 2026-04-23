@@ -39,7 +39,7 @@ export function SidebarItem({
         'focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-2 focus-visible:ring-offset-[#000000]',
         active
           ? 'text-white'
-          : 'text-[#71767b] hover:text-white hover:bg-white/[0.05]',
+          : 'text-[#a0a3a8] hover:text-white hover:bg-white/[0.05]',
         collapsed ? 'justify-center' : 'w-full'
       )}
     >
@@ -47,7 +47,7 @@ export function SidebarItem({
       <span
         className={cn(
           'shrink-0 transition-colors duration-150',
-          active ? 'text-white' : 'text-[#71767b] group-hover:text-white',
+          active ? 'text-white' : 'text-[#a0a3a8] group-hover:text-white',
           'h-[26px] w-[26px]'
         )}
       >
@@ -58,7 +58,7 @@ export function SidebarItem({
       {!collapsed && (
         <span className={cn(
           'truncate select-none',
-          active ? 'text-white font-bold' : 'font-bold text-[#71767b]'
+          active ? 'text-white font-black' : 'font-black text-[#a0a3a8]'
         )}>{label}</span>
       )}
 

@@ -13,7 +13,7 @@ import { db } from '@/lib/firebase'
 import { getOrCreateKeyPair, encryptMessage, decryptMessage } from '@/lib/crypto'
 import Picker from '@emoji-mart/react'
 import emojiData from '@emoji-mart/data'
-import { XChatInputBar } from '@/components/XChatInputBar'
+import { ChatInputBar } from '@/components/ChatInputBar'
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 
@@ -956,7 +956,7 @@ export function ChatRoomView() {
       )}
 
       {/* Input bar (X-style) */}
-      <XChatInputBar
+      <ChatInputBar
         value={text}
         onChange={setText}
         onSend={handleSend}

@@ -233,7 +233,7 @@ export function PrivacySettingsView() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-[15px] font-bold text-[#e7e9ea]">Direct Messages</h3>
+              <h3 className="text-[15px] font-bold text-[#e7e9ea]">Private Messages</h3>
               <p className="text-[13px] text-[#94a3b8] mt-0.5">
                 {dmPermission === 'all' && 'Anyone can send you messages.'}
                 {dmPermission === 'followers' && 'Only your followers can message you.'}
