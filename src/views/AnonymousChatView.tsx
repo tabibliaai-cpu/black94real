@@ -6,16 +6,6 @@ import { useAnonChat, type AnonMessage } from '@/stores/anonymousChat'
 import { useAppStore } from '@/stores/app'
 import { ChatInputBar } from '@/components/ChatInputBar'
 
-/* ── ICEBREAKERS ───────────────────────────────────────────────────── */
-const ICEBREAKERS = [
-  "What's a secret you've never told anyone?",
-  "If you could teleport anywhere right now...",
-  "What's the most spontaneous thing you've done?",
-  "What would you do if you won the lottery?",
-  "Share something you've never told anyone",
-  "Ask about their favorite hobby",
-]
-
 /* ── MASK ICON (incognito) ─────────────────────────────────────────── */
 function MaskIcon({ className }: { className?: string }) {
   return (
@@ -159,7 +149,7 @@ function LobbyScreen() {
                 <div className="w-full px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] animate-slide-up">
                   <p className="text-[11px] text-[#71767b] mb-1.5 font-semibold uppercase tracking-wider">Conversation starter</p>
                   <p className="text-[14px] text-[#e7e9ea] leading-snug">
-                    {ICEBREAKERS[Math.floor(Math.random() * ICEBREAKERS.length)]}
+                    Say hello to start chatting!
                   </p>
                 </div>
               )}

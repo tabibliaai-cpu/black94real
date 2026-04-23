@@ -74,29 +74,8 @@ function genColor(): string {
   return randItem(colors)
 }
 
-/* ── Stranger response pool ──────────────────────────────────────────── */
-const STRANGER_RESPONSES = [
-  "Hey! What's up? 😄",
-  "Haha that's interesting, tell me more!",
-  "I totally get what you mean",
-  "Same here honestly",
-  "That's cool! I've been thinking about that too",
-  "No way! That's awesome",
-  "haha true 😂",
-  "What do you do for fun?",
-  "I'm just vibing rn",
-  "Yo that's deep",
-  "I feel that on a spiritual level",
-  "Wait really? That's wild",
-  "Nice, I like your energy",
-  "Have you tried listening to lo-fi while working?",
-  "That reminds me of something funny that happened to me",
-  "I couldn't agree more",
-  "lowkey obsessed with that idea",
-  "bruh that's hilarious 😭",
-  "Honestly same, same",
-  "What's your take on AI? I think it's fascinating",
-]
+/* ── Response pool (to be replaced with real backend) ─────────────────────── */
+const STRANGER_RESPONSES: string[] = []
 
 /* ── AI icebreakers ──────────────────────────────────────────────────── */
 const ICEBREAKERS = [
@@ -199,21 +178,12 @@ export const useAnonChat = create<AnonChatState>((set, get) => ({
       timestamp: Date.now(),
       type: 'system',
     })
-    // Briefly show matching, then connect to next stranger
+    // Show matching state — waiting for real peer connection
     set({
       room: { ...room, status: 'matching', strangerAlias: '', strangerColor: '' },
       messages: [],
       strangerTyping: false,
     })
-
-    // Simulate finding a new stranger after 1.5-3s
-    setTimeout(() => {
-      const state = get()
-      if (state.room?.status === 'matching') {
-        const newAlias = genAlias()
-        state.connectToStranger(newAlias)
-      }
-    }, 1500 + Math.random() * 1500)
   },
 
   sendMessage: (content) => {
@@ -231,25 +201,6 @@ export const useAnonChat = create<AnonChatState>((set, get) => ({
     }
     get().addMessage(msg)
     set((s) => ({ room: s.room ? { ...s.room, messageCount: s.room.messageCount + 1 } : null }))
-
-    // Trigger typing indicator then deliver response
-    setTimeout(() => {
-      get().setStrangerTyping(true)
-    }, 500 + Math.random() * 1000)
-
-    setTimeout(() => {
-      get().setStrangerTyping(false)
-      const response = randItem(STRANGER_RESPONSES)
-      get().addMessage({
-        id: `msg_${++msgCounter}_${Date.now()}`,
-        roomId: room.id,
-        senderAlias: room.strangerAlias || 'Stranger',
-        content: response,
-        isMine: false,
-        timestamp: Date.now(),
-        type: 'text',
-      })
-      set((s) => ({ room: s.room ? { ...s.room, messageCount: s.room.messageCount + 1 } : null }))
-    }, 1500 + Math.random() * 2500)
+    // Message sent — waiting for real peer to reply via WebSocket
   },
 }))

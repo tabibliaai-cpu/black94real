@@ -53,14 +53,8 @@ export function CheckoutView() {
         setShippingCost(calculateShipping(result[0], 0.5, address.pincode))
       }
     } catch {
-      const demoPartners: ShippingPartner[] = [
-        { id: 'demo-1', name: 'SwiftPost', logo: '', isActive: true, baseRate: 49, perKgRate: 30, estimatedDays: '2-3', supportsCOD: true, supportsPrepaid: true },
-        { id: 'demo-2', name: 'EcoShip', logo: '', isActive: true, baseRate: 39, perKgRate: 20, estimatedDays: '4-6', supportsCOD: true, supportsPrepaid: true },
-        { id: 'demo-3', name: 'FlashDeliver', logo: '', isActive: true, baseRate: 79, perKgRate: 50, estimatedDays: '1-2', supportsCOD: false, supportsPrepaid: true },
-      ]
-      setPartners(demoPartners)
-      setSelectedPartner(demoPartners[0])
-      setShippingCost(calculateShipping(demoPartners[0], 0.5))
+      setPartners([])
+      toast.error('Could not load shipping partners. Please try again.')
     }
   }
 

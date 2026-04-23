@@ -43,7 +43,7 @@ export interface SponsoredAd {
   timestamp: number
 }
 
-export interface SampleChatItem {
+export interface ChatListItem {
   id: string
   name: string
   initial: string
@@ -53,7 +53,7 @@ export interface SampleChatItem {
   lastMessageTime: number
   unreadCount: number
   verified: boolean
-  isSample: true
+  isSample?: boolean
 }
 
 export type ChatView = 'list' | 'room' | 'settings'
@@ -72,8 +72,7 @@ interface DualPaneState {
   setChatView: (view: ChatView) => void
   selectChat: (chatId: string | null) => void
 
-  /* ── Sample Chat List ──────────────────────────── */
-  sampleChatList: SampleChatItem[]
+  /* ── Chat List ────────────────────────────────── */
   nuclearBlocked: Record<string, boolean>
   toggleNuclearBlock: (chatId: string) => void
   mutedChats: Record<string, boolean>
@@ -115,230 +114,19 @@ interface DualPaneState {
   reset: () => void
 }
 
-/* ── Sample chat messages ──────────────────────────────────────────── */
+/* ── Chat messages placeholder ──────────────────────────────────────────── */
 
-const SAMPLE_MESSAGES: Record<string, ChatMsg[]> = {
-  'sample_sarah': [
-    { id: 'm1', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Hey! Are you coming to the event tonight?', timestamp: Date.now() - 3600000 * 2, isMine: false, read: true, reactions: [{ emoji: '🔥', count: 2, reacted: false }] },
-    { id: 'm2', senderId: 'me', senderName: 'You', content: 'Yes! Definitely. What time does it start?', timestamp: Date.now() - 3600000 * 1.9, isMine: true, read: true, reactions: [] },
-    { id: 'm3', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Doors open at 7pm, main act at 8. I got us VIP spots 🎉', timestamp: Date.now() - 3600000 * 1.8, isMine: false, read: true, reactions: [{ emoji: '❤️', count: 1, reacted: true }, { emoji: '🎉', count: 3, reacted: true }] },
-    { id: 'm4', senderId: 'me', senderName: 'You', content: "No way! That's amazing, thanks so much!", timestamp: Date.now() - 3600000 * 1.7, isMine: true, read: true, reactions: [{ emoji: '😂', count: 1, reacted: false }] },
-    { id: 'm5', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Of course! Also bring that playlist you showed me last week 🔥', timestamp: Date.now() - 3600000 * 1.5, isMine: false, read: true, reactions: [] },
-    { id: 'm6', senderId: 'me', senderName: 'You', content: 'Already downloaded. The whole crew is going to love it.', timestamp: Date.now() - 3600000, isMine: true, read: true, reactions: [{ emoji: '💯', count: 2, reacted: true }] },
-    { id: 'm7', senderId: 'user_a', senderName: 'Sarah Chen', content: "Perfect. I'll text you when I'm outside.", timestamp: Date.now() - 1800000, isMine: false, read: true, reactions: [] },
-    { id: 'm8', senderId: 'user_a', senderName: 'Sarah Chen', content: 'Also did you see the new drop on Black94? Someone posted about the after-party', timestamp: Date.now() - 600000, isMine: false, read: true, reactions: [{ emoji: '👀', count: 1, reacted: false }] },
-    { id: 'm9', senderId: 'me', senderName: 'You', content: 'No I missed that! Send me the link?', timestamp: Date.now() - 300000, isMine: true, read: true, reactions: [] },
-  ],
-  'sample_mike': [
-    { id: 'mm1', senderId: 'user_b', senderName: 'Mike Dev', content: 'The API endpoint is ready for testing 🚀', timestamp: Date.now() - 7200000, isMine: false, read: true, reactions: [{ emoji: '🚀', count: 1, reacted: true }] },
-    { id: 'mm2', senderId: 'me', senderName: 'You', content: 'Nice! Deploying to staging now.', timestamp: Date.now() - 6800000, isMine: true, read: true, reactions: [] },
-    { id: 'mm3', senderId: 'user_b', senderName: 'Mike Dev', content: 'I found a bug in the auth middleware. Sending PR now.', timestamp: Date.now() - 3600000, isMine: false, read: true, reactions: [] },
-    { id: 'mm4', senderId: 'me', senderName: 'You', content: 'Good catch. I will review it after lunch.', timestamp: Date.now() - 2400000, isMine: true, read: true, reactions: [{ emoji: '👍', count: 1, reacted: false }] },
-    { id: 'mm5', senderId: 'user_b', senderName: 'Mike Dev', content: 'Sounds good. Also the client wants to add push notifications.', timestamp: Date.now() - 900000, isMine: false, read: true, reactions: [] },
-  ],
-  'sample_alex': [
-    { id: 'am1', senderId: 'user_c', senderName: 'Alex Rivera', content: 'Just shipped the new design system! Check it out ✨', timestamp: Date.now() - 86400000, isMine: false, read: true, reactions: [{ emoji: '✨', count: 2, reacted: true }] },
-    { id: 'am2', senderId: 'me', senderName: 'You', content: 'The dark mode variants look insane!', timestamp: Date.now() - 82800000, isMine: true, read: true, reactions: [] },
-    { id: 'am3', senderId: 'user_c', senderName: 'Alex Rivera', content: 'Thanks! Spent 3 days on the color tokens alone lol', timestamp: Date.now() - 80000000, isMine: false, read: true, reactions: [{ emoji: '😂', count: 2, reacted: false }] },
-    { id: 'am4', senderId: 'user_c', senderName: 'Alex Rivera', content: 'Want to collab on the motion design for the onboarding flow?', timestamp: Date.now() - 43200000, isMine: false, read: false, reactions: [] },
-  ],
-  'sample_priya': [
-    { id: 'pm1', senderId: 'me', senderName: 'You', content: 'How was the conference?', timestamp: Date.now() - 172800000, isMine: true, read: true, reactions: [] },
-    { id: 'pm2', senderId: 'user_d', senderName: 'Priya Sharma', content: 'Amazing! Met so many people from the AI community 🤖', timestamp: Date.now() - 170000000, isMine: false, read: true, reactions: [{ emoji: '🤖', count: 1, reacted: false }] },
-    { id: 'pm3', senderId: 'user_d', senderName: 'Priya Sharma', content: 'There was this talk on RAG pipelines that blew my mind', timestamp: Date.now() - 168000000, isMine: false, read: true, reactions: [] },
-    { id: 'pm4', senderId: 'me', senderName: 'You', content: 'Share the recording!', timestamp: Date.now() - 86400000, isMine: true, read: true, reactions: [] },
-    { id: 'pm5', senderId: 'user_d', senderName: 'Priya Sharma', content: 'Will do! Also I started a new open source project. Want to contribute? 🛠️', timestamp: Date.now() - 7200000, isMine: false, read: false, reactions: [] },
-  ],
-  'sample_jordan': [
-    { id: 'jm1', senderId: 'user_e', senderName: 'Jordan Lee', content: 'Bro the gym session was brutal today 💪', timestamp: Date.now() - 5400000, isMine: false, read: true, reactions: [{ emoji: '💪', count: 2, reacted: true }] },
-    { id: 'jm2', senderId: 'me', senderName: 'You', content: 'New PR on deadlift?', timestamp: Date.now() - 4800000, isMine: true, read: true, reactions: [] },
-    { id: 'jm3', senderId: 'user_e', senderName: 'Jordan Lee', content: 'Hit 405lbs! Finally broke the 4 plate barrier 🏆', timestamp: Date.now() - 4200000, isMine: false, read: true, reactions: [{ emoji: '🏆', count: 3, reacted: true }] },
-    { id: 'jm4', senderId: 'me', senderName: 'You', content: 'That is legendary. We need to celebrate', timestamp: Date.now() - 3600000, isMine: true, read: true, reactions: [] },
-    { id: 'jm5', senderId: 'user_e', senderName: 'Jordan Lee', content: "Let's hit the new ramen spot this weekend", timestamp: Date.now() - 1200000, isMine: false, read: false, reactions: [] },
-  ],
-  'sample_zara': [
-    { id: 'zm1', senderId: 'user_f', senderName: 'Zara Kim', content: 'The marketing report is ready. Impressive growth numbers! 📈', timestamp: Date.now() - 259200000, isMine: false, read: true, reactions: [{ emoji: '📈', count: 1, reacted: false }] },
-    { id: 'zm2', senderId: 'me', senderName: 'You', content: 'Great work! What is the CTR looking like?', timestamp: Date.now() - 250000000, isMine: true, read: true, reactions: [] },
-    { id: 'zm3', senderId: 'user_f', senderName: 'Zara Kim', content: 'Up 340% from last quarter. The new ad creatives are performing really well.', timestamp: Date.now() - 240000000, isMine: false, read: true, reactions: [{ emoji: '🔥', count: 2, reacted: true }] },
-    { id: 'zm4', senderId: 'me', senderName: 'You', content: 'Let us push more budget to those campaigns.', timestamp: Date.now() - 172800000, isMine: true, read: true, reactions: [] },
-    { id: 'zm5', senderId: 'user_f', senderName: 'Zara Kim', content: "Already on it! Also planning the influencer partnership for next month. I'll send the deck.", timestamp: Date.now() - 14400000, isMine: false, read: true, reactions: [] },
-  ],
-}
+const SAMPLE_MESSAGES: Record<string, ChatMsg[]> = {}
 
-/* ── Sample chat list data ──────────────────────────────────────────── */
+/* ── Chat list placeholder ──────────────────────────────────────────── */
 
-const SAMPLE_CHAT_LIST: SampleChatItem[] = [
-  {
-    id: 'sample_sarah',
-    name: 'Sarah Chen',
-    initial: 'S',
-    color: '#FFFFFF',
-    online: true,
-    lastMessage: 'No I missed that! Send me the link?',
-    lastMessageTime: Date.now() - 300000,
-    unreadCount: 2,
-    verified: true,
-    isSample: true,
-  },
-  {
-    id: 'sample_mike',
-    name: 'Mike Dev',
-    initial: 'M',
-    color: '#9CA3AF',
-    online: true,
-    lastMessage: 'Also the client wants to add push notifications.',
-    lastMessageTime: Date.now() - 900000,
-    unreadCount: 1,
-    verified: false,
-    isSample: true,
-  },
-  {
-    id: 'sample_alex',
-    name: 'Alex Rivera',
-    initial: 'A',
-    color: '#f59e0b',
-    online: false,
-    lastMessage: 'Want to collab on the motion design?',
-    lastMessageTime: Date.now() - 43200000,
-    unreadCount: 1,
-    verified: true,
-    isSample: true,
-  },
-  {
-    id: 'sample_jordan',
-    name: 'Jordan Lee',
-    initial: 'J',
-    color: '#ef4444',
-    online: true,
-    lastMessage: "Let's hit the new ramen spot this weekend",
-    lastMessageTime: Date.now() - 1200000,
-    unreadCount: 0,
-    verified: false,
-    isSample: true,
-  },
-  {
-    id: 'sample_priya',
-    name: 'Priya Sharma',
-    initial: 'P',
-    color: '#FFFFFF',
-    online: false,
-    lastMessage: 'Want to contribute? 🛠️',
-    lastMessageTime: Date.now() - 7200000,
-    unreadCount: 3,
-    verified: true,
-    isSample: true,
-  },
-  {
-    id: 'sample_zara',
-    name: 'Zara Kim',
-    initial: 'Z',
-    color: '#2a7fff',
-    online: false,
-    lastMessage: "I'll send the deck.",
-    lastMessageTime: Date.now() - 14400000,
-    unreadCount: 0,
-    verified: false,
-    isSample: true,
-  },
-]
+const SAMPLE_CHAT_LIST: ChatListItem[] = []
 
-/* ── Sponsored ads ──────────────────────────────────────────── */
+/* ── Sponsored ads placeholder ──────────────────────────────────── */
 
-const SPONSORED_ADS: SponsoredAd[] = [
-  {
-    id: 'ad1', brandName: 'Nike', brandInitial: 'N', verified: true,
-    headline: 'Just Do It — New Collection',
-    body: 'Explore the latest Air Max lineup. Limited drops every week.',
-    imageUrl: 'https://picsum.photos/seed/nike-ad/400/250',
-    ctaText: 'Shop Now', ctaColor: '#f97316',
-    reward: '₹2', impressions: 12400, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 3600000,
-  },
-  {
-    id: 'ad2', brandName: 'Spotify', brandInitial: 'S', verified: true,
-    headline: 'Your 2026 Wrapped is Here',
-    body: 'See your top songs, artists, and podcasts of the year. Share your vibe.',
-    imageUrl: 'https://picsum.photos/seed/spotify-ad/400/250',
-    ctaText: 'Listen Now', ctaColor: '#10b981',
-    reward: '₹1', impressions: 8900, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 7200000,
-  },
-  {
-    id: 'ad3', brandName: 'Amazon', brandInitial: 'A', verified: true,
-    headline: 'Mega Sale — Up to 70% OFF',
-    body: 'Electronics, fashion, home & more. Deals go live at midnight.',
-    imageUrl: 'https://picsum.photos/seed/amazon-ad/400/250',
-    ctaText: 'Shop Deals', ctaColor: '#f59e0b',
-    reward: '₹3', impressions: 24000, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 10800000,
-  },
-  {
-    id: 'ad4', brandName: 'Samsung', brandInitial: 'S', verified: true,
-    headline: 'Galaxy S26 Ultra — Pre-Order',
-    body: '200MP camera. AI-powered editing. Titanium frame. Yours from ₹1,29,999.',
-    imageUrl: 'https://picsum.photos/seed/samsung-ad/400/250',
-    ctaText: 'Pre-Order', ctaColor: '#3b82f6',
-    reward: '₹5', impressions: 15000, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 14400000,
-  },
-  {
-    id: 'ad5', brandName: 'Zomato', brandInitial: 'Z', verified: true,
-    headline: 'Free Delivery Weekend',
-    body: 'Order from top restaurants near you. No delivery fee all weekend long!',
-    imageUrl: 'https://picsum.photos/seed/zomato-ad/400/250',
-    ctaText: 'Order Food', ctaColor: '#ef4444',
-    reward: '₹2', impressions: 31000, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 18000000,
-  },
-  {
-    id: 'ad6', brandName: 'Notion', brandInitial: 'N', verified: true,
-    headline: 'Build Your Second Brain',
-    body: 'Organize notes, tasks, and projects in one beautiful workspace.',
-    imageUrl: 'https://picsum.photos/seed/notion-ad/400/250',
-    ctaText: 'Try Free', ctaColor: '#FFFFFF',
-    reward: '₹2', impressions: 6700, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 21600000,
-  },
-]
+const SPONSORED_ADS: SponsoredAd[] = []
 
-const EXTRA_ADS: SponsoredAd[] = [
-  {
-    id: 'ad7', brandName: 'Adobe', brandInitial: 'A', verified: true,
-    headline: 'Creative Cloud — Student Offer',
-    body: 'Get 60% off all Adobe apps. Design, edit, create — unlimited.',
-    imageUrl: 'https://picsum.photos/seed/adobe-ad/400/250',
-    ctaText: 'Get Offer', ctaColor: '#ef4444',
-    reward: '₹3', impressions: 4200, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 25200000,
-  },
-  {
-    id: 'ad8', brandName: 'Uber', brandInitial: 'U', verified: true,
-    headline: 'Ride for ₹0 This Friday',
-    body: 'First 2 rides absolutely free. Use code BLACK94 at checkout.',
-    imageUrl: 'https://picsum.photos/seed/uber-ad/400/250',
-    ctaText: 'Claim Ride', ctaColor: '#18152b',
-    reward: '₹1', impressions: 19000, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 28800000,
-  },
-  {
-    id: 'ad9', brandName: 'Netflix', brandInitial: 'N', verified: true,
-    headline: 'New Releases This Week',
-    body: 'Binge-worthy shows and movies added every day. Start watching now.',
-    imageUrl: 'https://picsum.photos/seed/netflix-ad/400/250',
-    ctaText: 'Watch Now', ctaColor: '#ef4444',
-    reward: '₹2', impressions: 22000, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 32400000,
-  },
-  {
-    id: 'ad10', brandName: 'LinkedIn', brandInitial: 'L', verified: true,
-    headline: 'Your Profile Was Viewed 47 Times',
-    body: 'Upgrade to Premium to see who viewed your profile and unlock top jobs.',
-    imageUrl: 'https://picsum.photos/seed/linkedin-ad/400/250',
-    ctaText: 'Go Premium', ctaColor: '#0a66c2',
-    reward: '₹4', impressions: 9800, liked: false, saved: false, skipped: false,
-    timestamp: Date.now() - 36000000,
-  },
-]
+const EXTRA_ADS: SponsoredAd[] = []
 
 /* ════════════════════════════════════════════════════════════════════ */
 
@@ -356,15 +144,13 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   setChatView: (view) => set({ chatView: view }),
   selectChat: (chatId) => {
     if (chatId) {
-      const msgs = SAMPLE_MESSAGES[chatId] || SAMPLE_MESSAGES['sample_sarah']!
-      set({ selectedChatId: chatId, chatView: 'room', messages: msgs })
+      set({ selectedChatId: chatId, chatView: 'room', messages: [] })
     } else {
       set({ selectedChatId: null, chatView: 'list' })
     }
   },
 
-  /* ── Sample Chat List ──────────────────────────── */
-  sampleChatList: SAMPLE_CHAT_LIST,
+  /* ── Chat List ────────────────────────────────── */
   nuclearBlocked: {},
   toggleNuclearBlock: (chatId) => set((s) => ({
     nuclearBlocked: { ...s.nuclearBlocked, [chatId]: !s.nuclearBlocked[chatId] },
@@ -375,7 +161,7 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   })),
 
   /* ── Chat Messages ────────────────────────────── */
-  messages: SAMPLE_MESSAGES['sample_sarah']!,
+  messages: [],
   setMessages: (msgs) => set({ messages: msgs }),
   addMessage: (msg) => set((s) => ({ messages: [...s.messages, msg] })),
   typing: false,
@@ -422,7 +208,7 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
   setReplyTo: (msg) => set({ replyTo: msg }),
 
   /* ── Sponsored Ads ───────────────────────────── */
-  ads: SPONSORED_ADS,
+  ads: [],
   loadMoreAds: () => {
     const { ads } = get()
     if (ads.length >= SPONSORED_ADS.length + EXTRA_ADS.length) return
@@ -497,10 +283,10 @@ export const useDualPaneChat = create<DualPaneState>((set, get) => ({
     mobileAdsOpen: false,
     selectedChatId: null,
     chatView: 'list' as ChatView,
-    messages: SAMPLE_MESSAGES['sample_sarah']!,
+    messages: [],
     typing: false,
     replyTo: null,
-    ads: SPONSORED_ADS,
+    ads: [],
     likedAds: new Set(),
     savedAds: new Set(),
     totalEarned: 0,

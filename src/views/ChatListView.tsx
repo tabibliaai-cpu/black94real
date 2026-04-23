@@ -114,7 +114,7 @@ function AdCard({ ad }: { ad: SponsoredAd }) {
             onClick={() => likeAd(ad.id)}
             className={cn(
               'flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] transition-all duration-200',
-              ad.liked ? 'bg-[#f91880]/15 text-[#f91880]' : 'text-[#94a3b8] hover:bg-white/[0.06]'
+              ad.liked ? 'bg-[#f43f5e]/15 text-[#f43f5e]' : 'text-[#94a3b8] hover:bg-white/[0.06]'
             )}
           >
             <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill={ad.liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2}>
@@ -868,7 +868,7 @@ export function ChatRoomView() {
           </svg>
         </button>
         <button
-          onClick={() => toast.info('Video call coming soon!')}
+          onClick={undefined}
           className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] transition-colors"
           aria-label="Video call"
         >
@@ -897,7 +897,7 @@ export function ChatRoomView() {
                 <div
                   className={cn(
                     'max-w-[75%] px-3 py-2 rounded-2xl text-[15px] leading-relaxed',
-                    isMine ? 'bg-[#1d9bf0] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
+                    isMine ? 'bg-[#3b82f6] text-white rounded-br-md' : 'bg-white/[0.06] text-[#e7e9ea] rounded-bl-md'
                   )}
                 >
                   {msg.messageType === 'image' && msg.mediaUrl ? (
@@ -955,7 +955,7 @@ export function ChatRoomView() {
         </div>
       )}
 
-      {/* Input bar (X-style) */}
+      {/* Input bar */}
       <ChatInputBar
         value={text}
         onChange={setText}

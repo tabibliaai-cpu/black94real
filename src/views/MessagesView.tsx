@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
-import { useDualPaneChat, type ChatMsg, type MessageReaction, type SampleChatItem } from '@/stores/dualPaneChat'
+import { useDualPaneChat, type ChatMsg, type MessageReaction } from '@/stores/dualPaneChat'
 import { useAppStore } from '@/stores/app'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { getUser } from '@/lib/db'
@@ -566,7 +566,7 @@ function ChatSettingsSheet({
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function ChatRoomView() {
-  const { messages, addMessage, typing, setTyping, replyTo, setReplyTo, selectedChatId, selectChat, setChatView, sampleChatList, nuclearBlocked } = useDualPaneChat()
+  const { messages, addMessage, typing, setTyping, replyTo, setReplyTo, selectedChatId, selectChat, setChatView, nuclearBlocked } = useDualPaneChat()
   const navigate = useAppStore((s) => s.navigate)
   const [text, setText] = useState('')
   const [reactionPicker, setReactionPicker] = useState<{
@@ -579,7 +579,7 @@ function ChatRoomView() {
   const inputRef = useRef<HTMLInputElement>(null)
   const headerMenuRef = useRef<HTMLDivElement>(null)
 
-  const chatPartner = sampleChatList.find((c) => c.id === selectedChatId) || sampleChatList[0]
+  const chatPartner = { id: selectedChatId || '', name: 'Chat', initial: '?', color: '#FFFFFF', online: false, lastMessage: '', lastMessageTime: 0, unreadCount: 0, verified: false }
   const isBlocked = nuclearBlocked[selectedChatId ?? ''] ?? false
 
   useEffect(() => {
@@ -858,7 +858,7 @@ function ChatRoomView() {
 
 function ChatListView() {
   const user = useAppStore((s) => s.user)
-  const { sampleChatList, selectChat, nuclearBlocked, mutedChats } = useDualPaneChat()
+  const { selectChat, nuclearBlocked, mutedChats } = useDualPaneChat()
   const [fbChats, setFbChats] = useState<FbChat[]>([])
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -940,10 +940,6 @@ function ChatListView() {
     }
   }, [user])
 
-  const filteredSample = sampleChatList.filter((c) =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
   const filteredFb = fbChats.filter((c) =>
     c.otherUser?.displayName?.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -989,85 +985,12 @@ function ChatListView() {
 
       {/* ─── Chat List ─── */}
       <div className="flex-1 overflow-y-auto no-scrollbar">
-        {/* Sample conversations */}
         <div className="py-1">
           <div className="px-4 py-2">
             <span className="text-[12px] font-bold text-[#64748b] uppercase tracking-wider">Recent</span>
           </div>
 
-          {filteredSample.map((chat) => {
-            const isBlocked = nuclearBlocked[chat.id] ?? false
-            const isMuted = mutedChats[chat.id] ?? false
-
-            return (
-              <div
-                key={chat.id}
-                onClick={() => selectChat(chat.id)}
-                className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04] transition-colors cursor-pointer group"
-              >
-                <div className="relative shrink-0">
-                  <PAvatar name={chat.name} size={50} src={chat.otherUser?.profileImage} verified={chat.verified} />
-                  {chat.online && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#10b981] border-2 border-black" />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      {chat.verified && <VerifiedBadge size={13} />}
-                      <span className={cn(
-                        'font-bold text-[15px] text-[#e7e9ea] truncate',
-                        isBlocked && 'line-through text-[#64748b]'
-                      )}>
-                        {chat.name}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                      {isMuted && (
-                        <svg className="w-3.5 h-3.5 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                          <path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
-                        </svg>
-                      )}
-                      <span className="text-[12px] text-[#64748b]">{timeAgo(chat.lastMessageTime)}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-0.5">
-                    <p className={cn(
-                      'text-[14px] truncate flex-1',
-                      chat.unreadCount > 0 ? 'text-[#e7e9ea] font-semibold' : 'text-[#94a3b8]',
-                      isBlocked && 'text-[#64748b] italic'
-                    )}>
-                      {isBlocked ? 'Chat blocked' : chat.lastMessage}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 shrink-0">
-                  {chat.unreadCount > 0 && !isBlocked && (
-                    <div className="w-5 h-5 rounded-full bg-[#FFFFFF] flex items-center justify-center">
-                      <span className="text-[10px] font-bold text-black">{chat.unreadCount}</span>
-                    </div>
-                  )}
-                  <div onClick={(e) => e.stopPropagation()}>
-                    <ChatItemMenu
-                      chatName={chat.name}
-                      chatId={chat.id}
-                      onSettings={() => {
-                        selectChat(chat.id)
-                        useDualPaneChat.getState().setChatView('settings')
-                      }}
-                      onDelete={() => {
-                        toast.success(`Chat with ${chat.name} deleted`)
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-
-          {/* Firebase chats (real) */}
+          {/* Firestore chats */}
           {filteredFb.map((chat) => (
             <div
               key={chat.id}
@@ -1115,7 +1038,7 @@ function ChatListView() {
           ))}
 
           {/* Empty state */}
-          {filteredSample.length === 0 && filteredFb.length === 0 && (
+          {filteredFb.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
               <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-4">
                 <svg className="w-8 h-8 text-[#64748b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>

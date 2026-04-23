@@ -21,12 +21,10 @@ export function AudioCallView() {
   const [keypadInput, setKeypadInput] = useState('')
   const timerRef = useRef<ReturnType<typeof setInterval>>(undefined)
 
-  // Simulate connection after 3 seconds
+  // Wait for real peer connection via WebRTC
+  // TODO: Integrate WebRTC signaling for actual audio calls
   useEffect(() => {
-    const connectTimer = setTimeout(() => {
-      setCallState('connected')
-    }, 3000)
-    return () => clearTimeout(connectTimer)
+    // Call stays in ringing state until a real connection is established
   }, [])
 
   // Timer when connected

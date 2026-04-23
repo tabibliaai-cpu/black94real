@@ -106,40 +106,4 @@ export interface BillingEntry {
   status: 'paid' | 'pending'
 }
 
-export const sampleBillingHistory: BillingEntry[] = [
-  {
-    id: 'bill-001',
-    date: '2025-04-18',
-    amount: 1599,
-    plan: 'Business Plan',
-    status: 'paid',
-  },
-  {
-    id: 'bill-002',
-    date: '2025-03-18',
-    amount: 1599,
-    plan: 'Business Plan',
-    status: 'paid',
-  },
-  {
-    id: 'bill-003',
-    date: '2025-02-18',
-    amount: 1599,
-    plan: 'Business Plan',
-    status: 'paid',
-  },
-  {
-    id: 'bill-004',
-    date: '2025-01-18',
-    amount: 449,
-    plan: 'Premium Plan',
-    status: 'paid',
-  },
-  {
-    id: 'bill-005',
-    date: '2024-12-18',
-    amount: 449,
-    plan: 'Premium Plan',
-    status: 'paid',
-  },
-]
+export const sampleBillingHistory: BillingEntry[] = []

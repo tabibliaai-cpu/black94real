@@ -4,7 +4,7 @@ import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import {
-  DEMO_STORY_GROUPS,  type StoryGroup,
+  type StoryGroup,
   type StoryCard,
   type StoryFormat,
   getLanguage,
@@ -529,7 +529,7 @@ export default function StoryFeed({ onOpenStory, onOpenCreator, storyGroups }: S
   const [scrollY, setScrollY] = useState(0)
   const feedRef = useRef<HTMLDivElement>(null)
 
-  const groups = useMemo(() => storyGroups ?? DEMO_STORY_GROUPS, [storyGroups])
+  const groups = useMemo(() => storyGroups ?? [], [storyGroups])
 
   // ─── Scroll tracking ───
   useEffect(() => {

@@ -82,7 +82,7 @@ export function FeedView() {
 
   // Fetch trending labels for posts
   const fetchTrendingLabels = useCallback(async (postsList: any[]) => {
-    const realPosts = postsList.filter((p: any) => !p.id?.startsWith('sample-'))
+    const realPosts = postsList
     if (realPosts.length === 0) return
     try {
       const results = await Promise.all(
@@ -131,7 +131,7 @@ export function FeedView() {
   const enrichWithInteractions = useCallback(async (postsList: any[]) => {
     const u = userRef.current
     if (!u) return postsList
-    const realPosts = postsList.filter((p: any) => !p.id?.startsWith('sample-'))
+    const realPosts = postsList
     if (realPosts.length === 0) return postsList
     try {
       const postIds = realPosts.map((p: any) => p.id)
@@ -408,7 +408,7 @@ export function FeedView() {
               onBookmark={handleBookmark}
               onDelete={handleDelete}
               onProfileTap={(uid: string) => {
-                if (uid !== 'sample') navigate('user-profile', { userId: uid })
+                navigate('user-profile', { userId: uid })
               }}
               userId={user?.id}
               userDisplayName={user?.displayName || undefined}
