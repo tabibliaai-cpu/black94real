@@ -2,12 +2,11 @@ import { create } from 'zustand'
 
 export type AppView = 
   | 'landing' | 'login' | 'signup' | 'feed' | 'explore' | 'chat' 
-  | 'chat-room' | 'e2ee-chat' | 'profile' | 'edit-profile' | 'article' | 'write-article'
+  | 'chat-room' | 'profile' | 'edit-profile' | 'article' | 'write-article'
   | 'notifications' | 'search' | 'settings' | 'business-dashboard' | 'premium-dashboard'
   | 'ads-manager' | 'create-ad' | 'crm-leads' | 'crm-deals' | 'crm-orders'
-  | 'crm-analytics' | 'affiliates' | 'subscriptions' | 'share-profile'
-  | 'user-profile' | 'threads' | 'thread-detail'
-  | 'reels' | 'stories' | 'dual-pane-chat'
+  | 'crm-analytics' | 'affiliates' | 'share-profile'
+  | 'user-profile' | 'stories' | 'dual-pane-chat'
   | 'storefront' | 'product-detail' | 'cart' | 'checkout'
   | 'my-store' | 'add-product' | 'order-tracking' | 'business-orders'
   | 'store-dashboard' | 'audio-call'
@@ -243,7 +242,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       return
     }
     const [view, query] = route.split('?')
-    const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','dual-pane-chat','business-dashboard','premium-dashboard','subscriptions','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call']
+    const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','dual-pane-chat','business-dashboard','premium-dashboard','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call']
     if (allViews.includes(view)) {
       const params: Record<string, string> = {}
       if (query) new URLSearchParams(query).forEach((v, k) => { params[k] = v })

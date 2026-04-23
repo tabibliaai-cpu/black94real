@@ -1403,7 +1403,7 @@ export default function StoryCreator({ open, onClose, onStoryPublished }: StoryC
             <span className="text-4xl">📰</span>
           </div>
           <div className="p-4">
-            <p className="text-white/30 text-xs mb-1">article.example.com</p>
+            <p className="text-white/30 text-xs mb-1">{feedUrl ? new URL(feedUrl.startsWith('http') ? feedUrl : 'https://' + feedUrl).hostname : 'Link preview'}</p>
             <p className="text-white font-semibold text-sm mb-1">{feedCaption || 'Shared post from the feed'}</p>
             <p className="text-white/40 text-xs truncate">{feedUrl}</p>
           </div>

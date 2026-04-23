@@ -39,7 +39,7 @@ export interface Black94User {
   coverImage: string;
   role: 'personal' | 'creator' | 'professional' | 'business';
   badge: '' | 'blue' | 'gold';
-  subscription: 'free' | 'pro' | 'gold';
+  subscription: string;
   isVerified: boolean;
   nameVisibility: 'public' | 'private';
   dmPermission: 'all' | 'followers' | 'paid';
