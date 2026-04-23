@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
+    title: "Black94",
   },
   openGraph: {
     title: "Black94",
@@ -34,6 +35,9 @@ export const metadata: Metadata = {
     url: "https://black94.web.app",
     siteName: "Black94",
     type: "website",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
   },
 };
 

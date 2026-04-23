@@ -120,9 +120,9 @@ function LoginScreen({ onSignIn, busy }: { onSignIn: () => void; busy: boolean }
         </button>
         <p className="mt-6 text-[11px] text-[#64748b] text-center leading-relaxed">
           By signing in, you agree to our{' '}
-          <a href="/terms-of-service.html" target="_blank" rel="noopener noreferrer" className="text-[#FFFFFF] hover:text-[#a78bfa] underline underline-offset-2">Terms of Service</a>
+          <a href="/terms-of-service.html" className="text-[#FFFFFF] hover:text-[#a78bfa] underline underline-offset-2">Terms of Service</a>
           {' '}and{' '}
-          <a href="/privacy-policy.html" target="_blank" rel="noopener noreferrer" className="text-[#FFFFFF] hover:text-[#a78bfa] underline underline-offset-2">Privacy Policy</a>.
+          <a href="/privacy-policy.html" className="text-[#FFFFFF] hover:text-[#a78bfa] underline underline-offset-2">Privacy Policy</a>.
         </p>
       </div>
     </div>
@@ -144,7 +144,7 @@ function LoadingScreen() {
 /* ═══════════════════════════════════════════════════════════════════════════
    VIEW ROUTER — with persistent view caching for instant tab switching
    ═══════════════════════════════════════════════════════════════════════════
-   Main tab views (Home, Search, Chat, Alerts, Stories, Anon) stay MOUNTED
+   Main tab views (Home, Search, Chat, Alerts, Stories) stay MOUNTED
    in the DOM but hidden with CSS display:none. This means:
    - Zero re-fetching when switching between tabs
    - Firestore real-time listeners persist
@@ -291,6 +291,28 @@ export default function Black94App() {
         }
       }
     } catch {}
+  }, [])
+
+  /* ── Service Worker Registration ─────────────────────────────────────── */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
+  }, [])
+
+  /* ── Disable pull-to-refresh and overscroll in standalone mode ────── */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone
+    if (!isStandalone) return
+    const preventPullRefresh = (e: TouchEvent) => {
+      if (document.scrollingElement && document.scrollingElement.scrollTop <= 0) {
+        e.preventDefault()
+      }
+    }
+    document.body.addEventListener('touchmove', preventPullRefresh, { passive: false })
+    return () => { document.body.removeEventListener('touchmove', preventPullRefresh) }
   }, [])
 
   /* ── Prefetch common views shortly after mount ──────────────────────── */

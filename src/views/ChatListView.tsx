@@ -905,7 +905,6 @@ export function ChatRoomView() {
                       src={msg.mediaUrl}
                       alt="Shared image"
                       className="max-w-[240px] rounded-xl mb-1.5 cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={() => window.open(msg.mediaUrl!, '_blank')}
                     />
                   ) : (
                     <p>{msg.content}</p>

@@ -1227,3 +1227,51 @@ html, body {
 .animate-slide-up-sheet {
   animation: slideUpSheet 0.35s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
+
+/* ─── Standalone App Mode (PWA / TWA) ─── */
+
+@media (display-mode: standalone) {
+  /* Disable overscroll bounce — native feel */
+  html, body {
+    overscroll-behavior: none;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Remove tap highlight on all interactive elements */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent text selection on buttons, nav, and tabs */
+  button, nav, [role="button"], [role="tab"], [role="tablist"] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Remove default callout on long-press (iOS) */
+  img, a {
+    -webkit-touch-callout: none;
+  }
+
+  /* Smooth scrolling without bounce */
+  * {
+    scroll-behavior: smooth;
+  }
+
+  /* Safe area for notched devices */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* iOS standalone detection */
+@media (display-mode: standalone) and (hover: none) {
+  /* Extra native feel for touch-only devices */
+  input, textarea {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+  }
+}

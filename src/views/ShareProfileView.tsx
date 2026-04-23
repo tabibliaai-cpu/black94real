@@ -89,7 +89,7 @@ function ShareRow({ shareUrl, onCopy }: { shareUrl: string; onCopy: () => void }
         }
         return
     }
-    if (url) window.open(url, '_blank', 'noopener,noreferrer')
+    if (url) onCopy()
   }
   return (
     <div className="flex items-center justify-center gap-4 py-2">
