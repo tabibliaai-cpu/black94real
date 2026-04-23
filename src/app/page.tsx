@@ -500,7 +500,7 @@ export default function Black94App() {
     settings: 'Edit Profile',
     explore: 'Explore',
     stories: 'Stories',
-    'subscriptions': 'Subscriptions',
+    'subscriptions': 'Free Forever',
     'business-dashboard': 'Business',
     'premium-dashboard': 'Dashboard',
     'ads-manager': 'Ad Manager',

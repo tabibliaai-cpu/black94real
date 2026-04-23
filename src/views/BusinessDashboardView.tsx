@@ -41,7 +41,7 @@ export function BusinessDashboardView() {
             <p className="text-[17px] font-bold text-[#e7e9ea]">Welcome back, {username}!</p>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-[12px] font-semibold px-2 py-0.5 rounded-full bg-[#ffd700]/15 text-[#ffd700]">
-                {user?.accountType === 'business' ? 'Business Account' : 'Pro Account'}
+                {user?.accountType === 'business' ? 'Business Account' : 'Personal Account'}
               </span>
             </div>
           </div>

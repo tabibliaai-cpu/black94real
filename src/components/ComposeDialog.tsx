@@ -80,10 +80,8 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pendingFileRef = useRef<File | null>(null)
 
-  // Premium detection: subscription OR badge indicates premium tier
-  const isPremium = user?.subscription === 'pro' || user?.subscription === 'gold'
-    || user?.badge === 'gold' || user?.badge === 'blue'
-  const maxLen = isPremium ? 4000 : 500
+  // All users get 4000 character limit (free platform)
+  const maxLen = 4000
   const remaining = maxLen - text.length
   const overLimit = remaining < 0
 
@@ -183,11 +181,6 @@ export function ComposeDialog({ open, onClose }: ComposeDialogProps) {
             </svg>
           </button>
           <div className="flex items-center gap-3">
-            {!isPremium && (
-              <span className="text-[11px] text-[#f59e0b] font-medium bg-[#f59e0b]/10 px-2 py-0.5 rounded-full">
-                500 char limit — Upgrade for 4000
-              </span>
-            )}
             <button
               onClick={handleSubmit}
               disabled={(!text.trim() && !imagePreview) || sending || overLimit}

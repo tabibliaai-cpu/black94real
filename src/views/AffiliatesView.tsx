@@ -8,8 +8,8 @@ import {
   type Affiliate,
 } from '@/lib/business'
 
-const FREE_BADGES = 2
-const BADGE_COST = 99
+const FREE_BADGES = 9999
+const BADGE_COST = 0
 
 function getInitials(name: string) {
   return name
@@ -119,7 +119,7 @@ export function AffiliatesView() {
           </div>
           <div>
             <p className="text-[15px] font-semibold text-[#e7e9ea]">Business Plan</p>
-            <p className="text-[13px] text-[#94a3b8]">2 free badges included</p>
+            <p className="text-[13px] text-[#94a3b8]">Unlimited badges included</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -272,7 +272,7 @@ export function AffiliatesView() {
                   : 'bg-white/[0.06] text-[#64748b] cursor-not-allowed'
               )}
             >
-              Assign Badge ({freeBadgesRemaining} free remaining)
+              Assign Badge
             </button>
           ) : (
             <div className="text-center py-2">
@@ -282,70 +282,7 @@ export function AffiliatesView() {
         </div>
       </div>
 
-      {/* ── Purchase Section ────────────────────────────── */}
-      {allFreeUsed && (
-        <div className="rounded-2xl bg-[#000000] border border-white/[0.08] p-4 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#ffd700]/10 flex items-center justify-center">
-              <svg className="w-5 h-5 text-[#ffd700]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v8M8 12h8" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-[15px] font-semibold text-[#e7e9ea]">Need more badges?</p>
-              <p className="text-[13px] text-[#94a3b8]">
-                ₹{BADGE_COST} per additional badge
-              </p>
-            </div>
-          </div>
 
-          {/* Quantity Selector */}
-          <div className="flex items-center justify-between">
-            <span className="text-[14px] text-[#94a3b8]">Quantity</span>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setPurchaseQty((q) => Math.max(1, q - 1))}
-                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#e7e9ea] hover:bg-white/[0.06] transition-colors"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-                  <path d="M5 12h14" />
-                </svg>
-              </button>
-              <span className="text-[18px] font-bold text-[#e7e9ea] w-8 text-center">
-                {purchaseQty}
-              </span>
-              <button
-                onClick={() => setPurchaseQty((q) => Math.min(10, q + 1))}
-                className="w-9 h-9 rounded-xl border border-white/[0.08] flex items-center justify-center text-[#e7e9ea] hover:bg-white/[0.06] transition-colors"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Total */}
-          <div className="flex items-center justify-between py-2 border-t border-white/[0.06]">
-            <span className="text-[14px] text-[#94a3b8]">Total</span>
-            <span className="text-[18px] font-bold text-[#ffd700]">
-              ₹{BADGE_COST * purchaseQty}
-            </span>
-          </div>
-
-          <button
-            onClick={handlePurchase}
-            className="w-full py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.15] text-[#e7e9ea] text-[15px] font-bold"
-          >
-            Purchase Badges
-          </button>
-
-          <p className="text-[12px] text-[#64748b] text-center">
-            Complete your Business plan setup to purchase badges
-          </p>
-        </div>
-      )}
     </div>
   )
 }

@@ -11,7 +11,6 @@ import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
 import { UserPostCard } from '@/components/UserPostCard'
 import { ProductCard } from '@/components/ProductCard'
 import type { Black94User } from '@/lib/db'
-import { getBusinessTrial, type BusinessTrial } from '@/lib/business'
 import { createOrGetChat } from '@/lib/chat'
 import { toast } from 'sonner'
 
@@ -30,18 +29,10 @@ export function ProfileView() {
   const [products, setProducts] = useState<any[]>([])
   const [messaging, setMessaging] = useState(false)
   const [productsLoading, setProductsLoading] = useState(false)
-  const [trial, setTrial] = useState<BusinessTrial | null>(null)
-
   const targetUserId = viewParams?.userId || user?.id
   const isOwnProfile = !viewParams?.userId || viewParams.userId === user?.id
   const isBusinessAccount = profile?.role === 'business'
   const showStoreTab = isBusinessAccount
-
-  // Fetch trial status for business accounts
-  useEffect(() => {
-    if (!targetUserId || !isBusinessAccount) return
-    getBusinessTrial(targetUserId).then((t) => setTrial(t)).catch(() => {})
-  }, [targetUserId, isBusinessAccount])
 
   // Fetch profile + posts
   useEffect(() => {
@@ -290,15 +281,6 @@ export function ProfileView() {
           {(isVerified || !!badge) && <VerifiedBadge size={20} badge={badge} />}
         </div>
         <p className="text-[15px] text-[#94a3b8]">@{username}</p>
-        {isBusinessAccount && trial && trial.isActive && (
-          <div className="flex items-center gap-1.5 mt-1.5">
-            <svg className={cn('w-3.5 h-3.5', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#FFFFFF]')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span className={cn('text-[12px] font-medium', trial.daysRemaining <= 7 ? 'text-amber-400' : 'text-[#94a3b8]')}>
-              Free Trial — {trial.daysRemaining} day{trial.daysRemaining !== 1 ? 's' : ''} remaining
-            </span>
-          </div>
-        )}
-
         {bio && (
           <p className="text-[15px] text-[#e7e9ea] mt-2 leading-relaxed">{bio}</p>
         )}

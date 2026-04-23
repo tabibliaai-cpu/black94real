@@ -163,15 +163,11 @@ export function formatNumber(num: number): string {
 import {
   doc,
   getDoc,
-  setDoc,
   updateDoc,
   serverTimestamp,
 } from 'firebase/firestore'
 import { db } from './firebase'
 
-const PRO_TRIAL_DURATION_DAYS = 7
-const GOLD_TRIAL_DURATION_DAYS = 7
-const TRIAL_DURATION_DAYS = 30
 
 function tsToISO(value: unknown): string {
   if (value && typeof value === 'object' && 'seconds' in value) {
@@ -184,73 +180,35 @@ function tsToISO(value: unknown): string {
 }
 
 export async function upgradeToBusinessTrial(uid: string): Promise<void> {
-  const now = new Date()
-  const endDate = new Date(now.getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000)
-
   const userRef = doc(db, 'users', uid)
   await updateDoc(userRef, {
     role: 'business',
     badge: 'gold',
     isVerified: true,
+    subscription: 'free',
     updatedAt: serverTimestamp(),
-  })
-
-  const trialRef = doc(db, 'business_trials', uid)
-  await setDoc(trialRef, {
-    uid,
-    plan: 'trial',
-    startDate: now.toISOString(),
-    endDate: endDate.toISOString(),
-    isActive: true,
-    createdAt: serverTimestamp(),
   })
 }
 
 export async function startProTrial(uid: string): Promise<void> {
-  const now = new Date()
-  const endDate = new Date(now.getTime() + PRO_TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000)
-
   const userRef = doc(db, 'users', uid)
   await updateDoc(userRef, {
-    subscription: 'pro',
+    subscription: 'free',
     badge: 'blue',
     isVerified: true,
     role: 'professional',
     updatedAt: serverTimestamp(),
   })
-
-  const trialRef = doc(db, 'subscription_trials', `pro_${uid}`)
-  await setDoc(trialRef, {
-    uid,
-    plan: 'pro',
-    startDate: now.toISOString(),
-    endDate: endDate.toISOString(),
-    isActive: true,
-    createdAt: serverTimestamp(),
-  })
 }
 
 export async function startGoldTrial(uid: string): Promise<void> {
-  const now = new Date()
-  const endDate = new Date(now.getTime() + GOLD_TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000)
-
   const userRef = doc(db, 'users', uid)
   await updateDoc(userRef, {
-    subscription: 'gold',
+    subscription: 'free',
     badge: 'gold',
     isVerified: true,
     role: 'business',
     updatedAt: serverTimestamp(),
-  })
-
-  const trialRef = doc(db, 'subscription_trials', `gold_${uid}`)
-  await setDoc(trialRef, {
-    uid,
-    plan: 'gold',
-    startDate: now.toISOString(),
-    endDate: endDate.toISOString(),
-    isActive: true,
-    createdAt: serverTimestamp(),
   })
 }
 

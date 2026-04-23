@@ -84,8 +84,7 @@ export function PrivacySettingsView() {
   const [showNuclearDialog, setShowNuclearDialog] = useState(false)
   const [nuclearConfirmed, setNuclearConfirmed] = useState(false)
 
-  const isCreatorOrPersonal =
-    user?.accountType === 'creator' || user?.accountType === 'personal'
+  // Paid chat available to all account types
 
   const persistSetting = useCallback(
     async (patch: Record<string, unknown>) => {
@@ -287,8 +286,7 @@ export function PrivacySettingsView() {
         </section>
 
         {/* Paid Chat */}
-        {isCreatorOrPersonal && (
-          <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
+        <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-white/[0.06]">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-[#FFFFFF]/10 flex items-center justify-center">
                 <svg className="w-[18px] h-[18px] text-[#FFFFFF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -332,8 +330,6 @@ export function PrivacySettingsView() {
               </div>
             )}
           </section>
-        )}
-
         {/* ── Nuclear Block (Danger Zone) ──────────────────────────────── */}
         <section className="bg-[#000000] rounded-2xl p-4 space-y-3 border border-red-500/20">
           <div className="flex items-center gap-3">
