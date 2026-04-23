@@ -196,7 +196,7 @@ export const FESTIVAL_TEMPLATES: FestivalTemplate[] = [
 // Story groups (populated from server)
 // ---------------------------------------------------------------------------
 
-export const DEMO_STORY_GROUPS: StoryGroup[] = []
+export const storyGroupsPlaceholder: StoryGroup[] = []
 
 // ---------------------------------------------------------------------------
 // Trending Topics (10 per tab)

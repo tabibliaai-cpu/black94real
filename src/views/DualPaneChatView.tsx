@@ -327,7 +327,7 @@ function PrivateChatPanel() {
     msgId: string
     position: { x: number; y: number; alignRight: boolean }
   } | null>(null)
-  const [chatPartner] = useState({ name: 'Sarah Chen', initial: 'S', color: '#FFFFFF', online: true })
+  const [chatPartner] = useState({ name: 'Chat', initial: '?', color: '#FFFFFF', online: false })
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -356,41 +356,10 @@ function PrivateChatPanel() {
         isMine: replyTo.isMine,
       } : undefined,
     })
-    const replyingTo = replyTo
     setText('')
     setReplyTo(null)
     inputRef.current?.focus()
-
-    // Simulate typing then reply
-    setTyping(true)
-    const delay = 1200 + Math.random() * 2000
-    setTimeout(() => {
-      setTyping(false)
-      const replies = [
-        "Here you go! 🔗 black94.app/p/afterparty",
-        "Also Jake and Maya are coming too",
-        "This is going to be legendary 🔥",
-        "I already got the outfits ready",
-        "Can't wait!! See you at 7",
-        "Should I bring the speaker?",
-        "The venue looks insane on the website",
-        "Oh and there's an open mic section too",
-      ]
-      const replyContent = replies[Math.floor(Math.random() * replies.length)]
-      addMessage({
-        id: `msg_${Date.now()}`,
-        senderId: 'user_a', senderName: chatPartner.name,
-        content: replyContent,
-        timestamp: Date.now(), isMine: false, read: true,
-        replyTo: replyingTo ? {
-          id: replyingTo.id,
-          senderName: replyingTo.senderName,
-          content: replyingTo.content,
-          isMine: replyingTo.isMine,
-        } : undefined,
-      })
-    }, delay)
-  }, [text, addMessage, setTyping, chatPartner.name, replyTo, setReplyTo])
+  }, [text, addMessage, replyTo, setReplyTo])
 
   const handleLongPress = useCallback((msg: ChatMsg, rect: DOMRect) => {
     setReactionPicker({

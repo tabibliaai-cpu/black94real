@@ -612,38 +612,10 @@ function ChatRoomView() {
         content: replyTo.content, isMine: replyTo.isMine,
       } : undefined,
     })
-    const replyingTo = replyTo
     setText('')
     setReplyTo(null)
     inputRef.current?.focus()
-
-    setTyping(true)
-    const delay = 1200 + Math.random() * 2000
-    setTimeout(() => {
-      setTyping(false)
-      const replies = [
-        "Got it! 👍",
-        "Sounds good to me!",
-        "Let me check and get back to you",
-        "Haha that's awesome! 😂",
-        "Sure thing, will do!",
-        "No worries at all",
-        "Perfect, thanks for letting me know",
-        "Already on it! 🚀",
-      ]
-      const replyContent = replies[Math.floor(Math.random() * replies.length)]
-      addMessage({
-        id: `msg_${Date.now()}`,
-        senderId: selectedChatId || 'user_a', senderName: chatPartner.name,
-        content: replyContent,
-        timestamp: Date.now(), isMine: false, read: true, reactions: [],
-        replyTo: replyingTo ? {
-          id: replyingTo.id, senderName: replyingTo.senderName,
-          content: replyingTo.content, isMine: replyingTo.isMine,
-        } : undefined,
-      })
-    }, delay)
-  }, [text, addMessage, setTyping, chatPartner.name, replyTo, setReplyTo, selectedChatId])
+  }, [text, addMessage, replyTo, setReplyTo])
 
   const handleLongPress = useCallback((msg: ChatMsg, rect: DOMRect) => {
     setReactionPicker({

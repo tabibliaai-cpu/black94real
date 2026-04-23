@@ -8,7 +8,6 @@ import {
   Bell,
   MessageCircle,
   Radio,
-  Ghost,
 } from 'lucide-react'
 
 interface MobileNavProps {
@@ -65,17 +64,6 @@ const NAV_ITEMS: { view: AppView; label: string; icon: (active: boolean) => Reac
       <Radio
         className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
         strokeWidth={active ? 2.4 : 2.2}
-      />
-    ),
-  },
-  {
-    view: 'anonymous-chat',
-    label: 'Anon',
-    icon: (active) => (
-      <Ghost
-        className={cn('w-[24px] h-[24px]', active ? 'text-[#ffffff]' : 'text-[#ffffff]')}
-        strokeWidth={active ? 2.4 : 2.2}
-        fill={active ? 'currentColor' : 'none'}
       />
     ),
   },

@@ -151,7 +151,7 @@ export function CheckoutView() {
           <div className="space-y-3">
             <h2 className="text-[16px] font-bold text-[#e7e9ea] mb-4">Shipping Address</h2>
             {[
-              { key: 'name' as const, label: 'Full Name', placeholder: 'John Doe', type: 'text' },
+              { key: 'name' as const, label: 'Full Name', placeholder: 'Your name', type: 'text' },
               { key: 'phone' as const, label: 'Phone Number', placeholder: '10-digit number', type: 'tel' },
               { key: 'line1' as const, label: 'Address Line 1', placeholder: 'House no, Street', type: 'text' },
               { key: 'line2' as const, label: 'Address Line 2', placeholder: 'Landmark (optional)', type: 'text' },

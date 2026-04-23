@@ -38,7 +38,7 @@ function GhostIcon({ className }: { className?: string }) {
    ANONYMOUS CHAT LOBBY — REDESIGNED
    ═══════════════════════════════════════════════════════════════════════════ */
 function LobbyScreen() {
-  const { startMatching, connectToStranger, room, myAlias } = useAnonChat()
+  const { startMatching, room, myAlias } = useAnonChat()
   const { navigate } = useAppStore()
   const [started, setStarted] = useState(false)
   const [showIcebreaker, setShowIcebreaker] = useState(false)
@@ -47,19 +47,7 @@ function LobbyScreen() {
   const handleStart = useCallback(() => {
     setStarted(true)
     startMatching()
-
-    const delay = 2000 + Math.random() * 2000
-    setTimeout(() => {
-      const state = useAnonChat.getState()
-      if (state.room?.status === 'matching') {
-        const prefixes = ['Ghost', 'Shadow', 'Phantom', 'Echo', 'Mist', 'Wisp', 'Drift', 'Blip', 'Void', 'Haze']
-        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)]
-        const num = Math.floor(Math.random() * 99) + 1
-        const strangerAlias = `${prefix}_${num}`
-        state.connectToStranger(strangerAlias)
-      }
-    }, delay)
-  }, [startMatching, connectToStranger])
+  }, [startMatching])
 
   useEffect(() => {
     if (room?.status === 'connected') {
@@ -265,37 +253,12 @@ function AnonChatRoom() {
     })
     setSentReactions((prev) => new Set(prev).add(emoji))
     setShowReactions(false)
-
-    if (Math.random() > 0.4) {
-      setTimeout(() => {
-        const emojis = ['🔥', '😂', '💀', '❤️', '👏']
-        const r = emojis[Math.floor(Math.random() * emojis.length)]
-        addMessage({
-          id: `react_${Date.now()}`,
-          roomId: room.id,
-          senderAlias: room.strangerAlias || 'Stranger',
-          content: r,
-          isMine: false,
-          timestamp: Date.now(),
-          type: 'reaction',
-        })
-      }, 800 + Math.random() * 1500)
-    }
   }, [room, myAlias])
 
   const handleNewChat = useCallback(() => {
-    const { startMatching, connectToStranger } = useAnonChat.getState()
+    const { startMatching } = useAnonChat.getState()
     clearMessages()
     startMatching()
-    setTimeout(() => {
-      const state = useAnonChat.getState()
-      if (state.room?.status === 'matching') {
-        const prefixes = ['Ghost', 'Shadow', 'Phantom', 'Echo', 'Mist', 'Wisp', 'Drift', 'Blip', 'Void', 'Haze']
-        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)]
-        const num = Math.floor(Math.random() * 99) + 1
-        state.connectToStranger(`${prefix}_${num}`)
-      }
-    }, 1500 + Math.random() * 2000)
   }, [clearMessages])
 
   const handleBack = useCallback(() => {

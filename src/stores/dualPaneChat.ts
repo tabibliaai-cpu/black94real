@@ -53,7 +53,6 @@ export interface ChatListItem {
   lastMessageTime: number
   unreadCount: number
   verified: boolean
-  isSample?: boolean
 }
 
 export type ChatView = 'list' | 'room' | 'settings'
@@ -116,11 +115,11 @@ interface DualPaneState {
 
 /* ── Chat messages placeholder ──────────────────────────────────────────── */
 
-const SAMPLE_MESSAGES: Record<string, ChatMsg[]> = {}
+const INITIAL_MESSAGES: Record<string, ChatMsg[]> = {}
 
 /* ── Chat list placeholder ──────────────────────────────────────────── */
 
-const SAMPLE_CHAT_LIST: ChatListItem[] = []
+const INITIAL_CHAT_LIST: ChatListItem[] = []
 
 /* ── Sponsored ads placeholder ──────────────────────────────────── */
 

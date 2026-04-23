@@ -24,8 +24,6 @@ const ExploreView = lazy(() => import('@/views/ExploreView').then(m => ({ defaul
 const ProfileView = lazy(() => import('@/views/ProfileView').then(m => ({ default: m.ProfileView })))
 const SettingsView = lazy(() => import('@/views/SettingsView').then(m => ({ default: m.SettingsView })))
 const StoriesView = lazy(() => import('@/views/StoriesView').then(m => ({ default: m.StoriesView })))
-const AnonymousChatView = lazy(() => import('@/views/AnonymousChatView').then(m => ({ default: m.AnonymousChatView })))
-const AnonymousChatRoomView = lazy(() => import('@/views/AnonymousChatView').then(m => ({ default: m.AnonymousChatRoomView })))
 const MessagesView = lazy(() => import('@/views/MessagesView').then(m => ({ default: m.MessagesView })))
 const AudioCallView = lazy(() => import('@/views/AudioCallView').then(m => ({ default: m.AudioCallView })))
 const BusinessDashboardView = lazy(() => import('@/views/BusinessDashboardView').then(m => ({ default: m.BusinessDashboardView })))
@@ -158,7 +156,7 @@ function LoadingScreen() {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 // The 6 main bottom-nav tabs that should stay mounted for instant switching
-const PERSISTENT_VIEWS = ['feed', 'search', 'chat', 'notifications', 'stories', 'anonymous-chat'] as const
+const PERSISTENT_VIEWS = ['feed', 'search', 'chat', 'notifications', 'stories'] as const
 
 function ViewRouter() {
   const currentView = useAppStore((s) => s.currentView)
@@ -177,8 +175,6 @@ function ViewRouter() {
     search: <SearchView />,
     settings: <SettingsView />,
     stories: <StoriesView />,
-    'anonymous-chat': <AnonymousChatView />,
-    'anonymous-room': <AnonymousChatRoomView />,
     'dual-pane-chat': <MessagesView />,
     'audio-call': <AudioCallView />,
     'subscriptions': <SubscriptionsView />,
@@ -471,7 +467,7 @@ export default function Black94App() {
   if (screen === 'login') return <LoginScreen onSignIn={handleSignIn} busy={busy} />
 
   // Hide chrome for full-screen views
-  const showChrome = !['chat-room', 'edit-profile', 'anonymous-room', 'anonymous-chat', 'write-article', 'checkout', 'store-dashboard', 'audio-call'].includes(currentView)
+  const showChrome = !['chat-room', 'edit-profile', 'write-article', 'checkout', 'store-dashboard', 'audio-call'].includes(currentView)
   const isHomeFeed = currentView === 'feed'
 
   // Title for header
@@ -482,7 +478,6 @@ export default function Black94App() {
     settings: 'Edit Profile',
     explore: 'Explore',
     stories: 'Stories',
-    'anonymous-chat': 'Anonymous Chat',
     'subscriptions': 'Subscriptions',
     'business-dashboard': 'Business',
     'premium-dashboard': 'Dashboard',

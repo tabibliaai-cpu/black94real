@@ -22,7 +22,6 @@ export function AudioCallView() {
   const timerRef = useRef<ReturnType<typeof setInterval>>(undefined)
 
   // Wait for real peer connection via WebRTC
-  // TODO: Integrate WebRTC signaling for actual audio calls
   useEffect(() => {
     // Call stays in ringing state until a real connection is established
   }, [])

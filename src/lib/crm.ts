@@ -66,15 +66,15 @@ export interface CrmAnalytics {
 
 /* ── Data placeholders ──────────────────────────────────────────────────── */
 
-export const sampleLeads: Lead[] = []
+export const leadsData: Lead[] = []
 
-export const sampleDeals: Deal[] = []
+export const dealsData: Deal[] = []
 
-export const sampleOrders: Order[] = []
+export const ordersData: Order[] = []
 
-export const sampleAdCampaigns: AdCampaign[] = []
+export const adCampaignsData: AdCampaign[] = []
 
-export const sampleAnalytics: CrmAnalytics = {
+export const crmAnalytics: CrmAnalytics = {
   totalRevenue: 0,
   totalLeads: 0,
   conversionRate: 0,

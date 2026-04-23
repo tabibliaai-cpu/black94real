@@ -74,20 +74,11 @@ function genColor(): string {
   return randItem(colors)
 }
 
-/* ── Response pool (to be replaced with real backend) ─────────────────────── */
+/* ── Response pool ─────────────────────────────────────────────────────── */
 const STRANGER_RESPONSES: string[] = []
 
-/* ── AI icebreakers ──────────────────────────────────────────────────── */
-const ICEBREAKERS = [
-  "Ask about their favorite hobby",
-  "Start with a fun random question",
-  "Share something you've never told anyone",
-  "What would you do if you won the lottery?",
-  "If you could teleport anywhere right now...",
-  "What's the most spontaneous thing you've done?",
-  "Do you believe in aliens? 👽",
-  "Cats or dogs? The debate continues...",
-]
+/* ── Icebreakers ──────────────────────────────────────────────────── */
+const ICEBREAKERS: string[] = []
 
 let msgCounter = 0
 

@@ -7,7 +7,7 @@ export type AppView =
   | 'ads-manager' | 'create-ad' | 'crm-leads' | 'crm-deals' | 'crm-orders'
   | 'crm-analytics' | 'affiliates' | 'subscriptions' | 'share-profile'
   | 'user-profile' | 'threads' | 'thread-detail'
-  | 'anonymous-chat' | 'anonymous-room' | 'reels' | 'stories' | 'dual-pane-chat'
+  | 'reels' | 'stories' | 'dual-pane-chat'
   | 'storefront' | 'product-detail' | 'cart' | 'checkout'
   | 'my-store' | 'add-product' | 'order-tracking' | 'business-orders'
   | 'store-dashboard' | 'audio-call'
@@ -251,7 +251,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       return
     }
     const [view, query] = route.split('?')
-    const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','anonymous-chat','anonymous-room','dual-pane-chat','business-dashboard','premium-dashboard','subscriptions','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call']
+    const allViews: string[] = ['feed','explore','chat','chat-room','profile','edit-profile','user-profile','notifications','search','settings','stories','dual-pane-chat','business-dashboard','premium-dashboard','subscriptions','ads-manager','create-ad','crm-leads','crm-deals','crm-orders','crm-analytics','privacy-settings','share-profile','write-article','article','affiliates','salary','performance','storefront','product-detail','cart','checkout','my-store','add-product','order-tracking','business-orders','store-dashboard','audio-call']
     if (allViews.includes(view)) {
       const params: Record<string, string> = {}
       if (query) new URLSearchParams(query).forEach((v, k) => { params[k] = v })
