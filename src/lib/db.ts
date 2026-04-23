@@ -888,9 +888,17 @@ function docToStory(docSnap: DocumentSnapshot<DocumentData>): Story {
   };
 }
 
+export interface StoryAuthorInfo {
+  authorUsername: string;
+  authorDisplayName: string;
+  authorProfileImage: string;
+  authorIsVerified: boolean;
+}
+
 /**
  * Create a new story in Firestore.
  * Returns the created story document.
+ * If authorInfo is provided, skips the extra getUser() Firestore read for speed.
  */
 export async function createStory(
   authorId: string,
@@ -908,16 +916,23 @@ export async function createStory(
     audience?: string;
     expiry?: string;
   },
+  authorInfo?: StoryAuthorInfo,
 ): Promise<Story> {
-  const author = await getUser(authorId);
+  // Use provided author info if available (avoids extra Firestore read)
+  const author = authorInfo ?? await getUser(authorId);
   if (!author) throw new Error('Author not found');
+
+  const username = typeof author === 'string' ? author : author.authorUsername;
+  const displayName = typeof author === 'string' ? author : author.authorDisplayName;
+  const profileImage = typeof author === 'string' ? '' : author.authorProfileImage;
+  const isVerified = typeof author === 'string' ? false : author.authorIsVerified;
 
   const storyRef = await addDoc(collection(db, 'stories'), {
     authorId,
-    authorUsername: author.username,
-    authorDisplayName: author.displayName,
-    authorProfileImage: author.profileImage,
-    authorIsVerified: author.isVerified,
+    authorUsername: username,
+    authorDisplayName: displayName,
+    authorProfileImage: profileImage,
+    authorIsVerified: isVerified,
     format: data.format,
     content: data.content,
     mediaUrl: data.mediaUrl ?? '',
