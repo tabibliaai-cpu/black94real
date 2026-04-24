@@ -50,6 +50,7 @@ const AddProductView = lazy(() => import('@/views/AddProductView').then(m => ({ 
 const OrderTrackingView = lazy(() => import('@/views/OrderTrackingView').then(m => ({ default: m.OrderTrackingView })))
 const BusinessOrdersView = lazy(() => import('@/views/BusinessOrdersView').then(m => ({ default: m.BusinessOrdersView })))
 const StoreDashboardView = lazy(() => import('@/views/StoreDashboardView').then(m => ({ default: m.StoreDashboardView })))
+const BookmarksView = lazy(() => import('@/views/BookmarksView').then(m => ({ default: m.BookmarksView })))
 
 /* ─── User data cache key ───────────────────────────────────────────────── */
 const USER_CACHE_KEY = 'black94_user_cache'
@@ -200,6 +201,7 @@ function ViewRouter() {
     'order-tracking': <OrderTrackingView />,
     'business-orders': <BusinessOrdersView />,
     'store-dashboard': <StoreDashboardView />,
+    'bookmarks': <BookmarksView />,
   }
 
   return (
@@ -525,6 +527,7 @@ export default function Black94App() {
     'business-orders': 'Orders',
     'store-dashboard': 'Store Dashboard',
     'dual-pane-chat': 'Messages',
+    'bookmarks': 'Bookmarks',
   }
 
   const headerTitle = viewTitles[currentView]

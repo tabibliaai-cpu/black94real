@@ -64,6 +64,25 @@ function compressBanner(file: File, maxW = 1500, quality = 0.75): Promise<string
   })
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SETTINGS LINK — Reusable row item for settings sections
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+function SettingsLink({ icon, label, desc, onClick }: { icon: React.ReactNode; label: string; desc: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/[0.04] transition-colors w-full text-left">
+      <div className="text-[#94a3b8] shrink-0">{icon}</div>
+      <div className="flex-1 min-w-0">
+        <p className="text-[15px] text-[#e7e9ea]">{label}</p>
+        <p className="text-[13px] text-[#64748b] truncate">{desc}</p>
+      </div>
+      <svg className="w-4 h-4 text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  )
+}
+
 export function SettingsView() {
   const user = useAppStore((s) => s.user)
   const setUser = useAppStore((s) => s.setUser)
@@ -480,6 +499,113 @@ export function SettingsView() {
           : !saved && !saving && 'Save changes'
         }
       </button>
+
+      {/* ─── Quick Links / Settings Sections ─── */}
+      <div className="space-y-2 pt-2">
+        <div className="h-px bg-white/[0.06]" />
+        <h3 className="text-[13px] font-bold text-[#64748b] uppercase tracking-wider px-1">Account</h3>
+      </div>
+
+      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] divide-y divide-white/[0.06] overflow-hidden">
+        <SettingsLink
+          icon={
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+          }
+          label="Privacy Settings"
+          desc="Name visibility, DM permissions, paid chat"
+          onClick={() => navigate('privacy-settings')}
+        />
+        <SettingsLink
+          icon={
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+          }
+          label="Share Profile"
+          desc="QR code, expiring link, social sharing"
+          onClick={() => navigate('share-profile')}
+        />
+        <SettingsLink
+          icon={
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          }
+          label="Affiliates"
+          desc="Badges and affiliate program"
+          onClick={() => navigate('affiliates')}
+        />
+      </div>
+
+      <div className="space-y-2 pt-2">
+        <div className="h-px bg-white/[0.06]" />
+        <h3 className="text-[13px] font-bold text-[#64748b] uppercase tracking-wider px-1">Business</h3>
+      </div>
+
+      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] divide-y divide-white/[0.06] overflow-hidden">
+        <SettingsLink
+          icon={
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+          }
+          label="My Store"
+          desc="Manage products and orders"
+          onClick={() => navigate('my-store')}
+        />
+        <SettingsLink
+          icon={
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          }
+          label="Dashboard"
+          desc="Business analytics and performance"
+          onClick={() => navigate('business-dashboard')}
+        />
+        <SettingsLink
+          icon={
+            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          }
+          label="Write Article"
+          desc="Create articles with fact-checking"
+          onClick={() => navigate('write-article')}
+        />
+      </div>
+
+      <div className="space-y-2 pt-2">
+        <div className="h-px bg-white/[0.06]" />
+        <h3 className="text-[13px] font-bold text-[#64748b] uppercase tracking-wider px-1">Legal</h3>
+      </div>
+
+      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] divide-y divide-white/[0.06] overflow-hidden">
+        <a href="/privacy-policy.html" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
+          <svg className="w-[18px] h-[18px] text-[#94a3b8] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <div className="flex-1 min-w-0">
+            <p className="text-[15px] text-[#e7e9ea]">Privacy Policy</p>
+          </div>
+          <svg className="w-4 h-4 text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+        <a href="/terms-of-service.html" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/[0.04] transition-colors">
+          <svg className="w-[18px] h-[18px] text-[#94a3b8] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <div className="flex-1 min-w-0">
+            <p className="text-[15px] text-[#e7e9ea]">Terms of Service</p>
+          </div>
+          <svg className="w-4 h-4 text-[#64748b] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+      </div>
     </div>
   )
 }
