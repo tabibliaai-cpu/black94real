@@ -12,7 +12,6 @@ import {
   Bell,
   MessageCircle,
   Radio,
-  LayoutDashboard,
   User,
   Bookmark,
   Ellipsis,
@@ -36,7 +35,6 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'notifications', label: 'Notifications', icon: (p) => <Bell {...p} strokeWidth={2} />, view: 'notifications' },
   { id: 'messages', label: 'Messages', icon: (p) => <MessageCircle {...p} strokeWidth={2} />, view: 'chat' },
   { id: 'stories', label: 'Stories', icon: (p) => <Radio {...p} strokeWidth={2} />, view: 'stories' },
-  { id: 'premium', label: 'Dashboard', icon: (p) => <LayoutDashboard {...p} strokeWidth={2} />, view: 'premium-dashboard' },
   { id: 'profile', label: 'Profile', icon: (p) => <User {...p} strokeWidth={2} />, view: 'profile' },
   { id: 'bookmarks', label: 'Bookmarks', icon: (p) => <Bookmark {...p} strokeWidth={2} />, view: 'bookmarks' as any },
 ]
