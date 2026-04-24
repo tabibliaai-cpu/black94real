@@ -54,7 +54,6 @@ export function PremiumDashboardView() {
           <h3 className="text-[15px] font-semibold text-white mb-3">Quick Links</h3>
           <div className="space-y-1">
             {[
-              { label: 'Business Dashboard', view: 'business-dashboard', show: isBusiness },
               { label: 'Store Dashboard', view: 'store-dashboard', show: isBusiness },
               { label: 'Affiliate Badges', view: 'affiliates', show: isBusiness },
               { label: 'Ad Manager', view: 'ads-manager', show: isBusiness },
