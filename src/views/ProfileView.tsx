@@ -623,17 +623,6 @@ export function ProfileView() {
           {isOwnProfile && (
             <div className="flex flex-col items-center gap-3 pt-4 pb-24">
               <button
-                onClick={() => navigate('store-dashboard')}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#FFFFFF] to-[#D1D5DB] text-black font-bold text-[14px] shadow-lg shadow-[#FFFFFF]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <path d="M16 10a4 4 0 01-8 0" />
-                </svg>
-                Store Dashboard
-              </button>
-              <button
                 onClick={() => navigate('add-product')}
                 className="flex items-center gap-1.5 text-[13px] font-medium text-[#FFFFFF] hover:text-[#c4e899] transition-colors"
               >
