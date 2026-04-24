@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '@/lib/utils'
+import { signOutUser } from '@/lib/firebase'
 import { useAppStore } from '@/stores/app'
 import { updateUser, checkUsernameAvailability, updateUsername, getUser, updateAuthorDataInPosts } from '@/lib/db'
 import { PAvatar, VerifiedBadge } from '@/components/PAvatar'
@@ -595,6 +596,27 @@ export function SettingsView() {
             <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </a>
+      </div>
+
+      {/* ─── Logout ─── */}
+      <div className="pt-4 pb-8">
+        <button
+          onClick={async () => {
+            try {
+              await signOutUser()
+              useAppStore.getState().logout()
+              toast.success('Logged out successfully')
+            } catch (err) {
+              toast.error('Failed to log out')
+            }
+          }}
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 font-semibold text-[15px] hover:bg-red-500/20 active:scale-[0.98] transition-all"
+        >
+          <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Log Out
+        </button>
       </div>
     </div>
   )
