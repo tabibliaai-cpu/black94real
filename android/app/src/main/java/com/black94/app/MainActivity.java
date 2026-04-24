@@ -416,7 +416,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
+                // Always allow app URLs
                 if (url.startsWith(APP_URL) || url.startsWith("https://black94.web.app")) {
+                    return false;
+                }
+                // Allow Google Auth URLs to load in WebView for sign-in redirect flow
+                if (url.contains("accounts.google.com") ||
+                    url.contains("apis.google.com") ||
+                    url.contains("google.com/signin") ||
+                    url.contains("firebase.google.com") ||
+                    url.contains("firebaseapp.com") ||
+                    url.contains("googleapis.com/auth")) {
                     return false;
                 }
                 // Open external links in browser

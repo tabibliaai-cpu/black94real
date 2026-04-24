@@ -469,7 +469,8 @@ export default function Black94App() {
     setBusy(true)
     try {
       const result = await signIn()
-      if (result.user) {
+      // signInWithRedirect returns void (page navigates away), so result may be undefined
+      if (result && result.user) {
         setScreen('loading')
         const dbUser = await createUserFromGoogle(result.user)
         const storeUser = toStoreUser(result.user, dbUser)
@@ -480,6 +481,7 @@ export default function Black94App() {
         // Restore previous view from URL hash
         restoreViewFromHash()
       }
+      // If result is undefined (redirect flow), the auth listener handles completion
     } catch (err: unknown) {
       setBusy(false)
       const code = (err as { code?: string })?.code
