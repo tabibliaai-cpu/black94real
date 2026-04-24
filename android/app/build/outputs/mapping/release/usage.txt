@@ -4537,21 +4537,19 @@ androidx.core.animation.AnimatorKt$doOnRepeat$$inlined$addListener$default$1
 androidx.core.animation.AnimatorKt$doOnStart$$inlined$addListener$default$1
 androidx.core.animation.AnimatorKt
 androidx.core.animation.Api19Impl
-androidx.core.app.ActivityCompat$1
 androidx.core.app.ActivityCompat$Api16Impl:
     private void <init>()
 androidx.core.app.ActivityCompat$Api21Impl
 androidx.core.app.ActivityCompat$Api22Impl
-androidx.core.app.ActivityCompat$Api23Impl
+androidx.core.app.ActivityCompat$Api23Impl:
+    private void <init>()
 androidx.core.app.ActivityCompat$Api28Impl
 androidx.core.app.ActivityCompat$Api30Impl
 androidx.core.app.ActivityCompat$Api31Impl
-androidx.core.app.ActivityCompat$OnRequestPermissionsResultCallback
-androidx.core.app.ActivityCompat$PermissionCompatDelegate
-androidx.core.app.ActivityCompat$RequestPermissionsRequestCodeValidator
+androidx.core.app.ActivityCompat$PermissionCompatDelegate:
+    public abstract boolean onActivityResult(android.app.Activity,int,int,android.content.Intent)
 androidx.core.app.ActivityCompat$SharedElementCallback21Impl
 androidx.core.app.ActivityCompat:
-    private static androidx.core.app.ActivityCompat$PermissionCompatDelegate sDelegate
     protected void <init>()
     public static void finishAfterTransition(android.app.Activity)
     public static androidx.core.app.ActivityCompat$PermissionCompatDelegate getPermissionCompatDelegate()
@@ -4560,7 +4558,6 @@ androidx.core.app.ActivityCompat:
     public static boolean isLaunchedFromBubble(android.app.Activity)
     public static void postponeEnterTransition(android.app.Activity)
     public static androidx.core.view.DragAndDropPermissionsCompat requestDragAndDropPermissions(android.app.Activity,android.view.DragEvent)
-    public static void requestPermissions(android.app.Activity,java.lang.String[],int)
     public static android.view.View requireViewById(android.app.Activity,int)
     public static void setEnterSharedElementCallback(android.app.Activity,androidx.core.app.SharedElementCallback)
     public static void setExitSharedElementCallback(android.app.Activity,androidx.core.app.SharedElementCallback)
@@ -7499,7 +7496,6 @@ androidx.fragment.app.FragmentActivity:
     public void supportFinishAfterTransition()
     public void supportPostponeEnterTransition()
     public void supportStartPostponedEnterTransition()
-    public final void validateRequestPermissionsRequestCode(int)
 androidx.fragment.app.FragmentAnim:
     private void <init>()
 androidx.fragment.app.FragmentController:
@@ -9413,6 +9409,8 @@ androidx.webkit.internal.WebkitToCompatConverter
 androidx.webkit.internal.package-info
 com.black94.app.MainActivity:
     private static final java.lang.String APP_URL
+    private static final int FILE_CHOOSER_RESULT_CODE
+    private static final int REQUEST_STORAGE_PERMISSION
 com.black94.app.R$color
 com.black94.app.R$drawable
 com.black94.app.R$layout:
@@ -25375,10 +25373,18 @@ androidx.core.R$styleable:
     public static final int GradientColor_android_tileMode
     public static final int GradientColor_android_type
 androidx.core.app.ActivityCompat$$InternalSyntheticLambda$1$6e9d625f7499cc02f53fe1dade3df85b3b9ea91cb0138464c0ece30ad7359ed5$0
+androidx.core.app.ActivityCompat$1:
+    private static void $r8$constructor$androidx$core$app$ActivityCompat$1()
+    private static void $r8$constructor$androidx$emoji2$text$EmojiCompat$ListenerDispatcher()
+    private static void $r8$constructor$androidx$emoji2$text$EmojiCompat$ListenerDispatcher$1()
+    private static void $r8$constructor$androidx$emoji2$text$EmojiCompat$ListenerDispatcher$2()
+androidx.core.app.ActivityCompat$PermissionCompatDelegate
+androidx.core.app.ActivityCompat$RequestPermissionsRequestCodeValidator
 androidx.core.app.ActivityCompat:
+    public static final androidx.core.app.ActivityCompat$PermissionCompatDelegate sDelegate
     public static final java.lang.Object sSync
     public static android.util.TypedValue sTempValue
-    public static int checkSelfPermission()
+    public static int checkSelfPermission(com.black94.app.MainActivity)
     public static android.graphics.drawable.Drawable getDrawable()
 androidx.core.app.ActivityRecreator$1
 androidx.core.app.ActivityRecreator$2
@@ -25396,8 +25402,12 @@ androidx.core.app.MultiWindowModeChangedInfo:
     public final boolean mIsInMultiWindowMode
     public final android.content.res.Configuration mNewConfig
 androidx.core.app.NavUtils
-androidx.core.app.NotificationManagerCompat$$InternalSyntheticApiModelOutline$1$a72af6d5190063792df6d39a579bc37c91253d0097c1bdf991345448519d2197$0
-androidx.core.app.NotificationManagerCompat
+androidx.core.app.NotificationManagerCompat:
+    public final android.content.Context mContext
+    public static final java.util.Set sEnabledNotificationListenerPackages
+    public static final java.lang.Object sEnabledNotificationListenersLock
+    public static final java.lang.Object sLock
+    public static boolean areNotificationsEnabled()
 androidx.core.app.PictureInPictureModeChangedInfo:
     public final boolean mIsInPictureInPictureMode
     public final android.content.res.Configuration mNewConfig
@@ -25601,10 +25611,7 @@ androidx.core.os.TraceCompat:
     public static final long sTraceTagApp
     public static void beginSection()
     public static void endSection()
-androidx.core.provider.CallbackWithHandler$2:
-    private static void $r8$constructor$androidx$emoji2$text$EmojiCompat$ListenerDispatcher()
-    private static void $r8$constructor$androidx$emoji2$text$EmojiCompat$ListenerDispatcher$1()
-    private static void $r8$constructor$androidx$emoji2$text$EmojiCompat$ListenerDispatcher$2()
+androidx.core.provider.CallbackWithHandler$2
 androidx.core.provider.CallbackWithHandler
 androidx.core.provider.CalleeHandler
 androidx.core.provider.FontRequest:
@@ -26761,6 +26768,7 @@ androidx.fragment.app.FragmentActivity:
     public final void onAttachFragment()
     public static boolean onPrepareOptionsPanel()
     public static void onResumeFragments()
+    public final void validateRequestPermissionsRequestCode()
 androidx.fragment.app.FragmentAnim$1
 androidx.fragment.app.FragmentAnim$2
 androidx.fragment.app.FragmentContainer:
@@ -28147,7 +28155,7 @@ androidx.transition.Visibility:
     public abstract android.animation.Animator onAppear()
     public abstract android.animation.Animator onDisappear()
     public final void setMode(int)
-androidx.transition.WindowIdApi14$$InternalSyntheticThrowCCEIfNotNull$192$346ba31081d848221d10738ffacfe8b42a1cf2bcc44a47580e10fd7ecc1dfab1$0
+androidx.transition.WindowIdApi14$$InternalSyntheticThrowCCEIfNotNull$193$346ba31081d848221d10738ffacfe8b42a1cf2bcc44a47580e10fd7ecc1dfab1$0
 androidx.transition.WindowIdApi14
 androidx.vectordrawable.graphics.drawable.AndroidResources:
     public static final int[] STYLEABLE_PATH_INTERPOLATOR
@@ -28354,13 +28362,20 @@ androidx.viewpager2.widget.ViewPager2:
     public static void setOrientation()
     public static void unregisterCurrentItemDataSetTracker()
     public static void unregisterOnPageChangeCallback()
-com.black94.app.MainActivity$1:
-    public final synthetic com.black94.app.MainActivity this$0
-com.black94.app.MainActivity$2:
+com.black94.app.MainActivity$2$$InternalSyntheticApiModelOutline$2$982450ba5194d75ed03aa9827532f4ec2883bc8084cdb9589b0708013d04fcaf$0
+com.black94.app.MainActivity$WebAppInterface:
     public final synthetic com.black94.app.MainActivity this$0
 com.black94.app.MainActivity:
-    public static synthetic void $r8$lambda$eU2BJcUlYoufZu04nQ9423Jun1s()
-    public static synthetic void lambda$onCreate$1()
+    public static synthetic bridge android.view.View -$$Nest$fgetloadingView()
+    public static synthetic bridge android.app.AlertDialog -$$Nest$fgetpopupDialog()
+    public static synthetic bridge android.webkit.WebView -$$Nest$fgetpopupWebView()
+    public static synthetic bridge android.widget.ProgressBar -$$Nest$fgetprogressBar()
+    public static synthetic bridge void -$$Nest$fputpopupWebView()
+    public static synthetic bridge void -$$Nest$mshowOfflineScreen()
+    public static android.view.View createLoadingView()
+    public static android.view.View createOfflineView()
+    public static boolean isNetworkError()
+    public static void loadApp()
 com.black94.app.R$layout
 com.black94.app.SplashActivity$$InternalSyntheticLambda$1$4a9f3a94cd2bad06939d537132b14f89859803fa25941722150e2cd2bfb31251$0
 com.google.android.material.R$animator
@@ -29664,6 +29679,7 @@ com.google.android.material.datepicker.MaterialCalendarGridView:
     public static void gainFocus()
     public static android.view.View getChildAtPosition()
     public static int horizontalMidPoint()
+com.google.android.material.datepicker.MaterialDatePicker$$InternalSyntheticLambda$1$5d7d61df5671d9c5914af281608967666a8890f83906d8383d8c7804e3fbcd27$0
 com.google.android.material.datepicker.MaterialDatePicker$1$$InternalSyntheticThrowCCEIfNotNull$31$8c0322c3b6a8ad59d9da5ebe01668fc41b267413290427d3382a40f1207874a7$0
 com.google.android.material.datepicker.MaterialDatePicker$1
 com.google.android.material.datepicker.MaterialDatePicker$2

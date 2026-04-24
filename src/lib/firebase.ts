@@ -3,6 +3,8 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   setPersistence,
   browserLocalPersistence,
@@ -40,9 +42,33 @@ export const authReady = setPersistence(auth, browserLocalPersistence)
   .then(() => undefined)
   .catch((err) => console.error('[Firebase] persistence failed:', err));
 
-// ── Sign In (popup only — no page reload, no redirect race conditions) ──────
+// ── Detect if running inside Android WebView ──────────────────────────────────
+function isWebView(): boolean {
+  if (typeof window === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return (ua.includes('wv') || ua.includes('Black94App') ||
+    (ua.includes('Android') && !ua.includes('Chrome')) ||
+    (typeof (window as any).Black94Native !== 'undefined'));
+}
+
+// ── Sign In — uses redirect in WebView, popup in browser ─────────────────────
 export async function signIn(): Promise<import('firebase/auth').UserCredential> {
   await authReady;
+
+  // Check for pending redirect result first (from previous redirect sign-in)
+  try {
+    const result = await getRedirectResult(auth);
+    if (result && result.user) return result;
+  } catch {
+    // No pending redirect, continue with sign-in
+  }
+
+  // Use redirect in WebView (popups don't work reliably in WebViews)
+  // even with multi-window support enabled
+  if (isWebView()) {
+    return signInWithRedirect(auth, googleProvider);
+  }
+
   return signInWithPopup(auth, googleProvider);
 }
 
@@ -55,6 +81,15 @@ export async function signOutUser(): Promise<void> {
 
 // ── Auth state listener (single source of truth) ────────────────────────────
 export { onAuthStateChanged };
+
+// ── Check for redirect result on page load (handles WebView redirect sign-in) ─
+export async function checkRedirectResult(): Promise<import('firebase/auth').UserCredential | null> {
+  try {
+    return await getRedirectResult(auth);
+  } catch {
+    return null;
+  }
+}
 
 // ── FCM (Push Notifications) ─────────────────────────────────────────────
 let messagingInstance: ReturnType<typeof getMessaging> | null = null;

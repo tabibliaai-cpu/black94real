@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react'
 import { useAppStore, type AppView, type User as StoreUser } from '@/stores/app'
-import { auth, authReady, signIn, signOutUser, onAuthStateChanged, requestNotificationPermission, saveFCMToken, setupFCMListener } from '@/lib/firebase'
+import { auth, authReady, signIn, signOutUser, onAuthStateChanged, checkRedirectResult, requestNotificationPermission, saveFCMToken, setupFCMListener } from '@/lib/firebase'
 import { createUserFromGoogle, fetchNotifications, markNotificationRead, ensureE2EKeyPair } from '@/lib/db'
 import { onSnapshot, collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
@@ -366,8 +366,17 @@ export default function Black94App() {
       }
     }
 
-    authReady.then(() => {
+    authReady.then(async () => {
       if (dead) return
+      // In WebView: check for pending redirect result first (from signInWithRedirect)
+      try {
+        const redirectResult = await checkRedirectResult()
+        if (dead) return
+        if (redirectResult?.user) {
+          handleUser(redirectResult.user)
+          return
+        }
+      } catch {}
       unsub = onAuthStateChanged(auth, (fbUser) => {
         if (dead) return
         if (fbUser) handleUser(fbUser)
