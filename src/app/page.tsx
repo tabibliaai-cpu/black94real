@@ -638,9 +638,10 @@ export default function Black94App() {
         <button
           onClick={() => setComposeOpen(true)}
           className={cn(
-            'fixed bottom-[62px] right-4 z-30 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all duration-300',
+            'fixed right-4 z-30 w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-lg transition-all duration-300',
             'hover:bg-white/90 active:scale-90',
             'md:hidden',
+            'bottom-[calc(62px+var(--sab,0px)+8px)]',
             fabVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-75 pointer-events-none'
           )}
           aria-label="Create new post"

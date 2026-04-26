@@ -45,6 +45,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private View offlineView;
     private View loadingView;
     private FrameLayout webViewContainer;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private ValueCallback<Uri[]> filePathCallback;
     private WebView popupWebView;
@@ -259,9 +264,16 @@ public class MainActivity extends AppCompatActivity {
         loadingView = createLoadingView();
         rootLayout.addView(loadingView);
 
-        // WebView container
+        // SwipeRefreshLayout (pull-to-refresh)
+        swipeRefreshLayout = new SwipeRefreshLayout(this);
+        swipeRefreshLayout.setColorSchemeColors(0xFF3b82f6);
+        rootLayout.addView(swipeRefreshLayout, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+
+        // WebView container (inside SwipeRefreshLayout)
         webViewContainer = new FrameLayout(this);
-        rootLayout.addView(webViewContainer, new FrameLayout.LayoutParams(
+        swipeRefreshLayout.addView(webViewContainer, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
 
@@ -494,6 +506,9 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
                 loadingView.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
+                // Re-inject safe area after every page navigation
+                injectSafeArea();
             }
 
             @Override
@@ -527,6 +542,29 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Toast.makeText(MainActivity.this, "Cannot open download", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        // ── Pull-to-refresh ───────────────────────────────────────────────
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (isNetworkAvailable()) {
+                webView.reload();
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(MainActivity.this, "No connection", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // ── Safe area injection: get window insets and pass to WebView ──────
+        ViewCompat.setOnApplyWindowInsetsListener(rootLayout, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    | WindowInsetsCompat.Type.displayCutout());
+            int topInset = systemBars.top;
+            int bottomInset = systemBars.bottom;
+            // Inject safe area CSS variables into the WebView
+            String js = "document.documentElement.style.setProperty('--sat','" + topInset + "px');"
+                    + "document.documentElement.style.setProperty('--sab','" + bottomInset + "px');";
+            webView.evaluateJavascript(js, null);
+            return insets;
         });
 
         // ── Check connectivity and load ────────────────────────────────────
@@ -572,9 +610,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void showOfflineScreen() {
         webViewContainer.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.GONE);
         offlineView.setVisibility(View.VISIBLE);
         loadingView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    /** Inject safe area CSS variables into the WebView */
+    private void injectSafeArea() {
+        View root = getWindow().getDecorView().getRootView();
+        ViewCompat.getRootWindowInsets(root);
+        runOnUiThread(() -> {
+            try {
+                WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(root);
+                if (insets != null) {
+                    Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                            | WindowInsetsCompat.Type.displayCutout());
+                    String js = "document.documentElement.style.setProperty('--sat','" + bars.top + "px');"
+                            + "document.documentElement.style.setProperty('--sab','" + bars.bottom + "px');";
+                    webView.evaluateJavascript(js, null);
+                }
+            } catch (Exception ignored) {}
+        });
     }
 
     /** Create native loading spinner view */
@@ -662,6 +719,7 @@ public class MainActivity extends AppCompatActivity {
         retryBtn.setOnClickListener(v -> {
             if (isNetworkAvailable()) {
                 webViewContainer.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
                 offlineView.setVisibility(View.GONE);
                 webView.reload();
             } else {
@@ -807,6 +865,7 @@ public class MainActivity extends AppCompatActivity {
         // Re-check connectivity when returning to app
         if (offlineView.getVisibility() == View.VISIBLE && isNetworkAvailable()) {
             webViewContainer.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
             offlineView.setVisibility(View.GONE);
             webView.reload();
         }
