@@ -303,7 +303,11 @@ public class MainActivity extends AppCompatActivity {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         // CRITICAL: Enable multi-window for Google Auth popups to work
         settings.setSupportMultipleWindows(true);
-        settings.setUserAgentString(settings.getUserAgentString() + " Black94App/1.8.0");
+        // CRITICAL: Strip "; wv" from UA to prevent Google's "disallowed_useragent" error
+        String ua = settings.getUserAgentString();
+        ua = ua.replace("; wv", "");
+        ua = ua.replace(" Black94App/1.8.0", "") + " Black94App/1.8.1";
+        settings.setUserAgentString(ua);
 
         // Enable geolocation if needed
         settings.setGeolocationEnabled(true);
