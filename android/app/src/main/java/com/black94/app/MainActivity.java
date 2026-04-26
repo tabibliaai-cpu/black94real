@@ -46,6 +46,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String APP_URL = "https://black94.web.app";
     private static final int FILE_CHOOSER_RESULT_CODE = 1001;
     private static final int REQUEST_STORAGE_PERMISSION = 2001;
+    private static final int GOOGLE_SIGN_IN_REQUEST_CODE = 3001;
+    private static final String WEB_CLIENT_ID = "210565807767-jtedotfd6hqn8cn31meuk2cfp2dkm88o.apps.googleusercontent.com";
 
     private WebView webView;
     private ProgressBar progressBar;
@@ -185,6 +194,35 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
+        }
+
+        /** Trigger native Google Sign-In */
+        @JavascriptInterface
+        public void nativeGoogleSignIn() {
+            ((MainActivity) context).runOnUiThread(() -> {
+                ((MainActivity) context).startNativeGoogleSignIn();
+            });
+        }
+    }
+
+    /** Start native Google Sign-In flow */
+    private void startNativeGoogleSignIn() {
+        try {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(WEB_CLIENT_ID)
+                    .requestEmail()
+                    .requestProfile()
+                    .build();
+
+            GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
+            Intent signInIntent = client.getSignInIntent();
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+        } catch (Exception e) {
+            // If native sign-in fails (no Play Services), fall back to web
+            webView.evaluateJavascript(
+                    "if(window.__nativeGoogleSignInFailed) window.__nativeGoogleSignInFailed('" + e.getMessage() + "');",
+                    null
+            );
         }
     }
 
@@ -650,6 +688,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Handle native Google Sign-In result
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null && account.getIdToken() != null) {
+                    // Escape special chars in token for safe JS string
+                    String escapedToken = account.getIdToken()
+                            .replace("\\", "\\\\")
+                            .replace("'", "\\'")
+                            .replace("\n", "\\n")
+                            .replace("\r", "\\r");
+                    webView.evaluateJavascript(
+                            "if(window.__onNativeGoogleSignIn) window.__onNativeGoogleSignIn('" + escapedToken + "');",
+                            null
+                    );
+                }
+            } catch (ApiException e) {
+                int statusCode = e.getStatusCode();
+                webView.evaluateJavascript(
+                        "if(window.__nativeGoogleSignInFailed) window.__nativeGoogleSignInFailed('" + statusCode + "');",
+                        null
+                );
+            }
+            return;
+        }
+
         if (requestCode == FILE_CHOOSER_RESULT_CODE) {
             Uri[] results = null;
             if (resultCode == Activity.RESULT_OK && data != null) {

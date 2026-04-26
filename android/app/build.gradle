@@ -10,8 +10,8 @@ android {
         applicationId "com.black94.app"
         minSdk 21
         targetSdk 35
-        versionCode 9
-        versionName "1.8.0"
+        versionCode 10
+        versionName "1.8.1"
     }
 
     signingConfigs {
@@ -46,4 +46,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation 'com.google.android.gms:play-services-auth:21.3.0'
 }

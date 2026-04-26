@@ -4,6 +4,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
+  signInWithCredential,
   getRedirectResult,
   signOut,
   setPersistence,
@@ -51,7 +52,7 @@ function isWebView(): boolean {
     (typeof (window as any).Black94Native !== 'undefined'));
 }
 
-// ── Sign In — uses redirect in WebView, popup in browser ─────────────────────
+// ── Sign In — uses native bridge in Android app, popup in browser ─────────
 export async function signIn(): Promise<import('firebase/auth').UserCredential> {
   await authReady;
 
@@ -63,9 +64,28 @@ export async function signIn(): Promise<import('firebase/auth').UserCredential> 
     // No pending redirect, continue with sign-in
   }
 
-  // Use redirect in WebView (popups don't work reliably in WebViews)
-  // even with multi-window support enabled
+  // In Android app: use native Google Sign-In bridge (no website navigation)
   if (isWebView()) {
+    const native = (window as any).Black94Native;
+    if (native && typeof native.nativeGoogleSignIn === 'function') {
+      // Register callback for native sign-in result
+      return new Promise<import('firebase/auth').UserCredential>((resolve, reject) => {
+        (window as any).__onNativeGoogleSignIn = async (idToken: string) => {
+          try {
+            const credential = GoogleAuthProvider.credential(idToken);
+            const result = await signInWithCredential(auth, credential);
+            resolve(result);
+          } catch (err) {
+            reject(err);
+          }
+        };
+        (window as any).__nativeGoogleSignInFailed = (err: string) => {
+          reject(new Error('Native Google Sign-In failed: ' + err));
+        };
+        native.nativeGoogleSignIn();
+      });
+    }
+    // Fallback: redirect (only if native bridge is not available)
     return signInWithRedirect(auth, googleProvider);
   }
 
@@ -81,6 +101,13 @@ export async function signOutUser(): Promise<void> {
 
 // ── Auth state listener (single source of truth) ────────────────────────────
 export { onAuthStateChanged };
+
+// ── Check if native Google Sign-In is available ─────────────────────────────
+export function isNativeGoogleSignInAvailable(): boolean {
+  if (typeof window === 'undefined') return false;
+  const native = (window as any).Black94Native;
+  return !!(native && typeof native.nativeGoogleSignIn === 'function');
+}
 
 // ── Check for redirect result on page load (handles WebView redirect sign-in) ─
 export async function checkRedirectResult(): Promise<import('firebase/auth').UserCredential | null> {

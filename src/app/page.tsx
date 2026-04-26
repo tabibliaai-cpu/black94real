@@ -484,8 +484,11 @@ export default function Black94App() {
       // If result is undefined (redirect flow), the auth listener handles completion
     } catch (err: unknown) {
       setBusy(false)
+      const msg = (err as { message?: string })?.message || ''
       const code = (err as { code?: string })?.code
+      // Silently ignore user-initiated cancellations (popup closed, native sign-in cancelled)
       if (code === 'auth/popup-closed-by-user') return
+      if (msg.includes('12501') || msg.includes('cancelled')) return
       console.error('[Auth] signIn error:', err)
       toast.error('Sign in failed. Try again.')
     }
