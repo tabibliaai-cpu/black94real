@@ -160,13 +160,14 @@ export function ChatSettingsSheet({
         })
       })
 
-      // Delete all messages
+      // Delete all messages (chunked for >500)
       const messagesRef = collection(db, 'chats', chatId, 'messages')
-      const messagesSnap = await getDocs(messagesRef)
-      if (!messagesSnap.empty) {
+      let messagesSnap = await getDocs(messagesRef)
+      while (!messagesSnap.empty) {
         const batch = writeBatch(db)
         messagesSnap.docs.forEach((d) => batch.delete(d.ref))
         await batch.commit()
+        messagesSnap = await getDocs(messagesRef)
       }
       // Delete chat doc
       await deleteDoc(doc(db, 'chats', chatId))
@@ -184,13 +185,14 @@ export function ChatSettingsSheet({
     setShowClearDialog(false)
     setClearing(true)
     try {
-      // Delete all messages in the chat (but keep the chat document)
+      // Delete all messages in the chat (but keep the chat document) — chunked for >500
       const messagesRef = collection(db, 'chats', chatId, 'messages')
-      const messagesSnap = await getDocs(messagesRef)
-      if (!messagesSnap.empty) {
+      let messagesSnap = await getDocs(messagesRef)
+      while (!messagesSnap.empty) {
         const batch = writeBatch(db)
         messagesSnap.docs.forEach((d) => batch.delete(d.ref))
         await batch.commit()
+        messagesSnap = await getDocs(messagesRef)
       }
       // Reset lastMessage
       await updateDoc(doc(db, 'chats', chatId), {
@@ -212,13 +214,14 @@ export function ChatSettingsSheet({
     setShowDeleteDialog(false)
     setDeleting(true)
     try {
-      // Delete all messages
+      // Delete all messages (chunked for >500)
       const messagesRef = collection(db, 'chats', chatId, 'messages')
-      const messagesSnap = await getDocs(messagesRef)
-      if (!messagesSnap.empty) {
+      let messagesSnap = await getDocs(messagesRef)
+      while (!messagesSnap.empty) {
         const batch = writeBatch(db)
         messagesSnap.docs.forEach((d) => batch.delete(d.ref))
         await batch.commit()
+        messagesSnap = await getDocs(messagesRef)
       }
       // Delete the chat document entirely
       await deleteDoc(doc(db, 'chats', chatId))

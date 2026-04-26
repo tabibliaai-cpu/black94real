@@ -852,13 +852,15 @@ export function ChatRoomView() {
     if (!chatId || !user) return
     setDeleting(true)
     try {
-      // Delete all messages in the chat
+      // Delete all messages in the chat (chunked for >500 messages)
       const messagesRef = collection(db, 'chats', chatId, 'messages')
-      const messagesSnap = await getDocs(messagesRef)
-      if (!messagesSnap.empty) {
+      let messagesSnap = await getDocs(messagesRef)
+      while (!messagesSnap.empty) {
         const batch = writeBatch(db)
         messagesSnap.docs.forEach((d: any) => batch.delete(d.ref))
         await batch.commit()
+        // Check for more messages (in case of >500)
+        messagesSnap = await getDocs(messagesRef)
       }
       // Delete the chat document
       await deleteDoc(doc(db, 'chats', chatId))

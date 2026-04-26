@@ -351,6 +351,7 @@ export default function Black94App() {
     // Restore view from URL hash/pathname FIRST (before any render)
     useAppStore.getState().restoreViewFromHash()
     // Then restore cached user for instant app display
+    let hasCachedUser = false
     try {
       const cached = localStorage.getItem(USER_CACHE_KEY)
       if (cached) {
@@ -359,9 +360,15 @@ export default function Black94App() {
           useAppStore.getState().setUser(parsed)
           useAppStore.getState().setToken(parsed.id)
           setScreenRef.current('app')
+          hasCachedUser = true
         }
       }
     } catch {}
+    // No cached user → skip loading screen, go straight to login (avoids black flash)
+    // The auth listener will override to 'app' if Firebase confirms a valid session
+    if (!hasCachedUser) {
+      setScreenRef.current('login')
+    }
   }, [])
 
   /* ── Service Worker Registration ─────────────────────────────────────── */
