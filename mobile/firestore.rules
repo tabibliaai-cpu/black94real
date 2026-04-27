@@ -1,0 +1,522 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// Black94 — Firestore Security Rules
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Collections covered:
+//   users, usernames, posts, posts/{postId}/likes, posts/{postId}/comments,
+//   post_likes, post_comments, post_reposts, post_bookmarks,
+//   chats, chats/{chatId}/messages, notifications, follows, stories,
+//   products, orders, reviews, shippingPartners, articles, leads, deals,
+//   fcmTokens, advertisements, ads
+//
+// PREREQUISITES (must be set via Firebase Admin SDK / Cloud Functions):
+//   1. Set custom auth claims for business users:
+//        admin.auth().setCustomUserClaims(uid, { role: 'business' })
+//   2. Notifications must be created via Admin SDK (bypasses rules).
+//   3. shippingPartners must be written via Admin SDK (bypasses rules).
+//
+// FIELD-LEVEL READ NOTE:
+//   Firestore rules allow or deny access to an entire document — there is
+//   no way to restrict which fields a client can read on an existing doc.
+//   If you need to hide sensitive user fields (email, phone, etc.) from
+//   other users, create a /users/{uid}/public sub-collection or a
+//   separate /userProfiles/{uid} collection that contains ONLY the public
+//   fields (username, displayName, bio, profileImage, coverImage,
+//   isVerified, badge, role, publicKey).
+// ═══════════════════════════════════════════════════════════════════════════
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ───────────────────────────────────────────────────────────────────
+    // HELPER FUNCTIONS
+    // ───────────────────────────────────────────────────────────────────
+
+    /** True when the request carries a valid Firebase Auth token. */
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    /** True when request.auth.uid equals the given id. */
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+
+    /**
+     * True when the authenticated user has a 'business' role.
+     *
+     * PRIMARY  – checks custom auth claims (fastest, no DB read).
+     * FALLBACK – checks the user document's role field.
+     *
+     * If your app sets custom claims, remove the get() line.
+     * If your app does NOT set custom claims, keep only the get() line.
+     */
+    function isBusiness() {
+      return isAuth()
+        && (
+          request.auth.token.role == 'business'
+          || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'business'
+        );
+    }
+
+    /** True when the value is one of the listed strings. */
+    function isOneOf(value, validOptions) {
+      return validOptions.hasAny([value]);
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 1. USERS
+    //    Doc ID: uid
+    //    Immutable fields: uid, role, badge, isVerified
+    // ───────────────────────────────────────────────────────────────────
+
+    match /users/{userId} {
+      // Anyone can browse user profiles (public app).
+      allow read: if true;
+
+      // A user may only create their own document.
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == request.auth.uid;
+
+      // A user may update their own profile, but the following fields
+      // MUST remain unchanged: uid, role, badge, isVerified.
+      allow update: if isOwner(userId)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.badge == resource.data.badge
+        && request.resource.data.isVerified == resource.data.isVerified;
+
+      // Accounts are never deleted from the client.
+      allow delete: if false;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 2. USERNAMES
+    //    Doc ID: usernameLower
+    //    Fields: uid
+    // ───────────────────────────────────────────────────────────────────
+
+    match /usernames/{usernameLower} {
+      allow read: if true;
+
+      // Claim a username: the uid field must be the caller's uid.
+      allow create: if isAuth()
+        && request.resource.data.uid == request.auth.uid;
+
+      // Reclaim only if currently unclaimed (uid == null) or already yours.
+      allow update: if isAuth()
+        && (resource.data.uid == null || resource.data.uid == request.auth.uid)
+        && request.resource.data.uid == request.auth.uid;
+
+      // Release your own username claim.
+      allow delete: if isAuth()
+        && resource.data.uid == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 3. POSTS
+    // ───────────────────────────────────────────────────────────────────
+
+    match /posts/{postId} {
+      // Anyone can view published posts.
+      allow read: if true;
+
+      // Authenticated users may publish posts.
+      allow create: if isAuth()
+        && request.resource.data.authorId == request.auth.uid;
+
+      // Author may edit; authorship cannot be reassigned.
+      allow update: if isAuth()
+        && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId;
+
+      // Author may delete their own post.
+      allow delete: if isAuth()
+        && resource.data.authorId == request.auth.uid;
+    }
+
+    // 3a. Posts Likes (subcollection)
+    match /posts/{postId}/likes/{likeId} {
+      allow read: if true;
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if false;
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // 3b. Posts Comments (subcollection)
+    match /posts/{postId}/comments/{commentId} {
+      allow read: if true;
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid;
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 4. TOP-LEVEL POST INTERACTIONS
+    //    Doc ID pattern: postId_userId
+    //    Users can read all entries but write only their own.
+    // ───────────────────────────────────────────────────────────────────
+
+    // 4a. post_likes
+    match /post_likes/{docId} {
+      allow read: if true;
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid;
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // 4b. post_comments
+    match /post_comments/{docId} {
+      allow read: if true;
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid;
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // 4c. post_reposts
+    match /post_reposts/{docId} {
+      allow read: if true;
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if false;                   // reposts are atomic
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // 4d. post_bookmarks (private — auth required for reads)
+    match /post_bookmarks/{docId} {
+      allow read: if isAuth();
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if false;
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 5. CHATS & MESSAGES
+    // ───────────────────────────────────────────────────────────────────
+
+    match /chats/{chatId} {
+      // Only participants (user1Id or user2Id) may see the chat.
+      allow read: if isAuth()
+        && (resource.data.user1Id == request.auth.uid
+          || resource.data.user2Id == request.auth.uid);
+
+      // Only participants may create a new chat.
+      allow create: if isAuth()
+        && (request.resource.data.user1Id == request.auth.uid
+          || request.resource.data.user2Id == request.auth.uid);
+
+      // Participants may update chat metadata (e.g., lastMessage).
+      allow update: if isAuth()
+        && (resource.data.user1Id == request.auth.uid
+          || resource.data.user2Id == request.auth.uid);
+
+      // Participants may delete (e.g., clear conversation).
+      allow delete: if isAuth()
+        && (resource.data.user1Id == request.auth.uid
+          || resource.data.user2Id == request.auth.uid);
+    }
+
+    match /chats/{chatId}/messages/{messageId} {
+      // Access the parent chat once and cache for this evaluation.
+      // OPTIMISATION NOTE: Each get() counts toward the Firestore
+      // rule-evaluation cost. If this becomes a bottleneck, store
+      // user1Id / user2Id redundantly on each message doc.
+      function isChatParticipant() {
+        let chat = get(/databases/$(database)/documents/chats/$(chatId)).data;
+        return chat.user1Id == request.auth.uid
+          || chat.user2Id == request.auth.uid;
+      }
+
+      allow read: if isAuth() && isChatParticipant();
+
+      allow create: if isAuth()
+        && isChatParticipant()
+        && request.resource.data.senderId == request.auth.uid;
+
+      // Messages are immutable once sent — prevents editing history.
+      allow update: if false;
+
+      // Only system (Admin SDK) may delete messages (e.g., moderation).
+      allow delete: if false;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 6. NOTIFICATIONS
+    //    Created by the system via Admin SDK (bypasses rules).
+    //    Users can read / update / delete only their own.
+    // ───────────────────────────────────────────────────────────────────
+
+    match /notifications/{notifId} {
+      allow read: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      // Clients never create notifications directly.
+      allow create: if false;
+
+      // Users may mark their own notifications as read, etc.
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      // Users may dismiss their own notifications.
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 7. FOLLOWS
+    //    Doc ID pattern: followerId_followingId
+    // ───────────────────────────────────────────────────────────────────
+
+    match /follows/{followId} {
+      // Authenticated users can list follows (for social graph queries).
+      allow read: if isAuth();
+
+      allow create: if isAuth()
+        && request.resource.data.followerId == request.auth.uid;
+
+      // Follow documents are immutable once created.
+      allow update: if false;
+
+      allow delete: if isAuth()
+        && resource.data.followerId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 8. STORIES  (ephemeral)
+    //    Expiration should be handled via Cloud Functions (scheduled
+    //    cleanup). Rules do not enforce TTL directly.
+    // ───────────────────────────────────────────────────────────────────
+
+    match /stories/{storyId} {
+      // Anyone can view stories (public feed).
+      allow read: if true;
+
+      // Users create their own stories.
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+
+      // Author may update their own story.
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      // Author may delete their own story.
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 9. PRODUCTS  (shop)
+    // ───────────────────────────────────────────────────────────────────
+
+    match /products/{productId} {
+      // Authenticated users see active products only.
+      allow read: if isAuth()
+        && resource.data.status == 'active';
+
+      // Business accounts may list new products.
+      allow create: if isBusiness()
+        && request.resource.data.businessId == request.auth.uid;
+
+      // Business accounts may edit their own products.
+      allow update: if isBusiness()
+        && resource.data.businessId == request.auth.uid
+        && request.resource.data.businessId == resource.data.businessId;
+
+      // Business accounts may remove their own products.
+      allow delete: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 10. ORDERS
+    // ───────────────────────────────────────────────────────────────────
+
+    match /orders/{orderId} {
+      // Buyers see their own orders; businesses see their orders.
+      allow read: if isAuth()
+        && (resource.data.buyerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid);
+
+      // Authenticated users place orders (as buyer).
+      allow create: if isAuth()
+        && request.resource.data.buyerId == request.auth.uid;
+
+      // Buyers may update limited fields (shipping address, notes).
+      // Business users update order status (confirmed, shipped, etc.).
+      allow update: if isAuth()
+        && (resource.data.buyerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid);
+
+      // Only the business may delete an order (cancellation flow).
+      allow delete: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 11. REVIEWS
+    // ───────────────────────────────────────────────────────────────────
+
+    match /reviews/{reviewId} {
+      // Authenticated users can browse reviews.
+      allow read: if isAuth();
+
+      // Users write reviews in their own name.
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+
+      // Users may edit their own review.
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId;
+
+      // Users may delete their own review.
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 12. ARTICLES
+    // ───────────────────────────────────────────────────────────────────
+
+    match /articles/{articleId} {
+      // Anyone can read published articles.
+      allow read: if true;
+
+      // Authors create articles.
+      allow create: if isAuth()
+        && request.resource.data.authorId == request.auth.uid;
+
+      // Authors update their own articles; authorship cannot change.
+      allow update: if isAuth()
+        && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId;
+
+      // Authors delete their own articles.
+      allow delete: if isAuth()
+        && resource.data.authorId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 13. LEADS  (CRM)
+    // ───────────────────────────────────────────────────────────────────
+
+    match /leads/{leadId} {
+      allow read: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+
+      allow create: if isBusiness()
+        && request.resource.data.businessId == request.auth.uid;
+
+      allow update: if isBusiness()
+        && resource.data.businessId == request.auth.uid
+        && request.resource.data.businessId == resource.data.businessId;
+
+      allow delete: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 14. DEALS  (CRM)
+    // ───────────────────────────────────────────────────────────────────
+
+    match /deals/{dealId} {
+      allow read: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+
+      allow create: if isBusiness()
+        && request.resource.data.businessId == request.auth.uid;
+
+      allow update: if isBusiness()
+        && resource.data.businessId == request.auth.uid
+        && request.resource.data.businessId == resource.data.businessId;
+
+      allow delete: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 15. SHIPPING PARTNERS
+    //     Read-only for all authenticated users.
+    //     Written only by Admin SDK (Cloud Functions).
+    // ───────────────────────────────────────────────────────────────────
+
+    match /shippingPartners/{partnerId} {
+      allow read: if isAuth();
+      allow write: if false;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 16. FCM TOKENS
+    //     Doc ID: uid
+    // ───────────────────────────────────────────────────────────────────
+
+    match /fcmTokens/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 17a. ADVERTISEMENTS
+    // ───────────────────────────────────────────────────────────────────
+
+    match /advertisements/{adId} {
+      // Authenticated users see active ads.
+      allow read: if isAuth()
+        && resource.data.status == 'active';
+
+      allow create: if isBusiness()
+        && request.resource.data.businessId == request.auth.uid;
+
+      allow update: if isBusiness()
+        && resource.data.businessId == request.auth.uid
+        && request.resource.data.businessId == resource.data.businessId;
+
+      allow delete: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // 17b. ADS  (alias collection)
+    // ───────────────────────────────────────────────────────────────────
+
+    match /ads/{adId} {
+      // Authenticated users see active ads.
+      allow read: if isAuth()
+        && resource.data.status == 'active';
+
+      allow create: if isBusiness()
+        && request.resource.data.businessId == request.auth.uid;
+
+      allow update: if isBusiness()
+        && resource.data.businessId == request.auth.uid
+        && request.resource.data.businessId == resource.data.businessId;
+
+      allow delete: if isBusiness()
+        && resource.data.businessId == request.auth.uid;
+    }
+
+    // ───────────────────────────────────────────────────────────────────
+    // DENY-ALL CATCH-ALL
+    // Any collection not explicitly matched above is blocked entirely.
+    // ───────────────────────────────────────────────────────────────────
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "210565807767",
+    "project_id": "black94",
+    "storage_bucket": "black94.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210565807767:android:7ba097fc1980fce42373d2",
+        "android_client_info": {
+          "package_name": "com.black94.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210565807767.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.black94.app",
+            "certificate_hash": "sha1_hash_placeholder"
+          }
+        },
+        {
+          "client_id": "210565807767-abc123.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAVWmNA9fo0hg4xRIi_O6ry3kAuuQylck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

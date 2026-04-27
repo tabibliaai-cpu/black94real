@@ -1,0 +1,44 @@
+name: Build Release APK
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: mobile/package-lock.json
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Install dependencies
+        run: cd mobile && npm install
+      - name: Decode keystore
+        run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > mobile/android/app/black94-release.jks
+      - name: Build Release APK
+        run: |
+          cd mobile/android
+          ./gradlew assembleRelease \
+            -PRELEASE_STORE_FILE=black94-release.jks \
+            -PRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }} \
+            -PRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }} \
+            -PRELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
+      - name: Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.8.2
+          name: "Black94 Real v1.8.2 - Native Android"
+          body: "React Native Android App v1.8.2 - 44 screens, dark theme, E2E chat, Firebase"
+          files: mobile/android/app/build/outputs/apk/release/*.apk
