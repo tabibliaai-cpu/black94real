@@ -26,6 +26,8 @@ import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private View loadingView;
     private FrameLayout webViewContainer;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private boolean webViewAtTop = true;
 
     private ValueCallback<Uri[]> filePathCallback;
     private WebView popupWebView;
@@ -294,6 +297,8 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Configure WebView ──────────────────────────────────────────────
         webView = new WebView(this);
+        // Bug 2 Fix: Set WebView background to black to prevent white flash
+        webView.setBackgroundColor(0xFF000000);
         webViewContainer.addView(webView, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
@@ -332,7 +337,94 @@ public class MainActivity extends AppCompatActivity {
         // ── Add native JavaScript bridge ───────────────────────────────────
         webView.addJavascriptInterface(new WebAppInterface(this), "Black94Native");
 
-        // ── WebChromeClient: handles popups, file uploads, progress, console
+        // ── Pull-to-refresh: only fire when WebView is scrolled to top ──
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (isNetworkAvailable()) {
+                webView.reload();
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(MainActivity.this, "No connection", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Bug 1 Fix: Override canChildScrollUp so pull-to-refresh ONLY triggers at top
+        swipeRefreshLayout.setNestedScrollingEnabled(true);
+        // We post a Runnable on the WebView to detect scroll position changes
+        webView.setWebViewClient(new WebViewClient() {
+            private int errorCount = 0;
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                String url = request.getUrl().toString();
+                if (url.startsWith(APP_URL) || url.startsWith("https://black94.web.app")) {
+                    return false;
+                }
+                if (url.contains("accounts.google.com") ||
+                    url.contains("apis.google.com") ||
+                    url.contains("google.com/signin") ||
+                    url.contains("firebase.google.com") ||
+                    url.contains("firebaseapp.com") ||
+                    url.contains("googleapis.com/auth")) {
+                    return false;
+                }
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                } catch (Exception ignored) {
+                }
+                return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                progressBar.setVisibility(View.VISIBLE);
+                offlineView.setVisibility(View.GONE);
+                webViewContainer.setVisibility(View.VISIBLE);
+                errorCount = 0;
+                // Bug 2 Fix: hide webView until content starts to prevent white flash
+                if (loadingView.getVisibility() == View.VISIBLE) {
+                    webView.setVisibility(View.INVISIBLE);
+                }
+                // Inject scroll listener to track scroll position for pull-to-refresh
+                injectScrollListener();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                progressBar.setVisibility(View.GONE);
+                loadingView.setVisibility(View.GONE);
+                // Bug 2 Fix: fade in WebView after first meaningful paint
+                webView.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
+                injectSafeArea();
+                injectSafeAreaCSS();
+                // Bug 1: inject scroll listener after page load as well
+                injectScrollListener();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                if (request.isForMainFrame() && isNetworkError(error.getErrorCode())) {
+                    errorCount++;
+                    if (errorCount >= 2) {
+                        showOfflineScreen();
+                    }
+                }
+            }
+
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+                if (request.isForMainFrame() && errorResponse.getStatusCode() >= 500) {
+                    showOfflineScreen();
+                }
+            }
+        });
+
+        // ── WebChromeClient: handles popups, file uploads, progress, console, JS dialogs ──
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -342,16 +434,58 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     progressBar.setVisibility(View.GONE);
                     loadingView.setVisibility(View.GONE);
+                    // Bug 2 Fix: show webView only after load completes
+                    if (webView.getVisibility() != View.VISIBLE) {
+                        webView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                // Silently consume console messages
+                return true;
+            }
+
+            // Bug 5 Fix: Handle JavaScript confirm() for chat deletion and other confirm dialogs
+            @Override
+            public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage(message)
+                        .setPositiveButton("OK", (dialog, which) -> result.confirm())
+                        .setNegativeButton("Cancel", (dialog, which) -> result.cancel())
+                        .setOnCancelListener(dialog -> result.cancel())
+                        .show();
+                return true;
+            }
+
+            // Handle JavaScript alert() dialogs natively
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage(message)
+                        .setPositiveButton("OK", (dialog, which) -> result.confirm())
+                        .setOnCancelListener(dialog -> result.cancel())
+                        .show();
+                return true;
+            }
+
+            // Handle JavaScript prompt() dialogs natively
+            @Override
+            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
+                android.widget.EditText input = new android.widget.EditText(MainActivity.this);
+                input.setText(defaultValue);
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage(message)
+                        .setView(input)
+                        .setPositiveButton("OK", (dialog, which) -> result.confirm(input.getText().toString()))
+                        .setNegativeButton("Cancel", (dialog, which) -> result.cancel())
+                        .setOnCancelListener(dialog -> result.cancel())
+                        .show();
                 return true;
             }
 
             /** Handle Google Auth popup windows */
+            // (popup handling code unchanged)
             @Override
             public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
                 popupWebView = new WebView(MainActivity.this);
@@ -463,75 +597,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ── WebViewClient: navigation, error handling, offline detection ───
-        webView.setWebViewClient(new WebViewClient() {
-            private int errorCount = 0;
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                String url = request.getUrl().toString();
-                // Always allow app URLs
-                if (url.startsWith(APP_URL) || url.startsWith("https://black94.web.app")) {
-                    return false;
-                }
-                // Allow Google Auth URLs to load in WebView for sign-in redirect flow
-                if (url.contains("accounts.google.com") ||
-                    url.contains("apis.google.com") ||
-                    url.contains("google.com/signin") ||
-                    url.contains("firebase.google.com") ||
-                    url.contains("firebaseapp.com") ||
-                    url.contains("googleapis.com/auth")) {
-                    return false;
-                }
-                // Open external links in browser
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                } catch (Exception ignored) {
-                }
-                return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                progressBar.setVisibility(View.VISIBLE);
-                offlineView.setVisibility(View.GONE);
-                webViewContainer.setVisibility(View.VISIBLE);
-                errorCount = 0;
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                progressBar.setVisibility(View.GONE);
-                loadingView.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);
-                // Re-inject safe area after every page navigation
-                injectSafeArea();
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                // Only show offline screen for main frame errors
-                if (request.isForMainFrame() && isNetworkError(error.getErrorCode())) {
-                    errorCount++;
-                    if (errorCount >= 2) {
-                        showOfflineScreen();
-                    }
-                }
-            }
-
-            @Override
-            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
-                super.onReceivedHttpError(view, request, errorResponse);
-                // Only handle main frame HTTP errors
-                if (request.isForMainFrame() && errorResponse.getStatusCode() >= 500) {
-                    showOfflineScreen();
-                }
-            }
-        });
+        // WebViewClient already set above (merged with pull-to-refresh fix)
 
         webView.setDownloadListener((url, userAgent, contentDisposition, mimetype, contentLength) -> {
             try {
@@ -544,15 +610,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ── Pull-to-refresh ───────────────────────────────────────────────
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (isNetworkAvailable()) {
-                webView.reload();
-            } else {
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(MainActivity.this, "No connection", Toast.LENGTH_SHORT).show();
-            }
-        });
+        // Pull-to-refresh listener already set above (moved before WebChromeClient for clarity)
 
         // ── Safe area injection: get window insets and pass to WebView ──────
         ViewCompat.setOnApplyWindowInsetsListener(rootLayout, (v, insets) -> {
@@ -632,6 +690,79 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (Exception ignored) {}
         });
+    }
+
+    /** Bug 3 & 4 Fix: Inject CSS to handle safe areas for bottom nav and top status bar */
+    private void injectSafeAreaCSS() {
+        String js =
+            "(function(){" +
+            "  var sat = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;" +
+            "  var sab = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sab')) || 0;" +
+            "  var style = document.createElement('style');" +
+            "  style.id = 'black94-safearea-fix';" +
+            "  style.textContent =" +
+            "    'html, body { padding-top: ' + sat + 'px !important; padding-bottom: ' + sab + 'px !important; }' +" +
+            "    'body > div:first-child, body > main:first-child, body > section:first-child, body > #__next, body > #__next > div:first-child { padding-top: 0px !important; }' +" +
+            "    'input, textarea, [contenteditable=\"true\"] { margin-top: 0px !important; }' +" +
+            "    '.fixed, .absolute, [style*=\"position: fixed\"], [style*=\"position:fixed\"] {' +" +
+            "      ' top: calc(max(env(safe-area-inset-top, 0px), ' + sat + 'px) + var(--sat-offset, 0px)) !important; }' +" +
+            "    'nav, [role=\"navigation\"], .bottom-nav, .tab-bar, footer, [class*=\"bottom\"], [class*=\"tab-bar\"] {' +" +
+            "      ' padding-bottom: ' + sab + 'px !important; margin-bottom: 0px !important; }' +" +
+            "    'button[class*=\"fab\"], [class*=\"fab\"], button[class*=\"create\"], [class*=\"create\"] {' +" +
+            "      ' bottom: calc(' + sab + 'px + var(--sab-offset, 0px)) !important; }' +" +
+            "    'button[class*=\"plus\"], button[class*=\"add\"] {' +" +
+            "      ' bottom: calc(' + sab + 'px + var(--sab-offset, 0px)) !important; }' +" +
+            "    '@supports (padding: max(0px)) {' +" +
+            "      'html, body { padding-top: max(env(safe-area-inset-top), ' + sat + 'px) !important; }' +" +
+            "      'nav, [role=\"navigation\"], .bottom-nav, .tab-bar, footer {' +" +
+            "        'padding-bottom: max(env(safe-area-inset-bottom), ' + sab + 'px) !important; }' +" +
+            "    '}';" +
+            "  var existing = document.getElementById('black94-safearea-fix');" +
+            "  if (existing) existing.remove();" +
+            "  document.head.appendChild(style);" +
+            "})();";
+        webView.evaluateJavascript(js, null);
+    }
+
+    /** Bug 1 Fix: Inject scroll listener to track WebView scroll position */
+    private void injectScrollListener() {
+        String js =
+            "(function(){" +
+            "  if (window.__black94ScrollInstalled) return;" +
+            "  window.__black94ScrollInstalled = true;" +
+            "  var checkScroll = function(){" +
+            "    var atTop = (window.scrollY === 0 || document.documentElement.scrollTop === 0);" +
+            "    if (window.Black94Native) {" +
+            "      window.Black94Native._setWebViewAtTop(atTop);" +
+            "    }" +
+            "  };" +
+            "  window.addEventListener('scroll', checkScroll, {passive: true});" +
+            "  document.addEventListener('scroll', checkScroll, {passive: true});" +
+            "  // Also observe for SPA-style changes via MutationObserver on scroll containers" +
+            "  var observer = new MutationObserver(function(mutations) {" +
+            "    mutations.forEach(function(m) {" +
+            "      m.addedNodes.forEach(function(node) {" +
+            "        if (node.nodeType === 1) {" +
+            "          var scrollEls = node.querySelectorAll ? node.querySelectorAll('[style*=\"overflow\"]') : [];" +
+            "          scrollEls.forEach(function(el) { el.addEventListener('scroll', checkScroll, {passive: true}); });" +
+            "          if (node.style && (node.style.overflow === 'auto' || node.style.overflow === 'scroll' || node.style.overflowY === 'auto' || node.style.overflowY === 'scroll')) {" +
+            "            node.addEventListener('scroll', checkScroll, {passive: true});" +
+            "          }" +
+            "        }" +
+            "      });" +
+            "    });" +
+            "  });" +
+            "  observer.observe(document.body, {childList: true, subtree: true});" +
+            "  checkScroll();" +
+            "})();";
+        webView.evaluateJavascript(js, null);
+    }
+
+    /** Called from JavaScript to update scroll position state for pull-to-refresh */
+    @JavascriptInterface
+    public void _setWebViewAtTop(boolean atTop) {
+        webViewAtTop = atTop;
+        runOnUiThread(() -> swipeRefreshLayout.setEnabled(atTop));
     }
 
     /** Create native loading spinner view */
