@@ -1,4 +1,22 @@
 {
-  "name": "mobile",
-  "displayName": "mobile"
+  "expo": {
+    "name": "Black94",
+    "slug": "black94",
+    "owner": "tabibliaai-cpu",
+    "android": {
+      "package": "com.black94.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#000000"
+      },
+      "splash": {
+        "backgroundColor": "#000000",
+        "resizeMode": "contain"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "black94-rn"
+      }
+    }
+  }
 }

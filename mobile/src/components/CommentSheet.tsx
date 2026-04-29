@@ -17,19 +17,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
+  Animated,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  runOnJS,
-} from 'react-native-reanimated';
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
 
 import type { CommentData } from '../lib/db';
 import { useAppStore } from '../store/useAppStore';
@@ -105,9 +94,32 @@ const CommentSheet: React.FC<CommentSheetProps> = ({
   const [newComment, setNewComment] = useState('');
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const flatListRef = useRef<FlatList>(null);
-  const translateY = useSharedValue(0);
+  const panY = useRef(new Animated.Value(0)).current;
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
+
+  // Refs for tracking pan gesture manually
+  const touchStartY = useRef(0);
+  const touchStartTime = useRef(0);
+  const lastTouchY = useRef(0);
+
+  // Keep sheet rendered during dismiss animation
+  useEffect(() => {
+    if (visible) {
+      setSheetOpen(true);
+    }
+  }, [visible]);
+
+  // Animate backdrop opacity when visible changes
+  useEffect(() => {
+    Animated.timing(backdropOpacity, {
+      toValue: visible ? 1 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [visible, backdropOpacity]);
 
   // Fetch comments when sheet opens
   useEffect(() => {
@@ -135,39 +147,70 @@ const CommentSheet: React.FC<CommentSheetProps> = ({
       setComments([]);
       setNewComment('');
       setSending(false);
-      translateY.value = 0;
+      panY.setValue(0);
+      // Allow a brief moment for any in-flight dismiss animation to finish
+      // before hiding the sheet entirely
+      const timer = setTimeout(() => {
+        setSheetOpen(false);
+      }, 300);
+      return () => clearTimeout(timer);
     }
-  }, [visible, translateY]);
+  }, [visible, panY]);
 
-  // Animated sheet style
-  const sheetAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
+  // ── Touch handlers for pan-to-dismiss ────────────────────────────────────
 
-  const backdropAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(visible ? 1 : 0, { duration: 250 }),
-  }));
+  const handleTouchStart = useCallback(
+    (e: React.MouseEvent | React.TouchEvent | any) => {
+      const touch = e.nativeEvent?.changedTouches?.[0] ?? e.nativeEvent;
+      touchStartY.current = touch.pageY ?? touch.locationY ?? 0;
+      touchStartTime.current = Date.now();
+      lastTouchY.current = touchStartY.current;
+      panY.setValue(0);
+    },
+    [panY],
+  );
 
-  // Pan gesture to dismiss
-  const panGesture = Gesture.Pan()
-    .onUpdate((e) => {
-      if (e.translationY > 0) {
-        translateY.value = e.translationY;
+  const handleTouchMove = useCallback(
+    (e: React.MouseEvent | React.TouchEvent | any) => {
+      const touch = e.nativeEvent?.changedTouches?.[0] ?? e.nativeEvent;
+      const currentY = touch.pageY ?? touch.locationY ?? 0;
+      const deltaY = currentY - touchStartY.current;
+
+      if (deltaY > 0) {
+        panY.setValue(deltaY);
       }
-    })
-    .onEnd((e) => {
-      if (e.translationY > 100 || e.velocityY > 500) {
-        // Dismiss
-        translateY.value = withTiming(SCREEN_HEIGHT, { duration: 250 }, () => {
-          if (visible) {
-            runOnJS(onClose)();
-          }
-        });
-      } else {
-        // Snap back
-        translateY.value = withSpring(0, { damping: 20, stiffness: 200 });
-      }
-    });
+
+      lastTouchY.current = currentY;
+    },
+    [panY],
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    const translationY = lastTouchY.current - touchStartY.current;
+    const elapsed = (Date.now() - touchStartTime.current) / 1000; // seconds
+    const velocityY = elapsed > 0 ? translationY / elapsed : 0;
+
+    if (translationY > 100 || velocityY > 500) {
+      // Dismiss: animate sheet off screen, then call onClose
+      Animated.timing(panY, {
+        toValue: SCREEN_HEIGHT,
+        duration: 250,
+        useNativeDriver: true,
+      }).start(() => {
+        if (visible) {
+          onClose();
+        }
+      });
+    } else {
+      // Snap back to resting position
+      Animated.spring(panY, {
+        toValue: 0,
+        damping: 20,
+        stiffness: 200,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible, onClose, panY]);
 
   const handleSend = useCallback(async () => {
     if (!newComment.trim() || sending || !user) return;
@@ -279,117 +322,124 @@ const CommentSheet: React.FC<CommentSheetProps> = ({
     [sending],
   );
 
-  if (!visible && translateY.value === 0) return null;
+  // Don't render anything if the sheet is not open and not animating
+  if (!visible && !sheetOpen) return null;
 
   return (
     <Modal visible={visible} transparent animationType="none" statusBarTranslucent>
-      <GestureHandlerRootView style={StyleSheet.absoluteFill}>
-        <KeyboardAvoidingView
-          style={StyleSheet.absoluteFill}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      <KeyboardAvoidingView
+        style={StyleSheet.absoluteFill}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        {/* Backdrop */}
+        <Animated.View
+          style={[
+            styles.backdrop,
+            { opacity: backdropOpacity },
+          ]}
         >
-          {/* Backdrop */}
-          <Animated.View
-            style={[styles.backdrop, backdropAnimatedStyle]}
-          >
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={onClose}
+          />
+        </Animated.View>
+
+        {/* Sheet */}
+        <Animated.View
+          style={[
+            styles.sheet,
+            { transform: [{ translateY: panY }] },
+          ]}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+        >
+          {/* Handle bar */}
+          <View style={styles.handleContainer}>
+            <View style={styles.handleBar} />
+          </View>
+
+          {/* Header */}
+          <View style={styles.sheetHeader}>
             <TouchableOpacity
-              style={StyleSheet.absoluteFill}
-              activeOpacity={1}
               onPress={onClose}
-            />
-          </Animated.View>
-
-          {/* Sheet */}
-          <GestureDetector gesture={panGesture}>
-            <Animated.View
-              style={[styles.sheet, sheetAnimatedStyle]}
+              style={styles.closeButton}
+              activeOpacity={0.7}
             >
-              {/* Handle bar */}
-              <View style={styles.handleContainer}>
-                <View style={styles.handleBar} />
-              </View>
+              <Text style={styles.closeIcon}>✕</Text>
+            </TouchableOpacity>
+            <Text style={styles.sheetTitle}>Post</Text>
+            <View style={styles.closeButtonPlaceholder} />
+          </View>
 
-              {/* Header */}
-              <View style={styles.sheetHeader}>
-                <TouchableOpacity
-                  onPress={onClose}
-                  style={styles.closeButton}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.closeIcon}>✕</Text>
-                </TouchableOpacity>
-                <Text style={styles.sheetTitle}>Post</Text>
-                <View style={styles.closeButtonPlaceholder} />
-              </View>
+          {/* Comments list */}
+          {loading && comments.length === 0 ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={COLORS.primary} />
+              <Text style={styles.loadingText}>Loading comments...</Text>
+            </View>
+          ) : (
+            <FlatList
+              ref={flatListRef}
+              data={comments}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              ListEmptyComponent={listEmptyComponent}
+              ListFooterComponent={listFooter}
+              contentContainerStyle={styles.commentsList}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            />
+          )}
 
-              {/* Comments list */}
-              {loading && comments.length === 0 ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color={COLORS.primary} />
-                  <Text style={styles.loadingText}>Loading comments...</Text>
-                </View>
-              ) : (
-                <FlatList
-                  ref={flatListRef}
-                  data={comments}
-                  renderItem={renderItem}
-                  keyExtractor={keyExtractor}
-                  ListEmptyComponent={listEmptyComponent}
-                  ListFooterComponent={listFooter}
-                  contentContainerStyle={styles.commentsList}
-                  showsVerticalScrollIndicator={false}
-                  keyboardShouldPersistTaps="handled"
-                />
-              )}
-
-              {/* Input bar */}
-              <View style={styles.inputBar}>
-                <Avatar
-                  uri={user?.profileImage}
-                  name={user?.displayName}
-                  size={32}
-                />
-                <View style={styles.inputWrap}>
-                  <TextInput
-                    style={styles.input}
-                    value={newComment}
-                    onChangeText={setNewComment}
-                    placeholder="Post your reply..."
-                    placeholderTextColor={COLORS.textMuted}
-                    multiline
-                    maxLength={500}
-                    returnKeyType="send"
-                    onSubmitEditing={handleSend}
-                    blurOnSubmit={false}
-                  />
-                </View>
-                <TouchableOpacity
-                  style={[
-                    styles.sendButton,
-                    newComment.trim()
-                      ? styles.sendButtonActive
-                      : styles.sendButtonInactive,
-                  ]}
-                  onPress={handleSend}
-                  disabled={!newComment.trim() || sending}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    style={[
-                      styles.sendIcon,
-                      newComment.trim()
-                        ? styles.sendIconActive
-                        : styles.sendIconInactive,
-                    ]}
-                  >
-                    ➤
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Animated.View>
-          </GestureDetector>
-        </KeyboardAvoidingView>
-      </GestureHandlerRootView>
+          {/* Input bar */}
+          <View style={styles.inputBar}>
+            <Avatar
+              uri={user?.profileImage}
+              name={user?.displayName}
+              size={32}
+            />
+            <View style={styles.inputWrap}>
+              <TextInput
+                style={styles.input}
+                value={newComment}
+                onChangeText={setNewComment}
+                placeholder="Post your reply..."
+                placeholderTextColor={COLORS.textMuted}
+                multiline
+                maxLength={500}
+                returnKeyType="send"
+                onSubmitEditing={handleSend}
+                blurOnSubmit={false}
+              />
+            </View>
+            <TouchableOpacity
+              style={[
+                styles.sendButton,
+                newComment.trim()
+                  ? styles.sendButtonActive
+                  : styles.sendButtonInactive,
+              ]}
+              onPress={handleSend}
+              disabled={!newComment.trim() || sending}
+              activeOpacity={0.7}
+            >
+              <Text
+                style={[
+                  styles.sendIcon,
+                  newComment.trim()
+                    ? styles.sendIconActive
+                    : styles.sendIconInactive,
+                ]}
+              >
+                ➤
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
