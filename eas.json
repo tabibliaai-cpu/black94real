@@ -1,1 +1,14 @@
-{"cli":{"version":">= 18.0.0","appVersionSource":"remote"},"build":{"production":{"android":{"buildType":"apk"}}}}
+{
+  "cli": {
+    "version": ">= 18.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "production": {
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      }
+    }
+  }
+}
