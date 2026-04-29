@@ -262,12 +262,8 @@ export default function PerformanceScreen() {
                   {post.caption}
                 </Text>
                 <View style={styles.topPostStats}>
-                  <Text style={styles.topPostStat}>
-                    ❤️ {formatCount(post.likes)}
-                  </Text>
-                  <Text style={styles.topPostStat}>
-                    💬 {formatCount(post.comments)}
-                  </Text>
+                  <Icon name="heart" size={14} color={Colors.like} /> <Text style={styles.topPostStat}>{formatCount(post.likes)}</Text>
+                  <Icon name="chatbubble-outline" size={14} color={Colors.textMuted} /> <Text style={styles.topPostStat}>{formatCount(post.comments)}</Text>
                 </View>
               </View>
               <View style={styles.topPostEngagement}>

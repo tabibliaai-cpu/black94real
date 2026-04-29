@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import auth from '@react-native-firebase/auth';
 import { fetchStoryGroups, StoryGroup } from '../lib/db';
 import { Colors, Spacing, BorderRadius } from '../theme';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { formatDistanceToNow } from 'date-fns';
 
 type RootStackParamList = {
@@ -200,7 +201,7 @@ const StoriesScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.feedSectionTitle}>Recent Stories</Text>
           {groups.length === 0 ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyIcon}>📖</Text>
+              <Icon name="book-outline" size={48} color={Colors.textTertiary} />
               <Text style={styles.emptyTitle}>No stories yet</Text>
               <Text style={styles.emptySubtext}>
                 Create your first story or follow people to see theirs

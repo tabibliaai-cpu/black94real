@@ -207,8 +207,8 @@ export default function ExploreScreen() {
           {item.caption}
         </Text>
         <View style={styles.featuredStats}>
-          <Text style={styles.featuredStat}>❤️ {formatCount(item.likeCount)}</Text>
-          <Text style={styles.featuredStat}>💬 {formatCount(item.commentCount)}</Text>
+          <Text style={styles.featuredStat}><Icon name="heart" size={12} color={Colors.like} /> {formatCount(item.likeCount)}</Text>
+          <Text style={styles.featuredStat}><Icon name="chatbubble-outline" size={12} color={Colors.textMuted} /> {formatCount(item.commentCount)}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -257,12 +257,8 @@ export default function ExploreScreen() {
           {item.caption}
         </Text>
         <View style={styles.trendingStats}>
-          <Text style={styles.trendingStat}>
-            ❤️ {formatCount(item.likeCount)}
-          </Text>
-          <Text style={styles.trendingStat}>
-            💬 {formatCount(item.commentCount)}
-          </Text>
+          <Text style={styles.trendingStat}><Icon name="heart" size={12} color={Colors.like} /> {formatCount(item.likeCount)}</Text>
+          <Text style={styles.trendingStat}><Icon name="chatbubble-outline" size={12} color={Colors.textMuted} /> {formatCount(item.commentCount)}</Text>
         </View>
       </View>
     </TouchableOpacity>

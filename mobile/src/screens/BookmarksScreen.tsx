@@ -14,6 +14,7 @@ import auth from '@react-native-firebase/auth';
 import { fetchBookmarkedPosts, Post } from '../lib/db';
 import { Colors, Spacing, BorderRadius } from '../theme';
 import PostCard from '../components/PostCard';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type RootStackParamList = {
   Bookmarks: undefined;
@@ -76,7 +77,7 @@ const BookmarksScreen: React.FC<Props> = ({ navigation }) => {
   const ListEmptyComponent = useCallback(
     () => (
       <View style={styles.emptyState}>
-        <Text style={styles.emptyIcon}>🔖</Text>
+        <Icon name="bookmark-outline" size={48} color={Colors.textTertiary} />
         <Text style={styles.emptyTitle}>No bookmarks yet</Text>
         <Text style={styles.emptySubtext}>
           Save posts you love by tapping the bookmark icon

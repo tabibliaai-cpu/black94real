@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import auth from '@react-native-firebase/auth';
 import { Colors, Spacing, BorderRadius, Typography } from '../theme';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type RootStackParamList = {
   Settings: undefined;
@@ -204,29 +205,30 @@ const SettingsScreen: React.FC<Props> = ({ navigation }) => {
   );
 
   const renderIcon = (iconName: string, color?: string) => {
-    // Simple text-based icons for portability
     const iconMap: Record<string, string> = {
-      'account-edit': '✏️',
-      'shield-lock': '🔒',
-      'lock': '🔑',
-      'weather-night': '🌙',
-      'bell': '🔔',
-      'translate': '🌐',
-      'chart-box': '📊',
-      'store': '🏪',
-      'account-group': '👥',
-      'help-circle': '❓',
-      'bug': '🐛',
-      'file-document': '📄',
-      'shield-check': '🛡️',
-      'chevron-right': '›',
-      'logout': '🚪',
-      'delete': '🗑️',
+      'account-edit': 'create-outline',
+      'shield-lock': 'shield-lock-outline',
+      'lock': 'key-outline',
+      'weather-night': 'moon-outline',
+      'bell': 'notifications-outline',
+      'translate': 'globe-outline',
+      'chart-box': 'stats-chart-outline',
+      'store': 'storefront-outline',
+      'account-group': 'people-outline',
+      'help-circle': 'help-circle-outline',
+      'bug': 'bug-outline',
+      'file-document': 'document-text-outline',
+      'shield-check': 'shield-checkmark-outline',
+      'chevron-right': 'chevron-forward',
+      'logout': 'log-out-outline',
+      'delete': 'trash-outline',
     };
     return (
-      <Text style={[styles.icon, { color: color ?? Colors.textSecondary }]}>
-        {iconMap[iconName] ?? '•'}
-      </Text>
+      <Icon
+        name={iconMap[iconName] ?? 'ellipse-outline'}
+        size={20}
+        color={color ?? Colors.textSecondary}
+      />
     );
   };
 

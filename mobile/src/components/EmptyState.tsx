@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 // ── Props ────────────────────────────────────────────────────────────────────
 
@@ -11,55 +12,40 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-// ── Icon helper ──────────────────────────────────────────────────────────────
+// ── Icon helper — uses Ionicons instead of emoji ─────────────────────────────
 
 function renderIcon(icon?: string): React.ReactElement | null {
+  let iconName: string = 'ellipse-outline';
   switch (icon) {
     case 'feed':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>💬</Text>
-        </View>
-      );
+      iconName = 'newspaper-outline';
+      break;
     case 'comment':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>💭</Text>
-        </View>
-      );
+      iconName = 'chatbubble-outline';
+      break;
     case 'search':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>🔍</Text>
-        </View>
-      );
+      iconName = 'search-outline';
+      break;
     case 'bookmark':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>🔖</Text>
-        </View>
-      );
+      iconName = 'bookmark-outline';
+      break;
     case 'notification':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>🔔</Text>
-        </View>
-      );
+      iconName = 'notifications-outline';
+      break;
     case 'user':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>👤</Text>
-        </View>
-      );
+      iconName = 'person-outline';
+      break;
     case 'story':
-      return (
-        <View style={styles.iconCircle}>
-          <Text style={styles.iconText}>📸</Text>
-        </View>
-      );
+      iconName = 'camera-outline';
+      break;
     default:
       return null;
   }
+  return (
+    <View style={styles.iconCircle}>
+      <Icon name={iconName} size={36} color="#e7e9ea" />
+    </View>
+  );
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -109,9 +95,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  iconText: {
-    fontSize: 36,
-  },
   title: {
     fontSize: 18,
     fontWeight: '700',
@@ -136,3 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: '#000000',
+  },
+});
+
+export default EmptyState;
