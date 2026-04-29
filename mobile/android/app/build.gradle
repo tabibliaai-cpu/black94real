@@ -94,7 +94,7 @@ android {
         }
         release {
             // CI (GitHub Actions) uses env vars; local falls back to hardcoded values
-            storeFile file(System.getenv("RELEASE_STORE_FILE") ?: '../../keystore/black94-release.jks')
+            storeFile file(System.getenv("RELEASE_STORE_FILE") ?: '../../../keystore/black94-release.jks')
             storePassword System.getenv("RELEASE_STORE_PASSWORD") ?: 'black94real'
             keyAlias System.getenv("RELEASE_KEY_ALIAS") ?: 'black94'
             keyPassword System.getenv("RELEASE_KEY_PASSWORD") ?: 'black94real'

@@ -3,6 +3,7 @@
     "name": "Black94",
     "slug": "black94",
     "owner": "tabibliaai-cpu",
+    "version": "1.8.2",
     "android": {
       "package": "com.black94.app",
       "adaptiveIcon": {
@@ -11,12 +12,23 @@
       "splash": {
         "backgroundColor": "#000000",
         "resizeMode": "contain"
-      }
+      },
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA",
+        "RECORD_AUDIO",
+        "POST_NOTIFICATIONS",
+        "VIBRATE"
+      ]
     },
     "extra": {
       "eas": {
         "projectId": "black94-rn"
       }
-    }
+    },
+    "plugins": []
   }
 }
