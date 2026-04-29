@@ -2,7 +2,7 @@
   "expo": {
     "name": "Black94",
     "slug": "black94",
-    "owner": "tabibliaai-cpu",
+    "owner": "corneli1",
     "version": "1.8.2",
     "android": {
       "package": "com.black94.app",
@@ -26,7 +26,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "black94-rn"
+        "projectId": "9dff44f7-2b2b-432d-a355-902a3d75e970"
       }
     },
     "plugins": []

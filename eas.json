@@ -3,19 +3,15 @@
     "version": ">= 18.0.0"
   },
   "build": {
-    "production": {
-      "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
     "release": {
+      "workingDirectory": "mobile",
       "android": {
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
       }
     },
     "preview": {
+      "workingDirectory": "mobile",
       "android": {
         "buildType": "apk"
       }
