@@ -43,12 +43,12 @@ const SHEET_HEIGHT = Math.min(SCREEN_HEIGHT * 0.75, 580);
 
 const COLORS = {
   bg: '#000000',
-  surface: '#111111',
+  surface: '#16181c',
   surfaceLight: '#18181b',
   textPrimary: '#e7e9ea',
   textSecondary: '#94a3b8',
   textMuted: '#64748b',
-  blue: '#3b82f6',
+  primary: '#FFFFFF',
   border: 'rgba(255, 255, 255, 0.06)',
   borderLight: 'rgba(255, 255, 255, 0.08)',
   overlay: 'rgba(0, 0, 0, 0.6)',
@@ -272,7 +272,7 @@ const CommentSheet: React.FC<CommentSheetProps> = ({
     () =>
       sending ? (
         <View style={styles.sendingRow}>
-          <ActivityIndicator size="small" color={COLORS.blue} />
+          <ActivityIndicator size="small" color={COLORS.primary} />
           <Text style={styles.sendingText}>Posting...</Text>
         </View>
       ) : null,
@@ -325,7 +325,7 @@ const CommentSheet: React.FC<CommentSheetProps> = ({
               {/* Comments list */}
               {loading && comments.length === 0 ? (
                 <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color={COLORS.blue} />
+                  <ActivityIndicator size="large" color={COLORS.primary} />
                   <Text style={styles.loadingText}>Loading comments...</Text>
                 </View>
               ) : (
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   sendButtonActive: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.primary,
   },
   sendButtonInactive: {
     backgroundColor: 'rgba(255, 255, 255, 0.06)',
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   sendIconActive: {
-    color: '#ffffff',
+    color: '#000000',
   },
   sendIconInactive: {
     color: COLORS.textMuted,

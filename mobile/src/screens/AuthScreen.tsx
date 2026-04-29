@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  Alert,
 } from 'react-native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { Colors, Spacing, BorderRadius } from '../theme';
@@ -15,51 +14,39 @@ import { useAppStore } from '../stores/app';
 import { createUserFromGoogle } from '../services/auth';
 
 /**
- * AuthScreen – Login screen with Google Sign-In.
+ * AuthScreen — Login screen matching web app's clean design.
  *
- * Requires `@react-native-google-signin/google-signin` to be installed.
- * Run:  npm install @react-native-google-signin/google-signin
- * Then rebuild native (cd ios && pod install / cd android && ./gradlew clean)
+ * Web: Black bg, "Welcome to Black94" heading, subtitle text,
+ * Google sign-in button (white bg, dark text), terms link below.
+ * No colored icon box, no blue accents.
  */
 
 export default function AuthScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const setUser = useAppStore((s) => s.setUser);
   const setAuthLoading = useAppStore((s) => s.setAuthLoading);
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
 
   const handleGoogleSignIn = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Dynamically import to avoid crash if package is not installed yet
       const { GoogleSignin } = require('@react-native-google-signin/google-signin');
 
-      // Configure Google Sign-In
       GoogleSignin.configure({
         scopes: ['email', 'profile'],
-        webClientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com', // TODO: replace with your Firebase web client ID
+        webClientId: '210565807767-jtedotfd6hqn8cn31meuk2cfp2dkm88o.apps.googleusercontent.com',
         offlineAccess: true,
       });
 
-      // Check if play services are available (Android)
       await GoogleSignin.hasPlayServices();
-
-      // Trigger the Google Sign-In flow
       const userInfo = await GoogleSignin.signIn();
-
-      // Get the ID token for Firebase
       const idToken = userInfo.data?.idToken;
-      if (!idToken) {
-        throw new Error('Failed to obtain Google ID token');
-      }
+      if (!idToken) throw new Error('Failed to obtain Google ID token');
 
-      // Create Firebase credential and sign in
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const userCredential = await auth().signInWithCredential(googleCredential);
-
-      // Create / update user document in Firestore
       await createUserFromGoogle(userCredential);
 
-      // Update app state with full User object
       const firebaseUser = userCredential.user;
       setUser({
         id: firebaseUser.uid,
@@ -84,13 +71,10 @@ export default function AuthScreen() {
       } as any);
     } catch (error: any) {
       console.error('Google sign-in error:', error);
-
-      // Don't show alert if user simply cancelled
       if (error.code !== '12501') {
-        Alert.alert(
-          'Sign In Error',
-          error.message || 'Something went wrong. Please try again.',
-        );
+        // Use Alert from react-native
+        const { Alert } = require('react-native');
+        Alert.alert('Sign In Error', error.message || 'Something went wrong.');
       }
     } finally {
       setIsLoading(false);
@@ -104,55 +88,72 @@ export default function AuthScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.innerContainer}>
-        {/* ── Logo / Brand ──────────────────────────────────────────────── */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logoIcon}>
-            <Text style={styles.logoIconText}>B94</Text>
-          </View>
-          <Text style={styles.logoText}>Black94</Text>
-          <Text style={styles.tagline}>Connect. Create. Commerce.</Text>
+        {/* ── Brand ────────────────────────────────────────────────────── */}
+        <View style={styles.brandContainer}>
+          <Text style={styles.brandName}>Black94</Text>
+          <Text style={styles.tagline}>
+            {mode === 'signin'
+              ? "See what's happening in the world right now."
+              : 'Join Black94 today.'}
+          </Text>
         </View>
 
         {/* ── Spacer ────────────────────────────────────────────────────── */}
         <View style={styles.spacer} />
 
-        {/* ── Sign In Button ────────────────────────────────────────────── */}
-        <View style={styles.buttonContainer}>
+        {/* ── Sign In / Sign Up ────────────────────────────────────────── */}
+        <View style={styles.authContainer}>
+          {/* ── Google Button ─────────────────────────────────────────── */}
           <TouchableOpacity
             style={styles.googleButton}
             onPress={handleGoogleSignIn}
-            activeOpacity={0.7}
+            activeOpacity={0.8}
             disabled={isLoading}
           >
             {isLoading ? (
-              <ActivityIndicator color="#ffffff" size="small" />
+              <ActivityIndicator color="#000000" size="small" />
             ) : (
               <View style={styles.googleButtonContent}>
-                {/* Google "G" SVG as text fallback */}
+                {/* Google "G" circle */}
                 <View style={styles.googleGContainer}>
                   <Text style={styles.googleG}>G</Text>
                 </View>
-                <Text style={styles.googleButtonText}>Sign in with Google</Text>
+                <Text style={styles.googleButtonText}>
+                  {mode === 'signin' ? 'Sign in with Google' : 'Sign up with Google'}
+                </Text>
               </View>
             )}
           </TouchableOpacity>
 
-          {/* ── Terms text ──────────────────────────────────────────────── */}
+          {/* ── Toggle mode ───────────────────────────────────────────── */}
+          <View style={styles.toggleContainer}>
+            <Text style={styles.toggleText}>
+              {mode === 'signin'
+                ? "Don't have an account? "
+                : 'Already have an account? '}
+              <Text
+                style={styles.toggleLink}
+                onPress={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+              >
+                {mode === 'signin' ? 'Sign up' : 'Sign in'}
+              </Text>
+            </Text>
+          </View>
+
+          {/* ── Terms text ─────────────────────────────────────────────── */}
           <Text style={styles.termsText}>
             By signing in, you agree to our{' '}
-            <Text style={styles.termsLink}>Terms of Service</Text> and{' '}
+            <Text style={styles.termsLink}>Terms of Service</Text>{' '}
+            and{' '}
             <Text style={styles.termsLink}>Privacy Policy</Text>
           </Text>
         </View>
-
-        {/* ── Version ───────────────────────────────────────────────────── */}
-        <Text style={styles.versionText}>v1.0.0</Text>
       </View>
     </KeyboardAvoidingView>
   );
 }
 
-// ─── Styles ─────────────────────────────────────────────────────────────────
+// ─── Styles — matched to web login page ──────────────────────────────────────
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -164,64 +165,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  // Logo
-  logoContainer: {
+  // Brand — web: large "Black94" text, no icon box
+  brandContainer: {
     alignItems: 'center',
     marginBottom: Spacing.xxxl,
   },
-  logoIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 20,
-    backgroundColor: Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: Spacing.lg,
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  logoIconText: {
-    color: '#ffffff',
-    fontSize: 24,
+  brandName: {
+    color: Colors.primary, // WHITE
+    fontSize: 42,
     fontWeight: '800',
-    letterSpacing: -0.5,
-  },
-  logoText: {
-    color: Colors.text,
-    fontSize: 32,
-    fontWeight: '800',
-    letterSpacing: -0.5,
+    letterSpacing: -1,
   },
   tagline: {
-    color: Colors.textMuted,
-    fontSize: 14,
-    marginTop: Spacing.xs,
-    letterSpacing: 1,
+    color: Colors.textSecondary,
+    fontSize: 16,
+    marginTop: Spacing.md,
+    textAlign: 'center',
+    lineHeight: 24,
   },
-
-  // Spacer
   spacer: {
     flex: 1,
   },
-
-  // Button area
-  buttonContainer: {
+  authContainer: {
     width: '100%',
     alignItems: 'center',
   },
+  // Google button — web style: white bg, rounded, dark text
   googleButton: {
     width: '100%',
     height: 54,
-    backgroundColor: Colors.surfaceElevated,
+    backgroundColor: Colors.primary, // WHITE
     borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: Colors.border,
     flexDirection: 'row',
     overflow: 'hidden',
   },
@@ -231,41 +207,47 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   googleGContainer: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#ffffff',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#4285F4', // Google blue for the G icon
     justifyContent: 'center',
     alignItems: 'center',
   },
   googleG: {
     fontSize: 14,
     fontWeight: '700',
-    color: Colors.background,
+    color: '#FFFFFF',
   },
   googleButtonText: {
-    color: Colors.text,
-    fontSize: 16,
-    fontWeight: '600',
+    color: Colors.primaryForeground, // BLACK text
+    fontSize: 17,
+    fontWeight: '700',
     letterSpacing: -0.2,
+  },
+  toggleContainer: {
+    marginTop: Spacing.lg,
+    alignItems: 'center',
+  },
+  toggleText: {
+    color: Colors.textMuted,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  toggleLink: {
+    color: Colors.primary, // WHITE (or could be neon for contrast)
+    fontSize: 14,
+    fontWeight: '700',
   },
   termsText: {
     color: Colors.textMuted,
     fontSize: 12,
-    marginTop: Spacing.lg,
+    marginTop: Spacing.xxl,
     textAlign: 'center',
     lineHeight: 18,
   },
   termsLink: {
-    color: Colors.primary,
+    color: Colors.textSecondary,
     fontSize: 12,
-  },
-
-  // Version
-  versionText: {
-    color: Colors.textMuted,
-    fontSize: 11,
-    marginTop: Spacing.xxxl,
-    opacity: 0.5,
   },
 });

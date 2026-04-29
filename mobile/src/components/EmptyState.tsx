@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#111111',
+    backgroundColor: '#16181c',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   actionButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     paddingHorizontal: 28,
     paddingVertical: 12,
@@ -135,8 +135,4 @@ const styles = StyleSheet.create({
   actionLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#ffffff',
-  },
-});
-
-export default EmptyState;
+    color: '#000000',

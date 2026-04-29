@@ -4,11 +4,11 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 // ── Theme colors ─────────────────────────────────────────────────────────────
 
 const COLORS = {
-  bg: '#111111',
+  bg: '#16181c',
   text: '#e7e9ea',
   textSecondary: '#94a3b8',
   green: '#10b981',
-  blue: '#3b82f6',
+  primary: '#FFFFFF',
   gold: '#f59e0b',
 } as const;
 
@@ -52,7 +52,7 @@ const Avatar: React.FC<AvatarProps> = ({
               width: size + (borderWidth || 2) * 2,
               height: size + (borderWidth || 2) * 2,
               borderRadius: (size + (borderWidth || 2) * 2) / 2,
-              borderColor: borderColor ?? COLORS.blue,
+              borderColor: borderColor ?? COLORS.primary,
               borderWidth: borderWidth || 2,
             },
           ]}

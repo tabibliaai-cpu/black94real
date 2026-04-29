@@ -199,7 +199,7 @@ export default function OrderTrackingScreen() {
             {
               backgroundColor: isCancelled
                 ? 'rgba(239, 68, 68, 0.15)'
-                : 'rgba(59, 130, 246, 0.15)',
+                : 'rgba(255, 255, 255, 0.15)',
             },
           ]}>
           <Text

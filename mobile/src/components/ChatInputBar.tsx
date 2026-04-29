@@ -14,17 +14,14 @@ import {
   Platform,
   Keyboard,
   ActivityIndicator,
+  Text,
+  Animated,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { uploadImage } from '../lib/db';
 import { colors } from '../theme/colors';
+import { Colors } from '../theme';
 
 interface ChatInputBarProps {
   onSend: (text: string, messageType: string, mediaUrl?: string) => void;
@@ -49,26 +46,16 @@ export default function ChatInputBar({
   const [mediaType, setMediaType] = useState<'image' | 'video' | null>(null);
   const textInputRef = useRef<TextInput>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const animatedHeight = useSharedValue(MIN_INPUT_HEIGHT + 24); // 24 for padding/borders
+  const [containerHeight, setContainerHeight] = useState(MIN_INPUT_HEIGHT + 24);
 
   const canSend = useMemo(() => {
     return text.trim().length > 0 || mediaUri !== null;
   }, [text, mediaUri]);
 
-  // ── Update animated height when input height changes ───────────────────
+  // ── Update container height when input height changes ────────────────
   useEffect(() => {
-    animatedHeight.value = withSpring(inputHeight + 24, {
-      damping: 20,
-      stiffness: 200,
-    });
-  }, [inputHeight, animatedHeight]);
-
-  const containerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      height: animatedHeight.value + (mediaUri ? 80 : 0),
-    };
-  });
+    setContainerHeight(inputHeight + 24);
+  }, [inputHeight]);
 
   // ── Typing indicator with debounce ─────────────────────────────────────
   const handleTextChange = useCallback(
@@ -171,7 +158,7 @@ export default function ChatInputBar({
   }, []);
 
   return (
-    <Animated.View style={[styles.container, containerAnimatedStyle]}>
+    <View style={[styles.container, { minHeight: containerHeight + (mediaUri ? 80 : 0) }]}>
       {/* Media preview */}
       {mediaUri && (
         <View style={styles.mediaPreview}>
@@ -244,17 +231,14 @@ export default function ChatInputBar({
             <Icon
               name={canSend ? 'send' : 'mic'}
               size={20}
-              color={canSend ? colors.white : colors.textTertiary}
+              color={canSend ? Colors.primaryForeground : colors.textTertiary}
             />
           )}
         </TouchableOpacity>
       </View>
-    </Animated.View>
+    </View>
   );
 }
-
-// ── Need Text import for the uploading text ────────────────────────────────
-import { Text } from 'react-native';
 
 // ── Styles ──────────────────────────────────────────────────────────────────
 
@@ -340,7 +324,7 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
   sendButtonActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: Colors.primary, // WHITE send button (matching web)
   },
   sendButtonInactive: {
     backgroundColor: colors.surfaceElevated,

@@ -22,7 +22,7 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ImageViewing } from 'react-native-image-viewing';
+import { Modal, Image as RNImage } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {
   sendMessage,
@@ -34,6 +34,7 @@ import {
 } from '../lib/db';
 import ChatInputBar from '../components/ChatInputBar';
 import { colors } from '../theme/colors';
+import { Colors } from '../theme';
 
 type RootStackParamList = {
   ChatRoom: {
@@ -103,7 +104,7 @@ export default function ChatRoomScreen() {
         </TouchableOpacity>
       ),
       headerStyle: {
-        backgroundColor: colors.surface,
+        backgroundColor: '#000000', // Match app bg
       },
       headerTintColor: colors.textPrimary,
       headerShadowVisible: false,
@@ -358,7 +359,7 @@ export default function ChatRoomScreen() {
             <Icon
               name="checkmark-done"
               size={14}
-              color={colors.primary}
+              color={Colors.primary} // White for seen
               style={styles.statusIcon}
             />
           );
@@ -534,7 +535,7 @@ export default function ChatRoomScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer} edges={['bottom']}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <ActivityIndicator size="large" color="#FFFFFF" />
       </SafeAreaView>
     );
   }
@@ -595,49 +596,33 @@ export default function ChatRoomScreen() {
         />
       </KeyboardAvoidingView>
 
-      {/* Image viewer */}
-      <ImageViewing
-        images={viewingImageUrl ? [{ uri: viewingImageUrl }] : []}
-        imageIndex={0}
+      {/* Image viewer modal */}
+      <Modal
         visible={imageViewerVisible}
+        transparent
+        animationType="fade"
         onRequestClose={() => setImageViewerVisible(false)}
-        backgroundColor={colors.black}
-      />
+      >
+        <TouchableOpacity
+          style={styles.imageViewerOverlay}
+          activeOpacity={1}
+          onPress={() => setImageViewerVisible(false)}
+        >
+          <RNImage
+            source={{ uri: viewingImageUrl }}
+            style={styles.imageViewerImage}
+            resizeMode="contain"
+          />
+          <TouchableOpacity
+            style={styles.imageViewerClose}
+            onPress={() => setImageViewerVisible(false)}
+            hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+          >
+            <Icon name="close" size={28} color="#FFFFFF" />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
-  );
-}
-
-// ── Typing dots animation ───────────────────────────────────────────────────
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withDelay,
-} from 'react-native-reanimated';
-
-function TypingDot({ index }: { index: number }) {
-  const offset = useSharedValue(0);
-
-  useEffect(() => {
-    offset.value = withRepeat(
-      withSequence(
-        withDelay(index * 150, withTiming(-4, { duration: 200 })),
-        withTiming(0, { duration: 200 }),
-      ),
-      -1,
-      true,
-    );
-  }, [index, offset]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: offset.value }],
-  }));
-
-  return (
-    <Animated.View
-      style={[styles.typingDotBase, animatedStyle]}
-    />
   );
 }
 
@@ -740,11 +725,11 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   mineBubble: {
-    backgroundColor: colors.messageMine,
+    backgroundColor: colors.messageMine, // WHITE (matching web .bubble-sent)
     borderBottomRightRadius: 4,
   },
   theirsBubble: {
-    backgroundColor: colors.messageTheirs,
+    backgroundColor: colors.messageTheirs, // Dark surface (matching web .bubble-received)
     borderBottomLeftRadius: 4,
   },
   messageText: {
@@ -837,15 +822,26 @@ const styles = StyleSheet.create({
   typingDot1: {},
   typingDot2: {},
   typingDot3: {},
-  typingDotBase: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.textSecondary,
-  },
+  // Image viewer
   typingText: {
     fontSize: 12,
     color: colors.textTertiary,
     fontStyle: 'italic',
+  },
+  // Image viewer
+  imageViewerOverlay: {
+    flex: 1,
+    backgroundColor: '#000000',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageViewerImage: {
+    width: '100%',
+    height: '80%',
+  },
+  imageViewerClose: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
   },
 });

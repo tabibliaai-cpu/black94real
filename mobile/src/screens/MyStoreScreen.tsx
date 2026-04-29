@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: theme.BorderRadius.md,
-    backgroundColor: 'rgba(59,130,246,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.12)',
   },
   viewStoreText: {
     color: theme.Colors.primary,
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   statsNote: {
     marginTop: theme.Spacing.lg,
     padding: theme.Spacing.md,
-    backgroundColor: 'rgba(59,130,246,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: theme.BorderRadius.md,
   },
   statsNoteText: {

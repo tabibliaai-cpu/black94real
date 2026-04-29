@@ -8,30 +8,17 @@ import {
   Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import type { Post } from '../navigation/types';
 import Avatar from './Avatar';
+import { Colors } from '../theme';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CAPTION_COLLAPSED_LINES = 4;
 const CAPTION_COLLAPSED_LENGTH = 200;
-
-const COLORS = {
-  bg: '#000000',
-  surface: '#111111',
-  textPrimary: '#e7e9ea',
-  textSecondary: '#94a3b8',
-  textMuted: '#64748b',
-  red: '#f43f5e',
-  green: '#10b981',
-  blue: '#3b82f6',
-  gold: '#f59e0b',
-  yellow: '#facc15',
-  white: '#ffffff',
-  border: 'rgba(255, 255, 255, 0.06)',
-} as const;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -69,52 +56,14 @@ function parseMediaUrls(raw: string): string[] {
     .filter(Boolean);
 }
 
-// ── Icons (inline SVG as components) ─────────────────────────────────────────
-
-const HeartIcon = ({ filled, color }: { filled: boolean; color: string }) => (
-  <View style={styles.iconWrap}>
-    {filled ? (
-      <View style={[styles.svgIcon, { width: 18, height: 18 }]}>
-        <Text style={{ color, fontSize: 18 }}>♥</Text>
-      </View>
-    ) : (
-      <View style={[styles.svgIcon, { width: 18, height: 18 }]}>
-        <Text style={{ color, fontSize: 18 }}>♡</Text>
-      </View>
-    )}
-  </View>
-);
-
-const CommentIcon = ({ color }: { color: string }) => (
-  <View style={styles.iconWrap}>
-    <Text style={{ color, fontSize: 18 }}>💬</Text>
-  </View>
-);
-
-const RepostIcon = ({ color }: { color: string }) => (
-  <View style={styles.iconWrap}>
-    <Text style={{ color, fontSize: 18 }}>🔁</Text>
-  </View>
-);
-
-const ShareIcon = ({ color }: { color: string }) => (
-  <View style={styles.iconWrap}>
-    <Text style={{ color, fontSize: 18 }}>📤</Text>
-  </View>
-);
-
-const BookmarkIcon = ({ filled, color }: { filled: boolean; color: string }) => (
-  <View style={styles.iconWrap}>
-    <Text style={{ color, fontSize: 18 }}>{filled ? '🔖' : '📑'}</Text>
-  </View>
-);
+// ── Verified Badge — matching web PAvatar VerifiedBadge ──────────────────────
 
 const VerifiedBadge: React.FC<{ badge?: string }> = ({ badge }) => {
-  if (!badge && badge !== 'blue' && badge !== 'gold') return null;
-  const color = badge === 'gold' ? COLORS.gold : COLORS.blue;
+  if (!badge) return null;
+  const color = badge === 'gold' ? Colors.verifiedGold : Colors.verified;
   return (
     <View style={[styles.badgeCircle, { borderColor: color }]}>
-      <Text style={[styles.badgeText, { color }]}>✓</Text>
+      <Icon name="checkmark" size={11} color={color} />
     </View>
   );
 };
@@ -130,7 +79,6 @@ interface PostCardProps {
   onDelete?: (postId: string) => void;
   onPress?: (post: Post) => void;
   currentUserId?: string;
-  /** Compact grid mode — shows only a thumbnail */
   compact?: boolean;
 }
 
@@ -179,9 +127,8 @@ const PostCard: React.FC<PostCardProps> = ({
     );
   }
 
-  // ── Full card (existing) ────────────────────────────────────────────────
+  // ── Full card ────────────────────────────────────────────────────────
 
-  // Local optimistic state
   const [isLiked, setIsLiked] = useState(post.isLiked ?? false);
   const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
   const [isReposted, setIsReposted] = useState(post.isReposted ?? false);
@@ -201,7 +148,6 @@ const PostCard: React.FC<PostCardProps> = ({
     setCommentCount(post.commentCount ?? 0);
   }, [post.isLiked, post.likeCount, post.isReposted, post.repostCount, post.isBookmarked, post.commentCount]);
 
-  const mediaUrls = useMemo(() => parseMediaUrls(post.mediaUrls), [post.mediaUrls]);
   const isOwnPost = currentUserId === post.authorId;
 
   const captionNeedsExpand = useMemo(() => {
@@ -249,10 +195,11 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <View style={styles.card}>
-      {/* Repost indicator */}
+      {/* Repost indicator — web uses green repost icon */}
       {isReposted && (
         <View style={styles.repostRow}>
-          <Text style={styles.repostText}>🔁 You shared</Text>
+          <Icon name="repeat" size={14} color={Colors.repost} />
+          <Text style={styles.repostText}>You reposted</Text>
         </View>
       )}
 
@@ -278,7 +225,7 @@ const PostCard: React.FC<PostCardProps> = ({
               </Text>
             </TouchableOpacity>
             {(post.authorIsVerified || !!post.authorBadge) && (
-              <VerifiedBadge badge={post.authorBadge} />
+              <VerifiedBadge badge={post.authorBadge || (post.authorIsVerified ? 'blue' : '')} />
             )}
             <Text style={styles.username} numberOfLines={1}>
               @{post.authorUsername || 'user'}
@@ -295,11 +242,11 @@ const PostCard: React.FC<PostCardProps> = ({
           activeOpacity={0.6}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={styles.menuDots}>···</Text>
+          <Icon name="ellipsis-horizontal" size={18} color={Colors.textSecondary} />
         </TouchableOpacity>
       </View>
 
-      {/* Caption */}
+      {/* Caption — web uses ExpandableText */}
       {post.caption ? (
         <View style={styles.captionContainer}>
           <Text style={styles.caption}>
@@ -316,7 +263,7 @@ const PostCard: React.FC<PostCardProps> = ({
         </View>
       ) : null}
 
-      {/* Media */}
+      {/* Media — web has up to 4 grid */}
       {mediaUrls.length > 0 && (
         <View style={styles.mediaSection}>
           {mediaUrls.length === 1 ? (
@@ -354,35 +301,28 @@ const PostCard: React.FC<PostCardProps> = ({
       {/* Fact check badge */}
       {post.factCheck ? (
         <View style={styles.factCheckBadge}>
-          <Text style={styles.factCheckText}>✅ Fact-checked</Text>
+          <Icon name="checkmark-circle" size={14} color={Colors.success} />
+          <Text style={styles.factCheckText}> Fact-checked</Text>
         </View>
       ) : null}
 
-      {/* Action bar */}
+      {/* Action bar — matching web UserPostCard action bar exactly */}
       <View style={styles.actionBar}>
-        {/* Heart */}
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={handleLike}
-          activeOpacity={0.7}
-        >
-          <HeartIcon filled={isLiked} color={isLiked ? COLORS.red : COLORS.textSecondary} />
-          {likeCount > 0 ? (
-            <Text style={[styles.actionCount, isLiked && { color: COLORS.red }]}>
-              {formatCount(likeCount)}
-            </Text>
-          ) : null}
-        </TouchableOpacity>
-
-        {/* Comment */}
+        {/* Comment — web: first icon */}
         <TouchableOpacity
           style={styles.actionButton}
           onPress={handleComment}
           activeOpacity={0.7}
         >
-          <CommentIcon color={COLORS.textSecondary} />
+          <Icon
+            name="chatbubble-outline"
+            size={18}
+            color={commentCount > 0 ? Colors.text : Colors.textMuted}
+          />
           {commentCount > 0 ? (
-            <Text style={styles.actionCount}>{formatCount(commentCount)}</Text>
+            <Text style={[styles.actionCount, commentCount > 0 && { color: Colors.text }]}>
+              {formatCount(commentCount)}
+            </Text>
           ) : null}
         </TouchableOpacity>
 
@@ -392,54 +332,86 @@ const PostCard: React.FC<PostCardProps> = ({
           onPress={handleRepost}
           activeOpacity={0.7}
         >
-          <RepostIcon color={isReposted ? COLORS.green : COLORS.textSecondary} />
+          <Icon
+            name={isReposted ? 'repeat' : 'repeat-outline'}
+            size={18}
+            color={isReposted ? Colors.repost : Colors.textMuted}
+          />
           {repostCount > 0 ? (
-            <Text style={[styles.actionCount, isReposted && { color: COLORS.green }]}>
+            <Text style={[styles.actionCount, isReposted && { color: Colors.repost }]}>
               {formatCount(repostCount)}
             </Text>
           ) : null}
         </TouchableOpacity>
 
-        {/* Share */}
-        <TouchableOpacity style={styles.actionButton} activeOpacity={0.7}>
-          <ShareIcon color={COLORS.textSecondary} />
-        </TouchableOpacity>
-
-        {/* Bookmark */}
+        {/* Like — web: heart icon */}
         <TouchableOpacity
           style={styles.actionButton}
+          onPress={handleLike}
+          activeOpacity={0.7}
+        >
+          <Icon
+            name={isLiked ? 'heart' : 'heart-outline'}
+            size={18}
+            color={isLiked ? Colors.like : Colors.textMuted}
+          />
+          {likeCount > 0 ? (
+            <Text style={[styles.actionCount, isLiked && { color: Colors.like }]}>
+              {formatCount(likeCount)}
+            </Text>
+          ) : null}
+        </TouchableOpacity>
+
+        {/* Views */}
+        <TouchableOpacity style={styles.actionButton} activeOpacity={0.7}>
+          <Icon name="bar-chart-outline" size={18} color={Colors.textMuted} />
+        </TouchableOpacity>
+
+        {/* Bookmark — web: rightmost icon */}
+        <TouchableOpacity
+          style={[styles.actionButton, styles.bookmarkButton]}
           onPress={handleBookmark}
           activeOpacity={0.7}
         >
-          <BookmarkIcon
-            filled={isBookmarked}
-            color={isBookmarked ? COLORS.yellow : COLORS.textSecondary}
+          <Icon
+            name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
+            size={18}
+            color={isBookmarked ? Colors.bookmark : Colors.textMuted}
           />
+        </TouchableOpacity>
+
+        {/* Share — web: rightmost */}
+        <TouchableOpacity style={styles.actionButton} activeOpacity={0.7}>
+          <Icon name="share-outline" size={18} color={Colors.textMuted} />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-// ── Styles ───────────────────────────────────────────────────────────────────
+// ── Styles — matched to web UserPostCard ─────────────────────────────────────
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.bg,
+    backgroundColor: Colors.background,
+    // Web: no visible bottom border, just hairline separator
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 12,
   },
   repostRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginLeft: 56,
     marginBottom: 4,
+    gap: 4,
   },
   repostText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '700',
-    color: COLORS.green,
+    color: Colors.repost,
   },
   authorRow: {
     flexDirection: 'row',
@@ -462,20 +434,20 @@ const styles = StyleSheet.create({
   displayName: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: Colors.text, // #e7e9ea
   },
   username: {
     fontSize: 15,
-    color: COLORS.textSecondary,
+    color: Colors.textMuted, // #71767b
     flexShrink: 1,
   },
   dot: {
     fontSize: 15,
-    color: COLORS.textSecondary,
+    color: Colors.textMuted,
   },
   timestamp: {
     fontSize: 15,
-    color: COLORS.textSecondary,
+    color: Colors.textMuted,
     flexShrink: 1,
   },
   menuButton: {
@@ -486,23 +458,13 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     paddingTop: 2,
   },
-  menuDots: {
-    fontSize: 18,
-    color: COLORS.textSecondary,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
   badgeCircle: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     borderWidth: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  badgeText: {
-    fontSize: 10,
-    fontWeight: '800',
   },
   captionContainer: {
     marginTop: 4,
@@ -510,20 +472,20 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 15,
-    color: COLORS.textPrimary,
+    color: Colors.text, // #e7e9ea
     lineHeight: 21,
   },
   captionMore: {
     fontSize: 15,
-    color: COLORS.blue,
-    fontWeight: '600',
+    color: Colors.textMuted,
+    fontWeight: '400', // Web: "See more" is same weight
   },
   mediaSection: {
     marginTop: 12,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: 'rgba(255, 255, 255, 0.08)', // Subtle border matching web
   },
   singleImage: {
     width: '100%',
@@ -539,7 +501,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     gap: 6,
-    backgroundColor: COLORS.bg,
+    backgroundColor: Colors.background,
   },
   dotIndicator: {
     width: 6,
@@ -547,7 +509,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   dotActive: {
-    backgroundColor: COLORS.white,
+    backgroundColor: Colors.primary, // WHITE
   },
   dotInactive: {
     backgroundColor: 'rgba(255, 255, 255, 0.25)',
@@ -559,9 +521,10 @@ const styles = StyleSheet.create({
   },
   factCheckText: {
     fontSize: 13,
-    color: COLORS.green,
+    color: Colors.success,
     fontWeight: '600',
   },
+  // Web: action bar with Comment, Repost, Like, Views, Bookmark, Share
   actionBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -573,23 +536,16 @@ const styles = StyleSheet.create({
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 6,
     gap: 4,
   },
-  iconWrap: {
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  svgIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  bookmarkButton: {
+    // Push to right like web
   },
   actionCount: {
     fontSize: 13,
-    color: COLORS.textSecondary,
+    color: Colors.textMuted,
   },
 });
 
@@ -605,7 +561,7 @@ const compactStyles = StyleSheet.create({
   gridImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.surface,
+    backgroundColor: Colors.surface,
   },
   placeholder: {
     padding: 8,
@@ -614,7 +570,7 @@ const compactStyles = StyleSheet.create({
   },
   placeholderText: {
     fontSize: 11,
-    color: COLORS.textSecondary,
+    color: Colors.textSecondary,
     textAlign: 'center',
   },
 });

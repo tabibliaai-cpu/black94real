@@ -16,13 +16,11 @@ import Avatar from './Avatar';
 
 const COLORS = {
   bg: '#000000',
-  surface: '#111111',
+  surface: '#16181c',
   textPrimary: '#e7e9ea',
   textSecondary: '#94a3b8',
   textMuted: '#64748b',
-  blue: '#3b82f6',
-  blueGradientStart: '#60a5fa',
-  blueGradientEnd: '#2563eb',
+  primary: '#FFFFFF',
   gray: 'rgba(255, 255, 255, 0.15)',
   border: 'rgba(255, 255, 255, 0.06)',
 } as const;
@@ -96,7 +94,7 @@ const StoryItem: React.FC<{
   story: StoryAuthor;
   onPress: () => void;
 }> = ({ story, onPress }) => {
-  const ringColor = story.hasUnseen ? COLORS.blue : COLORS.gray;
+  const ringColor = story.hasUnseen ? COLORS.primary : COLORS.gray;
 
   return (
     <TouchableOpacity
@@ -240,7 +238,7 @@ const styles = StyleSheet.create({
   },
   plusIcon: {
     fontSize: 24,
-    color: COLORS.blue,
+    color: COLORS.primary,
     fontWeight: '300',
   },
   storyRing: {

@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   chatItemSelected: {
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderLeftWidth: 3,
     borderLeftColor: colors.primary,
   },

@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
   },
   partnerCardSelected: {
     borderColor: theme.Colors.primary,
-    backgroundColor: 'rgba(59,130,246,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
   partnerRadio: {
     width: 24,
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
   },
   paymentCardSelected: {
     borderColor: theme.Colors.primary,
-    backgroundColor: 'rgba(59,130,246,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
   paymentInfo: {
     flex: 1,

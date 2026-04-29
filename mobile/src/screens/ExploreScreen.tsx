@@ -59,7 +59,7 @@ interface Category {
 // ── Data ───────────────────────────────────────────────────────────────────
 
 const CATEGORIES: Category[] = [
-  { id: 'tech', name: 'Technology', icon: 'laptop-outline', color: '#3b82f6' },
+  { id: 'tech', name: 'Technology', icon: 'laptop-outline', color: '#e0e0e0' },
   { id: 'business', name: 'Business', icon: 'briefcase-outline', color: '#22c55e' },
   { id: 'lifestyle', name: 'Lifestyle', icon: 'heart-outline', color: '#ec4899' },
   { id: 'entertainment', name: 'Entertainment', icon: 'film-outline', color: '#f59e0b' },

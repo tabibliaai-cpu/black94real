@@ -363,11 +363,11 @@ function SwipeableRow({
   );
 }
 
-// Quick Animated wrapper since we can't use Reanimated in a simple import
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+// Simple Animated wrapper using React Native Animated API
+import { Animated } from 'react-native';
 
 function AnimatedView({ style, children }: { style: any; children: React.ReactNode }) {
-  return <Animated.View style={style}>{children}</Animated.View>;
+  return <Animated.View style={style}>{children}</View>;
 }
 
 // ── Styles ──────────────────────────────────────────────────────────────────

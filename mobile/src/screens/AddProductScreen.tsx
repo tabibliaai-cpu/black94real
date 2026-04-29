@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.Colors.surfaceBorder,
   },
   dropdownItemActive: {
-    backgroundColor: 'rgba(59,130,246,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   dropdownItemText: {
     color: theme.Colors.textSecondary,

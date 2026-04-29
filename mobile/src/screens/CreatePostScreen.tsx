@@ -31,13 +31,13 @@ const MAX_CAPTION_LENGTH = 500;
 
 const COLORS = {
   bg: '#000000',
-  surface: '#111111',
+  surface: '#16181c',
   surfaceLight: '#18181b',
   textPrimary: '#e7e9ea',
   textSecondary: '#94a3b8',
   textMuted: '#64748b',
-  blue: '#3b82f6',
-  blueDisabled: 'rgba(59, 130, 246, 0.4)',
+  primary: '#FFFFFF',
+  primaryDisabled: 'rgba(255, 255, 255, 0.25)',
   red: '#f43f5e',
   border: 'rgba(255, 255, 255, 0.06)',
   borderLight: 'rgba(255, 255, 255, 0.08)',
@@ -367,17 +367,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerPostActive: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.primary,
   },
   headerPostInactive: {
-    backgroundColor: COLORS.blueDisabled,
+    backgroundColor: COLORS.primaryDisabled,
   },
   headerPostText: {
     fontSize: 15,
     fontWeight: '700',
   },
   headerPostTextActive: {
-    color: '#ffffff',
+    color: '#000000',
   },
   headerPostTextInactive: {
     color: 'rgba(255, 255, 255, 0.5)',
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   },
   addImageIcon: {
     fontSize: 28,
-    color: COLORS.blue,
+    color: COLORS.primary,
   },
   addImageText: {
     fontSize: 13,

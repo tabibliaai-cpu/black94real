@@ -19,7 +19,7 @@ function NotificationItem({ notification, onPress }: NotificationItemProps) {
       case 'like':
         return { name: 'heart' as const, color: '#EF4444', bg: 'rgba(239, 68, 68, 0.12)' };
       case 'comment':
-        return { name: 'chatbubble' as const, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' };
+        return { name: 'chatbubble' as const, color: '#FFFFFF', bg: 'rgba(255, 255, 255, 0.12)' };
       case 'follow':
         return { name: 'person-add' as const, color: '#22C55E', bg: 'rgba(34, 197, 94, 0.12)' };
       case 'message':

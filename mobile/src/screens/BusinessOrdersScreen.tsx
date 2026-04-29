@@ -68,7 +68,7 @@ function formatINR(amount: number): string {
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   pending: { color: colors.warning, bg: 'rgba(245, 158, 11, 0.15)' },
-  processing: { color: colors.primary, bg: 'rgba(59, 130, 246, 0.15)' },
+  processing: { color: colors.primary, bg: 'rgba(255, 255, 255, 0.15)' },
   shipped: { color: colors.info, bg: 'rgba(6, 182, 212, 0.15)' },
   delivered: { color: colors.success, bg: 'rgba(34, 197, 94, 0.15)' },
   cancelled: { color: colors.error, bg: 'rgba(239, 68, 68, 0.15)' },
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,

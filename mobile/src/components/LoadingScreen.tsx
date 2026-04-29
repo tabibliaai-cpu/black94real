@@ -19,7 +19,7 @@ interface LoadingScreenProps {
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ visible = true, text }) => {
   const content = (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#3b82f6" />
+      <ActivityIndicator size="large" color="#FFFFFF" />
       {text ? (
         <Text style={styles.text}>{text}</Text>
       ) : null}

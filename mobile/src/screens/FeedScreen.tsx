@@ -34,12 +34,10 @@ const PAGE_SIZE = 10;
 
 const COLORS = {
   bg: '#000000',
-  surface: '#111111',
   textPrimary: '#e7e9ea',
-  textSecondary: '#94a3b8',
-  textMuted: '#64748b',
-  blue: '#3b82f6',
-  border: 'rgba(255, 255, 255, 0.06)',
+  textSecondary: '#a1a1aa',
+  textMuted: '#71767b',
+  border: 'rgba(255, 255, 255, 0.08)',
 } as const;
 
 // ── Skeleton ─────────────────────────────────────────────────────────────────
@@ -370,7 +368,7 @@ const FeedScreen: React.FC = () => {
     () =>
       loadingMore ? (
         <View style={styles.loadingMoreContainer}>
-          <ActivityIndicator size="small" color={COLORS.blue} />
+          <ActivityIndicator size="small" color="#FFFFFF" />
         </View>
       ) : allLoaded && posts.length > 0 ? (
         <View style={styles.endOfFeed}>
@@ -403,8 +401,8 @@ const FeedScreen: React.FC = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={COLORS.blue}
-            colors={[COLORS.blue]}
+            tintColor="#FFFFFF"
+            colors={['#FFFFFF']}
           />
         }
         onEndReached={handleEndReached}
@@ -549,18 +547,18 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: COLORS.blue,
+    backgroundColor: '#FFFFFF', // Web: white FAB
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#3b82f6',
+    shadowColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
   },
   fabIcon: {
     fontSize: 28,
-    color: '#ffffff',
+    color: '#000000',
     fontWeight: '300',
     marginTop: -2,
   },

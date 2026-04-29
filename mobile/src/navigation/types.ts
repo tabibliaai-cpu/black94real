@@ -125,7 +125,7 @@ export type MainTabParamList = {
   Search: undefined;
   Chat: undefined;
   Notifications: undefined;
-  Profile: undefined;
+  Stories: undefined;
 };
 
 // ── Navigation prop helpers ──────────────────────────────────────────────────

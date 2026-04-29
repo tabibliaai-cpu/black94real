@@ -17,11 +17,11 @@ const AppDarkTheme = {
   ...NavDarkTheme,
   colors: {
     ...NavDarkTheme.colors,
-    primary: Colors.primary,
-    background: Colors.background,
-    card: Colors.surface,
-    text: Colors.text,
-    border: Colors.border,
+    primary: Colors.primary,        // WHITE (not blue)
+    background: Colors.background,  // #000000
+    card: Colors.background,        // #000000 (matching web)
+    text: Colors.text,              // #e7e9ea
+    border: Colors.border,          // #374151
     notification: Colors.error,
   },
 };
@@ -141,17 +141,17 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 20,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primary, // WHITE
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 8,
   },
   splashLogoText: {
-    color: '#ffffff',
+    color: '#000000', // Black text on white
     fontSize: 24,
     fontWeight: '800',
     letterSpacing: -0.5,

@@ -29,7 +29,7 @@ interface CrmDeal {
 }
 
 const STAGES: Array<{ key: CrmDeal['stage']; label: string; color: string }> = [
-  { key: 'initial', label: 'Initial', color: '#60a5fa' },
+  { key: 'initial', label: 'Initial', color: '#e0e0e0' },
   { key: 'negotiation', label: 'Negotiation', color: '#f59e0b' },
   { key: 'proposal', label: 'Proposal', color: '#8b5cf6' },
   { key: 'closing', label: 'Closing', color: '#06b6d4' },
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
   },
   viewToggleActive: {
     borderColor: theme.Colors.primary,
-    backgroundColor: 'rgba(59,130,246,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   pipelineBar: {
     flexDirection: 'row',
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: theme.Spacing.lg,
     paddingVertical: theme.Spacing.md,
-    backgroundColor: 'rgba(59,130,246,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderBottomWidth: 1,
     borderBottomColor: theme.Colors.surfaceBorder,
   },
