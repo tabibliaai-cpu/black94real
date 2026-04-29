@@ -6,21 +6,24 @@
     "production": {
       "android": {
         "buildType": "apk",
-        "workingDirectory": "mobile",
-        "gradleCommand": ":app:assembleRelease"
+        "gradleCommand": ":app:assembleRelease",
+        "cachePaths": [
+          "mobile/node_modules"
+        ]
       }
     },
     "release": {
       "android": {
         "buildType": "apk",
-        "workingDirectory": "mobile",
-        "gradleCommand": ":app:assembleRelease"
+        "gradleCommand": ":app:assembleRelease",
+        "cachePaths": [
+          "mobile/node_modules"
+        ]
       }
     },
     "preview": {
       "android": {
-        "buildType": "apk",
-        "workingDirectory": "mobile"
+        "buildType": "apk"
       }
     }
   }

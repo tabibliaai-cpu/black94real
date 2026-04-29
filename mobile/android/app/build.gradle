@@ -81,9 +81,15 @@ android {
         applicationId "com.black94.app"
         minSdkVersion 24
         targetSdkVersion 35
+        ndkVersion "26.1.10909125"
         versionCode 11
         versionName "1.8.2"
         vectorDrawables.useSupportLibrary = true
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_LD=lld"
+            }
+        }
     }
     signingConfigs {
         debug {

@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.android
+.git
+*.log
+src/
+public/
+prisma/
+functions/
+mini-services/
+db/
+skills/
+upload/
