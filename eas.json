@@ -7,6 +7,19 @@
     "production": {
       "android": {
         "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease",
+        "releaseChannel": "production"
+      }
+    },
+    "release": {
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
       }
     }
