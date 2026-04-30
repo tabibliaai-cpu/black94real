@@ -1,7 +1,12 @@
-name: Test CI
-on: workflow_dispatch
+name: Test Build
+on:
+  workflow_dispatch:
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - run: echo "Hello World"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Echo test
+        run: echo "Hello from test workflow"
